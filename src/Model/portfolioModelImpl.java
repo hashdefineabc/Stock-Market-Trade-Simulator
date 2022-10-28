@@ -15,15 +15,7 @@ public class portfolioModelImpl implements portfolioModel{
    * shares contain ticker name as key and value contains number of units, date bought
    */
   static HashMap<String, List<String>> shares;
-  user u = new user();
 
-  class stocks {
-    String tickerName;
-    Date dateBought;
-    Integer numOfUnits;
-
-
-  }
   List<String> portfolios;
   //user u = new user();
 
@@ -89,7 +81,6 @@ public class portfolioModelImpl implements portfolioModel{
       throw new IllegalArgumentException("Can't get value for date greater than today");
     }
     // get list of stocks from portfolio
-
 
     return 0;
   }
