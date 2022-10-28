@@ -6,12 +6,12 @@ import java.nio.file.Path;
 
 class user {
   String username;
-  //String folderPath = System.getProperty("user.home") + "\\Desktop";
   private String folderPath;
   private File file;
   public user() {
     this.folderPath = "C:\\Users\\anush\\OneDrive\\Desktop\\PortFolioComposition"; //TODO change to dynamic path
     file = new File(folderPath);
+    this.createFolder();
   }
 
   protected void createFolder() {
