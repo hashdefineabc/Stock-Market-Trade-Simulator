@@ -17,9 +17,9 @@ public class portfolioModelImpl implements portfolioModel{
    * @param
    */
 
-  /*public portfolioModelImpl(HashMap<String, List<String>> tickers) {
+  public portfolioModelImpl(HashMap<String, List<String>> tickers) {
     this.shares = tickers;
-  }*/
+  }
 
   // get high, low, price at open time, price at close time for each ticker on today's date
 //  String[][] getPortfolioCompostion() {
@@ -39,6 +39,7 @@ public class portfolioModelImpl implements portfolioModel{
    */
   @Override
   public List<List<String>> getPortfolio(String portfolioName) {
+
 
     return null;
   }
