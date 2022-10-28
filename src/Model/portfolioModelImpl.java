@@ -15,6 +15,14 @@ public class portfolioModelImpl implements portfolioModel{
    * shares contain ticker name as key and value contains number of units, date bought
    */
   static HashMap<String, List<String>> shares;
+
+  class stocks {
+    String tickerName;
+    Date dateBought;
+    Integer numOfUnits;
+
+
+  }
   List<String> portfolios;
   //user u = new user();
 
