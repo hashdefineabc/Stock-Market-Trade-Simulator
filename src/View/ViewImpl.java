@@ -1,5 +1,7 @@
 package View;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class ViewImpl implements ViewInterface{
@@ -53,7 +55,7 @@ public class ViewImpl implements ViewInterface{
    * displays the list of created portfolios
    */
   @Override
-  public void displayListOfPortfolios() {
+  public void displayListOfPortfolios(List<String> portfolios) {
 
   }
 
@@ -64,14 +66,25 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public String getPortfolioName() {
-    return null;
+    System.out.println("Pick a portfolio");
+    return scanner.next();
   }
 
   /**
    * displays stocks of a particular portfolio
    */
   @Override
-  public void displayStocks() {
+  public void displayStocks(List<List<String>> completePortfolio) {
+
+  }
+
+  @Override
+  public Date getDate() {
+    return null;
+  }
+
+  @Override
+  public void displayValue(double val) {
 
   }
 }

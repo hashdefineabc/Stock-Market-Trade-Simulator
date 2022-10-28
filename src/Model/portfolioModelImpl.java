@@ -15,6 +15,7 @@ public class portfolioModelImpl implements portfolioModel{
    * shares contain ticker name as key and value contains number of units, date bought
    */
   static HashMap<String, List<String>> shares;
+  user u = new user();
 
   class stocks {
     String tickerName;
@@ -31,9 +32,9 @@ public class portfolioModelImpl implements portfolioModel{
    * @param
    */
 
-  public portfolioModelImpl(HashMap<String, List<String>> tickers) {
-    this.shares = tickers;
-  }
+//  public portfolioModelImpl() {
+//
+//  }
 
   // get high, low, price at open time, price at close time for each ticker on today's date
 //  String[][] getPortfolioCompostion() {
@@ -64,13 +65,13 @@ public class portfolioModelImpl implements portfolioModel{
    * @return
    */
 
-  private List<String> showPortfolioNames(user u) {
+  public List<String> showPortfolioNames() {
     String[] files = u.retrieveFileNames();
     for (int i = 0; i < files.length; i++) {
       System.out.println(files[i]);
       this.portfolios.add(files[i]);
     }
-    return null;
+    return this.portfolios;
   }
 
   /**
@@ -117,7 +118,7 @@ public class portfolioModelImpl implements portfolioModel{
     portfolioModelImpl p = new portfolioModelImpl();
     System.out.println(now());
     user u = new user();
-    p.showPortfolioNames(u);
+    p.showPortfolioNames();
   }
 
 }

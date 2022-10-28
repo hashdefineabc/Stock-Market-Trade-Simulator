@@ -1,13 +1,48 @@
 package Controller;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
+
+import Model.portfolioModel;
+import Model.portfolioModelImpl;
+import View.ViewImpl;
+import View.ViewInterface;
 
 public class Controller {
 
+  private static ViewInterface view = new ViewImpl();
+  private static portfolioModel model = new portfolioModelImpl();
+
   public static void Main(String args[]) {
 
+    int option = view.displayMenu();
 
+    switch (option) {
+      // create new portfolio
+      case 1: model = new portfolioModelImpl();
+      while(view.addMoreStocks()) {
+        String[] s = view.takeStockInput();
+      }
+      break;
 
+      //retrieve portfolio
+
+      case 2: view.displayListOfPortfolios(model.showPortfolioNames());
+      String portfolioName = view.getPortfolioName();
+        List<List<String>> completePortfolio = model.getPortfolio(portfolioName);
+        view.displayStocks(completePortfolio);
+        break;
+
+      case 3: view.displayListOfPortfolios(model.showPortfolioNames());
+        String portfolio = view.getPortfolioName();
+        Date date = view.getDate();
+        double val = model.valueOfPortfolio(portfolio, date);
+        view.displayValue(val);
+        break;
+
+      case 4: System.exit(0);
+    }
   }
 
   private void run() {
