@@ -1,6 +1,10 @@
 package View;
 
+import java.util.Scanner;
+
 public class ViewImpl implements ViewInterface{
+
+  Scanner scanner = new Scanner(System.in);
   /**
    * display options
    * 1. create new portfolio
@@ -14,8 +18,9 @@ public class ViewImpl implements ViewInterface{
     System.out.println("1. Create a new Portfolio");
     System.out.println("2. Retrieve Portfolio");
     System.out.println("3. Check value of a Portfolio");
-
-    return 0;
+    System.out.println("Pick one of the options");
+    int option = scanner.nextInt();
+    return option;
   }
 
   /**
