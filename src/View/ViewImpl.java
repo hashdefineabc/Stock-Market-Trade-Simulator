@@ -31,7 +31,12 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public String[] takeStockInput() {
-    return new String[0];
+    String[] inputStock = new String[2];
+    System.out.println("Enter the ticker name:");
+    inputStock[0] = scanner.next();
+    System.out.println("Enter the number of units purchased");
+    inputStock[1] = Integer.toString(scanner.nextInt());
+    return inputStock;
   }
 
   /**
