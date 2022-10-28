@@ -1,8 +1,13 @@
 package Model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static java.time.LocalDate.now;
 
 public class portfolioModelImpl implements portfolioModel{
 
@@ -10,7 +15,8 @@ public class portfolioModelImpl implements portfolioModel{
    * shares contain ticker name as key and value contains number of units, date bought
    */
   static HashMap<String, List<String>> shares;
-  user u = new user();
+  List<String> portfolios;
+  //user u = new user();
 
   /**
    * Contructor
@@ -48,15 +54,12 @@ public class portfolioModelImpl implements portfolioModel{
    *
    * @return
    */
-  @Override
-  public List<String> showPortfolioNames() {
-    this.u.createFolder();
 
-
-
-    String[] files = this.u.retrieveFileNames();
+  private List<String> showPortfolioNames(user u) {
+    String[] files = u.retrieveFileNames();
     for (int i = 0; i < files.length; i++) {
       System.out.println(files[i]);
+      this.portfolios.add(files[i]);
     }
     return null;
   }
@@ -69,12 +72,43 @@ public class portfolioModelImpl implements portfolioModel{
    */
   @Override
   public double valueOfPortfolio(String portfolioName, Date date) throws IllegalArgumentException {
+    if (!this.findPortfolio(portfolioName)) {
+      throw new IllegalArgumentException("Portfolio doesn't exist!");
+    }
+    if (this.checkDate(date)) {
+      throw new IllegalArgumentException("Can't get value for date greater than today");
+    }
+    // get list of stocks from portfolio
+
+
     return 0;
+  }
+
+  private boolean findPortfolio(String portfolioName) {
+    if (!this.portfolios.contains(portfolioName)) {
+      return false;
+    }
+    return true;
+  }
+
+  private boolean checkDate(Date date) {
+    String today = LocalDate.now().toString();
+    if (today.compareTo(date.toString()) < 0) {
+      return true;
+    }
+    return false;
+  }
+
+  private List<String> getStocksFromPortfolio(String portfolioName) {
+    return null;
+
   }
 
   public static void main(String args[]) {
     portfolioModelImpl p = new portfolioModelImpl();
-    p.showPortfolioNames();
+    System.out.println(now());
+    user u = new user();
+    p.showPortfolioNames(u);
   }
 
 }

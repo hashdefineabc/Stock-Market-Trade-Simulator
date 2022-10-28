@@ -16,7 +16,7 @@ public interface portfolioModel {
    * Returns the list of portfolios of a particular user
    * @return
    */
-  public List<String> showPortfolioNames();
+ // public List<String> showPortfolioNames();
 
   /**
    *
