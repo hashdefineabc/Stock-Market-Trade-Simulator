@@ -1,5 +1,8 @@
 package View;
 
+import java.util.Date;
+import java.util.List;
+
 public interface ViewInterface {
 
   /**
@@ -27,7 +30,7 @@ public interface ViewInterface {
   /**
    * displays the list of created portfolios
    */
-  public void displayListOfPortfolios();
+  public void displayListOfPortfolios(List<String> portfolios);
 
   /**
    * displays list of portfolios and asks user to select one
@@ -39,7 +42,9 @@ public interface ViewInterface {
    * displays stocks of a particular portfolio
    */
 
-  public void displayStocks();
+  public void displayStocks(List<List<String>> Portfolio);
 
+  public Date getDate();
 
+  void displayValue(double val);
 }
