@@ -1,6 +1,7 @@
 package Controller;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Date;
 
 import Model.portfolio;
@@ -17,6 +18,22 @@ public class Controller {
   private static portfolioModel model = new portfolioModelImpl();
 
   private static Model.user user = new user();
+
+  private static boolean checkDateLaterThanToday(LocalDate date) {
+    String today = LocalDate.now().toString();
+    if (today.compareTo(date.toString()) < 0) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean checkIfDateToday(LocalDate date) {
+    String today = LocalDate.now().toString();
+    if (today.compareTo(date.toString()) == 0) {
+      return true;
+    }
+    return false;
+  }
 
   public static void Main(String args[]) throws ParseException {
 
@@ -56,7 +73,18 @@ public class Controller {
         view.displayListOfPortfolios(user.getPortfoliosCreated());
         int portfolioIndexForVal = view.getPortfolioName();
         portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal);
-        Date date = view.getDate();
+
+        LocalDate date = view.getDate();
+        //validation for date
+        while (!checkDateLaterThanToday(date)) {
+          view.displayMsgToUser("Can't get value for date greater than today");
+          date = view.getDate();
+        }
+        if (checkDateLaterThanToday(date)) {
+          view.displayMsgToUser("Value will be calculated based on yesterday's closing price.");
+          date = date.minusDays(1); //modify date to yesterday
+        }
+
         double val = toCalcVal.valueOfPortfolio(date);
         view.displayValue(val);
         break;
