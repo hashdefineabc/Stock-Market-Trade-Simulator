@@ -28,7 +28,13 @@ public class Controller {
         portfolio newPortfolio = new portfolio();
         while(view.addMoreStocks()) {
           String[] s = view.takeStockInput();
-          stock newStock = new stock(s[0], Integer.valueOf(s[1]));
+//          stock newStock = new stock(s[0], Integer.valueOf(s[1]));
+
+          //using builder method to create stocks
+          stock newStock = stock.getBuilder()
+                                .tickerName(s[0])
+                                .numOfUnits(Integer.valueOf(s[1]))
+                                .build();
           newPortfolio.addStocks(newStock);
         }
         user.CreateNewPortfolio(newPortfolio);
