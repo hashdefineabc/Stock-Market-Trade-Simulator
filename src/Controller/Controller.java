@@ -1,5 +1,6 @@
 package Controller;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import Model.portfolio;
@@ -17,9 +18,9 @@ public class Controller {
 
   private static Model.user user = new user();
 
-  public static void Main(String args[]) {
+  public static void Main(String args[]) throws ParseException {
 
-    int option = view.displayMenu();
+    int option = view.displayMenu(); //TODO: validation for user option
 
     switch (option) {
 
