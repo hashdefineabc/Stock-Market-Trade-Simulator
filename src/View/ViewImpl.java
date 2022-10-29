@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import Model.portfolio;
+
 public class ViewImpl implements ViewInterface{
 
   Scanner scanner = new Scanner(System.in);
@@ -55,7 +57,7 @@ public class ViewImpl implements ViewInterface{
    * displays the list of created portfolios
    */
   @Override
-  public void displayListOfPortfolios(List<String> portfolios) {
+  public void displayListOfPortfolios(List<portfolio> portfolios) {
 
   }
 
@@ -65,16 +67,16 @@ public class ViewImpl implements ViewInterface{
    * @return the selected portfolio
    */
   @Override
-  public String getPortfolioName() {
+  public int getPortfolioName() {
     System.out.println("Pick a portfolio");
-    return scanner.next();
+    return scanner.nextInt();
   }
 
   /**
    * displays stocks of a particular portfolio
    */
   @Override
-  public void displayStocks(List<List<String>> completePortfolio) {
+  public void displayStocks(portfolio toDisplay) {
 
   }
 

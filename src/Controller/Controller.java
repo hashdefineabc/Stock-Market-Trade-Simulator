@@ -1,8 +1,6 @@
 package Controller;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
 
 import Model.portfolio;
 import Model.portfolioModel;
@@ -33,21 +31,26 @@ public class Controller {
           stock newStock = new stock(s[0], Integer.valueOf(s[1]));
           newPortfolio.addStocks(newStock);
         }
+        user.CreateNewPortfolio(newPortfolio);
+        user.savePortfolioToFile(newPortfolio);
         break;
 
       //retrieve portfolio
 
       case 2:
-        view.displayListOfPortfolios(model.showPortfolioNames());
-        String portfolioName = view.getPortfolioName();
-        List<List<String>> completePortfolio = model.getPortfolio(portfolioName);
-        view.displayStocks(completePortfolio);
+        view.displayListOfPortfolios(user.getPortfoliosCreated());
+        int portfolioIndex = view.getPortfolioName();
+        portfolio toDisplay = user.getPortfoliosCreated().get(portfolioIndex);
+        view.displayStocks(toDisplay);
         break;
 
-      case 3: view.displayListOfPortfolios(model.showPortfolioNames());
-        String portfolio = view.getPortfolioName();
+        // value of a particular portfolio
+      case 3:
+        view.displayListOfPortfolios(user.getPortfoliosCreated());
+        int portfolioIndexForVal = view.getPortfolioName();
+        portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal);
         Date date = view.getDate();
-        double val = model.valueOfPortfolio(portfolio, date);
+        double val = toCalcVal.valueOfPortfolio(date);
         view.displayValue(val);
         break;
 

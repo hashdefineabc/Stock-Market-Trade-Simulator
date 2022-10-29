@@ -3,6 +3,8 @@ package View;
 import java.util.Date;
 import java.util.List;
 
+import Model.portfolio;
+
 public interface ViewInterface {
 
   /**
@@ -30,19 +32,19 @@ public interface ViewInterface {
   /**
    * displays the list of created portfolios
    */
-  public void displayListOfPortfolios(List<String> portfolios);
+  public void displayListOfPortfolios(List<portfolio> portfolios);
 
   /**
    * displays list of portfolios and asks user to select one
    * @return the selected portfolio
    */
-  public String getPortfolioName();
+  public int getPortfolioName();
 
   /**
    * displays stocks of a particular portfolio
    */
 
-  public void displayStocks(List<List<String>> Portfolio);
+  public void displayStocks(portfolio toDisplay);
 
   public Date getDate();
 

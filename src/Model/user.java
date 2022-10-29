@@ -16,6 +16,8 @@ public class user {
     file = new File(folderPath);
     this.createFolder();
     this.portfoliosList = null; //initially there are zero portfolios for a user
+    
+    //todo create function to load the portfolios that are already created in the previous session
   }
 
   /*
@@ -32,7 +34,7 @@ public class user {
    * @return
    */
 
-  public List<portfolio> showPortfolioNames() {
+  public List<portfolio> getPortfoliosCreated() {
 
     return this.portfoliosList;
 
@@ -73,4 +75,6 @@ public class user {
   }
 
 
+  public void savePortfolioToFile(portfolio newPortfolio) {
+  }
 }
