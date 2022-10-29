@@ -17,22 +17,16 @@ public class portfolio {
   }
 
 
-  public double valueOfPortfolio(Date date) throws IllegalArgumentException {
-    if (this.checkDate(date)) {
-      throw new IllegalArgumentException("Can't get value for date greater than today");
-    }
+  public double valueOfPortfolio(LocalDate date) {
     // get list of stocks from portfolio
     // calculate the value and return
 
     return 0;
   }
+  
 
-  private boolean checkDate(Date date) {
-    String today = LocalDate.now().toString();
-    if (today.compareTo(date.toString()) < 0) {
-      return true;
-    }
-    return false;
-  }
+
+
+
 
 }

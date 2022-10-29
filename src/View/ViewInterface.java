@@ -1,6 +1,7 @@
 package View;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,9 @@ public interface ViewInterface {
 
   public void displayStocks(portfolio toDisplay);
 
-  public Date getDate() throws ParseException;
+  public LocalDate getDate() throws ParseException;
 
   void displayValue(double val);
+
+  void displayMsgToUser(String msg);
 }

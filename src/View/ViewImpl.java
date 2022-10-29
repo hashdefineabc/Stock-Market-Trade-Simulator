@@ -1,8 +1,8 @@
 package View;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -89,11 +89,13 @@ public class ViewImpl implements ViewInterface{
    * @return date at which value has to be calculated.
    */
   @Override
-  public Date getDate() throws ParseException {
+  public LocalDate getDate() throws ParseException {
     System.out.println("Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)");
     String d = scanner.next();
-    Date date = new SimpleDateFormat("yyyy-mm-dd").parse(d);
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+    LocalDate date = LocalDate.parse(d, dateFormat);
     return date;
+
   }
 
   /**
@@ -103,5 +105,9 @@ public class ViewImpl implements ViewInterface{
   @Override
   public void displayValue(double val) {
     System.out.println("Value of the portfolio is: " + String.format("%.2f",val));
+  }
+
+  public void displayMsgToUser(String msg) {
+    System.out.println(msg);
   }
 }
