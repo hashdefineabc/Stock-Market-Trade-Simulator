@@ -42,6 +42,11 @@ public class stock {
       return this;
     }
 
+    public stockBuilder date(LocalDate date) {
+      this.date = date;
+      return this;
+    }
+
     public stock build() {
       //use the currently set values to create the stock object
       return new stock(tickerName, numOfUnits, date);
