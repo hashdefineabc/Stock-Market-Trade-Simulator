@@ -132,7 +132,7 @@ public class user {
 
   public Boolean checkIfFileExists(String fileName) {
     this.retrieveFileNames(); // updating the fileNamesFromSystem list.
-    if (this.fileNamesFromSystem.contains(fileName)) {
+    if (this.fileNamesFromSystem.contains(fileName + ".csv")) {
       return true;
     }
     return false;
@@ -145,15 +145,19 @@ public class user {
     try {
       this.createCSV(dataToWrite, newPortfolio.nameOfPortFolio);
     } catch(Exception e) {
-      //TODO:handle this
+      System.out.println("CSV was not created");
     }
   }
 
   public void createCSV(List<String[]> dataToWrite, String portFolioName) throws IOException {
-    File csvOutputFile = new File(this.folderPath + portFolioName);
-    try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+    File csvOutputFile = new File(this.folderPath + "\\" + portFolioName + ".csv");
+    try {
+      PrintWriter pw = new PrintWriter(csvOutputFile);
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
-       
+      pw.close();
+    }
+    catch (Exception e) {
+      System.out.println("Error creating a csv");
     }
   }
 
