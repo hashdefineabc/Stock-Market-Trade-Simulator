@@ -43,11 +43,12 @@ public class Controller {
 
       // create new portfolio and add stocks to the new portfolio
       case 1:
-        portfolio newPortfolio = new portfolio();
+        view.displayMsgToUser("Creating a new portfolio...");
+        String portfolioName = view.getPortfolioNameFromUser();
+        portfolio newPortfolio = new portfolio(portfolioName);
         while(view.addMoreStocks()) {
           String[] s = view.takeStockInput();
-//          stock newStock = new stock(s[0], Integer.valueOf(s[1]));
-
+          //stock newStock = new stock(s[0], Integer.valueOf(s[1]));
           //using builder method to create stocks
           stock newStock = stock.getBuilder()
                                 .tickerName(s[0])
@@ -57,10 +58,15 @@ public class Controller {
         }
         user.CreateNewPortfolio(newPortfolio);
         user.savePortfolioToFile(newPortfolio);
+        if (user.checkIfFileExists(portfolioName)) {
+          view.displayMsgToUser("Portfolio saved successfully");
+        }
+        else {
+          view.displayMsgToUser("Portfolio was not saved. Try again");
+        }
         break;
 
       //retrieve portfolio
-
       case 2:
         view.displayListOfPortfolios(user.getPortfoliosCreated());
         int portfolioIndex = view.getPortfolioName();

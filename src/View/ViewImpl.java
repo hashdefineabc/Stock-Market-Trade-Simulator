@@ -107,7 +107,14 @@ public class ViewImpl implements ViewInterface{
     System.out.println("Value of the portfolio is: " + String.format("%.2f",val));
   }
 
+  @Override
   public void displayMsgToUser(String msg) {
     System.out.println(msg);
+  }
+
+  @Override
+  public String getPortfolioNameFromUser() {
+    System.out.println("Please enter a name for this portfolio");
+    return scanner.nextLine();
   }
 }

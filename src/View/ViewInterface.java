@@ -53,4 +53,6 @@ public interface ViewInterface {
   void displayValue(double val);
 
   void displayMsgToUser(String msg);
+
+  String getPortfolioNameFromUser();
 }

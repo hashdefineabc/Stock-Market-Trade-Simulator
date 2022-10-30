@@ -1,14 +1,21 @@
 package Model;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class user {
 
   String username;
   List<portfolio> portfoliosList;
+  List<String> fileNamesFromSystem;
   private String folderPath;
   private File file;
   public user() {
@@ -19,6 +26,8 @@ public class user {
     
     //todo create function to load the portfolios that are already created in the previous session
   }
+
+
 
   /*
   creates a new portfolio
@@ -46,21 +55,7 @@ public class user {
 //    return this.portfolios;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  protected void createFolder() {
+  private void createFolder() {
     if (!Files.exists(Path.of(this.folderPath))) {
       file.mkdir();
       System.out.println("Folder created successfully");
@@ -70,11 +65,59 @@ public class user {
     }
   }
 
-  protected String[] retrieveFileNames() {
-    return file.list();
+  private List<String> retrieveFileNames() {
+    String[] fileNames = file.list();
+    for (String fileName: fileNames){
+      this.fileNamesFromSystem.add(fileName);
+    }
+
+    return this.fileNamesFromSystem;
+
+  }
+
+  public Boolean checkIfFileExists(String fileName) {
+    if (this.fileNamesFromSystem.contains(fileName)) {
+      return true;
+    }
+    return false;
   }
 
 
   public void savePortfolioToFile(portfolio newPortfolio) {
+    List<String[]> dataToWrite = new ArrayList<>();
+
+    for (int i = 0; i> newPortfolio.stocks.size(); i++) {
+      stock saveStock = newPortfolio.stocks.get(i);
+      saveStock.date = LocalDate.now();
+      dataToWrite.add(new String[]{saveStock.tickerName,Integer.toString(saveStock.numOfUnits),saveStock.date.toString()});
+    }
+    try {
+      this.createCSV(dataToWrite, newPortfolio.nameOfPortFolio);
+    } catch(Exception e) {
+      //TODO:handle this
+    }
+  }
+
+  public void createCSV(List<String[]> dataToWrite, String portFolioName) throws IOException {
+    File csvOutputFile = new File(portFolioName);
+    try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+      dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
+    }
+  }
+
+  public String convertToCSV(String[] data) {
+    return Stream.of(data)
+            .map(this::escapeSpecialCharacters)
+            .collect(Collectors.joining(","));
+  }
+
+
+  public String escapeSpecialCharacters(String data) {
+    String escapedData = data.replaceAll("\\R", " ");
+    if (data.contains(",") || data.contains("\"") || data.contains("'")) {
+      data = data.replace("\"", "\"\"");
+      escapedData = "\"" + data + "\"";
+    }
+    return escapedData;
   }
 }
