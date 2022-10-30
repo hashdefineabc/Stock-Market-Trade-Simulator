@@ -23,18 +23,19 @@ public class user {
   private String folderPath;
   private File file;
   public user() {
+    fileNamesFromSystem = new ArrayList<>();
     this.folderPath = "C:\\Users\\anush\\OneDrive\\Desktop\\PortFolioComposition"; //TODO change to dynamic path
     file = new File(folderPath);
     this.createFolder();
     loadExistingPortFolios(); //initially there are zero portfolios for a user
     portfoliosList = new ArrayList<>();
-    fileNamesFromSystem = new ArrayList<>();
+
     //todo create function to load the portfolios that are already created in the previous session
   }
 
   public void loadExistingPortFolios() {
     this.fileNamesFromSystem = this.retrieveFileNames();
-    if(this.fileNamesFromSystem == null)
+    if(this.fileNamesFromSystem.size() == 0)
       return;
     portfolio p;
     for (String portfolioName: this.fileNamesFromSystem) { //take files from system.
@@ -130,7 +131,8 @@ public class user {
   }
 
   public Boolean checkIfFileExists(String fileName) {
-    if (this.fileNamesFromSystem.contains(fileName)) {
+    this.retrieveFileNames(); // updating the fileNamesFromSystem list.
+    if (this.fileNamesFromSystem.contains(fileName + ".csv")) {
       return true;
     }
     return false;
@@ -143,14 +145,19 @@ public class user {
     try {
       this.createCSV(dataToWrite, newPortfolio.nameOfPortFolio);
     } catch(Exception e) {
-      //TODO:handle this
+      System.out.println("CSV was not created");
     }
   }
 
   public void createCSV(List<String[]> dataToWrite, String portFolioName) throws IOException {
-    File csvOutputFile = new File(portFolioName);
-    try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+    File csvOutputFile = new File(this.folderPath + "\\" + portFolioName + ".csv");
+    try {
+      PrintWriter pw = new PrintWriter(csvOutputFile);
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
+      pw.close();
+    }
+    catch (Exception e) {
+      System.out.println("Error creating a csv");
     }
   }
 
