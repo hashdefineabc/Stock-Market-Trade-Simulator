@@ -6,9 +6,12 @@ import java.util.List;
 
 public class portfolio {
 
+  String nameOfPortFolio;
+
   List<stock> stocks;
 
-  public portfolio() {
+  public portfolio(String nameOfPortFolio) {
+    this.nameOfPortFolio = nameOfPortFolio;
     this.stocks = null;
   }
 
@@ -23,7 +26,7 @@ public class portfolio {
 
     return 0;
   }
-  
+
 
 
 
