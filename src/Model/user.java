@@ -1,11 +1,15 @@
 package Model;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,12 +26,51 @@ public class user {
     this.folderPath = "C:\\Users\\anush\\OneDrive\\Desktop\\PortFolioComposition"; //TODO change to dynamic path
     file = new File(folderPath);
     this.createFolder();
-    this.portfoliosList = null; //initially there are zero portfolios for a user
+    loadExistingPortFolios(); //initially there are zero portfolios for a user
     
     //todo create function to load the portfolios that are already created in the previous session
   }
 
+  public void loadExistingPortFolios() {
+    this.fileNamesFromSystem = this.retrieveFileNames();
+    portfolio p;
+    for (String portfolioName: this.fileNamesFromSystem) { //take files from system.
+      p = new portfolio(portfolioName); //create a portfolio object.
+      //add stocks to the portfolio by reading csv.
+      String filePath = this.folderPath + "\\" + portfolioName;
 
+      List<String[]> listOfStocks = this.readCSVFromSystem(filePath);
+
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+      for (String[] stockDetails: listOfStocks) {
+        stock s = stock.getBuilder()
+                .tickerName(stockDetails[0])
+                .numOfUnits(Integer.valueOf(stockDetails[1]))
+                .date(LocalDate.parse(stockDetails[2],formatter))
+                .build();
+        p.addStocks(s);
+      }
+      //add this portfolio to list
+      this.portfoliosList.add(p);
+    }
+  }
+
+  public List<String[]> readCSVFromSystem(String filePath) {
+
+    List<String[]> listOfStocks = new ArrayList<String[]>();
+    String line = "";
+    String splitBy = ",";
+
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(filePath));
+      while ((line = br.readLine()) != null) {
+        listOfStocks.add(line.split(splitBy));
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return listOfStocks;
+  }
 
   /*
   creates a new portfolio
