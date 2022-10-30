@@ -2,7 +2,9 @@ package Controller;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import Model.portfolio;
 import Model.portfolioModel;
@@ -68,7 +70,14 @@ public class Controller {
 
       //retrieve portfolio
       case 2:
-        view.displayListOfPortfolios(user.getPortfoliosCreated());
+        view.displayMsgToUser("Following are the portfolios created till now:");
+        List<String> portfolioNames = new ArrayList<>();
+        List<portfolio> portfolioObjects = user.getPortfoliosCreated();
+        for (portfolio p: portfolioObjects) {
+          portfolioNames.add(p.nameOfPortFolio);
+        }
+        view.displayListOfPortfolios(portfolioNames);
+
         int portfolioIndex = view.getPortfolioName();
         portfolio toDisplay = user.getPortfoliosCreated().get(portfolioIndex);
         view.displayStocks(toDisplay);

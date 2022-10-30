@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import Model.portfolio;
+import Model.stock;
 
 public class ViewImpl implements ViewInterface{
 
@@ -61,8 +62,12 @@ public class ViewImpl implements ViewInterface{
    * displays the list of created portfolios
    */
   @Override
-  public void displayListOfPortfolios(List<portfolio> portfolios) {
-
+  public void displayListOfPortfolios(List<String> portfolios) { //changing this as model classes shouldn't interact with view.
+    int count = 0;
+    for(String p: portfolios) {
+      count++;
+      System.out.println(Integer.toString(count) + p);
+    }
   }
 
   /**
@@ -80,8 +85,12 @@ public class ViewImpl implements ViewInterface{
    * displays stocks of a particular portfolio
    */
   @Override
-  public void displayStocks(portfolio toDisplay) {
-
+  public void displayStocks(List<String[]> listOfStocks){ //changing this as model classes shouldn't interact with view.
+    System.out.println("Following stocks are present in the portfolio : ");
+    System.out.println("Ticker\t" + "Number of Units\t" + "Date Bought At\n");
+    for (String[] stockDetails : listOfStocks) {
+      System.out.println(stockDetails[0]+"\t"+stockDetails[1]+"\t"+stockDetails[2]);
+    }
   }
 
   /**
