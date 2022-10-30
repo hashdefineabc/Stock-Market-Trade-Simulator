@@ -22,7 +22,7 @@ public class AlphaVantageDemo {
        */
       url = new URL("https://www.alphavantage"
                     + ".co/query?function=TIME_SERIES_DAILY"
-                    + "&outputsize=full"
+                    + "&outputsize=compact"
                     + "&symbol"
                     + "=" + stockSymbol + "&apikey="+apiKey+"&datatype=csv");
     }

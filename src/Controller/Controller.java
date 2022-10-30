@@ -101,6 +101,8 @@ public class Controller {
         }
 
         double val = toCalcVal.valueOfPortfolio(date);
+
+
         view.displayValue(val);
         break;
 
