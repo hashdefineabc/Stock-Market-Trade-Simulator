@@ -19,7 +19,7 @@ public class user {
 
   String username;
   List<portfolio> portfoliosList;
-  List<String> fileNamesFromSystem;
+  List<String> fileNamesFromSystem = new ArrayList<>();
   private String folderPath;
   private File file;
   public user() {
