@@ -34,7 +34,7 @@ public interface ViewInterface {
   /**
    * displays the list of created portfolios
    */
-  public void displayListOfPortfolios(List<portfolio> portfolios);
+  public void displayListOfPortfolios(List<String> portfolios); //changing this as model classes shouldn't interact with view.
 
   /**
    * displays list of portfolios and asks user to select one
@@ -46,7 +46,7 @@ public interface ViewInterface {
    * displays stocks of a particular portfolio
    */
 
-  public void displayStocks(portfolio toDisplay);
+  public void displayStocks(List<String[]> listOfStocks);
 
   public LocalDate getDate() throws ParseException;
 

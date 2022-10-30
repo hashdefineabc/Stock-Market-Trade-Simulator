@@ -6,9 +6,9 @@ import java.util.List;
 
 public class portfolio {
 
-  String nameOfPortFolio;
+  public String nameOfPortFolio;
 
-  List<stock> stocks;
+  public List<stock> stocks;
 
   public portfolio(String nameOfPortFolio) {
     this.nameOfPortFolio = nameOfPortFolio;
