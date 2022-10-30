@@ -27,12 +27,15 @@ public class user {
     file = new File(folderPath);
     this.createFolder();
     loadExistingPortFolios(); //initially there are zero portfolios for a user
-    
+    portfoliosList = new ArrayList<>();
+    fileNamesFromSystem = new ArrayList<>();
     //todo create function to load the portfolios that are already created in the previous session
   }
 
   public void loadExistingPortFolios() {
     this.fileNamesFromSystem = this.retrieveFileNames();
+    if(this.fileNamesFromSystem == null)
+      return;
     portfolio p;
     for (String portfolioName: this.fileNamesFromSystem) { //take files from system.
       p = new portfolio(portfolioName); //create a portfolio object.
@@ -98,6 +101,14 @@ public class user {
 //    return this.portfolios;
   }
 
+//  public List<String> getPortfolioNames() {
+//    List<String> answer = null;
+//    for(portfolio portfolio: portfoliosList){
+//      answer.add(portfolio.getNameOfPortFolio());
+//    }
+//    return answer;
+//  }
+
   private void createFolder() {
     if (!Files.exists(Path.of(this.folderPath))) {
       file.mkdir();
@@ -127,13 +138,8 @@ public class user {
 
 
   public void savePortfolioToFile(portfolio newPortfolio) {
-    List<String[]> dataToWrite = new ArrayList<>();
+    List<String[]> dataToWrite = newPortfolio.toListOfString();
 
-    for (int i = 0; i> newPortfolio.stocks.size(); i++) {
-      stock saveStock = newPortfolio.stocks.get(i);
-      saveStock.date = LocalDate.now();
-      dataToWrite.add(new String[]{saveStock.tickerName,Integer.toString(saveStock.numOfUnits),saveStock.date.toString()});
-    }
     try {
       this.createCSV(dataToWrite, newPortfolio.nameOfPortFolio);
     } catch(Exception e) {

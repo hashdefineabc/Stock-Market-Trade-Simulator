@@ -54,8 +54,12 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public Boolean addMoreStocks() { //TODO: add validation for boolean input
-    System.out.println("Do you want to add more stocks to this portfolio? (Yes/No):");
-    return Boolean.getBoolean(scanner.next());
+    System.out.println("Do you want to add more stocks to this portfolio? (Press 1 for Yes, 0 for No):");
+    int userInput = scanner.nextInt();
+    if(userInput == 1)
+      return true;
+    else
+      return false;
   }
 
   /**
@@ -98,7 +102,7 @@ public class ViewImpl implements ViewInterface{
    * @return date at which value has to be calculated.
    */
   @Override
-  public LocalDate getDate() throws ParseException {
+  public LocalDate getDateFromUser() throws ParseException {
     System.out.println("Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)");
     String d = scanner.next();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-mm-dd");
@@ -124,6 +128,7 @@ public class ViewImpl implements ViewInterface{
   @Override
   public String getPortfolioNameFromUser() {
     System.out.println("Please enter a name for this portfolio");
-    return scanner.nextLine();
+    String portfolioName = scanner.next();
+    return portfolioName;
   }
 }

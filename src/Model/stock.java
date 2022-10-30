@@ -20,6 +20,20 @@ public class stock {
     this.date = date;
   }
 
+  String getTickerName() {
+    return this.tickerName;
+  }
+
+  Integer getNumOfUnits() {
+    return this.numOfUnits;
+  }
+
+  LocalDate getDate() {
+    return this.date;
+  }
+
+
+
   public static class stockBuilder {
 
     private String tickerName;

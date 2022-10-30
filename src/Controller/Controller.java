@@ -3,12 +3,9 @@ package Controller;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import Model.portfolio;
-import Model.portfolioModel;
-import Model.portfolioModelImpl;
 import Model.stock;
 import Model.user;
 import View.ViewImpl;
@@ -17,8 +14,6 @@ import View.ViewInterface;
 public class Controller {
 
   private static ViewInterface view = new ViewImpl();
-  private static portfolioModel model = new portfolioModelImpl();
-
   private static Model.user user = new user();
 
   private static boolean checkDateLaterThanToday(LocalDate date) {
@@ -37,7 +32,7 @@ public class Controller {
     return false;
   }
 
-  public static void Main(String args[]) throws ParseException {
+  public static void main(String args[]) throws ParseException {
 
     int option = view.displayMenu(); //TODO: validation for user option
 
@@ -80,20 +75,25 @@ public class Controller {
 
         int portfolioIndex = view.getPortfolioName();
         portfolio toDisplay = user.getPortfoliosCreated().get(portfolioIndex);
-        view.displayStocks(toDisplay);
+        List<String[]> stocksToDisplay = toDisplay.toListOfString();
+        view.displayStocks(stocksToDisplay);
         break;
 
         // value of a particular portfolio
       case 3:
-        view.displayListOfPortfolios(user.getPortfoliosCreated());
+        List<String> stocksNamesToDisplay = new ArrayList<>();
+        for(portfolio p : user.getPortfoliosCreated()) {
+          stocksNamesToDisplay.add(p.getNameOfPortFolio());
+        }
+        view.displayListOfPortfolios(stocksNamesToDisplay);
         int portfolioIndexForVal = view.getPortfolioName();
         portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal);
 
-        LocalDate date = view.getDate();
+        LocalDate date = view.getDateFromUser();
         //validation for date
         while (!checkDateLaterThanToday(date)) {
           view.displayMsgToUser("Can't get value for date greater than today");
-          date = view.getDate();
+          date = view.getDateFromUser();
         }
         if (checkDateLaterThanToday(date)) {
           view.displayMsgToUser("Value will be calculated based on yesterday's closing price.");
