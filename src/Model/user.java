@@ -111,6 +111,8 @@ public class user {
 //    return answer;
 //  }
 
+
+  // TODO: 10/30/22 getting exception when folder already exists 
   private void createFolder() {
     if (!Files.exists(Path.of(this.folderPath))) {
       file.mkdir();

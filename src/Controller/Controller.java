@@ -34,6 +34,8 @@ public class Controller {
 
   public static void main(String args[]) throws ParseException {
 
+
+
     int option = view.displayMenu(); //TODO: validation for user option
 
     switch (option) {
