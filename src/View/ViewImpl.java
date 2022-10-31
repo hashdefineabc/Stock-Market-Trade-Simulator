@@ -105,7 +105,7 @@ public class ViewImpl implements ViewInterface{
   public LocalDate getDateFromUser() throws ParseException {
     System.out.println("Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)");
     String d = scanner.next();
-    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDate date = LocalDate.parse(d, dateFormat);
     return date;
 

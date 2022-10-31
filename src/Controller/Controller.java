@@ -17,8 +17,8 @@ public class Controller {
   private static Model.user user = new user();
 
   private static boolean checkDateLaterThanToday(LocalDate date) {
-    String today = LocalDate.now().toString();
-    if (today.compareTo(date.toString()) < 0) {
+    LocalDate today = LocalDate.now();
+    if (today.compareTo(date) == -1) {
       return true;
     }
     return false;
@@ -89,15 +89,16 @@ public class Controller {
         }
         view.displayListOfPortfolios(stocksNamesToDisplay);
         int portfolioIndexForVal = view.getPortfolioName();
-        portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal);
+        portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal-1);
 
         LocalDate date = view.getDateFromUser();
+        LocalDate today = LocalDate.now();
         //validation for date
-        while (!checkDateLaterThanToday(date)) {
+        while (date.isAfter(today)) {
           view.displayMsgToUser("Can't get value for date greater than today");
           date = view.getDateFromUser();
         }
-        if (checkDateLaterThanToday(date)) {
+        if (date.equals(today)) {
           view.displayMsgToUser("Value will be calculated based on yesterday's closing price.");
           date = date.minusDays(1); //modify date to yesterday
         }

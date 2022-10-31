@@ -69,7 +69,7 @@ public class portfolio implements portfolioModel{
         String[] attributes = line.split(",");
         String timeStamp = attributes[0];
         if(timeStamp.equals(date.toString()))
-          result += Integer.parseInt(attributes[4]);
+          result += Double.parseDouble(attributes[4]);
         line = br.readLine();
       }
 

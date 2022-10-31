@@ -30,7 +30,6 @@ public class user {
     file = new File(folderPath);
     this.createFolder();
     loadExistingPortFolios(); //initially there are zero portfolios for a user
-    fileNamesFromSystem = new ArrayList<>();
 
     //todo create function to load the portfolios that are already created in the previous session
   }
@@ -47,7 +46,7 @@ public class user {
 
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath);
 
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // has to be capital M for month
       for (String[] stockDetails: listOfStocks) {
         stock s = stock.getBuilder()
                 .tickerName(stockDetails[0])
@@ -93,8 +92,8 @@ public class user {
    */
 
   public List<portfolio> getPortfoliosCreated() {
-
     return this.portfoliosList;
+  }
 
 //    String[] files = this.retrieveFileNames();
 //    for (int i = 0; i < files.length; i++) {
@@ -102,7 +101,7 @@ public class user {
 //      this.portfolios.add(files[i]);
 //    }
 //    return this.portfolios;
-  }
+
 
 //  public List<String> getPortfolioNames() {
 //    List<String> answer = null;
@@ -153,7 +152,7 @@ public class user {
   }
 
   public void createCSV(List<String[]> dataToWrite, String portFolioName) throws IOException {
-    File csvOutputFile = new File(this.folderPath + "\\" + portFolioName + ".csv");
+    File csvOutputFile = new File(this.folderPath + "/" + portFolioName + ".csv");
     try {
       PrintWriter pw = new PrintWriter(csvOutputFile);
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
