@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import Model.portfolio;
 import Model.stock;
 import Model.user;
@@ -16,24 +15,7 @@ public class Controller {
   private static ViewInterface view = new ViewImpl();
   private static Model.user user = new user();
 
-  private static boolean checkDateLaterThanToday(LocalDate date) {
-    LocalDate today = LocalDate.now();
-    if (today.compareTo(date) == -1) {
-      return true;
-    }
-    return false;
-  }
-
-  private boolean checkIfDateToday(LocalDate date) {
-    String today = LocalDate.now().toString();
-    if (today.compareTo(date.toString()) == 0) {
-      return true;
-    }
-    return false;
-  }
-
   public static void main(String args[]) throws ParseException {
-
 
 
     int option = view.displayMenu(); //TODO: validation for user option
@@ -76,7 +58,7 @@ public class Controller {
         view.displayListOfPortfolios(portfolioNames);
 
         int portfolioIndex = view.getPortfolioName();
-        portfolio toDisplay = user.getPortfoliosCreated().get(portfolioIndex);
+        portfolio toDisplay = user.getPortfoliosCreated().get(portfolioIndex-1);
         List<String[]> stocksToDisplay = toDisplay.toListOfString();
         view.displayStocks(stocksToDisplay);
         break;

@@ -1,13 +1,9 @@
 package View;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
-
-import Model.portfolio;
-import Model.stock;
 
 public class ViewImpl implements ViewInterface{
 
@@ -27,8 +23,7 @@ public class ViewImpl implements ViewInterface{
     System.out.println("3. Check value of a Portfolio");
     System.out.println("4. Exit the application.");
     System.out.println("Pick one of the options");
-    int option = scanner.nextInt();
-    return option;
+    return scanner.nextInt();
   }
 
   /**
@@ -56,10 +51,7 @@ public class ViewImpl implements ViewInterface{
   public Boolean addMoreStocks() { //TODO: add validation for boolean input
     System.out.println("Do you want to add more stocks to this portfolio? (Press 1 for Yes, 0 for No):");
     int userInput = scanner.nextInt();
-    if(userInput == 1)
-      return true;
-    else
-      return false;
+    return userInput == 1;
   }
 
   /**
@@ -70,7 +62,7 @@ public class ViewImpl implements ViewInterface{
     int count = 0;
     for(String p: portfolios) {
       count++;
-      System.out.println(Integer.toString(count) + p);
+      System.out.println(count + p);
     }
   }
 
@@ -102,12 +94,11 @@ public class ViewImpl implements ViewInterface{
    * @return date at which value has to be calculated.
    */
   @Override
-  public LocalDate getDateFromUser() throws ParseException {
+  public LocalDate getDateFromUser() {
     System.out.println("Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)");
     String d = scanner.next();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    LocalDate date = LocalDate.parse(d, dateFormat);
-    return date;
+    return LocalDate.parse(d, dateFormat);
 
   }
 
@@ -128,7 +119,6 @@ public class ViewImpl implements ViewInterface{
   @Override
   public String getPortfolioNameFromUser() {
     System.out.println("Please enter a name for this portfolio");
-    String portfolioName = scanner.next();
-    return portfolioName;
+    return scanner.next();
   }
 }

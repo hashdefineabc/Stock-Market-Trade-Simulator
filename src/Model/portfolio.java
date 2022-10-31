@@ -9,39 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class portfolio implements portfolioModel{
 
   public String nameOfPortFolio;
   String apiKey = "W0M1JOKC82EZEQA8";
 
   public List<stock> stocks;
-
-  // TODO: 10/30/22 remove this main method
-  public static void main(String[]args) throws IOException {
-
-    FileReader file = new FileReader("daily_goog.csv");
-
-    try(BufferedReader br = new BufferedReader(file)) {
-
-      String line = br.readLine();
-      while (line != null) {
-        String[] attributes = line.split(",");
-        LocalDate today = LocalDate.now();
-        LocalDate yes = today.minusDays(2);
-        System.out.println(yes);
-        String timeStamp = attributes[0];
-        if(timeStamp.equals(yes.toString()))
-          System.out.println("28th October");
-        System.out.println("date: "+attributes[0]+" close_value: "+attributes[4]);
-        line = br.readLine();
-      }
-
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-
-  }
 
   public portfolio(String nameOfPortFolio) {
     this.nameOfPortFolio = nameOfPortFolio;
@@ -103,11 +76,11 @@ public class portfolio implements portfolioModel{
   public List<String[]> toListOfString() {
     List<String[]> answer = new ArrayList<>();
 
-    for(int i=0; i<this.stocks.size(); i++) {
+    for (Model.stock stock : this.stocks) {
       String[] stocksDetails = new String[3];
-      stocksDetails[0] = String.valueOf(this.stocks.get(i).getTickerName());
-      stocksDetails[1] = String.valueOf(this.stocks.get(i).getNumOfUnits());
-      stocksDetails[2] = String.valueOf(this.stocks.get(i).getDate());
+      stocksDetails[0] = String.valueOf(stock.getTickerName());
+      stocksDetails[1] = String.valueOf(stock.getNumOfUnits());
+      stocksDetails[2] = String.valueOf(stock.getDate());
       answer.add(stocksDetails);
     }
     return answer;

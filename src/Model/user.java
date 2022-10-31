@@ -2,7 +2,6 @@ package Model;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -94,22 +93,6 @@ public class user {
   public List<portfolio> getPortfoliosCreated() {
     return this.portfoliosList;
   }
-
-//    String[] files = this.retrieveFileNames();
-//    for (int i = 0; i < files.length; i++) {
-//      System.out.println(files[i]);
-//      this.portfolios.add(files[i]);
-//    }
-//    return this.portfolios;
-
-
-//  public List<String> getPortfolioNames() {
-//    List<String> answer = null;
-//    for(portfolio portfolio: portfoliosList){
-//      answer.add(portfolio.getNameOfPortFolio());
-//    }
-//    return answer;
-//  }
 
 
   private void createFolder() {
