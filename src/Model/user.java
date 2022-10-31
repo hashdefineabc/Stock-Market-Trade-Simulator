@@ -23,7 +23,6 @@ public class user {
   private String folderPath;
   private File file;
   public user() {
-<<<<<<< HEAD
     portfoliosList = new ArrayList<>();
     fileNamesFromSystem = new ArrayList<>();
 
@@ -31,14 +30,7 @@ public class user {
     file = new File(folderPath);
     this.createFolder();
     loadExistingPortFolios(); //initially there are zero portfolios for a user
-=======
     fileNamesFromSystem = new ArrayList<>();
-    this.folderPath = "C:\\Users\\anush\\OneDrive\\Desktop\\PortFolioComposition"; //TODO change to dynamic path
-    file = new File(folderPath);
-    this.createFolder();
-    loadExistingPortFolios(); //initially there are zero portfolios for a user
-    portfoliosList = new ArrayList<>();
->>>>>>> 72f1b44ebd73e3386efd731d3fc52037c46a74eb
 
     //todo create function to load the portfolios that are already created in the previous session
   }
