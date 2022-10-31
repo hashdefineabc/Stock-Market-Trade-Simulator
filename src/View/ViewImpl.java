@@ -1,5 +1,6 @@
 package View;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -7,7 +8,14 @@ import java.util.Scanner;
 
 public class ViewImpl implements ViewInterface{
 
-  Scanner scanner = new Scanner(System.in);
+  private InputStream  userInput;
+  Scanner scanner;
+  public ViewImpl(InputStream in) {
+    this.userInput = in;
+    scanner = new Scanner(this.userInput);
+  }
+
+  //Scanner scanner = new Scanner(this.userInput);
   /**
    * display options
    * 1. create new portfolio

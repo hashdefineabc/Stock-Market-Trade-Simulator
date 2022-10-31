@@ -14,18 +14,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class user {
+public class User {
 
   String username;
   List<portfolio> portfoliosList;
   List<String> fileNamesFromSystem;
   private String folderPath;
   private File file;
-  public user() {
+  public User() {
     portfoliosList = new ArrayList<>();
     fileNamesFromSystem = new ArrayList<>();
 
-    this.folderPath = "/Users/manasamanjunath/Desktop/stocksPDP"; //TODO change to dynamic path
+    //this.folderPath = "/Users/manasamanjunath/Desktop/stocksPDP"; //TODO change to dynamic path
+    this.folderPath = "C:\\Users\\anush\\OneDrive\\Desktop\\PortFolioComposition";
     file = new File(folderPath);
     this.createFolder();
     loadExistingPortFolios(); //initially there are zero portfolios for a user
@@ -135,7 +136,8 @@ public class user {
   }
 
   public void createCSV(List<String[]> dataToWrite, String portFolioName) throws IOException {
-    File csvOutputFile = new File(this.folderPath + "/" + portFolioName + ".csv");
+    //File csvOutputFile = new File(this.folderPath + "/" + portFolioName + ".csv");
+    File csvOutputFile = new File(this.folderPath + "\\" + portFolioName + ".csv");
     try {
       PrintWriter pw = new PrintWriter(csvOutputFile);
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
