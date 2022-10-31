@@ -23,12 +23,14 @@ public class user {
   private String folderPath;
   private File file;
   public user() {
+    portfoliosList = new ArrayList<>();
     fileNamesFromSystem = new ArrayList<>();
-    this.folderPath = "C:\\Users\\anush\\OneDrive\\Desktop\\PortFolioComposition"; //TODO change to dynamic path
+
+    this.folderPath = "/Users/manasamanjunath/Desktop/stocksPDP"; //TODO change to dynamic path
     file = new File(folderPath);
     this.createFolder();
     loadExistingPortFolios(); //initially there are zero portfolios for a user
-    portfoliosList = new ArrayList<>();
+    fileNamesFromSystem = new ArrayList<>();
 
     //todo create function to load the portfolios that are already created in the previous session
   }
@@ -41,7 +43,7 @@ public class user {
     for (String portfolioName: this.fileNamesFromSystem) { //take files from system.
       p = new portfolio(portfolioName); //create a portfolio object.
       //add stocks to the portfolio by reading csv.
-      String filePath = this.folderPath + "\\" + portfolioName;
+      String filePath = this.folderPath + "/" + portfolioName;
 
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath);
 
@@ -109,6 +111,7 @@ public class user {
 //    }
 //    return answer;
 //  }
+
 
   private void createFolder() {
     if (!Files.exists(Path.of(this.folderPath))) {
