@@ -16,7 +16,7 @@ public interface ViewInterface {
    * 3. check value of a particular portfolio
    * @return the option selected by the user
    */
-  public int displayMenu();
+  public String displayMenu();
 
   /**
    * take stock details for a particular portfolio from the user

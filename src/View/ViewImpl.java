@@ -1,6 +1,8 @@
 package View;
 
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -9,9 +11,11 @@ import java.util.Scanner;
 public class ViewImpl implements ViewInterface{
 
   private InputStream  userInput;
+  private PrintStream out;
   Scanner scanner;
-  public ViewImpl(InputStream in) {
+  public ViewImpl(InputStream in, PrintStream o) {
     this.userInput = in;
+    this.out = o;
     scanner = new Scanner(this.userInput);
   }
 
@@ -25,13 +29,14 @@ public class ViewImpl implements ViewInterface{
    * @return the option selected by the user
    */
   @Override
-  public int displayMenu() { //TODO: validate the user input in portfolio.
-    System.out.println("1. Create a new Portfolio");
-    System.out.println("2. Retrieve Portfolio");
-    System.out.println("3. Check value of a Portfolio");
-    System.out.println("4. Exit the application.");
-    System.out.println("Pick one of the options");
-    return scanner.nextInt();
+  public String displayMenu() throws IllegalArgumentException { //TODO: validate the user input in portfolio.
+    int userInput = 5;
+    this.out.print("\t1. Create a new Portfolio\n");
+    this.out.print("\t2. Retrieve Portfolio\n");
+    this.out.print("\t3. Check value of a Portfolio\n");
+    this.out.print("\t4. Exit the application.\n");
+    this.out.print("\tPick one of the options\n");
+    return scanner.next();
   }
 
   /**
@@ -43,9 +48,9 @@ public class ViewImpl implements ViewInterface{
   @Override
   public String[] takeStockInput() { //TODO: validate the ticker and the num of units purchased.
     String[] inputStock = new String[2];
-    System.out.println("Enter the ticker name:");
+    this.out.print("Enter the ticker name:\n");
     inputStock[0] = scanner.next();
-    System.out.println("Enter the number of units purchased");
+    this.out.print("Enter the number of units purchased:\n");
     inputStock[1] = Integer.toString(scanner.nextInt());
     return inputStock;
   }
@@ -57,7 +62,7 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public Boolean addMoreStocks() { //TODO: add validation for boolean input
-    System.out.println("Do you want to add more stocks to this portfolio? (Press 1 for Yes, 0 for No):");
+    this.out.println("Do you want to add more stocks to this portfolio? (Press 1 for Yes, 0 for No):");
     int userInput = scanner.nextInt();
     return userInput == 1;
   }
@@ -70,7 +75,7 @@ public class ViewImpl implements ViewInterface{
     int count = 0;
     for(String p: portfolios) {
       count++;
-      System.out.println(count + p);
+      this.out.println(count + p);
     }
   }
 
@@ -81,7 +86,7 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public int getPortfolioName() { //TODO: validate the input from user
-    System.out.println("Pick a portfolio");
+    this.out.println("Pick a portfolio");
     return scanner.nextInt();
   }
 
@@ -90,10 +95,10 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public void displayStocks(List<String[]> listOfStocks){ //changing this as model classes shouldn't interact with view.
-    System.out.println("Following stocks are present in the portfolio : ");
-    System.out.println("Ticker\t" + "Number of Units\t" + "Date Bought At\n");
+    this.out.println("Following stocks are present in the portfolio : ");
+    this.out.println("Ticker\t" + "Number of Units\t" + "Date Bought At\n");
     for (String[] stockDetails : listOfStocks) {
-      System.out.println(stockDetails[0]+"\t"+stockDetails[1]+"\t"+stockDetails[2]);
+      this.out.println(stockDetails[0]+"\t"+stockDetails[1]+"\t"+stockDetails[2]);
     }
   }
 
@@ -103,7 +108,7 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public LocalDate getDateFromUser() {
-    System.out.println("Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)");
+    this.out.println("Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)");
     String d = scanner.next();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     return LocalDate.parse(d, dateFormat);
@@ -116,17 +121,17 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public void displayValue(double val) {
-    System.out.println("Value of the portfolio is: " + String.format("%.2f",val));
+    this.out.println("Value of the portfolio is: " + String.format("%.2f",val));
   }
 
   @Override
   public void displayMsgToUser(String msg) {
-    System.out.println(msg);
+    this.out.println(msg);
   }
 
   @Override
   public String getPortfolioNameFromUser() {
-    System.out.println("Please enter a name for this portfolio");
+    this.out.println("Please enter a name for this portfolio");
     return scanner.next();
   }
 }

@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import Model.portfolio;
 import Model.stock;
@@ -20,19 +21,34 @@ public class ControllerImpl {
     this.user = user;
   }
 
+  public int showMenuOnView() {
+    int userOption = 5;
+    List<Integer> validMenuOptions = Arrays.asList(1,2,3,4);
+    while (!validMenuOptions.contains(userOption)){
+      try {
+        userOption = Integer.parseInt( this.view.displayMenu());
+      } catch (IllegalArgumentException ie) {
+        this.view.displayMsgToUser("Please enter only an integer value!!");
+      }
+    }
+    return userOption;
+  }
+
+  public String[] takeStockInputFromView() {
+    return view.takeStockInput();
+  }
+
   public void go() {
 
     while(true) {
-      int option = view.displayMenu(); //TODO: validation for user option
-      switch (option) {
-
+        switch(this.showMenuOnView()) {
         // create new portfolio and add stocks to the new portfolio
         case 1:
           view.displayMsgToUser("Creating a new portfolio...");
           String portfolioName = view.getPortfolioNameFromUser();
           portfolio newPortfolio = new portfolio(portfolioName);
           while (view.addMoreStocks()) {
-            String[] s = view.takeStockInput();
+            String[] s = this.takeStockInputFromView();
             //stock newStock = new stock(s[0], Integer.valueOf(s[1]));
             //using builder method to create stocks
             stock newStock = stock.getBuilder()

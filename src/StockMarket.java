@@ -13,7 +13,7 @@ public class StockMarket {
     User u = new User();
 
     //create the view.
-    ViewInterface view = new ViewImpl(System.in); //this input stream can be used by view as well as junit tests.
+    ViewInterface view = new ViewImpl(System.in,System.out); //this input stream can be used by view as well as junit tests.
 
     //create the controller and give it the model.
     ControllerImpl controller = new ControllerImpl(u,view);
