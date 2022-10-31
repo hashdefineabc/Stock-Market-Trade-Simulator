@@ -10,7 +10,7 @@ import Model.user;
 import View.ViewImpl;
 import View.ViewInterface;
 
-public class Controller {
+public class ControllerImpl {
 
   private static ViewInterface view = new ViewImpl();
   private static Model.user user = new user();
