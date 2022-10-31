@@ -1,22 +1,26 @@
 package Controller;
 
+import java.io.InputStream;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import Model.portfolio;
 import Model.stock;
-import Model.user;
+import Model.User;
 import View.ViewImpl;
 import View.ViewInterface;
 
 public class ControllerImpl {
+  private static ViewInterface view;
+  private static User user;
 
-  private static ViewInterface view = new ViewImpl();
-  private static Model.user user = new user();
+  public ControllerImpl(User user, ViewInterface view) {
+    this.view = view;
+    this.user = user;
+  }
 
-  public static void main(String args[]) throws ParseException {
-
+  public void go() {
 
     int option = view.displayMenu(); //TODO: validation for user option
 
@@ -73,12 +77,21 @@ public class ControllerImpl {
         int portfolioIndexForVal = view.getPortfolioName();
         portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal-1);
 
-        LocalDate date = view.getDateFromUser();
+        LocalDate date = null;
+        try {
+          date = view.getDateFromUser();
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
         LocalDate today = LocalDate.now();
         //validation for date
         while (date.isAfter(today)) {
           view.displayMsgToUser("Can't get value for date greater than today");
-          date = view.getDateFromUser();
+          try {
+            date = view.getDateFromUser();
+          } catch (ParseException e) {
+            throw new RuntimeException(e);
+          }
         }
         if (date.equals(today)) {
           view.displayMsgToUser("Value will be calculated based on yesterday's closing price.");
