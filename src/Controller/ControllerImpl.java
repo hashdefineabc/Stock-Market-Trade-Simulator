@@ -3,6 +3,7 @@ package Controller;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,6 +69,22 @@ public class ControllerImpl {
     return index;
   }
 
+  public LocalDate getDateFromView() {
+    LocalDate valueDate = LocalDate.now();
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    boolean isDateOkay = false;
+    while (isDateOkay == false) {
+      try {
+        valueDate =  LocalDate.parse(view.getDateFromUser(), dateFormat);
+        isDateOkay = true;
+      } catch (Exception e) {
+        view.displayMsgToUser("Invalid date. Please try again!");
+        isDateOkay = false;
+      }
+    }
+    return valueDate;
+  }
+
   private boolean isPortFolioEmpty(portfolio p) {
     if (p.stocks.size() == 0) {
       this.view.displayMsgToUser("Portfolio is empty right now...");
@@ -131,21 +148,12 @@ public class ControllerImpl {
           int portfolioIndexForVal = view.getSelectedPortfolio();
           portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal - 1);
 
-          LocalDate date = null;
-          try {
-            date = view.getDateFromUser();
-          } catch (ParseException e) {
-            throw new RuntimeException(e);
-          }
+          LocalDate date = this.getDateFromView();
           LocalDate today = LocalDate.now();
           //validation for date
           while (date.isAfter(today)) {
             view.displayMsgToUser("Can't get value for date greater than today");
-            try {
-              date = view.getDateFromUser();
-            } catch (ParseException e) {
-              throw new RuntimeException(e);
-            }
+            date = this.getDateFromView();
           }
           if (date.equals(today)) {
             view.displayMsgToUser("Value will be calculated based on yesterday's closing price.");
@@ -153,8 +161,6 @@ public class ControllerImpl {
           }
 
           double val = toCalcVal.valueOfPortfolio(date);
-
-
           view.displayValue(val);
           break;
 

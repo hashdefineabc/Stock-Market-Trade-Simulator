@@ -85,7 +85,7 @@ public class ViewImpl implements ViewInterface{
    * @return the selected portfolio
    */
   @Override
-  public int getSelectedPortfolio() { //TODO: validate the input from user
+  public int getSelectedPortfolio() {
     this.out.println("Pick a portfolio");
     return scanner.nextInt();
   }
@@ -107,12 +107,10 @@ public class ViewImpl implements ViewInterface{
    * @return date at which value has to be calculated.
    */
   @Override
-  public LocalDate getDateFromUser() {
+  public String getDateFromUser() {
     this.out.println("Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)");
     String d = scanner.next();
-    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    return LocalDate.parse(d, dateFormat);
-
+    return d;
   }
 
   /**
