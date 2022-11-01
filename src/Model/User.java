@@ -19,19 +19,45 @@ public class User {
   String username;
   List<portfolio> portfoliosList;
   List<String> fileNamesFromSystem;
+
+  List<String> nasdaqTickerNames;
   private String folderPath;
   private File file;
   public User() {
     portfoliosList = new ArrayList<>();
     fileNamesFromSystem = new ArrayList<>();
+    nasdaqTickerNames = new ArrayList<String>();
 
     //this.folderPath = "/Users/manasamanjunath/Desktop/stocksPDP"; //TODO change to dynamic path
     this.folderPath = "C:\\Users\\anush\\OneDrive\\Desktop\\PortFolioComposition";
     file = new File(folderPath);
     this.createFolder();
     loadExistingPortFolios(); //initially there are zero portfolios for a user
+    loadNasdaqTickerNames();
 
     //todo create function to load the portfolios that are already created in the previous session
+  }
+
+  private void loadNasdaqTickerNames() {
+    try {
+      BufferedReader csvReader = new BufferedReader(new FileReader("NASDAQ_tickernames.csv"));
+      String row = "";
+      while ( !row.equals(null)) {
+        row = csvReader.readLine();
+        row = row.strip().split(",")[0];
+        this.nasdaqTickerNames.add(row);
+      }
+      csvReader.close();
+    } catch(Exception e) {
+
+    }
+  }
+
+  public boolean isTickerValid(String tickerName) {
+    if (this.nasdaqTickerNames.contains(tickerName)) {
+      return true;
+    }
+    return false;
   }
 
   public void loadExistingPortFolios() {
@@ -163,4 +189,6 @@ public class User {
     }
     return escapedData;
   }
+
+
 }
