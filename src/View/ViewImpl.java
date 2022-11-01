@@ -30,7 +30,6 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public String displayMenu() {
-    int userInput = 5;
     this.out.print("\t1. Create a new Portfolio\n");
     this.out.print("\t2. Retrieve Portfolio\n");
     this.out.print("\t3. Check value of a Portfolio\n");
@@ -38,6 +37,8 @@ public class ViewImpl implements ViewInterface{
     this.out.print("\tPick one of the options\n");
     return scanner.next();
   }
+
+
 
   /**
    * take stock details for a particular portfolio from the user
@@ -132,4 +133,18 @@ public class ViewImpl implements ViewInterface{
     this.out.println("Please enter a name for this portfolio");
     return scanner.next();
   }
+
+  @Override
+  public String displayCreatePortFolioOptions() {
+    this.out.print("\t1. Enter the stock details manually\n" + "\t2. Upload an existing file\n");
+    return scanner.next();
+  }
+
+  public boolean isFileUploaded() {
+    this.out.println("Has the file been placed at the above location? 1.Yes 0.No");
+    int userInput = scanner.nextInt();
+    return userInput == 1;
+  }
+
+
 }

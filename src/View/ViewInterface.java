@@ -55,4 +55,8 @@ public interface ViewInterface {
   void displayMsgToUser(String msg);
 
   String getPortfolioNameFromUser();
+
+  String displayCreatePortFolioOptions();
+
+  boolean isFileUploaded();
 }
