@@ -36,11 +36,14 @@ public class ControllerImpl {
 
   public String[] takeStockInputFromView() {
     String[] userStockInput = new String[2];
+    String tickerNameFromUser = "";
     int numUnits = -1;
-    while (numUnits <= 0) {
+    while (numUnits <= 0 || !user.isTickerValid(tickerNameFromUser)) {
       userStockInput = this.view.takeStockInput();
       numUnits = Integer.parseInt(userStockInput[1]);
+      tickerNameFromUser = userStockInput[0];
     }
+
     return userStockInput;
   }
 
@@ -82,6 +85,7 @@ public class ControllerImpl {
                     .tickerName(s[0])
                     .numOfUnits(Integer.valueOf(s[1]))
                     .build();
+
             newPortfolio.addStocks(newStock);
           }
           user.CreateNewPortfolio(newPortfolio);
@@ -147,6 +151,7 @@ public class ControllerImpl {
           break;
 
         case 4:
+          view.displayMsgToUser("Closing the application");
           System.exit(0);
           break;
       }
