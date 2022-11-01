@@ -7,6 +7,8 @@ ToDo
 3. For the case where user can upload a file to load the portfolio, take file-path as user input and process accordingly
 4. If the date provided is Sunday.
 5. We can use builder design method.
+6. input a file for a portfolio
+7. that the user can create a portfolio by providing a file.
 
 
 TA meet
