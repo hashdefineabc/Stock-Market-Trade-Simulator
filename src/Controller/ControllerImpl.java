@@ -35,7 +35,34 @@ public class ControllerImpl {
   }
 
   public String[] takeStockInputFromView() {
-    return view.takeStockInput();
+    String[] userStockInput = new String[2];
+    int numUnits = -1;
+    while (numUnits <= 0) {
+      userStockInput = this.view.takeStockInput();
+      numUnits = Integer.parseInt(userStockInput[1]);
+    }
+    return userStockInput;
+  }
+
+  public boolean addMoreStocksFromView() {
+    return view.addMoreStocks();
+  }
+
+  public String getPortFolioNameFromView() {
+    String portfolioName = this.view.getPortfolioNameFromUser();;
+    while(user.checkIfFileExists(portfolioName)) {
+      this.view.displayMsgToUser("This portfolio already exists in the system!!");
+      portfolioName = this.view.getPortfolioNameFromUser();
+    }
+    return portfolioName;
+  }
+
+  private boolean isPortFolioEmpty(portfolio p) {
+    if (p.stocks.size() == 0) {
+      this.view.displayMsgToUser("Portfolio is empty right now...");
+      return true;
+    }
+    return false;
   }
 
   public void go() {
@@ -45,9 +72,9 @@ public class ControllerImpl {
         // create new portfolio and add stocks to the new portfolio
         case 1:
           view.displayMsgToUser("Creating a new portfolio...");
-          String portfolioName = view.getPortfolioNameFromUser();
+          String portfolioName = this.getPortFolioNameFromView();
           portfolio newPortfolio = new portfolio(portfolioName);
-          while (view.addMoreStocks()) {
+          while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
             String[] s = this.takeStockInputFromView();
             //stock newStock = new stock(s[0], Integer.valueOf(s[1]));
             //using builder method to create stocks
@@ -121,6 +148,7 @@ public class ControllerImpl {
 
         case 4:
           System.exit(0);
+          break;
       }
     }
   }

@@ -29,7 +29,7 @@ public class ViewImpl implements ViewInterface{
    * @return the option selected by the user
    */
   @Override
-  public String displayMenu() throws IllegalArgumentException { //TODO: validate the user input in portfolio.
+  public String displayMenu() {
     int userInput = 5;
     this.out.print("\t1. Create a new Portfolio\n");
     this.out.print("\t2. Retrieve Portfolio\n");
@@ -46,7 +46,7 @@ public class ViewImpl implements ViewInterface{
    * @return the ticker name and the number of units
    */
   @Override
-  public String[] takeStockInput() { //TODO: validate the ticker and the num of units purchased.
+  public String[] takeStockInput() { //TODO: validate the ticker.
     String[] inputStock = new String[2];
     this.out.print("Enter the ticker name:\n");
     inputStock[0] = scanner.next();
