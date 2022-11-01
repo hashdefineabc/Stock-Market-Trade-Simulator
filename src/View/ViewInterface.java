@@ -48,7 +48,7 @@ public interface ViewInterface {
 
   public void displayStocks(List<String[]> listOfStocks);
 
-  public LocalDate getDateFromUser() throws ParseException;
+  public String getDateFromUser();
 
   void displayValue(double val);
 
