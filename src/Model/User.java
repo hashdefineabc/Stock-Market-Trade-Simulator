@@ -21,7 +21,7 @@ public class User {
   List<String> fileNamesFromSystem;
 
   List<String> nasdaqTickerNames;
-  private String folderPath;
+  public String folderPath;
   private File file;
   public User() {
     portfoliosList = new ArrayList<>();
@@ -61,7 +61,7 @@ public class User {
   }
 
   public void loadExistingPortFolios() {
-    this.fileNamesFromSystem = this.retrieveFileNames();
+    this.retrieveFileNames();
     if(this.fileNamesFromSystem.size() == 0)
       return;
     portfolio p;
@@ -84,6 +84,10 @@ public class User {
       //add this portfolio to list
       this.portfoliosList.add(p);
     }
+  }
+
+  public void createPortFolioFromFile() {
+    this.loadExistingPortFolios();
   }
 
   public List<String[]> readCSVFromSystem(String filePath) {
@@ -134,6 +138,7 @@ public class User {
 
   private List<String> retrieveFileNames() {
     String[] fileNames = file.list();
+    this.fileNamesFromSystem.clear();
     for (String fileName: fileNames){
       this.fileNamesFromSystem.add(fileName);
     }

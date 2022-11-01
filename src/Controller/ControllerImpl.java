@@ -29,7 +29,20 @@ public class ControllerImpl implements Controller{
       try {
         userOption = Integer.parseInt( this.view.displayMenu());
       } catch (IllegalArgumentException ie) {
-        this.view.displayMsgToUser("Please enter only an integer value!!");
+        this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
+      }
+    }
+    return userOption;
+  }
+
+  public int showCreatePortfolioOptionsOnView() {
+    int userOption = 3;
+    List<Integer> validMenuOptions = Arrays.asList(1,2);
+    while (!validMenuOptions.contains(userOption)){
+      try {
+        userOption = Integer.parseInt( this.view.displayCreatePortFolioOptions());
+      } catch (IllegalArgumentException ie) {
+        this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
     }
     return userOption;
@@ -93,32 +106,50 @@ public class ControllerImpl implements Controller{
     return false;
   }
 
+  public void displayCsvPathToUser() {
+    this.view.displayMsgToUser("Please place the csv at the location:\n" + this.user.folderPath);
+  }
+
+
+
   public void go() {
 
     while(true) {
         switch(this.showMenuOnView()) {
         // create new portfolio and add stocks to the new portfolio
         case 1:
-          view.displayMsgToUser("Creating a new portfolio...");
-          String portfolioName = this.getPortFolioNameFromView();
-          portfolio newPortfolio = new portfolio(portfolioName);
-          while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
-            String[] s = this.takeStockInputFromView();
-            //stock newStock = new stock(s[0], Integer.valueOf(s[1]));
-            //using builder method to create stocks
-            stock newStock = stock.getBuilder()
-                    .tickerName(s[0])
-                    .numOfUnits(Integer.valueOf(s[1]))
-                    .build();
+          switch(this.showCreatePortfolioOptionsOnView()) {
+            case 1:
+              view.displayMsgToUser("Creating a new portfolio...");
+              String portfolioName = this.getPortFolioNameFromView();
+              portfolio newPortfolio = new portfolio(portfolioName);
+              while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
+                String[] s = this.takeStockInputFromView();
+                //stock newStock = new stock(s[0], Integer.valueOf(s[1]));
+                //using builder method to create stocks
+                stock newStock = stock.getBuilder()
+                        .tickerName(s[0])
+                        .numOfUnits(Integer.valueOf(s[1]))
+                        .build();
 
-            newPortfolio.addStocks(newStock);
-          }
-          user.CreateNewPortfolio(newPortfolio);
-          user.savePortfolioToFile(newPortfolio);
-          if (user.checkIfFileExists(portfolioName)) {
-            view.displayMsgToUser("Portfolio saved successfully");
-          } else {
-            view.displayMsgToUser("Portfolio was not saved. Try again");
+                newPortfolio.addStocks(newStock);
+              }
+              user.CreateNewPortfolio(newPortfolio);
+              user.savePortfolioToFile(newPortfolio);
+              if (user.checkIfFileExists(portfolioName)) {
+                view.displayMsgToUser("Portfolio saved successfully");
+              } else {
+                view.displayMsgToUser("Portfolio was not saved. Try again");
+              }
+              break;
+
+            case 2: //upload a file
+              this.displayCsvPathToUser();
+              //check if file uploaded
+              if (view.isFileUploaded()) { //TODO: complete this fn
+                user.createPortFolioFromFile();
+              }
+              break;
           }
           break;
 
