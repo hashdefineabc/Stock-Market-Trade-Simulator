@@ -46,7 +46,7 @@ public class ViewImpl implements ViewInterface{
    * @return the ticker name and the number of units
    */
   @Override
-  public String[] takeStockInput() { //TODO: validate the ticker.
+  public String[] takeStockInput() {
     String[] inputStock = new String[2];
     this.out.print("Enter the ticker name:\n");
     inputStock[0] = scanner.next();
@@ -85,7 +85,7 @@ public class ViewImpl implements ViewInterface{
    * @return the selected portfolio
    */
   @Override
-  public int getPortfolioName() { //TODO: validate the input from user
+  public int getSelectedPortfolio() { //TODO: validate the input from user
     this.out.println("Pick a portfolio");
     return scanner.nextInt();
   }

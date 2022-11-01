@@ -40,7 +40,7 @@ public interface ViewInterface {
    * displays list of portfolios and asks user to select one
    * @return the selected portfolio
    */
-  public int getPortfolioName();
+  public int getSelectedPortfolio();
 
   /**
    * displays stocks of a particular portfolio

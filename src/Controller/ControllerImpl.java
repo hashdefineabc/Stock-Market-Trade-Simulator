@@ -60,6 +60,14 @@ public class ControllerImpl {
     return portfolioName;
   }
 
+  public int getSelectedPortFolioFromView() {
+    int index = -1;
+    while ((index < 0) || (index > user.getPortfoliosCreated().size())) {
+      index = view.getSelectedPortfolio();
+    }
+    return index;
+  }
+
   private boolean isPortFolioEmpty(portfolio p) {
     if (p.stocks.size() == 0) {
       this.view.displayMsgToUser("Portfolio is empty right now...");
@@ -107,7 +115,7 @@ public class ControllerImpl {
           }
           view.displayListOfPortfolios(portfolioNames);
 
-          int portfolioIndex = view.getPortfolioName();
+          int portfolioIndex = this.getSelectedPortFolioFromView();
           portfolio toDisplay = user.getPortfoliosCreated().get(portfolioIndex - 1);
           List<String[]> stocksToDisplay = toDisplay.toListOfString();
           view.displayStocks(stocksToDisplay);
@@ -120,7 +128,7 @@ public class ControllerImpl {
             stocksNamesToDisplay.add(p.getNameOfPortFolio());
           }
           view.displayListOfPortfolios(stocksNamesToDisplay);
-          int portfolioIndexForVal = view.getPortfolioName();
+          int portfolioIndexForVal = view.getSelectedPortfolio();
           portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal - 1);
 
           LocalDate date = null;
