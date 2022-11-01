@@ -21,11 +21,13 @@ public class portfolio implements portfolioModel{
     this.stocks = new ArrayList<>();
   }
 
+  @Override
   public void addStocks(stock s) {
     this.stocks.add(s);
   }
 
-  double getStockValue(String tickerName, LocalDate date) {
+
+  private double getStockValue(String tickerName, LocalDate date) {
     double result = 0;
     FileReader file = null;
     try {
@@ -52,7 +54,7 @@ public class portfolio implements portfolioModel{
     return result;
   }
 
-
+  @Override
   public double valueOfPortfolio(LocalDate date) {
     // get list of stocks from portfolio
     // calculate the value and return
