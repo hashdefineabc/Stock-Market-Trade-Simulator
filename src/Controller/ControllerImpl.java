@@ -57,6 +57,14 @@ public class ControllerImpl {
     return portfolioName;
   }
 
+  private boolean isPortFolioEmpty(portfolio p) {
+    if (p.stocks.size() == 0) {
+      this.view.displayMsgToUser("Portfolio is empty right now...");
+      return true;
+    }
+    return false;
+  }
+
   public void go() {
 
     while(true) {
@@ -66,7 +74,7 @@ public class ControllerImpl {
           view.displayMsgToUser("Creating a new portfolio...");
           String portfolioName = this.getPortFolioNameFromView();
           portfolio newPortfolio = new portfolio(portfolioName);
-          while (this.addMoreStocksFromView()) {
+          while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
             String[] s = this.takeStockInputFromView();
             //stock newStock = new stock(s[0], Integer.valueOf(s[1]));
             //using builder method to create stocks
@@ -140,6 +148,7 @@ public class ControllerImpl {
 
         case 4:
           System.exit(0);
+          break;
       }
     }
   }
