@@ -13,7 +13,7 @@ import Model.User;
 import View.ViewImpl;
 import View.ViewInterface;
 
-public class ControllerImpl {
+public class ControllerImpl implements Controller{
   private static ViewInterface view;
   private static User user;
 
