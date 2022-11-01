@@ -122,7 +122,7 @@ public class ControllerImpl implements Controller{
             case 1:
               view.displayMsgToUser("Creating a new portfolio...");
               String portfolioName = this.getPortFolioNameFromView();
-              portfolio newPortfolio = new portfolio(portfolioName);
+              portfolio newPortfolio = new portfolio(portfolioName + ".csv");
               while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
                 String[] s = this.takeStockInputFromView();
                 //stock newStock = new stock(s[0], Integer.valueOf(s[1]));
