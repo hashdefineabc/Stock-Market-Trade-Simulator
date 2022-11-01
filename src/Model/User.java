@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class User {
 
   String username;
-  List<portfolio> portfoliosList;
+  public List<portfolio> portfoliosList;
   List<String> fileNamesFromSystem;
 
   List<String> nasdaqTickerNames;

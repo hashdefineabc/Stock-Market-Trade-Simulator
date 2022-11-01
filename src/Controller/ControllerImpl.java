@@ -122,7 +122,7 @@ public class ControllerImpl implements Controller{
             case 1:
               view.displayMsgToUser("Creating a new portfolio...");
               String portfolioName = this.getPortFolioNameFromView();
-              portfolio newPortfolio = new portfolio(portfolioName);
+              portfolio newPortfolio = new portfolio(portfolioName + ".csv");
               while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
                 String[] s = this.takeStockInputFromView();
                 //stock newStock = new stock(s[0], Integer.valueOf(s[1]));
@@ -155,6 +155,10 @@ public class ControllerImpl implements Controller{
 
         //retrieve portfolio
         case 2:
+          if (this.user.portfoliosList.size() == 0) {
+            view.displayMsgToUser("No portfolios created till now");
+            continue;
+          }
           view.displayMsgToUser("Following are the portfolios created till now:");
           List<String> portfolioNames = new ArrayList<>();
           List<portfolio> portfolioObjects = user.getPortfoliosCreated();
