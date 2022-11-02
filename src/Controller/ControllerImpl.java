@@ -202,8 +202,10 @@ public class ControllerImpl implements Controller{
         case 3:
           view.displayListOfPortfolios(user.getPortfolioNamesCreated());
           int portfolioIndexForVal = this.getSelectedPortFolioFromView();
+
           LocalDate date = this.validateDateForValue();
           double val = user.calculateValueOfPortfolio(portfolioIndexForVal, date);
+
           if(val == 0) {
             view.displayMsgToUser("Market was closed on "+date);
           }

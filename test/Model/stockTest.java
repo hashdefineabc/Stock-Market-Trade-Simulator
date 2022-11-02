@@ -24,5 +24,9 @@ public class stockTest{
 
   @Test
   public void testGetDate() {
+    IstockModel stock = new stock("MSFT", 6 , LocalDate.now());
+    LocalDate curDate = LocalDate.now();
+    String s = curDate.toString();
+    assertEquals(s, stock.getDate().toString());
   }
 }

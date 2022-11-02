@@ -31,7 +31,13 @@ public class portfolio implements portfolioModel{
   private String folderPath = userDirectory + File.separator + "stockData";
 
 
-  public portfolio(String nameOfPortFolio, List<IstockModel> stocks) {
+  public portfolio(String nameOfPortFolio, List<IstockModel> stocks) throws IllegalArgumentException{
+    if(nameOfPortFolio == ""){
+      throw new IllegalArgumentException("Please provide a name for your portfolio");
+    }
+    if(stocks.isEmpty()) {
+      throw new IllegalArgumentException("Creating a portfolio requires atleast one stock, please add a stock!!!!!");
+    }
     this.nameOfPortFolio = nameOfPortFolio;
     this.stocks = stocks;
   }
