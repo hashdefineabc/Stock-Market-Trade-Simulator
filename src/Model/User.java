@@ -29,7 +29,7 @@ public class User implements IUserInterface{
     this.username = userName;
     portfoliosList = new ArrayList<>();
     fileNamesFromSystem = new ArrayList<>();
-    nasdaqTickerNames = new ArrayList<String>();
+    nasdaqTickerNames = new ArrayList<>();
 
     userDirectory = new File("").getAbsolutePath();
     this.folderPath = userDirectory + File.separator + "PortFolioComposition";

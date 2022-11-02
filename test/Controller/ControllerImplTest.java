@@ -3,16 +3,9 @@ package Controller;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-
 import Model.IUserInterface;
-import Model.IstockModel;
-import Model.User;
-import Model.portfolio;
 import Model.portfolioModel;
-import Model.stock;
 
 import static org.junit.Assert.assertEquals;
 
