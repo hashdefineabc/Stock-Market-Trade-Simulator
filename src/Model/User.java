@@ -165,15 +165,15 @@ public class User implements IUserInterface{
     }
   }
 
-  private List<String> retrieveFileNames() {
+  private List<String> retrieveFileNames() { //TODO:load only if extension is csv
     String[] fileNames = file.list();
     this.fileNamesFromSystem.clear();
     for (String fileName: fileNames){
-      this.fileNamesFromSystem.add(fileName);
+      if (fileName.contains(".csv")) {
+        this.fileNamesFromSystem.add(fileName);
+      }
     }
-
     return this.fileNamesFromSystem;
-
   }
 
   @Override
