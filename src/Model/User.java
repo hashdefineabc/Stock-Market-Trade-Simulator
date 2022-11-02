@@ -128,7 +128,7 @@ public class User implements IUserInterface{
     return listOfStocks;
   }
 
-  /*
+  /**
   creates a new portfolio
    */
   @Override
@@ -145,7 +145,6 @@ public class User implements IUserInterface{
 
   @Override
   public List<String> getPortfolioNamesCreated() {
-    //return this.portfoliosList;
     List<String> portfolioNames = new ArrayList<>();
     List<portfolioModel> portfolioObjects = this.portfoliosList;
     for (portfolioModel p : portfolioObjects) {
@@ -163,7 +162,6 @@ public class User implements IUserInterface{
   private void createFolder() {
     if (!Files.exists(Path.of(this.folderPath))) {
       file.mkdir();
-      System.out.println("Folder created successfully");
     }
   }
 
@@ -259,4 +257,8 @@ public class User implements IUserInterface{
     return false;
   }
 
+  @Override
+  public void setFolderPath(String folderPath) {
+    this.folderPath = folderPath;
+  }
 }

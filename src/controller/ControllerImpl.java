@@ -160,7 +160,7 @@ public class ControllerImpl implements Controller{
             case 1:
               view.displayMsgToUser("Creating a new portfolio...");
               String portfolioName = this.getPortFolioNameFromView();
-              List<String[]> stockList = new ArrayList<String[]>();
+              List<String[]> stockList = new ArrayList<>();
               do {
                 String[] s = this.takeStockInputFromView();
                 stockList.add(s);
