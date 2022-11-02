@@ -49,9 +49,15 @@ public class ControllerImplTest {
     }
 
     @Override
-    public List<portfolioModel> getPortfoliosCreated() {
+    public List<String> getPortfolioNamesCreated() {
       return null;
     }
+
+    @Override
+    public List<portfolioModel> getPortfoliosCreated_Objects() {
+      return null;
+    }
+
 
     @Override
     public Boolean checkIfFileExists(String fileName) {
@@ -64,11 +70,6 @@ public class ControllerImplTest {
     }
 
     @Override
-    public List<portfolioModel> getportfoliosList() {
-      return null;
-    }
-
-    @Override
     public boolean isTickerValid(String tickerNameFromUser) {
       return false;
     }
@@ -76,6 +77,16 @@ public class ControllerImplTest {
     @Override
     public String getFolderPath() {
       return null;
+    }
+
+    @Override
+    public List<String[]> displayStocksOfPortFolio(int portfolioIndex) {
+      return null;
+    }
+
+    @Override
+    public double calculateValueOfPortfolio(int portfolioIndex, LocalDate date) {
+      return 0;
     }
   }
 

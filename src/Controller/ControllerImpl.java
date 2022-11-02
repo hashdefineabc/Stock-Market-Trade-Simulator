@@ -97,7 +97,7 @@ public class ControllerImpl implements Controller{
 
   public int getSelectedPortFolioFromView() {
     int index = -1;
-    while ((index < 0) || (index > user.getPortfoliosCreated().size())) {
+    while ((index < 0) || (index > user.getPortfolioNamesCreated().size())) {
       view.getSelectedPortfolio();
       index = scanner.nextInt();
     }
@@ -129,6 +129,22 @@ public class ControllerImpl implements Controller{
     return false;
   }
 
+  private LocalDate validateDateForValue() {
+    LocalDate date = this.getDateFromView();
+    LocalDate today = LocalDate.now();
+    //validation for date
+    while (date.isAfter(today)) {
+      view.displayMsgToUser("Can't get value for date greater than today");
+      date = this.getDateFromView();
+    }
+    LocalTime fourPM = LocalTime.of(16, 00, 00, 342123342);
+    if (date.equals(today) && LocalTime.now().compareTo(fourPM) < 0) {
+      view.displayMsgToUser("Value will be calculated based on yesterday's closing price.");
+      date = date.minusDays(1); //modify date to yesterday
+    }
+    return date;
+  }
+
   public void displayCsvPathToUser() {
     this.view.displayMsgToUser("Please place the csv at the location:\n" + this.user.getFolderPath());
   }
@@ -145,24 +161,15 @@ public class ControllerImpl implements Controller{
             case 1:
               view.displayMsgToUser("Creating a new portfolio...");
               String portfolioName = this.getPortFolioNameFromView();
-              List<IstockModel> stockList = new ArrayList<>();
-              while (this.addMoreStocksFromView() || this.isPortFolioEmpty(stockList)) {
+              List<String[]> stockList = new ArrayList<String[]>();
+              do {
                 String[] s = this.takeStockInputFromView();
-                //using builder method to create stocks
-                stock newStock = stock.getBuilder()
-                        .tickerName(s[0])
-                        .numOfUnits(Integer.valueOf(s[1]))
-                        .build();
-                stockList.add(newStock);
-              }
-
-              portfolioModel newPortfolio = new portfolio(portfolioName, stockList);
-
-              user.CreateNewPortfolio(newPortfolio);
-              user.savePortfolioToFile(newPortfolio);
-              if (user.checkIfFileExists(portfolioName)) {
+                stockList.add(s);
+              } while (this.addMoreStocksFromView());
+              if (user.createPortfolioManually(portfolioName, stockList)) {
                 view.displayMsgToUser("Portfolio saved successfully");
-              } else {
+              }
+              else {
                 view.displayMsgToUser("Portfolio was not saved. Try again");
               }
               break;
@@ -171,7 +178,7 @@ public class ControllerImpl implements Controller{
               this.displayCsvPathToUser();
               //check if file uploaded
               view.isFileUploaded();
-              if (scanner.nextInt() == 1) { //TODO: complete this fn
+              if (scanner.nextInt() == 1) { //TODO: complete validation for this
                 user.createPortFolioFromFile();
               }
               break;
@@ -180,51 +187,28 @@ public class ControllerImpl implements Controller{
 
         //retrieve portfolio
         case 2:
-          if (this.user.getportfoliosList().size() == 0) {
+          if (user.getPortfolioNamesCreated().size() == 0) {
             view.displayMsgToUser("No portfolios created till now");
             continue;
           }
           view.displayMsgToUser("Following are the portfolios created till now:");
-          List<String> portfolioNames = new ArrayList<>();
-          List<portfolioModel> portfolioObjects = user.getPortfoliosCreated();
-          for (portfolioModel p : portfolioObjects) {
-            portfolioNames.add(p.getNameOfPortFolio());
-          }
-          view.displayListOfPortfolios(portfolioNames);
-
+          view.displayListOfPortfolios(user.getPortfolioNamesCreated());
           int portfolioIndex = this.getSelectedPortFolioFromView();
-          portfolioModel toDisplay = user.getPortfoliosCreated().get(portfolioIndex - 1);
-          List<String[]> stocksToDisplay = toDisplay.toListOfString();
+          List<String[]> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex);
           view.displayStocks(stocksToDisplay);
           break;
 
         // value of a particular portfolio
         case 3:
-          List<String> stocksNamesToDisplay = new ArrayList<>();
-          for (portfolioModel p : user.getPortfoliosCreated()) {
-            stocksNamesToDisplay.add(p.getNameOfPortFolio());
-          }
-          view.displayListOfPortfolios(stocksNamesToDisplay);
+          view.displayListOfPortfolios(user.getPortfolioNamesCreated());
           int portfolioIndexForVal = this.getSelectedPortFolioFromView();
-          portfolioModel toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal - 1);
-
-          LocalDate date = this.getDateFromView();
-          LocalDate today = LocalDate.now();
-          //validation for date
-          while (date.isAfter(today)) {
-            view.displayMsgToUser("Can't get value for date greater than today");
-            date = this.getDateFromView();
-          }
-          LocalTime fourPM = LocalTime.of(16, 00, 00, 342123342);
-          if (date.equals(today) && java.time.LocalTime.now().compareTo(fourPM) < 0) {
-            view.displayMsgToUser("Value will be calculated based on yesterday's closing price.");
-            date = date.minusDays(1); //modify date to yesterday
-          }
-
-          double val = toCalcVal.valueOfPortfolio(date);
-          view.displayValue(val);
+          LocalDate date = this.validateDateForValue();
+          double val = user.calculateValueOfPortfolio(portfolioIndexForVal, date);
           if(val == 0) {
             view.displayMsgToUser("Market was closed on "+date);
+          }
+          else{
+            view.displayValue(val);
           }
           break;
 
