@@ -7,10 +7,6 @@ public interface IUserInterface {
   void loadExistingPortFolios();
 
   void createPortFolioFromFile();
-
-  /**
-    creates a new portfolio
-   */
   void CreateNewPortfolio(portfolioModel newPortfolio);
 
   List<String> getPortfolioNamesCreated();

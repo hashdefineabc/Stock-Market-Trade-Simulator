@@ -53,6 +53,4 @@ public class UserTest {
   public void testSavePortfolioToFile() {
   }
 
-  public void testGetportfoliosList() {
-  }
 }

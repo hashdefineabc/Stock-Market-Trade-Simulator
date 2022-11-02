@@ -87,6 +87,11 @@ public class ControllerImplTest {
     public double calculateValueOfPortfolio(int portfolioIndex, LocalDate date) {
       return 0;
     }
+
+    @Override
+    public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
+      return false;
+    }
   }
 
   @Test
