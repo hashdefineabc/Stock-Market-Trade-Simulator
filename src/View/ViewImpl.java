@@ -7,13 +7,9 @@ import java.util.Scanner;
 
 public class ViewImpl implements ViewInterface{
 
-  private InputStream  userInput;
   private PrintStream out;
-  Scanner scanner;
-  public ViewImpl(InputStream in, PrintStream o) {
-    this.userInput = in;
+  public ViewImpl(PrintStream o) {
     this.out = o;
-    scanner = new Scanner(this.userInput);
   }
 
   //Scanner scanner = new Scanner(this.userInput);
@@ -26,7 +22,7 @@ public class ViewImpl implements ViewInterface{
    * @return the option selected by the user
    */
   @Override
-  public String displayMenu() {
+  public void displayMenu() {
     this.out.println();
     this.out.println("***********************************");
     this.out.print("\t1. Create a new Portfolio\n");
@@ -34,26 +30,19 @@ public class ViewImpl implements ViewInterface{
     this.out.print("\t3. Check value of a Portfolio\n");
     this.out.print("\t4. Exit the application.\n");
     this.out.print("Pick one of the options\n");
-    return scanner.next();
+
   }
 
-
-
-  /**
-   * take stock details for a particular portfolio from the user
-   * It should take the ticker name and the number of units
-   *
-   * @return the ticker name and the number of units
-   */
   @Override
-  public String[] takeStockInput() {
-    String[] inputStock = new String[2];
+  public void takeTickerName() {
     this.out.print("Enter the ticker name:\n");
-    inputStock[0] = scanner.next();
-    this.out.print("Enter the number of units purchased:\n");
-    inputStock[1] = Integer.toString(scanner.nextInt());
-    return inputStock;
   }
+
+  @Override
+  public void takeNumOfUnits() {
+    this.out.print("Enter the number of units purchased:\n");
+  }
+
 
   /**
    * asks user if they want to add more stocks to the portfolio
@@ -61,10 +50,8 @@ public class ViewImpl implements ViewInterface{
    * @return true of they want to add more stocks else return false
    */
   @Override
-  public Boolean addMoreStocks() { //TODO: add validation for boolean input
+  public void addMoreStocks() { //TODO: add validation for boolean input
     this.out.println("Do you want to add more stocks to this portfolio? (Press 1 for Yes, 0 for No):");
-    int userInput = scanner.nextInt();
-    return userInput == 1;
   }
 
   /**
@@ -85,9 +72,8 @@ public class ViewImpl implements ViewInterface{
    * @return the selected portfolio
    */
   @Override
-  public int getSelectedPortfolio() {
+  public void getSelectedPortfolio() {
     this.out.println("Pick a portfolio");
-    return scanner.nextInt();
   }
 
   /**
@@ -107,10 +93,8 @@ public class ViewImpl implements ViewInterface{
    * @return date at which value has to be calculated.
    */
   @Override
-  public String getDateFromUser() {
+  public void getDateFromUser() {
     this.out.println("Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)");
-    String d = scanner.next();
-    return d;
   }
 
   /**
@@ -128,21 +112,17 @@ public class ViewImpl implements ViewInterface{
   }
 
   @Override
-  public String getPortfolioNameFromUser() {
+  public void getPortfolioNameFromUser() {
     this.out.println("Please enter a name for this portfolio");
-    return scanner.next();
   }
 
   @Override
-  public String displayCreatePortFolioOptions() {
+  public void displayCreatePortFolioOptions() {
     this.out.print("\t1. Enter the stock details manually\n" + "\t2. Upload an existing file\n");
-    return scanner.next();
   }
 
-  public boolean isFileUploaded() {
+  public void isFileUploaded() {
     this.out.println("Has the file been placed at the above location? 1.Yes 0.No");
-    int userInput = scanner.nextInt();
-    return userInput == 1;
   }
 
 

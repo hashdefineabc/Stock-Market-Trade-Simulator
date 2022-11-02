@@ -16,20 +16,23 @@ public interface ViewInterface {
    * 3. check value of a particular portfolio
    * @return the option selected by the user
    */
-  String displayMenu();
+  void displayMenu();
+  void takeTickerName();
+
+  void takeNumOfUnits();
 
   /**
    * take stock details for a particular portfolio from the user
    * It should take the ticker name and the number of units
    * @return the ticker name and the number of units
    */
-  String[] takeStockInput();
+  void takeStockInput();
 
   /**
    * asks user if they want to add more stocks to the portfolio
    * @return true of they want to add more stocks else return false
    */
-  Boolean addMoreStocks();
+  void addMoreStocks();
 
   /**
    * displays the list of created portfolios
@@ -40,7 +43,7 @@ public interface ViewInterface {
    * displays list of portfolios and asks user to select one
    * @return the selected portfolio
    */
-  int getSelectedPortfolio();
+  void getSelectedPortfolio();
 
   /**
    * displays stocks of a particular portfolio
@@ -48,15 +51,15 @@ public interface ViewInterface {
 
   void displayStocks(List<String[]> listOfStocks);
 
-  String getDateFromUser();
+  void getDateFromUser();
 
   void displayValue(double val);
 
   void displayMsgToUser(String msg);
 
-  String getPortfolioNameFromUser();
+  void getPortfolioNameFromUser();
 
-  String displayCreatePortFolioOptions();
+  void displayCreatePortFolioOptions();
 
-  boolean isFileUploaded();
+  void isFileUploaded();
 }
