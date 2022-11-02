@@ -4,7 +4,7 @@ import java.util.List;
 
 
 /**
- * Interface that describes how the text user interface of this stockMarket application would look like.
+ * Interface defining methods of that would decide how the text user interface of this stockMarket application would look like.
  */
 public interface ViewInterface {
 
