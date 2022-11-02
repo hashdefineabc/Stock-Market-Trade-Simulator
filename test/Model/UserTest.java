@@ -29,7 +29,7 @@ public class UserTest {
     portfolioModel portfolio = new portfolio("Portfolio 1", stockList);
 
     user.CreateNewPortfolio(portfolio);
-    assertEquals("true", user.isTickerValid("AAPL"));
+    assertEquals(true, user.isTickerValid("AAPL"));
   }
 
   public void testGetFolderPath() {
