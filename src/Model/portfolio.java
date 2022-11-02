@@ -135,14 +135,14 @@ public class portfolio implements portfolioModel{
   }
 
 
-  public String convertToCSV(String[] data) {
+  private String convertToCSV(String[] data) {
     return Stream.of(data)
             .map(this::escapeSpecialCharacters)
             .collect(Collectors.joining(","));
   }
 
 
-  public String escapeSpecialCharacters(String data) {
+  private String escapeSpecialCharacters(String data) {
     String escapedData = data.replaceAll("\\R", " ");
     if (data.contains(",") || data.contains("\"") || data.contains("'")) {
       data = data.replace("\"", "\"\"");
@@ -167,11 +167,13 @@ public class portfolio implements portfolioModel{
   }
 
 
+  @Override
   public String getNameOfPortFolio() {
     return this.nameOfPortFolio;
   }
 
 
+  @Override
   public List<String[]> toListOfString() {
     List<String[]> answer = new ArrayList<>();
 

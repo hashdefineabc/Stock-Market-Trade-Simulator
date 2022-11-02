@@ -2,7 +2,7 @@ package Model;
 
 import java.time.LocalDate;
 
-public class stock {
+public class stock implements IstockModel {
   String tickerName;
   Integer numOfUnits;
   LocalDate date;

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class User {
+public class User implements IUserInterface{
 
   String username;
   public List<portfolio> portfoliosList;
@@ -62,6 +62,7 @@ public class User {
     return false;
   }
 
+  @Override
   public void loadExistingPortFolios() {
     this.portfoliosList.clear();
     this.retrieveFileNames();
@@ -77,23 +78,29 @@ public class User {
 
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // has to be capital M for month
       for (String[] stockDetails: listOfStocks) {
-        stock s = stock.getBuilder()
-                .tickerName(stockDetails[0])
-                .numOfUnits(Integer.valueOf(stockDetails[1]))
-                .date(LocalDate.parse(stockDetails[2],formatter))
-                .build();
-        p.addStocks(s);
+        try {
+          stock s = stock.getBuilder()
+                  .tickerName(stockDetails[0])
+                  .numOfUnits(Integer.valueOf(stockDetails[1]))
+                  .date(LocalDate.parse(stockDetails[2], formatter))
+                  .build();
+          p.addStocks(s);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+
+        }
       }
       //add this portfolio to list
       this.portfoliosList.add(p);
     }
   }
 
+  @Override
   public void createPortFolioFromFile() {
     this.loadExistingPortFolios();
   }
 
-  public List<String[]> readCSVFromSystem(String filePath) {
+  private List<String[]> readCSVFromSystem(String filePath) {
 
     List<String[]> listOfStocks = new ArrayList<String[]>();
     String line = "";
@@ -113,6 +120,7 @@ public class User {
   /*
   creates a new portfolio
    */
+  @Override
   public void CreateNewPortfolio(portfolio newPortfolio) {
     portfoliosList.add(newPortfolio);
   }
@@ -124,6 +132,7 @@ public class User {
    * @return
    */
 
+  @Override
   public List<portfolio> getPortfoliosCreated() {
     return this.portfoliosList;
   }
@@ -147,6 +156,7 @@ public class User {
 
   }
 
+  @Override
   public Boolean checkIfFileExists(String fileName) {
     this.retrieveFileNames(); // updating the fileNamesFromSystem list.
     if (this.fileNamesFromSystem.contains(fileName + ".csv")) {
@@ -155,7 +165,7 @@ public class User {
     return false;
   }
 
-
+  @Override
   public void savePortfolioToFile(portfolio newPortfolio) {
     List<String[]> dataToWrite = newPortfolio.toListOfString();
 
@@ -166,7 +176,7 @@ public class User {
     }
   }
 
-  public void createCSV(List<String[]> dataToWrite, String portFolioName) {
+  private void createCSV(List<String[]> dataToWrite, String portFolioName) {
     File csvOutputFile = new File(this.folderPath + File.separator + portFolioName + ".csv");
     try {
       PrintWriter pw = new PrintWriter(csvOutputFile);
@@ -178,14 +188,13 @@ public class User {
     }
   }
 
-  public String convertToCSV(String[] data) {
+  private String convertToCSV(String[] data) {
     return Stream.of(data)
             .map(this::escapeSpecialCharacters)
             .collect(Collectors.joining(","));
   }
 
-
-  public String escapeSpecialCharacters(String data) {
+  private String escapeSpecialCharacters(String data) {
     String escapedData = data.replaceAll("\\R", " ");
     if (data.contains(",") || data.contains("\"") || data.contains("'")) {
       data = data.replace("\"", "\"\"");
