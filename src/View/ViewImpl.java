@@ -18,17 +18,18 @@ public class ViewImpl implements ViewInterface{
    * 1. create new portfolio
    * 2. retrieve portfolio
    * 3. check value of a particular portfolio
-
+   *
    * @return the option selected by the user
    */
   @Override
   public void displayMenu() {
-    this.out.print("***********************************\n");
+    this.out.println();
+    this.out.println("***********************************");
     this.out.print("\t1. Create a new Portfolio\n");
     this.out.print("\t2. Retrieve Portfolio\n");
     this.out.print("\t3. Check value of a Portfolio\n");
     this.out.print("\t4. Exit the application.\n");
-    this.out.print("\tPick one of the options\n");
+    this.out.print("Pick one of the options\n");
 
   }
 
