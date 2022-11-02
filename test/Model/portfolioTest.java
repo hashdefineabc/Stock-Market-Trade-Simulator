@@ -8,8 +8,14 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * The type Portfolio test.
+ */
 public class portfolioTest {
 
+  /**
+   * Test value of portfolio.
+   */
   @Test
   public void testValueOfPortfolio() {
     List<IstockModel> stockList = new ArrayList<>();
@@ -21,6 +27,9 @@ public class portfolioTest {
     assertEquals("1857.75", String.valueOf(portfolio.valueOfPortfolio(LocalDate.of(2022, 10, 27))));
   }
 
+  /**
+   * Test value of empty portfolio.
+   */
   @Test
   public void testValueOfEmptyPortfolio() {
     List<IstockModel> stockList = new ArrayList<>();
@@ -28,6 +37,9 @@ public class portfolioTest {
     assertEquals("0.0", String.valueOf(portfolio.valueOfPortfolio(LocalDate.of(2022, 10, 27))));
   }
 
+  /**
+   * Test get name of port folio.
+   */
   @Test
   public void testGetNameOfPortFolio() {
     List<IstockModel> stockList = new ArrayList<>();
@@ -53,6 +65,9 @@ public class portfolioTest {
     portfolioModel portfolio = new portfolio("", stockList);
   }
 
+  /**
+   * Test to list of string.
+   */
   @Test
   public void testToListOfString() {
     List<IstockModel> stockList = new ArrayList<>();

@@ -86,4 +86,6 @@ public interface IUserInterface {
    * @return boolean = if this portfolio was created or not.
    */
   boolean createPortfolioManually(String portfolioName, List<String[]> stockList);
+
+  void setFolderPath(String folderPath);
 }
