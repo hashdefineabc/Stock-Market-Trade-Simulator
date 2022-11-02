@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.List;
 
 import Controller.ControllerImpl;
 import Model.User;
@@ -18,6 +19,75 @@ import Model.User;
 import static org.junit.Assert.*;
 
 public class ViewImplTest {
+
+  /*class MockView implements ViewInterface {
+
+    //create a flag
+    boolean checkDisplayMenu = false;
+    //compare this flag later to check if this fn was called or not
+
+
+    @Override
+    public String displayMenu() {
+      checkDisplayMenu = true;
+      return null;
+    }
+
+    @Override
+    public String[] takeStockInput() {
+      return new String[0];
+    }
+
+    @Override
+    public Boolean addMoreStocks() {
+      return null;
+    }
+
+    @Override
+    public void displayListOfPortfolios(List<String> portfolios) {
+
+    }
+
+    @Override
+    public int getSelectedPortfolio() {
+      return 0;
+    }
+
+    @Override
+    public void displayStocks(List<String[]> listOfStocks) {
+
+    }
+
+    @Override
+    public String getDateFromUser() {
+      return null;
+    }
+
+    @Override
+    public void displayValue(double val) {
+
+    }
+
+    @Override
+    public void displayMsgToUser(String msg) {
+
+    }
+
+    @Override
+    public String getPortfolioNameFromUser() {
+      return null;
+    }
+
+    @Override
+    public String displayCreatePortFolioOptions() {
+      return null;
+    }
+
+    @Override
+    public boolean isFileUploaded() {
+      return false;
+    }
+  }*/
 
   @Test
   public void testDisplayMenu() {
