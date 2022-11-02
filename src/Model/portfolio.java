@@ -1,6 +1,7 @@
 package Model;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -41,14 +42,20 @@ public class portfolio implements portfolioModel{
   private double getStockValue(String tickerName, LocalDate date) {
     double result = 0;
     FileReader file = null;
+
+    String userDirectory = new File("").getAbsolutePath();
+
+    String folderPath = userDirectory + File.separator + "stockData";
+    String filePath = folderPath+File.separator+tickerName+".csv";
+
     try {
-      String fileName = ""+tickerName+".csv";
+      String fileName = filePath;
       file = new FileReader(fileName);
     } catch (FileNotFoundException e) {
       updateStockFile(tickerName);
     }
 
-    String fileName = ""+tickerName+".csv";
+    String fileName = filePath;
     try {
       file = new FileReader(fileName);
     } catch (FileNotFoundException e) {
@@ -102,7 +109,10 @@ public class portfolio implements portfolioModel{
               + "&symbol"
               + "=" + tickerName + "&apikey="+apiKey+"&datatype=csv");
 
-      String filePath = ""+tickerName+".csv";
+      String userDirectory = new File("").getAbsolutePath();
+
+      String folderPath = userDirectory + File.separator + "stockData";
+      String filePath = folderPath+File.separator+tickerName+".csv";
       new FileWriter(filePath, false).close();
 
       List<String[]> row = new ArrayList<>();
