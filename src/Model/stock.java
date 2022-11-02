@@ -2,6 +2,9 @@ package Model;
 
 import java.time.LocalDate;
 
+/**
+ * Class that implements the stock structure and methods.
+ */
 public class stock implements IstockModel {
   private String tickerName;
   private Integer numOfUnits;
