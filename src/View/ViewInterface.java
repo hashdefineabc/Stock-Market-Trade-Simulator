@@ -26,7 +26,7 @@ public interface ViewInterface {
    * It should take the ticker name and the number of units
    * @return the ticker name and the number of units
    */
-  void takeStockInput();
+
 
   /**
    * asks user if they want to add more stocks to the portfolio

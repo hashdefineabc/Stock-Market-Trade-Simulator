@@ -72,8 +72,13 @@ public class ControllerImpl implements Controller{
   }
 
   public boolean addMoreStocksFromView() {
-    this.view.addMoreStocks();
-    int userInput = scanner.nextInt();
+    int userInput = 3;
+    List<Integer> validOptions = Arrays.asList(0,1);
+
+    while (!validOptions.contains(userInput)){
+      this.view.addMoreStocks();
+      userInput = scanner.nextInt();
+    }
     return userInput == 1;
   }
 
