@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * Class to test the text user interface of the stockMarket application.
  */
-public class ViewImplTest {
+public class ViewImplPrintTest {
 
   OutputStream out;
   ViewInterface view;

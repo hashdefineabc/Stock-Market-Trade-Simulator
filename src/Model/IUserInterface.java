@@ -1,5 +1,6 @@
 package Model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IUserInterface {
@@ -12,15 +13,21 @@ public interface IUserInterface {
    */
   void CreateNewPortfolio(portfolioModel newPortfolio);
 
-  List<portfolioModel> getPortfoliosCreated();
+  List<String> getPortfolioNamesCreated();
+
+  List<portfolioModel> getPortfoliosCreated_Objects();
 
   Boolean checkIfFileExists(String fileName);
 
   void savePortfolioToFile(portfolioModel newPortfolio);
 
-  List<portfolioModel> getportfoliosList();
-
   boolean isTickerValid(String tickerNameFromUser);
 
   String getFolderPath();
+
+  List<String[]> displayStocksOfPortFolio(int portfolioIndex);
+
+  double calculateValueOfPortfolio(int portfolioIndex, LocalDate date);
+
+  boolean createPortfolioManually(String portfolioName, List<String[]> stockList);
 }

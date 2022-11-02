@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ import java.util.stream.Stream;
 
 public class User implements IUserInterface{
 
-  String username;
-  private List<portfolioModel> portfoliosList;
+  public String username;
+  public List<portfolioModel> portfoliosList;
   List<String> fileNamesFromSystem;
 
   List<String> nasdaqTickerNames;
@@ -141,7 +142,18 @@ public class User implements IUserInterface{
    */
 
   @Override
-  public List<portfolioModel> getPortfoliosCreated() {
+  public List<String> getPortfolioNamesCreated() {
+    //return this.portfoliosList;
+    List<String> portfolioNames = new ArrayList<>();
+    List<portfolioModel> portfolioObjects = this.portfoliosList;
+    for (portfolioModel p : portfolioObjects) {
+      portfolioNames.add(p.getNameOfPortFolio());
+    }
+    return portfolioNames;
+  }
+
+  @Override
+  public List<portfolioModel> getPortfoliosCreated_Objects() {
     return this.portfoliosList;
   }
 
@@ -184,10 +196,6 @@ public class User implements IUserInterface{
     }
   }
 
-  @Override
-  public List<portfolioModel> getportfoliosList() {
-    return this.portfoliosList;
-  }
 
   private void createCSV(List<String[]> dataToWrite, String portFolioName) {
     File csvOutputFile = new File(this.folderPath + File.separator + portFolioName + ".csv");
@@ -214,6 +222,39 @@ public class User implements IUserInterface{
       escapedData = "\"" + data + "\"";
     }
     return escapedData;
+  }
+
+  @Override
+  public List<String[]> displayStocksOfPortFolio(int portfolioIndex) {
+    portfolioModel toDisplay = this.getPortfoliosCreated_Objects().get(portfolioIndex - 1);
+    List<String[]> stocksToDisplay = toDisplay.toListOfString();
+    return stocksToDisplay;
+  }
+
+  @Override
+  public double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date) {
+    portfolioModel toCalcVal = this.getPortfoliosCreated_Objects().get(portfolioIndexForVal - 1);
+    double val = toCalcVal.valueOfPortfolio(date);
+    return val;
+  }
+
+  @Override
+  public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
+    List<IstockModel> stockListToAdd = new ArrayList<>();
+    for (String[] singleStock: stockList) {
+      stock newStock = stock.getBuilder()
+              .tickerName(singleStock[0])
+              .numOfUnits(Integer.valueOf(singleStock[1]))
+              .build();
+      stockListToAdd.add(newStock);
+    }
+    portfolioModel newPortfolio = new portfolio(portfolioName, stockListToAdd);
+    this.CreateNewPortfolio(newPortfolio);
+    this.savePortfolioToFile(newPortfolio);
+    if (this.checkIfFileExists(portfolioName)) {
+      return true;
+    }
+    return false;
   }
 
 }
