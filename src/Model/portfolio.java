@@ -21,8 +21,8 @@ import java.util.stream.Stream;
 
 public class portfolio implements portfolioModel{
 
-  public String nameOfPortFolio;
-  public List<stock> stocks;
+  private String nameOfPortFolio;
+  private List<stock> stocks;
 
   // private fields for api data fetching and file handling
   private String apiKey = "W0M1JOKC82EZEQA8";
@@ -185,6 +185,11 @@ public class portfolio implements portfolioModel{
       answer.add(stocksDetails);
     }
     return answer;
+  }
+
+  @Override
+  public List<stock> getStocks() {
+    return this.stocks;
   }
 
 }

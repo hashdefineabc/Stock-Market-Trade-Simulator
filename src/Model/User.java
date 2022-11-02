@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class User implements IUserInterface{
 
   String username;
-  public List<portfolio> portfoliosList;
+  private List<portfolioModel> portfoliosList;
   List<String> fileNamesFromSystem;
 
   List<String> nasdaqTickerNames;
@@ -55,11 +55,17 @@ public class User implements IUserInterface{
     }
   }
 
+  @Override
   public boolean isTickerValid(String tickerName) {
     if (this.nasdaqTickerNames.contains(tickerName)) {
       return true;
     }
     return false;
+  }
+
+  @Override
+  public String getFolderPath() {
+    return this.folderPath;
   }
 
   @Override
@@ -121,7 +127,7 @@ public class User implements IUserInterface{
   creates a new portfolio
    */
   @Override
-  public void CreateNewPortfolio(portfolio newPortfolio) {
+  public void CreateNewPortfolio(portfolioModel newPortfolio) {
     portfoliosList.add(newPortfolio);
   }
 
@@ -133,7 +139,7 @@ public class User implements IUserInterface{
    */
 
   @Override
-  public List<portfolio> getPortfoliosCreated() {
+  public List<portfolioModel> getPortfoliosCreated() {
     return this.portfoliosList;
   }
 
@@ -166,14 +172,19 @@ public class User implements IUserInterface{
   }
 
   @Override
-  public void savePortfolioToFile(portfolio newPortfolio) {
+  public void savePortfolioToFile(portfolioModel newPortfolio) {
     List<String[]> dataToWrite = newPortfolio.toListOfString();
 
     try {
-      this.createCSV(dataToWrite, newPortfolio.nameOfPortFolio);
+      this.createCSV(dataToWrite, newPortfolio.getNameOfPortFolio());
     } catch(Exception e) {
       System.out.println("CSV was not created");
     }
+  }
+
+  @Override
+  public List<portfolioModel> getportfoliosList() {
+    return this.portfoliosList;
   }
 
   private void createCSV(List<String[]> dataToWrite, String portFolioName) {

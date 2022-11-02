@@ -10,11 +10,17 @@ public interface IUserInterface {
   /**
     creates a new portfolio
    */
-  void CreateNewPortfolio(portfolio newPortfolio);
+  void CreateNewPortfolio(portfolioModel newPortfolio);
 
-  List<portfolio> getPortfoliosCreated();
+  List<portfolioModel> getPortfoliosCreated();
 
   Boolean checkIfFileExists(String fileName);
 
-  void savePortfolioToFile(portfolio newPortfolio);
+  void savePortfolioToFile(portfolioModel newPortfolio);
+
+  List<portfolioModel> getportfoliosList();
+
+  boolean isTickerValid(String tickerNameFromUser);
+
+  String getFolderPath();
 }

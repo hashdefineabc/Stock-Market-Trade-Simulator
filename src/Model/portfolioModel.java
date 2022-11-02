@@ -14,5 +14,6 @@ public interface portfolioModel {
 
   List<String[]> toListOfString();
 
+  List<stock> getStocks();
 
 }

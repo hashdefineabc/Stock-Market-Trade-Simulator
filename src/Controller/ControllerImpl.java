@@ -7,7 +7,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import Model.IUserInterface;
 import Model.portfolio;
+import Model.portfolioModel;
 import Model.stock;
 import Model.User;
 import View.ViewInterface;
@@ -15,7 +18,7 @@ import java.util.Scanner;
 
 public class ControllerImpl implements Controller{
   private static ViewInterface view;
-  private static User user;
+  private static IUserInterface user;
   private InputStream userInput;
   Scanner scanner;
 
@@ -118,8 +121,8 @@ public class ControllerImpl implements Controller{
     return valueDate;
   }
 
-  private boolean isPortFolioEmpty(portfolio p) {
-    if (p.stocks.size() == 0) {
+  private boolean isPortFolioEmpty(portfolioModel p) {
+    if (p.getStocks().size() == 0) {
       this.view.displayMsgToUser("Portfolio is empty right now...");
       return true;
     }
@@ -127,7 +130,7 @@ public class ControllerImpl implements Controller{
   }
 
   public void displayCsvPathToUser() {
-    this.view.displayMsgToUser("Please place the csv at the location:\n" + this.user.folderPath);
+    this.view.displayMsgToUser("Please place the csv at the location:\n" + this.user.getFolderPath());
   }
 
 
@@ -142,7 +145,7 @@ public class ControllerImpl implements Controller{
             case 1:
               view.displayMsgToUser("Creating a new portfolio...");
               String portfolioName = this.getPortFolioNameFromView();
-              portfolio newPortfolio = new portfolio(portfolioName);
+              portfolioModel newPortfolio = new portfolio(portfolioName);
               while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
                 String[] s = this.takeStockInputFromView();
                 //using builder method to create stocks
@@ -174,20 +177,20 @@ public class ControllerImpl implements Controller{
 
         //retrieve portfolio
         case 2:
-          if (this.user.portfoliosList.size() == 0) {
+          if (this.user.getportfoliosList().size() == 0) {
             view.displayMsgToUser("No portfolios created till now");
             continue;
           }
           view.displayMsgToUser("Following are the portfolios created till now:");
           List<String> portfolioNames = new ArrayList<>();
-          List<portfolio> portfolioObjects = user.getPortfoliosCreated();
-          for (portfolio p : portfolioObjects) {
-            portfolioNames.add(p.nameOfPortFolio);
+          List<portfolioModel> portfolioObjects = user.getPortfoliosCreated();
+          for (portfolioModel p : portfolioObjects) {
+            portfolioNames.add(p.getNameOfPortFolio());
           }
           view.displayListOfPortfolios(portfolioNames);
 
           int portfolioIndex = this.getSelectedPortFolioFromView();
-          portfolio toDisplay = user.getPortfoliosCreated().get(portfolioIndex - 1);
+          portfolioModel toDisplay = user.getPortfoliosCreated().get(portfolioIndex - 1);
           List<String[]> stocksToDisplay = toDisplay.toListOfString();
           view.displayStocks(stocksToDisplay);
           break;
@@ -195,12 +198,12 @@ public class ControllerImpl implements Controller{
         // value of a particular portfolio
         case 3:
           List<String> stocksNamesToDisplay = new ArrayList<>();
-          for (portfolio p : user.getPortfoliosCreated()) {
+          for (portfolioModel p : user.getPortfoliosCreated()) {
             stocksNamesToDisplay.add(p.getNameOfPortFolio());
           }
           view.displayListOfPortfolios(stocksNamesToDisplay);
           int portfolioIndexForVal = this.getSelectedPortFolioFromView();
-          portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal - 1);
+          portfolioModel toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal - 1);
 
           LocalDate date = this.getDateFromView();
           LocalDate today = LocalDate.now();
@@ -209,7 +212,7 @@ public class ControllerImpl implements Controller{
             view.displayMsgToUser("Can't get value for date greater than today");
             date = this.getDateFromView();
           }
-          LocalTime fourPM = java.time.LocalTime.now();
+          LocalTime fourPM = LocalTime.of(16, 00, 00, 342123342);
           if (date.equals(today) && java.time.LocalTime.now().compareTo(fourPM) < 0) {
             view.displayMsgToUser("Value will be calculated based on yesterday's closing price.");
             date = date.minusDays(1); //modify date to yesterday
