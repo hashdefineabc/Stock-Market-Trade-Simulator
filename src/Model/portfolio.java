@@ -3,16 +3,27 @@ package Model;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class portfolio implements portfolioModel{
 
   public String nameOfPortFolio;
   String apiKey = "W0M1JOKC82EZEQA8";
+  String stockSymbol = ""; //ticker symbol for Google
+  URL url = null;
 
   public List<stock> stocks;
 
@@ -38,13 +49,34 @@ public class portfolio implements portfolioModel{
     }
 
     try(BufferedReader br = new BufferedReader(file)) {
-
       String line = br.readLine();
+
+
+      /* check if the date for which the value is to be determined is greater than
+          the latest date that exists in our file.
+      */
+      String[] attributes = line.split(",");
+      line = br.readLine();
+
+      attributes = line.split(",");
+      String timeStamp = attributes[0];
+      final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      LocalDate dt = LocalDate.parse(timeStamp,formatter);
+
+
+      if(dt.compareTo(date) < 0) { // date > latest (first) timestamp in file
+        updateStockFile(tickerName);
+      }
+
       while (line != null) {
-        String[] attributes = line.split(",");
-        String timeStamp = attributes[0];
-        if(timeStamp.equals(date.toString()))
+        attributes = line.split(",");
+        timeStamp = attributes[0];
+        if(timeStamp.equals(date.toString())) {
           result += Double.parseDouble(attributes[4]);
+          return result;
+        }
         line = br.readLine();
       }
 
@@ -53,6 +85,69 @@ public class portfolio implements portfolioModel{
     }
     return result;
   }
+
+  public void updateStockFile(String tickerName) {
+    try {
+      url = new URL("https://www.alphavantage"
+              + ".co/query?function=TIME_SERIES_DAILY"
+              + "&outputsize=compact"
+              + "&symbol"
+              + "=" + tickerName + "&apikey="+apiKey+"&datatype=csv");
+
+      String filePath = ""+tickerName+".csv";
+      new FileWriter(filePath, false).close();
+
+      List<String[]> row = new ArrayList<>();
+
+      InputStream in = null;
+      StringBuilder output = new StringBuilder();
+
+      in = url.openStream();
+
+      try(BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+        String line = br.readLine();
+
+        while (line != null) {
+          String[] attributes = line.split(",");
+          row.add(attributes);
+
+          line = br.readLine();
+        }
+
+        try (PrintWriter pw = new PrintWriter(filePath)) {
+          row.stream()
+                  .map(this::convertToCSV)
+                  .forEach(pw::println);
+        }
+
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+
+  public String convertToCSV(String[] data) {
+    return Stream.of(data)
+            .map(this::escapeSpecialCharacters)
+            .collect(Collectors.joining(","));
+  }
+
+
+  public String escapeSpecialCharacters(String data) {
+    String escapedData = data.replaceAll("\\R", " ");
+    if (data.contains(",") || data.contains("\"") || data.contains("'")) {
+      data = data.replace("\"", "\"\"");
+      escapedData = "\"" + data + "\"";
+    }
+    return escapedData;
+  }
+
 
   @Override
   public double valueOfPortfolio(LocalDate date) {
@@ -87,6 +182,5 @@ public class portfolio implements portfolioModel{
     }
     return answer;
   }
-
 
 }

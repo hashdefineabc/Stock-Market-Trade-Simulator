@@ -28,8 +28,11 @@ public class User {
     fileNamesFromSystem = new ArrayList<>();
     nasdaqTickerNames = new ArrayList<String>();
 
-    //this.folderPath = "/Users/manasamanjunath/Desktop/stocksPDP"; //TODO change to dynamic path
-    this.folderPath = "C:\\Users\\anush\\OneDrive\\Desktop\\PortFolioComposition";
+    String userDirectory = new File("").getAbsolutePath();
+
+    this.folderPath = userDirectory + File.separator + "PortFolioComposition";
+    System.out.println(this.folderPath);
+
     file = new File(folderPath);
     this.createFolder();
     loadExistingPortFolios(); //initially there are zero portfolios for a user
@@ -131,9 +134,6 @@ public class User {
       file.mkdir();
       System.out.println("Folder created successfully");
     }
-    else{
-      System.out.println("Folder already exists.");
-    }
   }
 
   private List<String> retrieveFileNames() {
@@ -167,8 +167,8 @@ public class User {
   }
 
   public void createCSV(List<String[]> dataToWrite, String portFolioName) throws IOException {
-    //File csvOutputFile = new File(this.folderPath + "/" + portFolioName + ".csv");
-    File csvOutputFile = new File(this.folderPath + "\\" + portFolioName + ".csv");
+    File csvOutputFile = new File(this.folderPath + File.separator + portFolioName + ".csv");
+//    File csvOutputFile = new File(this.folderPath + "\\" + portFolioName + ".csv");
     try {
       PrintWriter pw = new PrintWriter(csvOutputFile);
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
@@ -194,6 +194,5 @@ public class User {
     }
     return escapedData;
   }
-
 
 }
