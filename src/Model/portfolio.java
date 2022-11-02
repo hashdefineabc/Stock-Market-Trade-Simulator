@@ -160,7 +160,7 @@ public class portfolio implements portfolioModel{
     double answer = 0;
 
     for(stock curStock: this.stocks) {
-      answer = answer + curStock.numOfUnits * getStockValue(curStock.tickerName, date);
+      answer = answer + curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date);
     }
 
     return answer;

@@ -3,28 +3,27 @@ package Model;
 import java.time.LocalDate;
 
 public class stock implements IstockModel {
-  String tickerName;
-  Integer numOfUnits;
+  private String tickerName;
+  private Integer numOfUnits;
   LocalDate date;
-
-  //todo : builder method to initialize
-
 
   public static stockBuilder getBuilder() {
     return new stockBuilder();
   }
 
-  private stock(String tickerName, Integer numOfUnits, LocalDate date) {
+  public stock(String tickerName, Integer numOfUnits, LocalDate date) {
     this.tickerName = tickerName;
     this.numOfUnits = numOfUnits;
     this.date = date;
   }
 
-  String getTickerName() {
+  @Override
+  public String getTickerName() {
     return this.tickerName;
   }
 
-  Integer getNumOfUnits() {
+  @Override
+  public Integer getNumOfUnits() {
     return this.numOfUnits;
   }
 

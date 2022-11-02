@@ -12,7 +12,6 @@ import Model.IUserInterface;
 import Model.portfolio;
 import Model.portfolioModel;
 import Model.stock;
-import Model.User;
 import View.ViewInterface;
 import java.util.Scanner;
 
@@ -22,7 +21,7 @@ public class ControllerImpl implements Controller{
   private InputStream userInput;
   Scanner scanner;
 
-  public ControllerImpl(User user, ViewInterface view, InputStream in) {
+  public ControllerImpl(IUserInterface user, ViewInterface view, InputStream in) {
     this.view = view;
     this.user = user;
     this.userInput = in;
