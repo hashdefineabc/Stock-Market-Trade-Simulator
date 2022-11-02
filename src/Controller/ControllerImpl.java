@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import Model.IUserInterface;
+import Model.IstockModel;
 import Model.portfolio;
 import Model.portfolioModel;
 import Model.stock;
@@ -120,8 +121,8 @@ public class ControllerImpl implements Controller{
     return valueDate;
   }
 
-  private boolean isPortFolioEmpty(portfolioModel p) {
-    if (p.getStocks().size() == 0) {
+  private boolean isPortFolioEmpty(List<IstockModel> stockList) {
+    if (stockList.isEmpty()) {
       this.view.displayMsgToUser("Portfolio is empty right now...");
       return true;
     }
@@ -144,16 +145,19 @@ public class ControllerImpl implements Controller{
             case 1:
               view.displayMsgToUser("Creating a new portfolio...");
               String portfolioName = this.getPortFolioNameFromView();
-              portfolioModel newPortfolio = new portfolio(portfolioName);
-              while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
+              List<IstockModel> stockList = new ArrayList<>();
+              while (this.addMoreStocksFromView() || this.isPortFolioEmpty(stockList)) {
                 String[] s = this.takeStockInputFromView();
                 //using builder method to create stocks
                 stock newStock = stock.getBuilder()
                         .tickerName(s[0])
                         .numOfUnits(Integer.valueOf(s[1]))
                         .build();
-                newPortfolio.addStocks(newStock);
+                stockList.add(newStock);
               }
+
+              portfolioModel newPortfolio = new portfolio(portfolioName, stockList);
+
               user.CreateNewPortfolio(newPortfolio);
               user.savePortfolioToFile(newPortfolio);
               if (user.checkIfFileExists(portfolioName)) {

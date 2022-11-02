@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 public class portfolio implements portfolioModel{
 
   private String nameOfPortFolio;
-  private List<stock> stocks;
+  private static List<IstockModel> stocks;
 
   // private fields for api data fetching and file handling
   private String apiKey = "W0M1JOKC82EZEQA8";
@@ -31,15 +31,11 @@ public class portfolio implements portfolioModel{
   private String folderPath = userDirectory + File.separator + "stockData";
 
 
-  public portfolio(String nameOfPortFolio) {
+  public portfolio(String nameOfPortFolio, List<IstockModel> stocks) {
     this.nameOfPortFolio = nameOfPortFolio;
-    this.stocks = new ArrayList<>();
+    this.stocks = stocks;
   }
 
-  @Override
-  public void addStocks(stock s) {
-    this.stocks.add(s);
-  }
   private double getStockValue(String tickerName, LocalDate date) {
     double result = 0;
     FileReader file = null;
@@ -67,20 +63,23 @@ public class portfolio implements portfolioModel{
       attributes = line.split(",");
       String timeStamp = attributes[0];
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-      LocalDate dt = LocalDate.parse(timeStamp,formatter);
-
-      if(dt.compareTo(date) < 0) { // date > latest (first) timestamp in file
-        updateStockFile(tickerName);
-      }
-
-      while (line != null) {
-        attributes = line.split(",");
-        timeStamp = attributes[0];
-        if(timeStamp.equals(date.toString())) {
-          result += Double.parseDouble(attributes[4]);
-          return result;
+      try {
+        LocalDate dt = LocalDate.parse(timeStamp,formatter);
+        if(dt.compareTo(date) < 0) { // date > latest (first) timestamp in file
+          updateStockFile(tickerName);
         }
-        line = br.readLine();
+
+        while (line != null) {
+          attributes = line.split(",");
+          timeStamp = attributes[0];
+          if(timeStamp.equals(date.toString())) {
+            result += Double.parseDouble(attributes[4]);
+            return result;
+          }
+          line = br.readLine();
+        }
+      }
+      catch(Exception e) {
       }
 
     } catch (IOException e) {
@@ -159,7 +158,7 @@ public class portfolio implements portfolioModel{
 
     double answer = 0;
 
-    for(stock curStock: this.stocks) {
+    for(IstockModel curStock: this.stocks) {
       answer = answer + curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date);
     }
 
@@ -177,7 +176,7 @@ public class portfolio implements portfolioModel{
   public List<String[]> toListOfString() {
     List<String[]> answer = new ArrayList<>();
 
-    for (Model.stock stock : this.stocks) {
+    for (IstockModel stock : this.stocks) {
       String[] stocksDetails = new String[3];
       stocksDetails[0] = String.valueOf(stock.getTickerName());
       stocksDetails[1] = String.valueOf(stock.getNumOfUnits());
@@ -188,7 +187,7 @@ public class portfolio implements portfolioModel{
   }
 
   @Override
-  public List<stock> getStocks() {
+  public List<IstockModel> getStocks() {
     return this.stocks;
   }
 

@@ -24,7 +24,8 @@ public class User implements IUserInterface{
   public String folderPath;
   private String userDirectory;
   private File file;
-  public User() {
+  public User(String userName) {
+    this.username = userName;
     portfoliosList = new ArrayList<>();
     fileNamesFromSystem = new ArrayList<>();
     nasdaqTickerNames = new ArrayList<String>();
@@ -76,13 +77,13 @@ public class User implements IUserInterface{
       return;
     portfolio p;
     for (String portfolioName: this.fileNamesFromSystem) { //take files from system.
-      p = new portfolio(portfolioName); //create a portfolio object.
       //add stocks to the portfolio by reading csv.
       String filePath = this.folderPath + "/" + portfolioName;
 
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath);
 
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // has to be capital M for month
+      List<IstockModel> stockList = new ArrayList<>();
       for (String[] stockDetails: listOfStocks) {
         try {
           stock s = stock.getBuilder()
@@ -90,12 +91,13 @@ public class User implements IUserInterface{
                   .numOfUnits(Integer.valueOf(stockDetails[1]))
                   .date(LocalDate.parse(stockDetails[2], formatter))
                   .build();
-          p.addStocks(s);
+          stockList.add(s);
         }
         catch (ArrayIndexOutOfBoundsException e) {
 
         }
       }
+      p = new portfolio(portfolioName, stockList); //create a portfolio object.
       //add this portfolio to list
       this.portfoliosList.add(p);
     }

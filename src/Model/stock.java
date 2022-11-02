@@ -27,7 +27,8 @@ public class stock implements IstockModel {
     return this.numOfUnits;
   }
 
-  LocalDate getDate() {
+  @Override
+  public LocalDate getDate() {
     return this.date;
   }
 

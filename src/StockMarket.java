@@ -11,7 +11,7 @@ public class StockMarket {
   public static void main(String args[]) {
 
     //create the model.
-    IUserInterface u = new User();
+    IUserInterface u = new User("First User");
 
     //create the view.
     ViewInterface view = new ViewImpl(System.out); //this input stream can be used by view as well as junit tests.

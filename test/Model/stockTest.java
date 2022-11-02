@@ -19,7 +19,7 @@ public class stockTest{
   @Test
   public void testGetNumOfUnits() {
     IstockModel stock = new stock("MSFT", 6 , LocalDate.now());
-    assertEquals("5", stock.getNumOfUnits());
+    assertEquals("6", stock.getNumOfUnits().toString());
   }
 
   @Test
