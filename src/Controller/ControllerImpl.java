@@ -1,5 +1,6 @@
 package Controller;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -10,14 +11,20 @@ import Model.portfolio;
 import Model.stock;
 import Model.User;
 import View.ViewInterface;
+import java.util.Scanner;
 
 public class ControllerImpl implements Controller{
   private static ViewInterface view;
   private static User user;
 
-  public ControllerImpl(User user, ViewInterface view) {
+  private InputStream userInput;
+  Scanner scanner;
+
+  public ControllerImpl(User user, ViewInterface view, InputStream in) {
     this.view = view;
     this.user = user;
+    this.userInput = in;
+    scanner = new Scanner(this.userInput);
   }
 
   public int showMenuOnView() {
@@ -25,7 +32,8 @@ public class ControllerImpl implements Controller{
     List<Integer> validMenuOptions = Arrays.asList(1,2,3,4);
     while (!validMenuOptions.contains(userOption)){
       try {
-        userOption = Integer.parseInt( this.view.displayMenu());
+        this.view.displayMenu();
+        userOption = Integer.parseInt(scanner.next());
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
@@ -38,7 +46,8 @@ public class ControllerImpl implements Controller{
     List<Integer> validMenuOptions = Arrays.asList(1,2);
     while (!validMenuOptions.contains(userOption)){
       try {
-        userOption = Integer.parseInt( this.view.displayCreatePortFolioOptions());
+        this.view.displayCreatePortFolioOptions();
+        userOption = Integer.parseInt(scanner.next());
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
@@ -51,23 +60,30 @@ public class ControllerImpl implements Controller{
     String tickerNameFromUser = "";
     int numUnits = -1;
     while (numUnits <= 0 || !user.isTickerValid(tickerNameFromUser)) {
-      userStockInput = this.view.takeStockInput();
-      numUnits = Integer.parseInt(userStockInput[1]);
-      tickerNameFromUser = userStockInput[0];
+      this.view.takeTickerName();
+      tickerNameFromUser = scanner.next();
+      userStockInput[0] = tickerNameFromUser;
+      this.view.takeNumOfUnits();
+      numUnits = scanner.nextInt();
+      userStockInput[1] = Integer.toString(numUnits);
     }
 
     return userStockInput;
   }
 
   public boolean addMoreStocksFromView() {
-    return view.addMoreStocks();
+    this.view.addMoreStocks();
+    int userInput = scanner.nextInt();
+    return userInput == 1;
   }
 
   public String getPortFolioNameFromView() {
-    String portfolioName = this.view.getPortfolioNameFromUser();;
+    this.view.getPortfolioNameFromUser();
+    String portfolioName = scanner.next();
     while(user.checkIfFileExists(portfolioName)) {
       this.view.displayMsgToUser("This portfolio already exists in the system!!");
-      portfolioName = this.view.getPortfolioNameFromUser();
+      this.view.getPortfolioNameFromUser();
+      portfolioName = scanner.next();
     }
     return portfolioName;
   }
@@ -75,7 +91,8 @@ public class ControllerImpl implements Controller{
   public int getSelectedPortFolioFromView() {
     int index = -1;
     while ((index < 0) || (index > user.getPortfoliosCreated().size())) {
-      index = view.getSelectedPortfolio();
+      view.getSelectedPortfolio();
+      index = scanner.nextInt();
     }
     return index;
   }
@@ -86,7 +103,8 @@ public class ControllerImpl implements Controller{
     boolean isDateOkay = false;
     while (isDateOkay == false) {
       try {
-        valueDate =  LocalDate.parse(view.getDateFromUser(), dateFormat);
+        view.getDateFromUser();
+        valueDate =  LocalDate.parse(scanner.next(), dateFormat);
         isDateOkay = true;
       } catch (Exception e) {
         view.displayMsgToUser("Invalid date. Please try again!");
@@ -120,7 +138,7 @@ public class ControllerImpl implements Controller{
             case 1:
               view.displayMsgToUser("Creating a new portfolio...");
               String portfolioName = this.getPortFolioNameFromView();
-              portfolio newPortfolio = new portfolio(portfolioName + ".csv");
+              portfolio newPortfolio = new portfolio(portfolioName);
               while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
                 String[] s = this.takeStockInputFromView();
                 //using builder method to create stocks
@@ -142,7 +160,8 @@ public class ControllerImpl implements Controller{
             case 2: //upload a file
               this.displayCsvPathToUser();
               //check if file uploaded
-              if (view.isFileUploaded()) { //TODO: complete this fn
+              view.isFileUploaded();
+              if (scanner.nextInt() == 1) { //TODO: complete this fn
                 user.createPortFolioFromFile();
               }
               break;
@@ -176,7 +195,7 @@ public class ControllerImpl implements Controller{
             stocksNamesToDisplay.add(p.getNameOfPortFolio());
           }
           view.displayListOfPortfolios(stocksNamesToDisplay);
-          int portfolioIndexForVal = view.getSelectedPortfolio();
+          int portfolioIndexForVal = this.getSelectedPortFolioFromView();
           portfolio toCalcVal = user.getPortfoliosCreated().get(portfolioIndexForVal - 1);
 
           LocalDate date = this.getDateFromView();

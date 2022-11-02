@@ -117,5 +117,17 @@ public class ViewImplTest {
     String expectedOutput = "Enter the ticker name:\n" + "Enter the number of units purchased:\n";
     assertEquals(expectedOutput, out.toString());
   }
+  @Test
+  public void testAddMoreStocks() {
+    String inputForTest = "1";
+    InputStream input = new ByteArrayInputStream(inputForTest.getBytes());
+    OutputStream out = new ByteArrayOutputStream();
+    User u = new User();
+    ViewInterface view = new ViewImpl(input, new PrintStream(out));
+    ControllerImpl controller = new ControllerImpl(u, view);
+    controller.addMoreStocksFromView();
+    String expectedOutput = "Do you want to add more stocks to this portfolio? (Press 1 for Yes, 0 for No):\n";
+    assertEquals(expectedOutput, out.toString());
+  }
 
 }
