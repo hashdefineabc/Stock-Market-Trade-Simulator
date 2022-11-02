@@ -7,15 +7,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import Model.IUserInterface;
-import Model.IstockModel;
-import Model.portfolio;
-import Model.portfolioModel;
-import Model.stock;
+import Model.IstockModel;;
 import View.ViewInterface;
 import java.util.Scanner;
 
+/**
+ * Class to implement the controller of the stock market application.
+ */
 public class ControllerImpl implements Controller{
   private static ViewInterface view;
   private static IUserInterface user;

@@ -28,11 +28,6 @@ public class ControllerImplTest {
 
     }
 
-    /**
-     * creates a new portfolio
-     *
-     * @param newPortfolio
-     */
     @Override
     public void CreateNewPortfolio(portfolioModel newPortfolio) {
 

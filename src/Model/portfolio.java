@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
+/**
+ * Class to implement a portfolio.
+ */
 public class portfolio implements portfolioModel{
 
   private String nameOfPortFolio;

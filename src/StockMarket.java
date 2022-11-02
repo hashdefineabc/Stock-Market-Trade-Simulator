@@ -1,5 +1,3 @@
-import java.io.InputStream;
-
 import Controller.ControllerImpl;
 import Model.IUserInterface;
 import Model.User;
