@@ -1,65 +1,87 @@
 package View;
 
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
-import Model.portfolio;
 
+/**
+ * Interface that describes how the text user interface of this stockMarket application would look like.
+ */
 public interface ViewInterface {
 
   /**
-   * display options
+   * Method to display the below options to the user
    * 1. create new portfolio
    * 2. retrieve portfolio
    * 3. check value of a particular portfolio
-   * @return the option selected by the user
+   * 4. Exit the application
    */
   void displayMenu();
+
+  /**
+   * Method to tell the user to input a ticker name.
+   */
   void takeTickerName();
 
+  /**
+   * Method to tell the user to input the num of units bought for that particular share
+   */
   void takeNumOfUnits();
 
   /**
-   * take stock details for a particular portfolio from the user
-   * It should take the ticker name and the number of units
-   * @return the ticker name and the number of units
-   */
-
-
-  /**
-   * asks user if they want to add more stocks to the portfolio
-   * @return true of they want to add more stocks else return false
+   * Method that asks the user if they want to add more stocks to the portfolio
+   *
    */
   void addMoreStocks();
 
   /**
-   * displays the list of created portfolios
+   * Method that displays the list of created portfolios.
+   * @param portfolios = list of portfolios as given by the controller.
    */
-  void displayListOfPortfolios(List<String> portfolios); //changing this as model classes shouldn't interact with view.
+  void displayListOfPortfolios(List<String> portfolios);
 
   /**
-   * displays list of portfolios and asks user to select one
-   * @return the selected portfolio
+   * Method that displays list of portfolios and asks user to select one.
    */
   void getSelectedPortfolio();
 
   /**
-   * displays stocks of a particular portfolio
+   * Method that displays stocks of a particular portfolio
    */
-
   void displayStocks(List<String[]> listOfStocks);
+
+  /**
+   * Method that tells the user to input the date for which he/she wishes to see the value of the
+   * portfolio.
+   */
 
   void getDateFromUser();
 
+  /**
+   * Method to display the calculated value of the portfolio.
+   * @param val = value as calculated by model.
+   */
   void displayValue(double val);
 
+  /**
+   * Method to display any arbitrary msg to the user.
+   * @param msg = the msg passed by the controller.
+   */
   void displayMsgToUser(String msg);
 
+  /**
+   * Method to get the portfolio name from the user.
+   */
   void getPortfolioNameFromUser();
 
+  /**
+   * Method to display the following two options of creating a portfolio:
+   * 1. Enter the stock details manually
+   * 2. Upload an existing file
+   */
   void displayCreatePortFolioOptions();
 
+  /**
+   * Method to check if the file to create a portfolio has been uploaded by the user.
+   */
   void isFileUploaded();
 }
