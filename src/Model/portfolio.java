@@ -45,8 +45,16 @@ public class portfolio implements portfolioModel{
       String fileName = ""+tickerName+".csv";
       file = new FileReader(fileName);
     } catch (FileNotFoundException e) {
-      throw new RuntimeException("File not found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      updateStockFile(tickerName);
     }
+
+    String fileName = ""+tickerName+".csv";
+    try {
+      file = new FileReader(fileName);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException("File not found yet !!!!!!!!!!!");
+    }
+
 
     try(BufferedReader br = new BufferedReader(file)) {
       String line = br.readLine();
