@@ -16,7 +16,6 @@ import java.util.Scanner;
 public class ControllerImpl implements Controller{
   private static ViewInterface view;
   private static User user;
-
   private InputStream userInput;
   Scanner scanner;
 
