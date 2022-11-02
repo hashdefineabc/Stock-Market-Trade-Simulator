@@ -23,8 +23,7 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public void displayMenu() {
-    this.out.println();
-    this.out.println("***********************************");
+    this.out.print("***********************************\n");
     this.out.print("\t1. Create a new Portfolio\n");
     this.out.print("\t2. Retrieve Portfolio\n");
     this.out.print("\t3. Check value of a Portfolio\n");
