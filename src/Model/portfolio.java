@@ -22,11 +22,14 @@ import java.util.stream.Stream;
 public class portfolio implements portfolioModel{
 
   public String nameOfPortFolio;
-  String apiKey = "W0M1JOKC82EZEQA8";
-  String stockSymbol = ""; //ticker symbol for Google
-  URL url = null;
-
   public List<stock> stocks;
+
+  // private fields for api data fetching and file handling
+  private String apiKey = "W0M1JOKC82EZEQA8";
+  private URL url = null;
+  private String userDirectory = new File("").getAbsolutePath();
+  private String folderPath = userDirectory + File.separator + "stockData";
+
 
   public portfolio(String nameOfPortFolio) {
     this.nameOfPortFolio = nameOfPortFolio;
@@ -37,49 +40,34 @@ public class portfolio implements portfolioModel{
   public void addStocks(stock s) {
     this.stocks.add(s);
   }
-
-
   private double getStockValue(String tickerName, LocalDate date) {
     double result = 0;
     FileReader file = null;
-
-    String userDirectory = new File("").getAbsolutePath();
-
-    String folderPath = userDirectory + File.separator + "stockData";
-    String filePath = folderPath+File.separator+tickerName+".csv";
+    String fileName = folderPath+File.separator+tickerName+".csv";
 
     try {
-      String fileName = filePath;
       file = new FileReader(fileName);
     } catch (FileNotFoundException e) {
       updateStockFile(tickerName);
     }
 
-    String fileName = filePath;
     try {
       file = new FileReader(fileName);
     } catch (FileNotFoundException e) {
       throw new RuntimeException("File not found yet !!!!!!!!!!!");
     }
 
-
     try(BufferedReader br = new BufferedReader(file)) {
       String line = br.readLine();
-
-
       /* check if the date for which the value is to be determined is greater than
           the latest date that exists in our file.
       */
       String[] attributes = line.split(",");
       line = br.readLine();
-
       attributes = line.split(",");
       String timeStamp = attributes[0];
-      final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
       LocalDate dt = LocalDate.parse(timeStamp,formatter);
-
 
       if(dt.compareTo(date) < 0) { // date > latest (first) timestamp in file
         updateStockFile(tickerName);
@@ -101,7 +89,7 @@ public class portfolio implements portfolioModel{
     return result;
   }
 
-  public void updateStockFile(String tickerName) {
+  private void updateStockFile(String tickerName) {
     try {
       url = new URL("https://www.alphavantage"
               + ".co/query?function=TIME_SERIES_DAILY"
@@ -109,9 +97,6 @@ public class portfolio implements portfolioModel{
               + "&symbol"
               + "=" + tickerName + "&apikey="+apiKey+"&datatype=csv");
 
-      String userDirectory = new File("").getAbsolutePath();
-
-      String folderPath = userDirectory + File.separator + "stockData";
       String filePath = folderPath+File.separator+tickerName+".csv";
       new FileWriter(filePath, false).close();
 
@@ -128,23 +113,23 @@ public class portfolio implements portfolioModel{
         while (line != null) {
           String[] attributes = line.split(",");
           row.add(attributes);
-
           line = br.readLine();
         }
-
         try (PrintWriter pw = new PrintWriter(filePath)) {
           row.stream()
                   .map(this::convertToCSV)
                   .forEach(pw::println);
         }
-
-      } catch (IOException e) {
+      }
+      catch (IOException e) {
         throw new RuntimeException(e);
       }
 
-    } catch (MalformedURLException e) {
+    }
+    catch (MalformedURLException e) {
       throw new RuntimeException(e);
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
@@ -171,7 +156,6 @@ public class portfolio implements portfolioModel{
   public double valueOfPortfolio(LocalDate date) {
     // get list of stocks from portfolio
     // calculate the value and return
-
 
     double answer = 0;
 

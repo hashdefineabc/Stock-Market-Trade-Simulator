@@ -22,16 +22,15 @@ public class User {
 
   List<String> nasdaqTickerNames;
   public String folderPath;
+  private String userDirectory;
   private File file;
   public User() {
     portfoliosList = new ArrayList<>();
     fileNamesFromSystem = new ArrayList<>();
     nasdaqTickerNames = new ArrayList<String>();
 
-    String userDirectory = new File("").getAbsolutePath();
-
+    userDirectory = new File("").getAbsolutePath();
     this.folderPath = userDirectory + File.separator + "PortFolioComposition";
-    System.out.println(this.folderPath);
 
     file = new File(folderPath);
     this.createFolder();
@@ -166,9 +165,8 @@ public class User {
     }
   }
 
-  public void createCSV(List<String[]> dataToWrite, String portFolioName) throws IOException {
+  public void createCSV(List<String[]> dataToWrite, String portFolioName) {
     File csvOutputFile = new File(this.folderPath + File.separator + portFolioName + ".csv");
-//    File csvOutputFile = new File(this.folderPath + "\\" + portFolioName + ".csv");
     try {
       PrintWriter pw = new PrintWriter(csvOutputFile);
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
