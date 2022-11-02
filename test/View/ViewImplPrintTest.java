@@ -2,18 +2,15 @@ package View;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import Controller.ControllerImpl;
-import Model.User;
-
 import static org.junit.Assert.*;
 
+/**
+ * Class to test the text user interface of the stockMarket application.
+ */
 public class ViewImplTest {
 
   OutputStream out;
