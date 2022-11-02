@@ -63,6 +63,7 @@ public class User {
   }
 
   public void loadExistingPortFolios() {
+    this.portfoliosList.clear();
     this.retrieveFileNames();
     if(this.fileNamesFromSystem.size() == 0)
       return;
