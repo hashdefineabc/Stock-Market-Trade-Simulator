@@ -1,6 +1,5 @@
 package Model;
 
-
 import org.junit.Test;
 
 import java.time.LocalDate;

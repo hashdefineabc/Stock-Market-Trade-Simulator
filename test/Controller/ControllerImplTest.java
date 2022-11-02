@@ -80,6 +80,11 @@ public class ControllerImplTest {
     public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
       return false;
     }
+
+    @Override
+    public void setFolderPath(String folderPath) {
+
+    }
   }
 
   @Test
