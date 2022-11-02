@@ -1,10 +1,7 @@
 package View;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,11 +27,13 @@ public class ViewImpl implements ViewInterface{
    */
   @Override
   public String displayMenu() {
+    this.out.println();
+    this.out.println("***********************************");
     this.out.print("\t1. Create a new Portfolio\n");
     this.out.print("\t2. Retrieve Portfolio\n");
     this.out.print("\t3. Check value of a Portfolio\n");
     this.out.print("\t4. Exit the application.\n");
-    this.out.print("\tPick one of the options\n");
+    this.out.print("Pick one of the options\n");
     return scanner.next();
   }
 
@@ -76,7 +75,7 @@ public class ViewImpl implements ViewInterface{
     int count = 0;
     for(String p: portfolios) {
       count++;
-      this.out.println(count + p);
+      this.out.println(count + " " +p);
     }
   }
 
@@ -97,9 +96,9 @@ public class ViewImpl implements ViewInterface{
   @Override
   public void displayStocks(List<String[]> listOfStocks){ //changing this as model classes shouldn't interact with view.
     this.out.println("Following stocks are present in the portfolio : ");
-    this.out.println("Ticker\t" + "Number of Units\t" + "Date Bought At\n");
+    this.out.println("Ticker\t" + "NumberOfUnits\t" + "DateBoughtAt\n");
     for (String[] stockDetails : listOfStocks) {
-      this.out.println(stockDetails[0]+"\t"+stockDetails[1]+"\t"+stockDetails[2]);
+      this.out.println(stockDetails[0]+"\t"+stockDetails[1]+"\t\t\t\t"+stockDetails[2]);
     }
   }
 

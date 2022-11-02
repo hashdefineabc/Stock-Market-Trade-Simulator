@@ -1,8 +1,7 @@
 package Controller;
 
-import java.io.InputStream;
-import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +9,6 @@ import java.util.List;
 import Model.portfolio;
 import Model.stock;
 import Model.User;
-import View.ViewImpl;
 import View.ViewInterface;
 
 public class ControllerImpl implements Controller{
@@ -115,7 +113,7 @@ public class ControllerImpl implements Controller{
   public void go() {
 
     while(true) {
-        switch(this.showMenuOnView()) {
+      switch(this.showMenuOnView()) {
         // create new portfolio and add stocks to the new portfolio
         case 1:
           switch(this.showCreatePortfolioOptionsOnView()) {
@@ -125,13 +123,11 @@ public class ControllerImpl implements Controller{
               portfolio newPortfolio = new portfolio(portfolioName + ".csv");
               while (this.addMoreStocksFromView() || this.isPortFolioEmpty(newPortfolio)) {
                 String[] s = this.takeStockInputFromView();
-                //stock newStock = new stock(s[0], Integer.valueOf(s[1]));
                 //using builder method to create stocks
                 stock newStock = stock.getBuilder()
                         .tickerName(s[0])
                         .numOfUnits(Integer.valueOf(s[1]))
                         .build();
-
                 newPortfolio.addStocks(newStock);
               }
               user.CreateNewPortfolio(newPortfolio);
@@ -190,19 +186,26 @@ public class ControllerImpl implements Controller{
             view.displayMsgToUser("Can't get value for date greater than today");
             date = this.getDateFromView();
           }
-          if (date.equals(today)) {
+          LocalTime fourPM = java.time.LocalTime.now();
+          if (date.equals(today) && java.time.LocalTime.now().compareTo(fourPM) < 0) {
             view.displayMsgToUser("Value will be calculated based on yesterday's closing price.");
             date = date.minusDays(1); //modify date to yesterday
           }
 
           double val = toCalcVal.valueOfPortfolio(date);
           view.displayValue(val);
+          if(val == 0) {
+            view.displayMsgToUser("Market was closed on "+date);
+          }
           break;
 
         case 4:
           view.displayMsgToUser("Closing the application");
           System.exit(0);
           break;
+
+        default:
+          System.exit(0);
       }
     }
   }
