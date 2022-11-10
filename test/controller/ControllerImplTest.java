@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.List;
-import Model.IUserInterface;
-import Model.portfolioModel;
+import model.IUserInterface;
+import model.PortfolioModel;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +29,7 @@ public class ControllerImplTest {
     }
 
     @Override
-    public void CreateNewPortfolio(portfolioModel newPortfolio) {
+    public void CreateNewPortfolio(PortfolioModel newPortfolio) {
 
     }
 
@@ -39,7 +39,7 @@ public class ControllerImplTest {
     }
 
     @Override
-    public List<portfolioModel> getPortfoliosCreated_Objects() {
+    public List<PortfolioModel> getPortfoliosCreated_Objects() {
       return null;
     }
 
@@ -51,7 +51,7 @@ public class ControllerImplTest {
     }
 
     @Override
-    public void savePortfolioToFile(portfolioModel newPortfolio) {
+    public void savePortfolioToFile(PortfolioModel newPortfolio) {
 
     }
 

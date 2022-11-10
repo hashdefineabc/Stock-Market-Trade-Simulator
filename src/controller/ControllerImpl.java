@@ -7,9 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import Model.IUserInterface;
-import Model.IstockModel;;
-import View.ViewInterface;
+import model.IUserInterface;
+import model.IstockModel;;
+import view.ViewInterface;
 import java.util.Scanner;
 
 /**

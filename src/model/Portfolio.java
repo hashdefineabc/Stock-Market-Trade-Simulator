@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 /**
  * Class to implement a portfolio.
  */
-public class portfolio implements portfolioModel{
+public class Portfolio implements PortfolioModel {
 
   private String nameOfPortFolio;
   private static List<IstockModel> stocks;
@@ -33,7 +33,7 @@ public class portfolio implements portfolioModel{
   private String folderPath = userDirectory + File.separator + "stockData";
 
 
-  public portfolio(String nameOfPortFolio, List<IstockModel> stocks) throws IllegalArgumentException{
+  public Portfolio(String nameOfPortFolio, List<IstockModel> stocks) throws IllegalArgumentException{
     if(nameOfPortFolio == ""){
       throw new IllegalArgumentException("Please provide a name for your portfolio");
     }

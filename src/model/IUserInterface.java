@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,7 +21,7 @@ public interface IUserInterface {
    * Method to create a new portfolio.
    * @param newPortfolio the new portfolio
    */
-  void CreateNewPortfolio(portfolioModel newPortfolio);
+  void CreateNewPortfolio(PortfolioModel newPortfolio);
 
   /**
    * Method to get the names of the portfolios created.
@@ -33,7 +33,7 @@ public interface IUserInterface {
    * Method to get the list of portfolio objects created.
    * @return the list of portfolios.
    */
-  List<portfolioModel> getPortfoliosCreated_Objects();
+  List<PortfolioModel> getPortfoliosCreated_Objects();
 
   /**
    * Method to check if a particular file exists in the system.
@@ -46,7 +46,7 @@ public interface IUserInterface {
    * Method to save the created portfolio to a csv file.
    * @param newPortfolio the portfolio to be saved.
    */
-  void savePortfolioToFile(portfolioModel newPortfolio);
+  void savePortfolioToFile(PortfolioModel newPortfolio);
 
   /**
    * Method to check if a tickerName is valid or not.
@@ -88,4 +88,13 @@ public interface IUserInterface {
   boolean createPortfolioManually(String portfolioName, List<String[]> stockList);
 
   void setFolderPath(String folderPath);
+
+  //todo
+  void buySell();
+
+  //todo
+  void calculateCostBasis();
+
+  //todo
+  void displayChart();
 }

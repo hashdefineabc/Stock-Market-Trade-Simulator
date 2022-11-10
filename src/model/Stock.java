@@ -1,11 +1,11 @@
-package Model;
+package model;
 
 import java.time.LocalDate;
 
 /**
  * Class that implements the stock structure and methods.
  */
-public class stock implements IstockModel {
+public class Stock implements IstockModel {
   private String tickerName;
   private Integer numOfUnits;
   LocalDate date;
@@ -14,7 +14,7 @@ public class stock implements IstockModel {
     return new stockBuilder();
   }
 
-  public stock(String tickerName, Integer numOfUnits, LocalDate date) {
+  public Stock(String tickerName, Integer numOfUnits, LocalDate date) {
     this.tickerName = tickerName;
     this.numOfUnits = numOfUnits;
     this.date = date;
@@ -62,9 +62,9 @@ public class stock implements IstockModel {
       return this;
     }
 
-    public stock build() {
+    public Stock build() {
       //use the currently set values to create the stock object
-      return new stock(tickerName, numOfUnits, date);
+      return new Stock(tickerName, numOfUnits, date);
     }
 
   }

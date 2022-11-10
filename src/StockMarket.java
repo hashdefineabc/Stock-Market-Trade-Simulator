@@ -1,8 +1,8 @@
 import Controller.ControllerImpl;
-import Model.IUserInterface;
-import Model.User;
-import View.ViewImpl;
-import View.ViewInterface;
+import model.IUserInterface;
+import model.User;
+import view.ViewImpl;
+import view.ViewInterface;
 
 public class StockMarket {
 

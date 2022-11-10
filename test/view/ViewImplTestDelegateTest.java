@@ -1,4 +1,4 @@
-package View;
+package view;
 
 import org.junit.Test;
 import java.util.ArrayList;

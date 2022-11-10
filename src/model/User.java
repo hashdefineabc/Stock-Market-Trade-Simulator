@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class User implements IUserInterface{
 
   public String username;
-  public List<portfolioModel> portfoliosList;
+  public List<PortfolioModel> portfoliosList;
   List<String> fileNamesFromSystem;
 
   List<String> nasdaqTickerNames;
@@ -78,7 +78,7 @@ public class User implements IUserInterface{
     this.retrieveFileNames();
     if(this.fileNamesFromSystem.size() == 0)
       return;
-    portfolio p;
+    Portfolio p;
     for (String portfolioName: this.fileNamesFromSystem) { //take files from system.
       //add stocks to the portfolio by reading csv.
       String filePath = this.folderPath + "/" + portfolioName;
@@ -89,7 +89,7 @@ public class User implements IUserInterface{
       List<IstockModel> stockList = new ArrayList<>();
       for (String[] stockDetails: listOfStocks) {
         try {
-          stock s = stock.getBuilder()
+          Stock s = Stock.getBuilder()
                   .tickerName(stockDetails[0])
                   .numOfUnits(Integer.valueOf(stockDetails[1]))
                   .date(LocalDate.parse(stockDetails[2], formatter))
@@ -100,7 +100,7 @@ public class User implements IUserInterface{
 
         }
       }
-      p = new portfolio(portfolioName, stockList); //create a portfolio object.
+      p = new Portfolio(portfolioName, stockList); //create a portfolio object.
       //add this portfolio to list
       this.portfoliosList.add(p);
     }
@@ -132,7 +132,7 @@ public class User implements IUserInterface{
   creates a new portfolio
    */
   @Override
-  public void CreateNewPortfolio(portfolioModel newPortfolio) {
+  public void CreateNewPortfolio(PortfolioModel newPortfolio) {
     portfoliosList.add(newPortfolio);
   }
 
@@ -146,15 +146,15 @@ public class User implements IUserInterface{
   @Override
   public List<String> getPortfolioNamesCreated() {
     List<String> portfolioNames = new ArrayList<>();
-    List<portfolioModel> portfolioObjects = this.portfoliosList;
-    for (portfolioModel p : portfolioObjects) {
+    List<PortfolioModel> portfolioObjects = this.portfoliosList;
+    for (PortfolioModel p : portfolioObjects) {
       portfolioNames.add(p.getNameOfPortFolio());
     }
     return portfolioNames;
   }
 
   @Override
-  public List<portfolioModel> getPortfoliosCreated_Objects() {
+  public List<PortfolioModel> getPortfoliosCreated_Objects() {
     return this.portfoliosList;
   }
 
@@ -186,7 +186,7 @@ public class User implements IUserInterface{
   }
 
   @Override
-  public void savePortfolioToFile(portfolioModel newPortfolio) {
+  public void savePortfolioToFile(PortfolioModel newPortfolio) {
     List<String[]> dataToWrite = newPortfolio.toListOfString();
 
     try {
@@ -226,14 +226,14 @@ public class User implements IUserInterface{
 
   @Override
   public List<String[]> displayStocksOfPortFolio(int portfolioIndex) {
-    portfolioModel toDisplay = this.getPortfoliosCreated_Objects().get(portfolioIndex - 1);
+    PortfolioModel toDisplay = this.getPortfoliosCreated_Objects().get(portfolioIndex - 1);
     List<String[]> stocksToDisplay = toDisplay.toListOfString();
     return stocksToDisplay;
   }
 
   @Override
   public double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date) {
-    portfolioModel toCalcVal = this.getPortfoliosCreated_Objects().get(portfolioIndexForVal - 1);
+    PortfolioModel toCalcVal = this.getPortfoliosCreated_Objects().get(portfolioIndexForVal - 1);
     double val = toCalcVal.valueOfPortfolio(date);
     return val;
   }
@@ -242,13 +242,13 @@ public class User implements IUserInterface{
   public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
     List<IstockModel> stockListToAdd = new ArrayList<>();
     for (String[] singleStock: stockList) {
-      stock newStock = stock.getBuilder()
+      Stock newStock = Stock.getBuilder()
               .tickerName(singleStock[0])
               .numOfUnits(Integer.valueOf(singleStock[1]))
               .build();
       stockListToAdd.add(newStock);
     }
-    portfolioModel newPortfolio = new portfolio(portfolioName, stockListToAdd);
+    PortfolioModel newPortfolio = new Portfolio(portfolioName, stockListToAdd);
     this.CreateNewPortfolio(newPortfolio);
     this.savePortfolioToFile(newPortfolio);
     if (this.checkIfFileExists(portfolioName)) {
@@ -260,5 +260,20 @@ public class User implements IUserInterface{
   @Override
   public void setFolderPath(String folderPath) {
     this.folderPath = folderPath;
+  }
+
+  @Override
+  public void buySell() {
+
+  }
+
+  @Override
+  public void calculateCostBasis() {
+
+  }
+
+  @Override
+  public void displayChart() {
+
   }
 }
