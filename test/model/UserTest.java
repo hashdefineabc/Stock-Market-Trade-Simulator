@@ -4,6 +4,7 @@ package model;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,6 @@ public class UserTest {
 
 
   @Test
-<<<<<<< HEAD:test/model/UserTest.java
   public void testStocks() {
     IstockModel stock = new Stock("AAPL", 5, LocalDate.now());
 //    assertEquals();
@@ -32,7 +32,7 @@ public class UserTest {
 
   @Test
   public void testIsTickerValid() {
-    IUserInterface user = new User("new user");
+    IUserInterface user = new User();
     List<IstockModel> stockList = new ArrayList<>();
     Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
     stockList.add(s);
@@ -47,7 +47,7 @@ public class UserTest {
   @Test
   public void testCreateNewPortfolio() {
 
-    IUserInterface user = new User("User 1");
+    IUserInterface user = new User();
     List<IstockModel> stockList = new ArrayList<>();
     Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
     stockList.add(s);
@@ -60,16 +60,11 @@ public class UserTest {
     user.CreateNewPortfolio(portfolio);
     portfoliosCreated = user.getPortfolioNamesCreated();
     assertEquals(previousSize+1, portfoliosCreated.size());
-
-=======
-  public void testIsTickerValid() {
-    assertEquals(true, testUser.isTickerValid("AAPL"));
   }
 
   @Test
   public void testIsTickerInvalid() {
     assertEquals(false, testUser.isTickerValid("zzz"));
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:test/Model/UserTest.java
   }
 
   @Test

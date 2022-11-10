@@ -19,12 +19,7 @@ import java.util.stream.Stream;
  */
 public class User implements IUserInterface {
 
-<<<<<<< HEAD:src/model/User.java
-  public String username;
-  public List<PortfolioModel> portfoliosList;
-=======
   private List<PortfolioModel> portfoliosList;
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
   List<String> fileNamesFromSystem;
 
   List<String> nasdaqTickerNames;
@@ -85,14 +80,9 @@ public class User implements IUserInterface {
     this.retrieveFileNames();
     if (this.fileNamesFromSystem.size() == 0) {
       return;
-<<<<<<< HEAD:src/model/User.java
-    Portfolio p;
-    for (String portfolioName: this.fileNamesFromSystem) { //take files from system.
-=======
     }
     Portfolio p;
     for (String portfolioName : this.fileNamesFromSystem) { //take files from system.
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
       //add stocks to the portfolio by reading csv.
       String filePath = this.folderPath + "/" + portfolioName;
 
@@ -141,11 +131,7 @@ public class User implements IUserInterface {
   }
 
   @Override
-<<<<<<< HEAD:src/model/User.java
   public void CreateNewPortfolio(PortfolioModel newPortfolio) {
-=======
-  public void createNewPortfolio(PortfolioModel newPortfolio) {
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
     portfoliosList.add(newPortfolio);
   }
 
@@ -167,12 +153,8 @@ public class User implements IUserInterface {
     return portfolioNames;
   }
 
-<<<<<<< HEAD:src/model/User.java
   @Override
-  public List<PortfolioModel> getPortfoliosCreated_Objects() {
-=======
-  private List<PortfolioModel> getPortfoliosCreatedObjects() {
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
+  public List<PortfolioModel> getPortfoliosCreatedObjects() {
     return this.portfoliosList;
   }
 
@@ -240,22 +222,14 @@ public class User implements IUserInterface {
 
   @Override
   public List<String[]> displayStocksOfPortFolio(int portfolioIndex) {
-<<<<<<< HEAD:src/model/User.java
-    PortfolioModel toDisplay = this.getPortfoliosCreated_Objects().get(portfolioIndex - 1);
-=======
     PortfolioModel toDisplay = this.getPortfoliosCreatedObjects().get(portfolioIndex - 1);
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
     List<String[]> stocksToDisplay = toDisplay.toListOfString();
     return stocksToDisplay;
   }
 
   @Override
   public double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date) {
-<<<<<<< HEAD:src/model/User.java
-    PortfolioModel toCalcVal = this.getPortfoliosCreated_Objects().get(portfolioIndexForVal - 1);
-=======
     PortfolioModel toCalcVal = this.getPortfoliosCreatedObjects().get(portfolioIndexForVal - 1);
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
     double val = toCalcVal.valueOfPortfolio(date);
     return val;
   }
@@ -263,11 +237,7 @@ public class User implements IUserInterface {
   @Override
   public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
     List<IstockModel> stockListToAdd = new ArrayList<>();
-<<<<<<< HEAD:src/model/User.java
-    for (String[] singleStock: stockList) {
-=======
     for (String[] singleStock : stockList) {
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
       Stock newStock = Stock.getBuilder()
               .tickerName(singleStock[0])
               .numOfUnits(Integer.valueOf(singleStock[1]))
@@ -275,19 +245,9 @@ public class User implements IUserInterface {
       stockListToAdd.add(newStock);
     }
     PortfolioModel newPortfolio = new Portfolio(portfolioName, stockListToAdd);
-<<<<<<< HEAD:src/model/User.java
     this.CreateNewPortfolio(newPortfolio);
-=======
-    this.createNewPortfolio(newPortfolio);
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
     this.savePortfolioToFile(newPortfolio);
     return this.checkIfFileExists(portfolioName);
-  }
-
-<<<<<<< HEAD:src/model/User.java
-  @Override
-  public void setFolderPath(String folderPath) {
-    this.folderPath = folderPath;
   }
 
   @Override
@@ -304,6 +264,4 @@ public class User implements IUserInterface {
   public void displayChart() {
 
   }
-=======
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
 }

@@ -21,11 +21,7 @@ public interface IUserInterface {
    * Method to create a new portfolio.
    * @param newPortfolio the new portfolio
    */
-<<<<<<< HEAD:src/model/IUserInterface.java
   void CreateNewPortfolio(PortfolioModel newPortfolio);
-=======
-  void createNewPortfolio(PortfolioModel newPortfolio);
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/IUserInterface.java
 
   /**
    * Method to get the names of the portfolios created.
@@ -33,14 +29,11 @@ public interface IUserInterface {
    */
   List<String> getPortfolioNamesCreated();
 
-<<<<<<< HEAD:src/model/IUserInterface.java
   /**
    * Method to get the list of portfolio objects created.
    * @return the list of portfolios.
    */
-  List<PortfolioModel> getPortfoliosCreated_Objects();
-=======
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/IUserInterface.java
+  List<PortfolioModel> getPortfoliosCreatedObjects();
 
   /**
    * Method to check if a particular file exists in the system.
@@ -92,9 +85,6 @@ public interface IUserInterface {
    * @return boolean = if this portfolio was created or not.
    */
   boolean createPortfolioManually(String portfolioName, List<String[]> stockList);
-<<<<<<< HEAD:src/model/IUserInterface.java
-
-  void setFolderPath(String folderPath);
 
   //todo
   void buySell();
@@ -104,6 +94,4 @@ public interface IUserInterface {
 
   //todo
   void displayChart();
-=======
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/IUserInterface.java
 }

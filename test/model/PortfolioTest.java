@@ -63,8 +63,6 @@ public class PortfolioTest {
   public void testCreatePortfolioWithEmptyStocks() {
     List<IstockModel> stockList = new ArrayList<>();
     PortfolioModel portfolio = new Portfolio("", stockList);
-<<<<<<< HEAD:test/model/portfolioTest.java
-=======
   }
 
   /**
@@ -81,7 +79,6 @@ public class PortfolioTest {
     int previous = user.getPortfolioNamesCreated().size();
     PortfolioModel portfolio = new Portfolio("", stockList);
     assertEquals(previous + 1, user.getPortfolioNamesCreated().size());
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:test/Model/portfolioTest.java
   }
 
   /**
