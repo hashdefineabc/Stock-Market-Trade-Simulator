@@ -92,8 +92,6 @@ public class NewStock implements  IstockModelNew{
     }
 
 
-
-
     public NewStock build() {
       //use the currently set values to create the stock object
       return new NewStock(tickerName, numOfUnits, commission, buyingPrice, buyDate);

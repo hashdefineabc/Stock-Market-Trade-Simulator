@@ -1,20 +1,26 @@
-package Model;
+package model;
 
 import java.time.LocalDate;
 
 /**
  * Class that implements the stock structure and methods.
  */
-public class stock implements IstockModel {
+public class Stock implements IstockModel {
   private String tickerName;
-  private Integer numOfUnits;
+  private Integer numOfUnits; //TODO: make this double
   LocalDate date;
 
-  public static stockBuilder getBuilder() {
-    return new stockBuilder();
+  public static StockBuilder getBuilder() {
+    return new StockBuilder();
   }
 
-  public stock(String tickerName, Integer numOfUnits, LocalDate date) {
+  /**
+   * Constructor to initialize the fields of the stock class.
+   * @param tickerName name of the ticker
+   * @param numOfUnits number of units for this ticker name
+   * @param date date on which the stock was purchased
+   */
+  public Stock(String tickerName, Integer numOfUnits, LocalDate date) {
     this.tickerName = tickerName;
     this.numOfUnits = numOfUnits;
     this.date = date;
@@ -35,36 +41,44 @@ public class stock implements IstockModel {
     return this.date;
   }
 
-  public static class stockBuilder {
+  /**
+   * Using builder method to initialize the class.
+   */
+
+  public static class StockBuilder {
 
     private String tickerName;
     private Integer numOfUnits;
     private LocalDate date;
 
-    public stockBuilder() {
+    /**
+     * Constructor to initialize the fields of the stockBuilder class.
+     */
+
+    public StockBuilder() {
       tickerName = "";
       numOfUnits = 0;
       date = LocalDate.now();
     }
 
-    public stockBuilder tickerName(String tickerName) {
+    public StockBuilder tickerName(String tickerName) {
       this.tickerName = tickerName;
       return this;
     }
 
-    public stockBuilder numOfUnits(int units) {
+    public StockBuilder numOfUnits(int units) {
       this.numOfUnits = units;
       return this;
     }
 
-    public stockBuilder date(LocalDate date) {
+    public StockBuilder date(LocalDate date) {
       this.date = date;
       return this;
     }
 
-    public stock build() {
+    public Stock build() {
       //use the currently set values to create the stock object
-      return new stock(tickerName, numOfUnits, date);
+      return new Stock(tickerName, numOfUnits, date);
     }
 
   }
