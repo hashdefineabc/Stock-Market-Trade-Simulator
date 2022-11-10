@@ -34,10 +34,6 @@ public class Portfolio implements PortfolioModel {
   private String folderPath = userDirectory + File.separator + "stockData";
 
 
-<<<<<<< HEAD:src/model/Portfolio.java
-  public Portfolio(String nameOfPortFolio, List<IstockModel> stocks) throws IllegalArgumentException{
-    if(nameOfPortFolio == ""){
-=======
   /**
    * Constructor to initialize the fields of the portfolio class.
    * It throws an exception if no stocks are provided while creating the portfolio
@@ -48,7 +44,6 @@ public class Portfolio implements PortfolioModel {
   public Portfolio(String nameOfPortFolio, List<IstockModel> stocks)
           throws IllegalArgumentException {
     if (Objects.equals(nameOfPortFolio, "")) {
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/portfolio.java
       throw new IllegalArgumentException("Please provide a name for your portfolio");
     }
     if (stocks.isEmpty()) {

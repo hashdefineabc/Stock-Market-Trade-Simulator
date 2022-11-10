@@ -7,17 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-<<<<<<< HEAD
-import model.IUserInterface;
-import model.IstockModel;;
-import view.ViewInterface;
-=======
 
 import model.IUserInterface;
 import model.IstockModel;
 import view.ViewInterface;
 
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47
 import java.util.Scanner;
 
 /**

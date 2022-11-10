@@ -14,15 +14,12 @@ public class Stock implements IstockModel {
     return new StockBuilder();
   }
 
-<<<<<<< HEAD:src/model/Stock.java
-=======
   /**
    * Constructor to initialize the fields of the stock class.
    * @param tickerName name of the ticker
    * @param numOfUnits number of units for this ticker name
    * @param date date on which the stock was purchased
    */
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/stock.java
   public Stock(String tickerName, Integer numOfUnits, LocalDate date) {
     this.tickerName = tickerName;
     this.numOfUnits = numOfUnits;

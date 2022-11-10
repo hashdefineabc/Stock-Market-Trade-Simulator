@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import Controller.ControllerImpl;
-=======
 import controller.ControllerImpl;
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47
 import model.IUserInterface;
 import model.User;
 import view.ViewImpl;

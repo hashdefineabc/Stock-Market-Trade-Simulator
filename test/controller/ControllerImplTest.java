@@ -6,17 +6,12 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
-import model.IUserInterface;
-import model.PortfolioModel;
-=======
 
 import model.IUserInterface;
 import model.IstockModel;
 import model.Portfolio;
 import model.PortfolioModel;
 import model.Stock;
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47
 
 import static org.junit.Assert.assertEquals;
 
@@ -53,13 +48,8 @@ public class ControllerImplTest {
     }
 
     @Override
-<<<<<<< HEAD
     public void CreateNewPortfolio(PortfolioModel newPortfolio) {
-
-=======
-    public void createNewPortfolio(PortfolioModel newPortfolio) {
       log.append("CreateNewPortfolio method is called with " + newPortfolio.getNameOfPortFolio());
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47
     }
 
     @Override
@@ -69,15 +59,12 @@ public class ControllerImplTest {
     }
 
     @Override
-<<<<<<< HEAD
-    public List<PortfolioModel> getPortfoliosCreated_Objects() {
+    public List<PortfolioModel> getPortfoliosCreatedObjects() {
       return null;
     }
 
 
     @Override
-=======
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47
     public Boolean checkIfFileExists(String fileName) {
       log.append("fileName provided is : " + fileName);
       return null;
@@ -85,12 +72,8 @@ public class ControllerImplTest {
 
     @Override
     public void savePortfolioToFile(PortfolioModel newPortfolio) {
-<<<<<<< HEAD
-
-=======
       log.append("savePortfolioToFile is provided with the portfolio: " +
               newPortfolio.getNameOfPortFolio());
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47
     }
 
     @Override
@@ -232,7 +215,7 @@ public class ControllerImplTest {
     stockList.add(s);
     PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
 
-    user.createNewPortfolio(portfolio);
+    user.CreateNewPortfolio(portfolio);
     String expectedResult = "CreateNewPortfolio method is called with " +
             portfolio.getNameOfPortFolio();
     assertEquals(expectedResult, log.toString());
