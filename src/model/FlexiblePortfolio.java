@@ -1,8 +1,8 @@
-package Model;
+package model;
 
 import java.util.List;
 
-public class FlexiblePortfolio implements IflexiblePortfolio{
+public class FlexiblePortfolio implements IflexiblePortfolio {
 
   private final String portfolioName;
   private List<IstockModelNew> stocks;
