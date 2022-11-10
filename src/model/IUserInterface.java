@@ -21,7 +21,7 @@ public interface IUserInterface {
    * Method to create a new portfolio.
    * @param newPortfolio the new portfolio
    */
-  void createNewPortfolio(PortfolioModel newPortfolio);
+  void CreateNewPortfolio(PortfolioModel newPortfolio);
 
   /**
    * Method to get the names of the portfolios created.
@@ -29,6 +29,11 @@ public interface IUserInterface {
    */
   List<String> getPortfolioNamesCreated();
 
+  /**
+   * Method to get the list of portfolio objects created.
+   * @return the list of portfolios.
+   */
+  List<PortfolioModel> getPortfoliosCreatedObjects();
 
   /**
    * Method to check if a particular file exists in the system.
@@ -80,4 +85,13 @@ public interface IUserInterface {
    * @return boolean = if this portfolio was created or not.
    */
   boolean createPortfolioManually(String portfolioName, List<String[]> stockList);
+
+  //todo
+  void buySell();
+
+  //todo
+  void calculateCostBasis();
+
+  //todo
+  void displayChart();
 }

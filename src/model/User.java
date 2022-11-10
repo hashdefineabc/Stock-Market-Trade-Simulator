@@ -131,7 +131,7 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public void createNewPortfolio(PortfolioModel newPortfolio) {
+  public void CreateNewPortfolio(PortfolioModel newPortfolio) {
     portfoliosList.add(newPortfolio);
   }
 
@@ -153,7 +153,8 @@ public class User implements IUserInterface {
     return portfolioNames;
   }
 
-  private List<PortfolioModel> getPortfoliosCreatedObjects() {
+  @Override
+  public List<PortfolioModel> getPortfoliosCreatedObjects() {
     return this.portfoliosList;
   }
 
@@ -244,9 +245,23 @@ public class User implements IUserInterface {
       stockListToAdd.add(newStock);
     }
     PortfolioModel newPortfolio = new Portfolio(portfolioName, stockListToAdd);
-    this.createNewPortfolio(newPortfolio);
+    this.CreateNewPortfolio(newPortfolio);
     this.savePortfolioToFile(newPortfolio);
     return this.checkIfFileExists(portfolioName);
   }
 
+  @Override
+  public void buySell() {
+
+  }
+
+  @Override
+  public void calculateCostBasis() {
+
+  }
+
+  @Override
+  public void displayChart() {
+
+  }
 }

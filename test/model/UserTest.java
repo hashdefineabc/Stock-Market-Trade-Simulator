@@ -4,6 +4,7 @@ package model;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +25,41 @@ public class UserTest {
 
 
   @Test
+  public void testStocks() {
+    IstockModel stock = new Stock("AAPL", 5, LocalDate.now());
+//    assertEquals();
+  }
+
+  @Test
   public void testIsTickerValid() {
-    assertEquals(true, testUser.isTickerValid("AAPL"));
+    IUserInterface user = new User();
+    List<IstockModel> stockList = new ArrayList<>();
+    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
+    stockList.add(s);
+    s = new Stock("MSFT", 5, LocalDate.of(2022, 10, 26));
+    stockList.add(s);
+    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
+
+    user.CreateNewPortfolio(portfolio);
+    assertEquals(true, user.isTickerValid("AAPL"));
+  }
+
+  @Test
+  public void testCreateNewPortfolio() {
+
+    IUserInterface user = new User();
+    List<IstockModel> stockList = new ArrayList<>();
+    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
+    stockList.add(s);
+    s = new Stock("MSFT", 5, LocalDate.of(2022, 10, 26));
+    stockList.add(s);
+    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
+
+    List<String> portfoliosCreated = user.getPortfolioNamesCreated();
+    int previousSize =  portfoliosCreated.size();
+    user.CreateNewPortfolio(portfolio);
+    portfoliosCreated = user.getPortfolioNamesCreated();
+    assertEquals(previousSize+1, portfoliosCreated.size());
   }
 
   @Test

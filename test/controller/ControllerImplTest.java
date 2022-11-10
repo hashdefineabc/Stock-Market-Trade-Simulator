@@ -47,7 +47,7 @@ public class ControllerImplTest {
     }
 
     @Override
-    public void createNewPortfolio(PortfolioModel newPortfolio) {
+    public void CreateNewPortfolio(PortfolioModel newPortfolio) {
       log.append("CreateNewPortfolio method is called with " + newPortfolio.getNameOfPortFolio());
     }
 
@@ -56,6 +56,12 @@ public class ControllerImplTest {
       log.append("getPortfolioNamesCreated method is called");
       return null;
     }
+
+    @Override
+    public List<PortfolioModel> getPortfoliosCreatedObjects() {
+      return null;
+    }
+
 
     @Override
     public Boolean checkIfFileExists(String fileName) {
@@ -208,7 +214,7 @@ public class ControllerImplTest {
     stockList.add(s);
     PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
 
-    user.createNewPortfolio(portfolio);
+    user.CreateNewPortfolio(portfolio);
     String expectedResult = "CreateNewPortfolio method is called with " +
             portfolio.getNameOfPortFolio();
     assertEquals(expectedResult, log.toString());
