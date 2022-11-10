@@ -17,23 +17,33 @@ import java.util.stream.Stream;
 /**
  * Class to implement the user's functionality for the stock market application.
  */
-public class User implements IUserInterface{
+public class User implements IUserInterface {
 
+<<<<<<< HEAD:src/model/User.java
   public String username;
   public List<PortfolioModel> portfoliosList;
+=======
+  private List<PortfolioModel> portfoliosList;
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
   List<String> fileNamesFromSystem;
 
   List<String> nasdaqTickerNames;
-  public String folderPath;
-  private String userDirectory;
+  private String folderPath;
   private File file;
-  public User(String userName) {
-    this.username = userName;
+
+
+  /**
+   * Constructor for user class.
+   * it takes username and initializes the fields of this class
+   */
+
+  public User() {
+
     portfoliosList = new ArrayList<>();
     fileNamesFromSystem = new ArrayList<>();
     nasdaqTickerNames = new ArrayList<>();
 
-    userDirectory = new File("").getAbsolutePath();
+    String userDirectory = new File("").getAbsolutePath();
     this.folderPath = userDirectory + File.separator + "PortFolioComposition";
 
     file = new File(folderPath);
@@ -46,25 +56,22 @@ public class User implements IUserInterface{
 
   private void loadNasdaqTickerNames() {
     try {
-      BufferedReader csvReader = new BufferedReader(new FileReader("NASDAQ_tickernames.csv"));
+      BufferedReader csvReader = new BufferedReader(new FileReader("./resources/Nasdaq_top25.csv"));
       String row = "";
-      while ( !row.equals(null)) {
+      while (row != null) {
         row = csvReader.readLine();
         row = row.strip().split(",")[0];
         this.nasdaqTickerNames.add(row);
       }
       csvReader.close();
-    } catch(Exception e) {
-
+    } catch (Exception e) {
+        //do nothing
     }
   }
 
   @Override
   public boolean isTickerValid(String tickerName) {
-    if (this.nasdaqTickerNames.contains(tickerName)) {
-      return true;
-    }
-    return false;
+    return this.nasdaqTickerNames.contains(tickerName);
   }
 
   @Override
@@ -76,18 +83,24 @@ public class User implements IUserInterface{
   public void loadExistingPortFolios() {
     this.portfoliosList.clear();
     this.retrieveFileNames();
-    if(this.fileNamesFromSystem.size() == 0)
+    if (this.fileNamesFromSystem.size() == 0) {
       return;
+<<<<<<< HEAD:src/model/User.java
     Portfolio p;
     for (String portfolioName: this.fileNamesFromSystem) { //take files from system.
+=======
+    }
+    Portfolio p;
+    for (String portfolioName : this.fileNamesFromSystem) { //take files from system.
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
       //add stocks to the portfolio by reading csv.
       String filePath = this.folderPath + "/" + portfolioName;
 
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath);
 
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // has to be capital M for month
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
       List<IstockModel> stockList = new ArrayList<>();
-      for (String[] stockDetails: listOfStocks) {
+      for (String[] stockDetails : listOfStocks) {
         try {
           Stock s = Stock.getBuilder()
                   .tickerName(stockDetails[0])
@@ -95,9 +108,8 @@ public class User implements IUserInterface{
                   .date(LocalDate.parse(stockDetails[2], formatter))
                   .build();
           stockList.add(s);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // do nothing
         }
       }
       p = new Portfolio(portfolioName, stockList); //create a portfolio object.
@@ -128,23 +140,25 @@ public class User implements IUserInterface{
     return listOfStocks;
   }
 
-  /**
-  creates a new portfolio
-   */
   @Override
+<<<<<<< HEAD:src/model/User.java
   public void CreateNewPortfolio(PortfolioModel newPortfolio) {
+=======
+  public void createNewPortfolio(PortfolioModel newPortfolio) {
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
     portfoliosList.add(newPortfolio);
   }
 
 
   /**
-   * Returns the list of portfolios of a particular user
+   * Returns the list of portfolios of a particular user.
    *
    * @return
    */
 
   @Override
   public List<String> getPortfolioNamesCreated() {
+    this.loadExistingPortFolios();
     List<String> portfolioNames = new ArrayList<>();
     List<PortfolioModel> portfolioObjects = this.portfoliosList;
     for (PortfolioModel p : portfolioObjects) {
@@ -153,8 +167,12 @@ public class User implements IUserInterface{
     return portfolioNames;
   }
 
+<<<<<<< HEAD:src/model/User.java
   @Override
   public List<PortfolioModel> getPortfoliosCreated_Objects() {
+=======
+  private List<PortfolioModel> getPortfoliosCreatedObjects() {
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
     return this.portfoliosList;
   }
 
@@ -168,7 +186,7 @@ public class User implements IUserInterface{
   private List<String> retrieveFileNames() { //TODO:load only if extension is csv
     String[] fileNames = file.list();
     this.fileNamesFromSystem.clear();
-    for (String fileName: fileNames){
+    for (String fileName : fileNames) {
       if (fileName.contains(".csv")) {
         this.fileNamesFromSystem.add(fileName);
       }
@@ -179,10 +197,7 @@ public class User implements IUserInterface{
   @Override
   public Boolean checkIfFileExists(String fileName) {
     this.retrieveFileNames(); // updating the fileNamesFromSystem list.
-    if (this.fileNamesFromSystem.contains(fileName + ".csv")) {
-      return true;
-    }
-    return false;
+    return this.fileNamesFromSystem.contains(fileName + ".csv");
   }
 
   @Override
@@ -191,7 +206,7 @@ public class User implements IUserInterface{
 
     try {
       this.createCSV(dataToWrite, newPortfolio.getNameOfPortFolio());
-    } catch(Exception e) {
+    } catch (Exception e) {
       System.out.println("CSV was not created");
     }
   }
@@ -203,8 +218,7 @@ public class User implements IUserInterface{
       PrintWriter pw = new PrintWriter(csvOutputFile);
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
       pw.close();
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       System.out.println("Error creating a csv");
     }
   }
@@ -226,14 +240,22 @@ public class User implements IUserInterface{
 
   @Override
   public List<String[]> displayStocksOfPortFolio(int portfolioIndex) {
+<<<<<<< HEAD:src/model/User.java
     PortfolioModel toDisplay = this.getPortfoliosCreated_Objects().get(portfolioIndex - 1);
+=======
+    PortfolioModel toDisplay = this.getPortfoliosCreatedObjects().get(portfolioIndex - 1);
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
     List<String[]> stocksToDisplay = toDisplay.toListOfString();
     return stocksToDisplay;
   }
 
   @Override
   public double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date) {
+<<<<<<< HEAD:src/model/User.java
     PortfolioModel toCalcVal = this.getPortfoliosCreated_Objects().get(portfolioIndexForVal - 1);
+=======
+    PortfolioModel toCalcVal = this.getPortfoliosCreatedObjects().get(portfolioIndexForVal - 1);
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
     double val = toCalcVal.valueOfPortfolio(date);
     return val;
   }
@@ -241,7 +263,11 @@ public class User implements IUserInterface{
   @Override
   public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
     List<IstockModel> stockListToAdd = new ArrayList<>();
+<<<<<<< HEAD:src/model/User.java
     for (String[] singleStock: stockList) {
+=======
+    for (String[] singleStock : stockList) {
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
       Stock newStock = Stock.getBuilder()
               .tickerName(singleStock[0])
               .numOfUnits(Integer.valueOf(singleStock[1]))
@@ -249,14 +275,16 @@ public class User implements IUserInterface{
       stockListToAdd.add(newStock);
     }
     PortfolioModel newPortfolio = new Portfolio(portfolioName, stockListToAdd);
+<<<<<<< HEAD:src/model/User.java
     this.CreateNewPortfolio(newPortfolio);
+=======
+    this.createNewPortfolio(newPortfolio);
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
     this.savePortfolioToFile(newPortfolio);
-    if (this.checkIfFileExists(portfolioName)) {
-      return true;
-    }
-    return false;
+    return this.checkIfFileExists(portfolioName);
   }
 
+<<<<<<< HEAD:src/model/User.java
   @Override
   public void setFolderPath(String folderPath) {
     this.folderPath = folderPath;
@@ -276,4 +304,6 @@ public class User implements IUserInterface{
   public void displayChart() {
 
   }
+=======
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/User.java
 }

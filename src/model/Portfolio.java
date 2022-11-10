@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,30 +25,45 @@ import java.util.stream.Stream;
 public class Portfolio implements PortfolioModel {
 
   private String nameOfPortFolio;
-  private static List<IstockModel> stocks;
+  private LocalDate dateOfCreation;
+  private final List<IstockModel> stocks;
 
   // private fields for api data fetching and file handling
   private String apiKey = "W0M1JOKC82EZEQA8";
-  private URL url = null;
   private String userDirectory = new File("").getAbsolutePath();
   private String folderPath = userDirectory + File.separator + "stockData";
 
 
+<<<<<<< HEAD:src/model/Portfolio.java
   public Portfolio(String nameOfPortFolio, List<IstockModel> stocks) throws IllegalArgumentException{
     if(nameOfPortFolio == ""){
+=======
+  /**
+   * Constructor to initialize the fields of the portfolio class.
+   * It throws an exception if no stocks are provided while creating the portfolio
+   * @param nameOfPortFolio name of the portfolio
+   * @param stocks list of stocks
+   * @throws IllegalArgumentException when we try to create portfolio with empty stocks
+   */
+  public Portfolio(String nameOfPortFolio, List<IstockModel> stocks)
+          throws IllegalArgumentException {
+    if (Objects.equals(nameOfPortFolio, "")) {
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:src/Model/portfolio.java
       throw new IllegalArgumentException("Please provide a name for your portfolio");
     }
-    if(stocks.isEmpty()) {
-      throw new IllegalArgumentException("Creating a portfolio requires atleast one stock, please add a stock!!!!!");
+    if (stocks.isEmpty()) {
+      throw new IllegalArgumentException(
+              "Creating a portfolio requires atleast one stock, please add a stock!!!!!");
     }
     this.nameOfPortFolio = nameOfPortFolio;
     this.stocks = stocks;
+    this.dateOfCreation = LocalDate.now();
   }
 
   private double getStockValue(String tickerName, LocalDate date) {
     double result = 0;
     FileReader file = null;
-    String fileName = folderPath+File.separator+tickerName+".csv";
+    String fileName = "./resources/stockData/" + File.separator + tickerName + ".csv";
 
     try {
       file = new FileReader(fileName);
@@ -61,7 +77,7 @@ public class Portfolio implements PortfolioModel {
       throw new RuntimeException("File not found yet !!!!!!!!!!!");
     }
 
-    try(BufferedReader br = new BufferedReader(file)) {
+    try (BufferedReader br = new BufferedReader(file)) {
       String line = br.readLine();
       /* check if the date for which the value is to be determined is greater than
           the latest date that exists in our file.
@@ -72,22 +88,22 @@ public class Portfolio implements PortfolioModel {
       String timeStamp = attributes[0];
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
       try {
-        LocalDate dt = LocalDate.parse(timeStamp,formatter);
-        if(dt.compareTo(date) < 0) { // date > latest (first) timestamp in file
+        LocalDate dt = LocalDate.parse(timeStamp, formatter);
+        if (dt.compareTo(date) < 0) { // date > latest (first) timestamp in file
           updateStockFile(tickerName);
         }
 
         while (line != null) {
           attributes = line.split(",");
           timeStamp = attributes[0];
-          if(timeStamp.equals(date.toString())) {
+          if (timeStamp.equals(date.toString())) {
             result += Double.parseDouble(attributes[4]);
             return result;
           }
           line = br.readLine();
         }
-      }
-      catch(Exception e) {
+      } catch (Exception e) {
+        // do nothing
       }
 
     } catch (IOException e) {
@@ -98,13 +114,13 @@ public class Portfolio implements PortfolioModel {
 
   private void updateStockFile(String tickerName) {
     try {
-      url = new URL("https://www.alphavantage"
+      URL url = new URL("https://www.alphavantage"
               + ".co/query?function=TIME_SERIES_DAILY"
               + "&outputsize=compact"
               + "&symbol"
-              + "=" + tickerName + "&apikey="+apiKey+"&datatype=csv");
+              + "=" + tickerName + "&apikey=" + apiKey + "&datatype=csv");
 
-      String filePath = folderPath+File.separator+tickerName+".csv";
+      String filePath = folderPath + File.separator + tickerName + ".csv";
       new FileWriter(filePath, false).close();
 
       List<String[]> row = new ArrayList<>();
@@ -114,7 +130,7 @@ public class Portfolio implements PortfolioModel {
 
       in = url.openStream();
 
-      try(BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+      try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
         String line = br.readLine();
 
         while (line != null) {
@@ -127,16 +143,13 @@ public class Portfolio implements PortfolioModel {
                   .map(this::convertToCSV)
                   .forEach(pw::println);
         }
-      }
-      catch (IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException(e);
       }
 
-    }
-    catch (MalformedURLException e) {
+    } catch (MalformedURLException e) {
       throw new RuntimeException(e);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
@@ -166,7 +179,7 @@ public class Portfolio implements PortfolioModel {
 
     double answer = 0;
 
-    for(IstockModel curStock: this.stocks) {
+    for (IstockModel curStock : this.stocks) {
       answer = answer + curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date);
     }
 
@@ -177,6 +190,11 @@ public class Portfolio implements PortfolioModel {
   @Override
   public String getNameOfPortFolio() {
     return this.nameOfPortFolio;
+  }
+
+  @Override
+  public LocalDate getDateOfPortFolio() {
+    return this.dateOfCreation;
   }
 
 

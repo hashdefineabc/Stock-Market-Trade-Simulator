@@ -2,11 +2,12 @@ package view;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Class to test the text user interface of the stockMarket application.
@@ -25,7 +26,10 @@ public class ViewImplPrintTest {
   @Test
   public void testDisplayMenu() {
     view.displayMenu();
-    String expectedMenu = "***********************************\n" + "\t1. Create a new Portfolio\n" + "\t2. Retrieve Portfolio\n" + "\t3. Check value of a Portfolio\n" + "\t4. Exit the application.\n" + "Pick one of the options\n";
+    String expectedMenu = "\n***********************************\n"
+            + "\t1. Create a new Portfolio\n" + "\t2. Retrieve Portfolio\n"
+            + "\t3. Check value of a Portfolio\n" + "\t4. Exit the application.\n"
+            + "Pick one of the options\n";
     assertEquals(expectedMenu, out.toString());
   }
 
@@ -46,7 +50,8 @@ public class ViewImplPrintTest {
   @Test
   public void testAddMoreStocks() {
     view.addMoreStocks();
-    String expectedMenu = "Do you want to add more stocks to this portfolio? (Press 1 for Yes, 0 for No):\n";
+    String expectedMenu = "Do you want to add more stocks to this portfolio? "
+            + "(Press 1 for Yes, 0 for No):\n";
     assertEquals(expectedMenu, out.toString());
   }
 
@@ -60,26 +65,28 @@ public class ViewImplPrintTest {
   @Test
   public void testGetDateFromUser() {
     view.getDateFromUser();
-    String expectedMenu = "Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)\n";
+    String expectedMenu = "Enter the date for which you to check the value of the portfolio:"
+            + "(yyyy-mm-dd)\n";
     assertEquals(expectedMenu, out.toString());
   }
 
   @Test
-  public void testGetPortfolioNameFromUser(){
+  public void testGetPortfolioNameFromUser() {
     view.getPortfolioNameFromUser();
     String expectedMenu = "\tPlease enter a name for this portfolio\n";
     assertEquals(expectedMenu, out.toString());
   }
 
   @Test
-  public void testDisplayCreatePortFolioOptions(){
+  public void testDisplayCreatePortFolioOptions() {
     view.displayCreatePortFolioOptions();
-    String expectedMenu = "\t1. Enter the stock details manually\n" + "\t2. Upload an existing file\n";
+    String expectedMenu = "\t1. Enter the stock details manually\n"
+            + "\t2. Upload an existing file\n";
     assertEquals(expectedMenu, out.toString());
   }
 
   @Test
-  public void testIsFileUploaded(){
+  public void testIsFileUploaded() {
     view.isFileUploaded();
     String expectedMenu = "\tHas the file been placed at the above location? 1.Yes 0.No\n";
     assertEquals(expectedMenu, out.toString());

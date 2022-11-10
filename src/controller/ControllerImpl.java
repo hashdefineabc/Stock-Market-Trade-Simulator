@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -7,31 +7,53 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+<<<<<<< HEAD
 import model.IUserInterface;
 import model.IstockModel;;
 import view.ViewInterface;
+=======
+
+import model.IUserInterface;
+import model.IstockModel;
+import view.ViewInterface;
+
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47
 import java.util.Scanner;
 
 /**
  * Class to implement the controller of the stock market application.
  */
-public class ControllerImpl implements Controller{
+public class ControllerImpl implements Controller {
   private static ViewInterface view;
   private static IUserInterface user;
-  private InputStream userInput;
+
+  /**
+   * The Scanner.
+   */
   Scanner scanner;
 
+  /**
+   * Instantiates a new Controller.
+   * It takes in user, view and an input stream and
+   * instantiates it to the private fields of this class.
+   *
+   * @param user the user
+   * @param view the view
+   * @param in   the input
+   */
   public ControllerImpl(IUserInterface user, ViewInterface view, InputStream in) {
+    InputStream userInput;
     this.view = view;
     this.user = user;
-    this.userInput = in;
-    scanner = new Scanner(this.userInput);
+    userInput = in;
+    scanner = new Scanner(userInput);
   }
 
+  @Override
   public int showMenuOnView() {
     int userOption = 5;
-    List<Integer> validMenuOptions = Arrays.asList(1,2,3,4);
-    while (!validMenuOptions.contains(userOption)){
+    List<Integer> validMenuOptions = Arrays.asList(1, 2, 3, 4);
+    while (!validMenuOptions.contains(userOption)) {
       try {
         this.view.displayMenu();
         userOption = Integer.parseInt(scanner.next());
@@ -42,10 +64,15 @@ public class ControllerImpl implements Controller{
     return userOption;
   }
 
+  /**
+   * Show create portfolio options on view int.
+   *
+   * @return the int
+   */
   public int showCreatePortfolioOptionsOnView() {
     int userOption = 3;
-    List<Integer> validMenuOptions = Arrays.asList(1,2);
-    while (!validMenuOptions.contains(userOption)){
+    List<Integer> validMenuOptions = Arrays.asList(1, 2);
+    while (!validMenuOptions.contains(userOption)) {
       try {
         this.view.displayCreatePortFolioOptions();
         userOption = Integer.parseInt(scanner.next());
@@ -56,6 +83,7 @@ public class ControllerImpl implements Controller{
     return userOption;
   }
 
+  @Override
   public String[] takeStockInputFromView() {
     String[] userStockInput = new String[2];
     String tickerNameFromUser = "";
@@ -72,21 +100,23 @@ public class ControllerImpl implements Controller{
     return userStockInput;
   }
 
+  @Override
   public boolean addMoreStocksFromView() {
     int userInput = 3;
-    List<Integer> validOptions = Arrays.asList(0,1);
+    List<Integer> validOptions = Arrays.asList(0, 1);
 
-    while (!validOptions.contains(userInput)){
+    while (!validOptions.contains(userInput)) {
       this.view.addMoreStocks();
       userInput = scanner.nextInt();
     }
     return userInput == 1;
   }
 
+  @Override
   public String getPortFolioNameFromView() {
     this.view.getPortfolioNameFromUser();
     String portfolioName = scanner.next();
-    while(user.checkIfFileExists(portfolioName)) {
+    while (user.checkIfFileExists(portfolioName)) {
       this.view.displayMsgToUser("This portfolio already exists in the system!!");
       this.view.getPortfolioNameFromUser();
       portfolioName = scanner.next();
@@ -94,6 +124,7 @@ public class ControllerImpl implements Controller{
     return portfolioName;
   }
 
+  @Override
   public int getSelectedPortFolioFromView() {
     int index = -1;
     while ((index < 0) || (index > user.getPortfolioNamesCreated().size())) {
@@ -103,14 +134,15 @@ public class ControllerImpl implements Controller{
     return index;
   }
 
+  @Override
   public LocalDate getDateFromView() {
     LocalDate valueDate = LocalDate.now();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     boolean isDateOkay = false;
-    while (isDateOkay == false) {
+    while (!isDateOkay) {
       try {
         view.getDateFromUser();
-        valueDate =  LocalDate.parse(scanner.next(), dateFormat);
+        valueDate = LocalDate.parse(scanner.next(), dateFormat);
         isDateOkay = true;
       } catch (Exception e) {
         view.displayMsgToUser("Invalid date. Please try again!");
@@ -144,71 +176,88 @@ public class ControllerImpl implements Controller{
     return date;
   }
 
+  /**
+   * Display csv path to user.
+   */
   public void displayCsvPathToUser() {
-    this.view.displayMsgToUser("Please place the csv at the location:\n" + this.user.getFolderPath());
+    this.view.displayMsgToUser("Please place the csv at the location:\n"
+            + this.user.getFolderPath());
+  }
+
+  @Override
+  public boolean retrievePortFolios() {
+    if (user.getPortfolioNamesCreated().size() == 0) {
+      view.displayMsgToUser("No portfolios created till now");
+      return false;
+    }
+    view.displayMsgToUser("Following are the portfolios created till now:");
+    view.displayListOfPortfolios(user.getPortfolioNamesCreated());
+    int portfolioIndex = this.getSelectedPortFolioFromView();
+    List<String[]> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex);
+    view.displayStocks(stocksToDisplay);
+    return true;
   }
 
 
 
-  public void go() {
+  @Override
+  public void goController() {
 
-    while(true) {
-      switch(this.showMenuOnView()) {
+    while (true) {
+      switch (this.showMenuOnView()) {
         // create new portfolio and add stocks to the new portfolio
         case 1:
-          switch(this.showCreatePortfolioOptionsOnView()) {
-            case 1:
-              view.displayMsgToUser("Creating a new portfolio...");
-              String portfolioName = this.getPortFolioNameFromView();
-              List<String[]> stockList = new ArrayList<>();
-              do {
-                String[] s = this.takeStockInputFromView();
-                stockList.add(s);
-              } while (this.addMoreStocksFromView());
-              if (user.createPortfolioManually(portfolioName, stockList)) {
-                view.displayMsgToUser("Portfolio saved successfully");
-              }
-              else {
-                view.displayMsgToUser("Portfolio was not saved. Try again");
-              }
-              break;
-
-            case 2: //upload a file
-              this.displayCsvPathToUser();
-              //check if file uploaded
-              view.isFileUploaded();
-              if (scanner.nextInt() == 1) { //TODO: complete validation for this
-                user.createPortFolioFromFile();
-              }
-              break;
+          if (this.showCreatePortfolioOptionsOnView() == 1) {
+            view.displayMsgToUser("Creating a new portfolio...");
+            String portfolioName = this.getPortFolioNameFromView();
+            List<String[]> stockList = new ArrayList<>();
+            do {
+              String[] s = this.takeStockInputFromView();
+              stockList.add(s);
+            }
+            while (this.addMoreStocksFromView());
+            if (user.createPortfolioManually(portfolioName, stockList)) {
+              view.displayMsgToUser("Portfolio saved successfully");
+            } else {
+              view.displayMsgToUser("Portfolio was not saved. Try again");
+            }
+          } else if (this.showCreatePortfolioOptionsOnView() == 2) {
+            //upload a file
+            this.displayCsvPathToUser();
+            //check if file uploaded
+            view.isFileUploaded();
+            if (scanner.nextInt() == 1) {
+              user.createPortFolioFromFile();
+            }
           }
+
           break;
 
         //retrieve portfolio
         case 2:
-          if (user.getPortfolioNamesCreated().size() == 0) {
-            view.displayMsgToUser("No portfolios created till now");
+          if (!this.retrievePortFolios()) {
             continue;
           }
-          view.displayMsgToUser("Following are the portfolios created till now:");
-          view.displayListOfPortfolios(user.getPortfolioNamesCreated());
-          int portfolioIndex = this.getSelectedPortFolioFromView();
-          List<String[]> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex);
-          view.displayStocks(stocksToDisplay);
           break;
 
         // value of a particular portfolio
         case 3:
+          if (user.getPortfolioNamesCreated().size() == 0) {
+            view.displayMsgToUser("No portfolios created till now, can't calculate value");
+            continue;
+          }
           view.displayListOfPortfolios(user.getPortfolioNamesCreated());
           int portfolioIndexForVal = this.getSelectedPortFolioFromView();
 
           LocalDate date = this.validateDateForValue();
           double val = user.calculateValueOfPortfolio(portfolioIndexForVal, date);
 
-          if(val == 0) {
-            view.displayMsgToUser("Market was closed on "+date);
-          }
-          else{
+          if (val == 0) {
+            view.displayMsgToUser("Market was closed on " + date);
+          } else if (val == -1) {
+            view.displayMsgToUser(
+                    "Value cannot be calculated for a date prior to portfolio creation");
+          } else {
             view.displayValue(val);
           }
           break;

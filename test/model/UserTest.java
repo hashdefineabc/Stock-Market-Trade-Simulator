@@ -4,40 +4,27 @@ package model;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+/**
+ * Class to check the user functionalities.
+ */
 public class UserTest {
-
 
   IUserInterface testUser;
 
   @Before
   public void setUp() {
-    String userDirectory = new File("").getAbsolutePath();
-    String folderPath = userDirectory + File.separator + "testPortfolio";
-    File file = new File(folderPath);
-    if (!Files.exists(Path.of(folderPath))) {
-      file.mkdir();
-    }
-    List<String[]> stockList = new ArrayList<>();
-    String[] s = new String[]{"AAPL", "5", LocalDate.of(2022, 10, 26).toString()};
-    stockList.add(s);
-    s = new String[]{"MSFT", "5", LocalDate.of(2022, 10, 26).toString()};
-    stockList.add(s);
-    testUser = new User("testUser");
-    testUser.setFolderPath(folderPath);
-    testUser.createPortfolioManually("Portfolio 1", stockList);
+    testUser = new User();
   }
 
 
   @Test
+<<<<<<< HEAD:test/model/UserTest.java
   public void testStocks() {
     IstockModel stock = new Stock("AAPL", 5, LocalDate.now());
 //    assertEquals();
@@ -74,16 +61,47 @@ public class UserTest {
     portfoliosCreated = user.getPortfolioNamesCreated();
     assertEquals(previousSize+1, portfoliosCreated.size());
 
+=======
+  public void testIsTickerValid() {
+    assertEquals(true, testUser.isTickerValid("AAPL"));
+  }
+
+  @Test
+  public void testIsTickerInvalid() {
+    assertEquals(false, testUser.isTickerValid("zzz"));
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:test/Model/UserTest.java
   }
 
   @Test
   public void testGetPortfoliosCreated() {
-    System.out.println(testUser.getPortfolioNamesCreated());
+    String expected = "[TestPortFolio1.csv, TestPortfolio2.csv]";
+    assertEquals(expected, testUser.getPortfolioNamesCreated().toString());
   }
 
   @Test
-  public void testPortfolioComposition() {
-
+  public void testCreatePortfolio() {
+    List<String[]> stockList = new ArrayList<>();
+    String[] s = new String[2];
+    s[0] = "AAPL";
+    s[1] = "5";
+    s[2] = "2022-10-26";
+    stockList.add(s);
+    int previous = testUser.getPortfolioNamesCreated().size();
+    testUser.createPortfolioManually("P1", stockList);
+    assertEquals(previous + 1, testUser.getPortfolioNamesCreated().size());
   }
+
+  @Test
+  public void testSavePortFolio() {
+    List<String[]> stockList = new ArrayList<>();
+    String[] s = new String[2];
+    s[0] = "GOOG";
+    s[1] = "5";
+    s[2] = "2022-11-02";
+    stockList.add(s);
+    testUser.createPortfolioManually("P2", stockList);
+    assertTrue("true", testUser.checkIfFileExists("P2"));
+  }
+
 
 }

@@ -6,16 +6,17 @@ import java.util.List;
 /**
  * Class that implements the text user interface of the stock market application.
  */
-public class ViewImpl implements ViewInterface{
+public class ViewImpl implements ViewInterface {
 
   private PrintStream out;
+
   public ViewImpl(PrintStream o) {
     this.out = o;
   }
 
   @Override
   public void displayMenu() {
-    this.out.print("***********************************\n");
+    this.out.print("\n***********************************\n");
     this.out.print("\t1. Create a new Portfolio\n");
     this.out.print("\t2. Retrieve Portfolio\n");
     this.out.print("\t3. Check value of a Portfolio\n");
@@ -35,16 +36,17 @@ public class ViewImpl implements ViewInterface{
   }
 
   @Override
-  public void addMoreStocks() { 
-    this.out.print("Do you want to add more stocks to this portfolio? (Press 1 for Yes, 0 for No):\n");
+  public void addMoreStocks() {
+    this.out.print(
+            "Do you want to add more stocks to this portfolio? (Press 1 for Yes, 0 for No):\n");
   }
 
   @Override
-  public void displayListOfPortfolios(List<String> portfolios) { //changing this as model classes shouldn't interact with view.
+  public void displayListOfPortfolios(List<String> portfolios) {
     int count = 0;
-    for(String p: portfolios) {
+    for (String p : portfolios) {
       count++;
-      this.out.println(count + " " +p);
+      this.out.println(count + " " + p);
     }
   }
 
@@ -55,28 +57,29 @@ public class ViewImpl implements ViewInterface{
 
 
   @Override
-  public void displayStocks(List<String[]> listOfStocks){ //changing this as model classes shouldn't interact with view.
+  public void displayStocks(List<String[]> listOfStocks) {
     this.out.println("Following stocks are present in the portfolio : ");
     this.out.println("Ticker\t" + "NumberOfUnits\t" + "DateBoughtAt\n");
     for (String[] stockDetails : listOfStocks) {
-      this.out.println(stockDetails[0]+"\t"+stockDetails[1]+"\t\t\t\t"+stockDetails[2]);
+      this.out.println(stockDetails[0] + "\t" + stockDetails[1] + "\t\t\t\t" + stockDetails[2]);
     }
   }
 
   @Override
   public void getDateFromUser() {
-    this.out.print("Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)\n");
+    this.out.print(
+            "Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)\n");
   }
 
 
   @Override
   public void displayValue(double val) {
-    this.out.println("Value of the portfolio is: " + String.format("%.2f",val));
+    this.out.println("Value of the portfolio is: " + String.format("%.2f", val));
   }
 
   @Override
   public void displayMsgToUser(String msg) {
-    this.out.println(msg);
+    this.out.print(msg);
   }
 
   @Override

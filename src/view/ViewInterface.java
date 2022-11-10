@@ -4,12 +4,13 @@ import java.util.List;
 
 
 /**
- * Interface defining methods of that would decide how the text user interface of this stockMarket application would look like.
+ * Interface defining methods of that would decide how the text user interface
+ * of this stockMarket application would look like.
  */
 public interface ViewInterface {
 
   /**
-   * Method to display the below options to the user
+   * Method to display the below options to the user.
    * 1. create new portfolio
    * 2. retrieve portfolio
    * 3. check value of a particular portfolio
@@ -23,12 +24,12 @@ public interface ViewInterface {
   void takeTickerName();
 
   /**
-   * Method to tell the user to input the num of units bought for that particular share
+   * Method to tell the user to input the num of units bought for that particular share.
    */
   void takeNumOfUnits();
 
   /**
-   * Method that asks the user if they want to add more stocks to the portfolio
+   * Method that asks the user if they want to add more stocks to the portfolio.
    *
    */
   void addMoreStocks();
@@ -45,7 +46,7 @@ public interface ViewInterface {
   void getSelectedPortfolio();
 
   /**
-   * Method that displays stocks of a particular portfolio
+   * Method that displays stocks of a particular portfolio.
    */
   void displayStocks(List<String[]> listOfStocks);
 

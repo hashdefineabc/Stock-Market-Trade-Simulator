@@ -1,21 +1,30 @@
 package view;
 
 import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Class to test the view controller delegation.
+ */
 public class ViewImplTestDelegateTest {
 
+  /**
+   * Class to test the text user interface of this application.
+   */
   class MockViewModel implements ViewInterface {
 
     private StringBuilder log;
+
     public MockViewModel(StringBuilder log) {
       this.log = log;
     }
 
     /**
-     * Method to display the below options to the user
+     * Method to display the below options to the user.
      * 1. create new portfolio
      * 2. retrieve portfolio
      * 3. check value of a particular portfolio
@@ -23,7 +32,7 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void displayMenu() {
-
+      log.append("DisplayMenu method called.");
     }
 
     /**
@@ -31,23 +40,23 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void takeTickerName() {
-
+      log.append("takeTickerName method called.");
     }
 
     /**
-     * Method to tell the user to input the num of units bought for that particular share
+     * Method to tell the user to input the num of units bought for that particular share.
      */
     @Override
     public void takeNumOfUnits() {
-
+      log.append("takeNumOfUnits method called.");
     }
 
     /**
-     * Method that asks the user if they want to add more stocks to the portfolio
+     * Method that asks the user if they want to add more stocks to the portfolio.
      */
     @Override
     public void addMoreStocks() {
-
+      log.append("addMoreStocks method called.");
     }
 
     /**
@@ -68,13 +77,13 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void getSelectedPortfolio() {
-
+      log.append("getSelectedPortfolio method called.");
     }
 
     /**
-     * Method that displays stocks of a particular portfolio
+     * Method that displays stocks of a particular portfolio.
      *
-     * @param listOfStocks
+     * @param listOfStocks list of stocks
      */
     @Override
     public void displayStocks(List<String[]> listOfStocks) {
@@ -90,7 +99,7 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void getDateFromUser() {
-
+      log.append("getDateFromUser method called.");
     }
 
     /**
@@ -100,7 +109,7 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void displayValue(double val) {
-      log.append("Value provided = "+val);
+      log.append("Value provided = " + val);
     }
 
     /**
@@ -110,7 +119,7 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void displayMsgToUser(String msg) {
-      log.append("String provided to print = "+msg);
+      log.append("String provided to print = " + msg);
     }
 
     /**
@@ -118,17 +127,17 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void getPortfolioNameFromUser() {
-
+      log.append("getPortfolioNameFromUser method called.");
     }
 
     /**
-     * Method to display the following two options of creating a portfolio:
+     * Method to display the following two options of creating a portfolio.
      * 1. Enter the stock details manually
      * 2. Upload an existing file
      */
     @Override
     public void displayCreatePortFolioOptions() {
-
+      log.append("displayCreatePortFolioOptions method called.");
     }
 
     /**
@@ -136,7 +145,7 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void isFileUploaded() {
-
+      log.append("isFileUploaded method called.");
     }
   }
 
@@ -173,7 +182,7 @@ public class ViewImplTestDelegateTest {
     StringBuilder log = new StringBuilder();
     ViewInterface view = new MockViewModel(log);
     view.displayValue(20);
-    String expectedResult = "Value provided = "+20.0;
+    String expectedResult = "Value provided = " + 20.0;
     assertEquals(expectedResult, log.toString());
   }
 
@@ -182,7 +191,90 @@ public class ViewImplTestDelegateTest {
     StringBuilder log = new StringBuilder();
     ViewInterface view = new MockViewModel(log);
     view.displayMsgToUser("Hey there");
-    String expectedResult = "String provided to print = "+ "Hey there";
+    String expectedResult = "String provided to print = " + "Hey there";
     assertEquals(expectedResult, log.toString());
   }
+
+  @Test
+  public void testDisplayMenu() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockViewModel(log);
+    view.displayMenu();
+    String expectedResult = "DisplayMenu method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testTakeTickerName() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockViewModel(log);
+    view.takeTickerName();
+    String expectedResult = "takeTickerName method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testTakeNumOfUnits() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockViewModel(log);
+    view.takeNumOfUnits();
+    String expectedResult = "takeNumOfUnits method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testAddMoreStocks() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockViewModel(log);
+    view.addMoreStocks();
+    String expectedResult = "addMoreStocks method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testGetSelectedPortfolio() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockViewModel(log);
+    view.getSelectedPortfolio();
+    String expectedResult = "getSelectedPortfolio method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testGetDateFromUser() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockViewModel(log);
+    view.getDateFromUser();
+    String expectedResult = "getDateFromUser method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testGetPortfolioNameFromUser() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockViewModel(log);
+    view.getPortfolioNameFromUser();
+    String expectedResult = "getPortfolioNameFromUser method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testDisplayCreatePortFolioOptions() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockViewModel(log);
+    view.displayCreatePortFolioOptions();
+    String expectedResult = "displayCreatePortFolioOptions method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testIsFileUploaded() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockViewModel(log);
+    view.isFileUploaded();
+    String expectedResult = "isFileUploaded method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+
 }

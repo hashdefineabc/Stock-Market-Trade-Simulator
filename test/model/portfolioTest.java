@@ -9,9 +9,9 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * The type Portfolio test.
+ * Class to test how a portfolio works.
  */
-public class portfolioTest {
+public class PortfolioTest {
 
   /**
    * Test value of portfolio.
@@ -48,7 +48,7 @@ public class portfolioTest {
   }
 
   /**
-   * Create portfolio without a name throws an exception
+   * Create portfolio without a name throws an exception.
    */
   @Test(expected = IllegalArgumentException.class)
   public void testGetNameOfPortFolioEmpty() {
@@ -57,12 +57,31 @@ public class portfolioTest {
   }
 
   /**
-   * Create portfolio without stocks
+   * Create portfolio without stocks.
    */
   @Test(expected = IllegalArgumentException.class)
   public void testCreatePortfolioWithEmptyStocks() {
     List<IstockModel> stockList = new ArrayList<>();
     PortfolioModel portfolio = new Portfolio("", stockList);
+<<<<<<< HEAD:test/model/portfolioTest.java
+=======
+  }
+
+  /**
+   * Create portfolio.
+   */
+  @Test
+  public void testCreatePortfolio() {
+    List<IstockModel> stockList = new ArrayList<>();
+    IUserInterface user = new User();
+    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
+    stockList.add(s);
+    s = new Stock("MSFT", 25, LocalDate.of(2022, 10, 26));
+    stockList.add(s);
+    int previous = user.getPortfolioNamesCreated().size();
+    PortfolioModel portfolio = new Portfolio("", stockList);
+    assertEquals(previous + 1, user.getPortfolioNamesCreated().size());
+>>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:test/Model/portfolioTest.java
   }
 
   /**
