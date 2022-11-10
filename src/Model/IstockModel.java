@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import java.time.LocalDate;
 
@@ -7,7 +7,7 @@ import java.time.LocalDate;
  */
 public interface IstockModel {
   /**
-   * Method to get the NASDAQ ticker name of the stock
+   * Method to get the NASDAQ ticker name of the stock.
    * @return the ticker name of the calling stock object
    */
   String getTickerName();

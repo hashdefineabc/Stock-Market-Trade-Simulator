@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import java.time.LocalDate;
 
@@ -21,7 +21,7 @@ public interface Controller {
   String[] takeStockInputFromView();
 
   /**
-   * Checks if the user wants to add more stocks
+   * Checks if the user wants to add more stocks.
    * @return boolean = user's choice (yes/no) for adding the stocks.
    */
   boolean addMoreStocksFromView();
@@ -45,5 +45,16 @@ public interface Controller {
    * @return the date input.
    */
   LocalDate getDateFromView();
+
+  /**
+   * Main driver method of the controller.
+   */
+  void goController();
+
+  /**
+   * Main controller method to display all the portfolios.
+   * @return
+   */
+  boolean retrievePortFolios();
 
 }
