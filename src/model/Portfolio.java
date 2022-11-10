@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 /**
  * Class to implement a portfolio.
  */
-public class portfolio implements portfolioModel {
+public class Portfolio implements PortfolioModel {
 
   private String nameOfPortFolio;
   private LocalDate dateOfCreation;
@@ -41,7 +41,7 @@ public class portfolio implements portfolioModel {
    * @param stocks list of stocks
    * @throws IllegalArgumentException when we try to create portfolio with empty stocks
    */
-  public portfolio(String nameOfPortFolio, List<IstockModelNew> stocks)
+  public Portfolio(String nameOfPortFolio, List<IstockModelNew> stocks)
           throws IllegalArgumentException {
     if (Objects.equals(nameOfPortFolio, "")) {
       throw new IllegalArgumentException("Please provide a name for your portfolio");
@@ -187,10 +187,6 @@ public class portfolio implements portfolioModel {
     return this.nameOfPortFolio;
   }
 
-  @Override
-  public LocalDate getDateOfPortFolio() {
-    return this.dateOfCreation;
-  }
 
 
   @Override
