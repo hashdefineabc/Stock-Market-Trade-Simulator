@@ -89,13 +89,13 @@ public class User implements IUserInterface {
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath);
 
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-      List<IstockModel> stockList = new ArrayList<>();
+      List<IstockModelNew> stockList = new ArrayList<>();
       for (String[] stockDetails : listOfStocks) {
         try {
-          Stock s = Stock.getBuilder()
+          NewStock s = NewStock.getBuilder()
                   .tickerName(stockDetails[0])
                   .numOfUnits(Integer.valueOf(stockDetails[1]))
-                  .date(LocalDate.parse(stockDetails[2], formatter))
+                  .buyDate(LocalDate.parse(stockDetails[2], formatter))
                   .build();
           stockList.add(s);
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -236,9 +236,9 @@ public class User implements IUserInterface {
 
   @Override
   public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
-    List<IstockModel> stockListToAdd = new ArrayList<>();
+    List<IstockModelNew> stockListToAdd = new ArrayList<>();
     for (String[] singleStock : stockList) {
-      Stock newStock = Stock.getBuilder()
+      NewStock newStock = NewStock.getBuilder()
               .tickerName(singleStock[0])
               .numOfUnits(Integer.valueOf(singleStock[1]))
               .build();
