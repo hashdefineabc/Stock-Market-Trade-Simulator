@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.IUserInterface;
-import model.IstockModel;
 import model.Portfolio;
 import model.PortfolioModel;
 import model.Stock;
