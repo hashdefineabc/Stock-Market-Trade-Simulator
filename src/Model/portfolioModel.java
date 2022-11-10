@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /**
  *Interface that describes all the operations that can be performed on a portfolio.
  */
-public interface PortfolioModel {
+public interface portfolioModel {
   /**
    * Method to calculate the value of a portfolio.
    * @param date  =  date at which we need to calculate the value
@@ -30,7 +30,7 @@ public interface PortfolioModel {
    * Method that gets the stocks in a portfolio.
    * @return the stocks
    */
-  List<IstockModel> getStocks();
+  List<IstockModelNew> getStocks();
 
   LocalDate getDateOfPortFolio();
 

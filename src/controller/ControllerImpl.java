@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import model.IUserInterface;
-import model.IstockModel;
 import view.ViewInterface;
 
 import java.util.Scanner;
