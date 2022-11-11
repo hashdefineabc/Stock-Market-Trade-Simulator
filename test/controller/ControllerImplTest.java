@@ -107,6 +107,23 @@ public class ControllerImplTest {
       log.append("createPortfolioManually is provided with " + portfolioName);
       return false;
     }
+
+    //todo
+
+    @Override
+    public void buySell() {
+
+    }
+
+    @Override
+    public void calculateCostBasis() {
+
+    }
+
+    @Override
+    public void displayChart() {
+
+    }
   }
 
   @Test
