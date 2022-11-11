@@ -18,9 +18,12 @@ public class ViewImpl implements ViewInterface {
   public void displayMenu() {
     this.out.print("\n***********************************\n");
     this.out.print("\t1. Create a new Portfolio\n");
-    this.out.print("\t2. Retrieve Portfolio\n");
+    this.out.print("\t2. View Composition of a Portfolio\n");
     this.out.print("\t3. Check value of a Portfolio\n");
-    this.out.print("\t4. Exit the application.\n");
+    this.out.print("\t4. Buy or Sell Shares in a Portfolio\n");
+    this.out.print("\t5. View Cost Basis of a Portfolio\n");
+    this.out.print("\t6. Display bar chart of a Portfolio\n");
+    this.out.print("\t7. Close Application\n");
     this.out.print("Pick one of the options\n");
 
   }
