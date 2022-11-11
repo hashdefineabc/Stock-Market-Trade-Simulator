@@ -26,7 +26,7 @@ public class Portfolio implements PortfolioModel {
 
   private String nameOfPortFolio;
   private LocalDate dateOfCreation;
-  private final List<IstockModel> stocks;
+  private final List<IstockModelNew> stocks;
 
   // private fields for api data fetching and file handling
   private String apiKey = "W0M1JOKC82EZEQA8";
@@ -41,7 +41,7 @@ public class Portfolio implements PortfolioModel {
    * @param stocks list of stocks
    * @throws IllegalArgumentException when we try to create portfolio with empty stocks
    */
-  public Portfolio(String nameOfPortFolio, List<IstockModel> stocks)
+  public Portfolio(String nameOfPortFolio, List<IstockModelNew> stocks)
           throws IllegalArgumentException {
     if (Objects.equals(nameOfPortFolio, "")) {
       throw new IllegalArgumentException("Please provide a name for your portfolio");
@@ -174,7 +174,7 @@ public class Portfolio implements PortfolioModel {
 
     double answer = 0;
 
-    for (IstockModel curStock : this.stocks) {
+    for (IstockModelNew curStock : this.stocks) {
       answer = answer + curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date);
     }
 
@@ -187,28 +187,24 @@ public class Portfolio implements PortfolioModel {
     return this.nameOfPortFolio;
   }
 
-  @Override
-  public LocalDate getDateOfPortFolio() {
-    return this.dateOfCreation;
-  }
 
 
   @Override
   public List<String[]> toListOfString() {
     List<String[]> answer = new ArrayList<>();
 
-    for (IstockModel stock : this.stocks) {
+    for (IstockModelNew stock : this.stocks) {
       String[] stocksDetails = new String[3];
       stocksDetails[0] = String.valueOf(stock.getTickerName());
       stocksDetails[1] = String.valueOf(stock.getNumOfUnits());
-      stocksDetails[2] = String.valueOf(stock.getDate());
+      stocksDetails[2] = String.valueOf(stock.getBuyDate());
       answer.add(stocksDetails);
     }
     return answer;
   }
 
   @Override
-  public List<IstockModel> getStocks() {
+  public List<IstockModelNew> getStocks() {
     return this.stocks;
   }
 
