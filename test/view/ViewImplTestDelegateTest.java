@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.IstockModel;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -86,7 +88,7 @@ public class ViewImplTestDelegateTest {
      * @param listOfStocks list of stocks
      */
     @Override
-    public void displayStocks(List<String[]> listOfStocks) {
+    public void displayStocks(List<IstockModel> listOfStocks) {
       log.append("List of stocks provided is : ");
       for (String[] s : listOfStocks) {
         log.append(s);

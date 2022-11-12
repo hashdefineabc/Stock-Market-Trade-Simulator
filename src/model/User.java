@@ -22,6 +22,8 @@ public class User implements IUserInterface {
 
   List<String> nasdaqTickerNames;
   private String folderPath;
+  private String fixedPFPath;
+  private String flexiblePFPath;
   private File file;
 
   private List<IFixedPortfolio> fixedPortfolios;
@@ -42,6 +44,8 @@ public class User implements IUserInterface {
 
     String userDirectory = new File("").getAbsolutePath();
     this.folderPath = userDirectory + File.separator + "PortFolioComposition";
+    this.fixedPFPath = this.folderPath + File.separator + "FixedPortfolios";
+    this.flexiblePFPath = this.folderPath + File.separator + "FlexiblePortfolios";
 
     file = new File(folderPath);
     this.createFolder();
@@ -217,7 +221,19 @@ public class User implements IUserInterface {
 
 
   private void createFolder() {
+    //creating main folder
+    file = new File(this.folderPath);
     if (!Files.exists(Path.of(this.folderPath))) {
+      file.mkdir();
+    }
+    //creating fixed portfolios folder
+    file = new File(this.fixedPFPath);
+    if (!Files.exists(Path.of(this.fixedPFPath))) {
+      file.mkdir();
+    }
+    //creating flexible portfolios folder
+    file = new File(this.flexiblePFPath);
+    if (!Files.exists(Path.of(this.flexiblePFPath))) {
       file.mkdir();
     }
   }
@@ -296,6 +312,7 @@ public class User implements IUserInterface {
   public void addStocksToAPortfolio(int portfolioIndex) {
 
         }
+
   public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
     List<IstockModel> stockListToAdd = new ArrayList<>();
     for (String[] singleStock : stockList) {
@@ -319,4 +336,5 @@ public class User implements IUserInterface {
   public void displayChart() {
 
   }
+  
 }

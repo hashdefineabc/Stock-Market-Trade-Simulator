@@ -31,7 +31,7 @@ public class Create implements ICommandController {
         stockList.add(s);
       }
       while (this.addMoreStocksFromView());
-      if (user.createPortfolioManually(portfolioName, stockList)) {
+      if (user.createNewPortfolio(portfolioName, stockList, "Fixed")) {
         view.displayMsgToUser("Portfolio saved successfully");
       } else {
         view.displayMsgToUser("Portfolio was not saved. Try again");

@@ -3,6 +3,8 @@ package view;
 import java.io.PrintStream;
 import java.util.List;
 
+import model.IstockModel;
+
 /**
  * Class that implements the text user interface of the stock market application.
  */
@@ -60,12 +62,12 @@ public class ViewImpl implements ViewInterface {
 
 
   @Override
-  public void displayStocks(List<String[]> listOfStocks) {
+  public void displayStocks(List<IstockModel> listOfStocks) {
     this.out.println("Following stocks are present in the portfolio : ");
     this.out.println("Ticker\t" + "NumberOfUnits\t" + "DateBoughtAt\n");
-    for (String[] stockDetails : listOfStocks) {
+    /*for (String[] stockDetails : listOfStocks) {
       this.out.println(stockDetails[0] + "\t" + stockDetails[1] + "\t\t\t\t" + stockDetails[2]);
-    }
+    }*/
   }
 
   @Override

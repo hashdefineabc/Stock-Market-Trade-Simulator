@@ -2,6 +2,8 @@ package view;
 
 import java.util.List;
 
+import model.IstockModel;
+
 
 /**
  * Interface defining methods of that would decide how the text user interface
@@ -48,7 +50,7 @@ public interface ViewInterface {
   /**
    * Method that displays stocks of a particular portfolio.
    */
-  void displayStocks(List<String[]> listOfStocks);
+  void displayStocks(List<IstockModel> listOfStocks);
 
   /**
    * Method that tells the user to input the date for which he/she wishes to see the value of the
