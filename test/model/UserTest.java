@@ -26,7 +26,7 @@ public class UserTest {
 
   @Test
   public void testStocks() {
-    IstockModel stock = new Stock("AAPL", 5, LocalDate.now());
+    IstockModel stock = new Stock("AAPL", 5.0, LocalDate.now());
 //    assertEquals();
   }
 
@@ -34,9 +34,9 @@ public class UserTest {
   public void testIsTickerValid() {
     IUserInterface user = new User();
     List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
+    Stock s = new Stock("AAPL", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    s = new Stock("MSFT", 5, LocalDate.of(2022, 10, 26));
+    s = new Stock("MSFT", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
     PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
 
@@ -49,9 +49,9 @@ public class UserTest {
 
     IUserInterface user = new User();
     List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
+    Stock s = new Stock("AAPL", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    s = new Stock("MSFT", 5, LocalDate.of(2022, 10, 26));
+    s = new Stock("MSFT", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
     PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
 

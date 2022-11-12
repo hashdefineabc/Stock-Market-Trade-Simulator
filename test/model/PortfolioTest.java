@@ -19,9 +19,9 @@ public class PortfolioTest {
   @Test
   public void testValueOfPortfolio() {
     List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
+    Stock s = new Stock("AAPL", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    s = new Stock("MSFT", 5, LocalDate.of(2022, 10, 26));
+    s = new Stock("MSFT", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
     PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
     assertEquals("1857.75", String.valueOf(portfolio.valueOfPortfolio(LocalDate.of(2022, 10, 27))));
@@ -72,9 +72,9 @@ public class PortfolioTest {
   public void testCreatePortfolio() {
     List<IstockModel> stockList = new ArrayList<>();
     IUserInterface user = new User();
-    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
+    Stock s = new Stock("AAPL", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    s = new Stock("MSFT", 25, LocalDate.of(2022, 10, 26));
+    s = new Stock("MSFT", 25.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
     int previous = user.getPortfolioNamesCreated().size();
     PortfolioModel portfolio = new Portfolio("", stockList);
@@ -87,9 +87,9 @@ public class PortfolioTest {
   @Test
   public void testToListOfString() {
     List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
+    Stock s = new Stock("AAPL", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    s = new Stock("MSFT", 25, LocalDate.of(2022, 10, 26));
+    s = new Stock("MSFT", 25.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
     PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
 

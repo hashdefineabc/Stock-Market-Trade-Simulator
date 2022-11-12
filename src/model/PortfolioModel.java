@@ -30,6 +30,6 @@ public interface PortfolioModel {
    * Method that gets the stocks in a portfolio.
    * @return the stocks
    */
-  List<IstockModelNew> getStocks();
+  List<IstockModel> getStocks();
 
 }

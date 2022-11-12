@@ -5,18 +5,18 @@ import java.util.List;
 public class FlexiblePortfolio extends AbstractFixedPortfolio implements IFlexiblePortfolio {
 
 
-  public FlexiblePortfolio(String portfolioName, List<IstockModelNew> stocks) {
+  public FlexiblePortfolio(String portfolioName, List<IstockModel> stocks) {
     super(portfolioName, stocks);
   }
 
   @Override
-  public void addStocks(IstockModelNew stockToAdd) {
+  public void addStocks(IstockModel stockToAdd) {
     this.stocks.add(stockToAdd);
 
   }
 
   @Override
-  public void sellStocks(IstockModelNew stockToSell) {
+  public void sellStocks(IstockModel stockToSell) {
     this.stocks.remove(stockToSell);
   }
 }

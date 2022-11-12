@@ -9,7 +9,7 @@ public interface IFixedPortfolio {
 
   String getNameOfPortFolio();
 
-  List<IstockModelNew> getStocksInPortfolio();
+  List<IstockModel> getStocksInPortfolio();
 
   Double calculateCostBasis();
 
