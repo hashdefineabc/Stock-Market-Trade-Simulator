@@ -7,10 +7,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.FixedPortfolio;
 import model.IUserInterface;
 import model.IstockModel;
-import model.Portfolio;
-import model.PortfolioModel;
+import model.IFixedPortfolio;
 import model.Stock;
 
 import static org.junit.Assert.assertEquals;
@@ -48,7 +48,7 @@ public class ControllerImplTest {
     }
 
     @Override
-    public void CreateNewPortfolio(PortfolioModel newPortfolio) {
+    public void CreateNewPortfolio(IFixedPortfolio newPortfolio) {
       log.append("CreateNewPortfolio method is called with " + newPortfolio.getNameOfPortFolio());
     }
 
@@ -59,7 +59,7 @@ public class ControllerImplTest {
     }
 
     @Override
-    public List<PortfolioModel> getPortfoliosCreatedObjects() {
+    public List<IFixedPortfolio> getPortfoliosCreatedObjects() {
       return null;
     }
 
@@ -71,7 +71,7 @@ public class ControllerImplTest {
     }
 
     @Override
-    public void savePortfolioToFile(PortfolioModel newPortfolio) {
+    public void savePortfolioToFile(IFixedPortfolio newPortfolio) {
       log.append("savePortfolioToFile is provided with the portfolio: " +
               newPortfolio.getNameOfPortFolio());
     }
@@ -213,7 +213,7 @@ public class ControllerImplTest {
     s = new Stock("MSFT", 5.0, LocalDate.of(2022, 10,
             26));
     stockList.add(s);
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
 
     user.savePortfolioToFile(portfolio);
     String expectedResult = "savePortfolioToFile is provided with the portfolio: " +
@@ -230,7 +230,7 @@ public class ControllerImplTest {
     s = new Stock("MSFT", 5.0,
             LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
 
     user.CreateNewPortfolio(portfolio);
     String expectedResult = "CreateNewPortfolio method is called with " +

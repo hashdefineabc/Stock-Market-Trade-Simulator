@@ -19,7 +19,6 @@ public interface IUserInterface {
    */
   void createPortFolioFromFile(String typeofPortfolio);
 
-
   /**
    * Method to get the names of the portfolios created.
    * @return the list of these portfolionames.
@@ -43,7 +42,7 @@ public interface IUserInterface {
    * Method to save the created portfolio to a csv file.
    * @param newPortfolio the portfolio to be saved.
    */
-  void savePortfolioToFile(PortfolioModel newPortfolio);
+  void savePortfolioToFile(IFixedPortfolio newPortfolio);
 
   /**
    * Method to check if a tickerName is valid or not.

@@ -187,8 +187,6 @@ public class User implements IUserInterface {
   }
 
 
-
-
   @Override
   public void createPortFolioFromFile(String typeofPortfolio) {
 
@@ -205,6 +203,7 @@ public class User implements IUserInterface {
     this.loadExistingPortFolios("Fixed");
     List<String> portfolioNames = new ArrayList<>();
     List<IFixedPortfolio> portfolioObjects = this.fixedPortfolios;
+
     for (IFixedPortfolio p : portfolioObjects) {
       portfolioNames.add(p.getNameOfPortFolio());
     }
@@ -241,7 +240,7 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public void savePortfolioToFile(PortfolioModel newPortfolio) {
+  public void savePortfolioToFile(IFixedPortfolio newPortfolio) {
     List<String[]> dataToWrite = newPortfolio.toListOfString();
 
     try {
@@ -296,8 +295,20 @@ public class User implements IUserInterface {
   @Override
   public void addStocksToAPortfolio(int portfolioIndex) {
 
+        }
+  public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
+    List<IstockModel> stockListToAdd = new ArrayList<>();
+    for (String[] singleStock : stockList) {
+      Stock newStock = Stock.getBuilder()
+              .tickerName(singleStock[0])
+              .numOfUnits(Integer.valueOf(singleStock[1]))
+              .build();
+      stockListToAdd.add(newStock);
+    }
+    IFixedPortfolio newPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
+    this.savePortfolioToFile(newPortfolio);
+    return this.checkIfFileExists(portfolioName);
   }
-
 
   @Override
   public void sellStocksFromAPortfolio(int portfolioIndex) {
