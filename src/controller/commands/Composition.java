@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import controller.ICommandController;
 import model.IUserInterface;
+import model.IstockModel;
 import model.User;
 import view.ViewInterface;
 
@@ -32,7 +33,7 @@ public class Composition implements ICommandController {
     view.displayMsgToUser("Following are the portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated());
     int portfolioIndex = this.getSelectedPortFolioFromView();
-    List<String[]> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex);
+    List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,"Fixed");
     view.displayStocks(stocksToDisplay);
     return true;
   }

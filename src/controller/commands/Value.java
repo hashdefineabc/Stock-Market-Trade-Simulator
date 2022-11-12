@@ -30,7 +30,7 @@ public class Value implements ICommandController {
     int portfolioIndexForVal = this.getSelectedPortFolioFromView();
 
     LocalDate date = this.validateDateForValue();
-    double val = user.calculateValueOfPortfolio(portfolioIndexForVal, date);
+    double val = user.calculateValueOfPortfolio(portfolioIndexForVal, date, "Fixed");
 
     if (val == 0) {
       view.displayMsgToUser("Market was closed on " + date);
