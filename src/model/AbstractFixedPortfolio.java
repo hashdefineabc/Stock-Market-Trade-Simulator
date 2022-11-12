@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +19,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
 abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   private String nameOfPortFolio;
   private LocalDate dateOfCreation;
   final List<IstockModel> stocks;
 
   // private fields for api data fetching and file handling
-  private String apiKey = "W0M1JOKC82EZEQA8";
+  private String apiKey = "RWI9HAQXNXJQQSJI";
   private String userDirectory = new File("").getAbsolutePath();
   private String folderPath = userDirectory + File.separator + "stockData";
+  String portfolioType;
 
 
   /**
@@ -50,8 +51,12 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     this.nameOfPortFolio = nameOfPortFolio;
     this.stocks = stocks;
     this.dateOfCreation = LocalDate.now();
+    this.portfolioType = "fixed";
   }
 
+  public String getPortfolioType() {
+    return this.portfolioType;
+  }
   private double getStockValue(String tickerName, LocalDate date) {
     double result = 0;
     FileReader file = null;
@@ -208,7 +213,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   public Double calculateCostBasis() {
     double costBasis = 0.0;
     for (IstockModel ns: this.stocks) {
-      costBasis += ((ns.getBuyingPrice() * ns.getNumOfUnits()) + ns.getCommission());
+      costBasis += ((ns.getTransactionPrice() * ns.getNumOfUnits()) + ns.getCommission());
     }
     return costBasis;
   }

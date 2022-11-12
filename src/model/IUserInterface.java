@@ -23,7 +23,7 @@ public interface IUserInterface {
    * Method to get the names of the portfolios created.
    * @return the list of these portfolionames.
    */
-  List<String> getPortfolioNamesCreated();
+  List<String> getPortfolioNamesCreated(String portfolioType);
 
   /**
    * Method to get the list of portfolio objects created.
@@ -82,6 +82,8 @@ public interface IUserInterface {
   void addStocksToAPortfolio(int portfolioIndex);
 
   void sellStocksFromAPortfolio(int portfolioIndex);
+
+  void buySell();
 
   //todo
   void displayChart();
