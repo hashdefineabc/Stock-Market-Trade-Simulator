@@ -18,7 +18,8 @@ import java.util.stream.Stream;
  */
 public class User implements IUserInterface {
 
-  List<String> fileNamesFromSystem;
+  private List<String> fixedPFInSystem;
+  private List<String> flexPFInSystem;
 
   List<String> nasdaqTickerNames;
   private String folderPath;
@@ -39,7 +40,8 @@ public class User implements IUserInterface {
 
     this.fixedPortfolios = new ArrayList<>();
     this.flexiblePortfolios = new ArrayList<>();
-    fileNamesFromSystem = new ArrayList<>();
+    this.flexPFInSystem = new ArrayList<>();
+    this.fixedPFInSystem = new ArrayList<>();
     nasdaqTickerNames = new ArrayList<>();
 
     String userDirectory = new File("").getAbsolutePath();
@@ -51,7 +53,6 @@ public class User implements IUserInterface {
     this.createFolder();
     loadExistingPortFolios("Fixed"); //initially there are zero portfolios for a user
     loadNasdaqTickerNames();
-    //todo create function to load the portfolios that are already created in the previous session
   }
 
   private void loadNasdaqTickerNames() {
@@ -82,6 +83,7 @@ public class User implements IUserInterface {
 
   @Override
   public boolean createNewPortfolio(String portfolioName, List<String[]> stockList, String typeofPortfolio) {
+    List<String[]> dataToWrite = null;
     List<IstockModel> stockListToAdd = new ArrayList<IstockModel>();
     for (String[] singleStock : stockList) {
       Stock newStock = Stock.getBuilder()
@@ -94,20 +96,20 @@ public class User implements IUserInterface {
       stockListToAdd.add(newStock);
     }
 
-    switch (typeofPortfolio) {
-      case "Fixed":
-        IFixedPortfolio newFixedPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
-        this.fixedPortfolios.add(newFixedPortfolio);
-        break;
-      case "Flexible":
-        IFlexiblePortfolio newFlexPortfolio = new FlexiblePortfolio(portfolioName, stockListToAdd);
-        this.flexiblePortfolios.add(newFlexPortfolio);
-        break;
+    if (typeofPortfolio.equals("fixed")) {
+      IFixedPortfolio newFixedPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
+      this.fixedPortfolios.add(newFixedPortfolio);
+      dataToWrite = newFixedPortfolio.toListOfString();
+      this.savePortfolioToFile(dataToWrite, newFixedPortfolio.getNameOfPortFolio(),typeofPortfolio);
+    }
+    else if (typeofPortfolio.equals("flexible")) {
+      IFlexiblePortfolio newFlexPortfolio = new FlexiblePortfolio(portfolioName, stockListToAdd);
+      this.flexiblePortfolios.add(newFlexPortfolio);
+      dataToWrite = newFlexPortfolio.toListOfString();
+      this.savePortfolioToFile(dataToWrite, newFlexPortfolio.getNameOfPortFolio(),typeofPortfolio);
     }
 
-    //TODO: save this portfolio to a csv file
-    //TODO: check if this file exists..
-    return true;
+    return this.checkIfFileExists(portfolioName,typeofPortfolio);
   }
 
   @Override
@@ -120,27 +122,23 @@ public class User implements IUserInterface {
   public void loadExistingPortFolios(String portfolioType) {
     List<String> fileNamesFromSystem =  null;
     String filePath = null;
-    switch (portfolioType) {
-      case "Fixed":
-        this.fixedPortfolios.clear();
-        String existingpfpath = null;
-        String fixedpffolderpath = null;
-        fileNamesFromSystem =  this.retrieveFileNames(existingpfpath); //TODO: replace existingpfpath with real path
-        filePath = fixedpffolderpath;
-        break;
-      case "Flexible":
-        this.flexiblePortfolios.clear();
-        String existingpath = null;
-        String flexiblepffolderpath = null;
-        fileNamesFromSystem =  this.retrieveFileNames(existingpath); //TODO: replace existingpfpath with real path
-
-        break;
+    if (portfolioType.equals("fixed")) {
+      this.fixedPortfolios.clear();
+      String existingpfpath = null;
+      String fixedpffolderpath = null;
+      fileNamesFromSystem =  this.retrieveFileNames(existingpfpath); //TODO: replace existingpfpath with real path
+      filePath = fixedpffolderpath;
+    }
+    else if (portfolioType.equals("flexible")) {
+      this.flexiblePortfolios.clear();
+      String existingpath = null;
+      String flexiblepffolderpath = null;
+      fileNamesFromSystem =  this.retrieveFileNames(existingpath); //TODO: replace existingpfpath with real path
     }
 
     if (fileNamesFromSystem.size() == 0) {
       return;
     }
-
 
     for (String portfolioName : fileNamesFromSystem) { //take files from system.
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath + "/" + portfolioName);
@@ -155,15 +153,13 @@ public class User implements IUserInterface {
                 .build();
         stockList.add(s);
       }
-      switch (portfolioType) {
-        case "Fixed":
-          IFixedPortfolio fip = new FixedPortfolio(portfolioName, stockList); //create a portfolio object.
-          this.fixedPortfolios.add(fip);
-          break;
-        case "Flexible":
-          IFlexiblePortfolio flp = new FlexiblePortfolio(portfolioName, stockList); //create a portfolio object.
-          this.flexiblePortfolios.add(flp);
-          break;
+      if (portfolioType.equals("fixed")) {
+        IFixedPortfolio fip = new FixedPortfolio(portfolioName, stockList); //create a portfolio object.
+        this.fixedPortfolios.add(fip);
+      }
+      else if (portfolioType.equals("flexible")) {
+        IFlexiblePortfolio flp = new FlexiblePortfolio(portfolioName, stockList); //create a portfolio object.
+        this.flexiblePortfolios.add(flp);
       }
     }
   }
@@ -249,37 +245,50 @@ public class User implements IUserInterface {
     }
   }
 
-  private List<String> retrieveFileNames(String portfolioType) { //TODO:load only if extension is csv
+  private List<String> retrieveFileNames(String portfolioType) {
+    List<String> fileNamesFromSystem = null;
+    if (portfolioType == "Fixed") {
+      file = new File(this.fixedPFPath);
+    }
+    else if (portfolioType == "Flexible") {
+      file = new File(this.flexiblePFPath);
+    }
     String[] fileNames = file.list();
-    this.fileNamesFromSystem.clear();
     for (String fileName : fileNames) {
       if (fileName.contains(".csv")) {
-        this.fileNamesFromSystem.add(fileName);
+        fileNamesFromSystem.add(fileName);
       }
     }
-    return this.fileNamesFromSystem;
+    return fileNamesFromSystem;
   }
 
   @Override
-  public Boolean checkIfFileExists(String fileName) {
-    this.retrieveFileNames("Fixed"); // updating the fileNamesFromSystem list.
-    return this.fileNamesFromSystem.contains(fileName + ".csv");
+  public Boolean checkIfFileExists(String fileName, String portfolioType) {
+    List<String> fileNamesFromSystem = this.retrieveFileNames(portfolioType); // updating the fileNamesFromSystem list.
+    return fileNamesFromSystem.contains(fileName + ".csv");
   }
 
   @Override
-  public void savePortfolioToFile(IFixedPortfolio newPortfolio) {
-    List<String[]> dataToWrite = newPortfolio.toListOfString();
+  public void savePortfolioToFile(List<String[]> dataToWrite, String portfolioName, String portfolioType) {
 
     try {
-      this.createCSV(dataToWrite, newPortfolio.getNameOfPortFolio());
+      this.createCSV(dataToWrite, portfolioName, portfolioType);
     } catch (Exception e) {
       System.out.println("CSV was not created");
     }
   }
 
 
-  private void createCSV(List<String[]> dataToWrite, String portFolioName) {
-    File csvOutputFile = new File(this.folderPath + File.separator + portFolioName + ".csv");
+  private void createCSV(List<String[]> dataToWrite, String portFolioName, String portfolioType) {
+    File csvOutputFile = null;
+    switch(portfolioType) {
+      case "Fixed":
+        csvOutputFile = new File(this.fixedPFPath + File.separator + portFolioName + ".csv");
+        break;
+      case "Flexible":
+        csvOutputFile = new File(this.flexiblePFPath + File.separator + portFolioName + ".csv");
+        break;
+    }
     try {
       PrintWriter pw = new PrintWriter(csvOutputFile);
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
@@ -322,21 +331,8 @@ public class User implements IUserInterface {
   @Override
   public void addStocksToAPortfolio(int portfolioIndex) {
 
-        }
-
-  public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
-    List<IstockModel> stockListToAdd = new ArrayList<>();
-    for (String[] singleStock : stockList) {
-      Stock newStock = Stock.getBuilder()
-              .tickerName(singleStock[0])
-              .numOfUnits(Integer.valueOf(singleStock[1]))
-              .build();
-      stockListToAdd.add(newStock);
-    }
-    IFixedPortfolio newPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
-    this.savePortfolioToFile(newPortfolio);
-    return this.checkIfFileExists(portfolioName);
   }
+
 
   @Override
   public void sellStocksFromAPortfolio(int portfolioIndex) {
@@ -352,5 +348,5 @@ public class User implements IUserInterface {
   public void displayChart() {
 
   }
-  
+
 }
