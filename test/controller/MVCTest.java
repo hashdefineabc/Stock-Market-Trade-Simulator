@@ -78,7 +78,7 @@ public class MVCTest {
     log = new StringBuilder();
     log.append(expectedOutputs.get("menuOk"));
     input = new ByteArrayInputStream("1".getBytes());
-    Controller controller = new ControllerImpl(u, view, input);
+    Controller controller = new CommandController(u, view, input);
     controller.showMenuOnView();
     assertEquals(log.toString(), out.toString());
   }
