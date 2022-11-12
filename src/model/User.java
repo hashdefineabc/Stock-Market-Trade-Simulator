@@ -2,6 +2,7 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -51,11 +52,16 @@ public class User implements IUserInterface {
 
     file = new File(folderPath);
     this.createFolder();
-    loadExistingPortFolios("Fixed"); //initially there are zero portfolios for a user
-    loadNasdaqTickerNames();
+    this.loadExistingPortFolios("fixed");
+    this.loadExistingPortFolios("flexible");
+    try {
+      this.loadNasdaqTickerNames();
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    }
   }
 
-  private void loadNasdaqTickerNames() {
+  private void loadNasdaqTickerNames() throws FileNotFoundException {
     try {
       BufferedReader csvReader = new BufferedReader(new FileReader("./resources/Nasdaq_top25.csv"));
       String row = "";
@@ -66,7 +72,7 @@ public class User implements IUserInterface {
       }
       csvReader.close();
     } catch (Exception e) {
-        //do nothing
+        throw new FileNotFoundException("Nasdaq ticker names file not found");
     }
   }
 
@@ -192,12 +198,6 @@ public class User implements IUserInterface {
 
   }
 
-  /**
-   * Returns the list of portfolios of a particular user.
-   *
-   * @return
-   */
-
   @Override
   public List<String> getPortfolioNamesCreated(String portFolioType) {
 
@@ -222,9 +222,15 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public List<IFixedPortfolio> getPortfoliosCreatedObjects() {
+  public List<IFixedPortfolio> getFixedPortfoliosCreatedObjects() {
     return this.fixedPortfolios;
   }
+
+  @Override
+  public List<IFlexiblePortfolio> getFlexiblePortfoliosCreatedObjects() {
+    return this.flexiblePortfolios;
+  }
+
 
 
   private void createFolder() {

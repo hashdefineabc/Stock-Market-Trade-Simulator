@@ -53,27 +53,37 @@ public class Create implements ICommandController {
    * @return the int
    */
   public int showCreatePortfolioOptionsOnView() {
-    int userOption = 3;
+    int userOption = 0;
     List<Integer> validMenuOptions = Arrays.asList(1, 2);
-    while (!validMenuOptions.contains(userOption)) {
+    do {
       try {
         this.view.displayCreatePortFolioOptions();
         userOption = Integer.parseInt(scanner.next());
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
-    }
+    } while (!validMenuOptions.contains(userOption));
     return userOption;
   }
 
   public String getPortFolioNameFromView() {
-    this.view.getPortfolioNameFromUser();
-    String portfolioName = scanner.next();
-    while (user.checkIfFileExists(portfolioName)) {
-      this.view.displayMsgToUser("This portfolio already exists in the system!!");
-      this.view.getPortfolioNameFromUser();
-      portfolioName = scanner.next();
-    }
+    String portfolioName = null;
+    boolean fileExists = false;
+    do {
+      try{
+        this.view.getPortfolioNameFromUser();
+        portfolioName = scanner.next();
+        if (user.checkIfFileExists(portfolioName,"fixed")
+                || user.checkIfFileExists(portfolioName, "flexible")) {
+          throw new IllegalArgumentException("A portfolio by this name exists already");
+        }
+        fileExists = false;
+      } catch (IllegalArgumentException e) {
+        this.view.displayMsgToUser(e.getMessage());
+        fileExists = true;
+      }
+
+    } while (fileExists);
     return portfolioName;
   }
 
