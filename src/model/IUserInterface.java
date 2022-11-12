@@ -12,6 +12,8 @@ public interface IUserInterface {
    */
   void loadExistingPortFolios(String portfolioType);
 
+  void createPortFolioFromFile();
+
   /**
    * Method to create port folio using a file from the user.
    */
@@ -28,7 +30,7 @@ public interface IUserInterface {
    * Method to get the list of portfolio objects created.
    * @return the list of portfolios.
    */
-  List<PortfolioModel> getPortfoliosCreatedObjects();
+  List<IFixedPortfolio> getPortfoliosCreatedObjects();
 
   /**
    * Method to check if a particular file exists in the system.
@@ -56,13 +58,7 @@ public interface IUserInterface {
    */
   String getFolderPath();
 
-  /**
-   * Method to display the stocks of a portfolio list.
-   * @param portfolioIndex the portfolio index = indicates the portfolio for which we need to
-   *                       display the stocks.
-   * @return the list = list of stocks
-   */
-  List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String typeofPortfolio);
+  abstract List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String typeofPortfolio);
 
   /**
    * Method to calculate the value of a portfolio.
@@ -79,7 +75,7 @@ public interface IUserInterface {
    * @param stockList the stocks  in this portfolio.
    * @return boolean = if this portfolio was created or not.
    */
-  boolean createNewPortfolioManually(String portfolioName, List<String[]> stockList,
+  boolean createNewPortfolio(String portfolioName, List<String[]> stockList,
                                   String typeofPortfolio);
 
   double calculateCostBasisOfPortfolio(int portfolioIndex);

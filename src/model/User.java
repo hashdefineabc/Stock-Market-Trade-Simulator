@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,12 +18,14 @@ import java.util.stream.Stream;
  */
 public class User implements IUserInterface {
 
-  private List<PortfolioModel> portfoliosList;
   List<String> fileNamesFromSystem;
 
   List<String> nasdaqTickerNames;
   private String folderPath;
   private File file;
+
+  private List<IFixedPortfolio> fixedPortfolios;
+  private List<IFlexiblePortfolio> flexiblePortfolios;
 
 
   /**
@@ -34,7 +35,8 @@ public class User implements IUserInterface {
 
   public User() {
 
-    portfoliosList = new ArrayList<>();
+    this.fixedPortfolios = new ArrayList<>();
+    this.flexiblePortfolios = new ArrayList<>();
     fileNamesFromSystem = new ArrayList<>();
     nasdaqTickerNames = new ArrayList<>();
 
@@ -43,7 +45,7 @@ public class User implements IUserInterface {
 
     file = new File(folderPath);
     this.createFolder();
-    loadExistingPortFolios(); //initially there are zero portfolios for a user
+    loadExistingPortFolios("Fixed"); //initially there are zero portfolios for a user
     loadNasdaqTickerNames();
     //todo create function to load the portfolios that are already created in the previous session
   }
@@ -73,19 +75,35 @@ public class User implements IUserInterface {
     return this.folderPath;
   }
 
-  @Override
-  public List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String typeofPortfolio) {
-    return null;
-  }
 
   @Override
-  public double calculateValueOfPortfolio(int portfolioIndex, LocalDate date, String typeofPortfolio) {
-    return 0;
-  }
+  public boolean createNewPortfolio(String portfolioName, List<String[]> stockList, String typeofPortfolio) {
+    List<IstockModel> stockListToAdd = new ArrayList<IstockModel>();
+    for (String[] singleStock : stockList) {
+      Stock newStock = Stock.getBuilder()
+              .tickerName(singleStock[0])
+              .numOfUnits(Integer.valueOf(singleStock[1]))
+              .commission(Double.valueOf(singleStock[2]))
+              .buyingPrice(Double.valueOf(singleStock[3]))
+              .buyDate(LocalDate.parse(singleStock[4])).build();
 
-  @Override
-  public boolean createNewPortfolioManually(String portfolioName, List<String[]> stockList, String typeofPortfolio) {
-    return false;
+      stockListToAdd.add(newStock);
+    }
+
+    switch (typeofPortfolio) {
+      case "Fixed":
+        IFixedPortfolio newFixedPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
+        this.fixedPortfolios.add(newFixedPortfolio);
+        break;
+      case "Flexible":
+        IFlexiblePortfolio newFlexPortfolio = new FlexiblePortfolio(portfolioName, stockListToAdd);
+        this.flexiblePortfolios.add(newFlexPortfolio);
+        break;
+    }
+
+    //TODO: save this portfolio to a csv file
+    //TODO: check if this file exists..
+    return true;
   }
 
   @Override
@@ -93,53 +111,62 @@ public class User implements IUserInterface {
     return 0;
   }
 
-  @Override
-  public void addStocksToAPortfolio(int portfolioIndex) {
-
-  }
 
   @Override
-  public void sellStocksFromAPortfolio(int portfolioIndex) {
+  public void loadExistingPortFolios(String portfolioType) {
+    List<String> fileNamesFromSystem =  null;
+    String filePath = null;
+    switch (portfolioType) {
+      case "Fixed":
+        this.fixedPortfolios.clear();
+        String existingpfpath = null;
+        String fixedpffolderpath = null;
+        fileNamesFromSystem =  this.retrieveFileNames(existingpfpath); //TODO: replace existingpfpath with real path
+        filePath = fixedpffolderpath;
+        break;
+      case "Flexible":
+        this.flexiblePortfolios.clear();
+        String existingpath = null;
+        String flexiblepffolderpath = null;
+        fileNamesFromSystem =  this.retrieveFileNames(existingpath); //TODO: replace existingpfpath with real path
 
-  }
+        break;
+    }
 
-  @Override
-  public void loadExistingPortFolios() {
-    this.portfoliosList.clear();
-    this.retrieveFileNames();
-    if (this.fileNamesFromSystem.size() == 0) {
+    if (fileNamesFromSystem.size() == 0) {
       return;
     }
-    Portfolio p;
-    for (String portfolioName : this.fileNamesFromSystem) { //take files from system.
-      //add stocks to the portfolio by reading csv.
-      String filePath = this.folderPath + "/" + portfolioName;
 
-      List<String[]> listOfStocks = this.readCSVFromSystem(filePath);
 
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    for (String portfolioName : fileNamesFromSystem) { //take files from system.
+      List<String[]> listOfStocks = this.readCSVFromSystem(filePath + "/" + portfolioName);
       List<IstockModel> stockList = new ArrayList<>();
       for (String[] stockDetails : listOfStocks) {
-        try {
-          Stock s = Stock.getBuilder()
-                  .tickerName(stockDetails[0])
-                  .numOfUnits(Integer.valueOf(stockDetails[1]))
-                  .buyDate(LocalDate.parse(stockDetails[2], formatter))
-                  .build();
-          stockList.add(s);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            // do nothing
-        }
+        Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
+                .tickerName(stockDetails[0])
+                .numOfUnits(Integer.valueOf(stockDetails[1]))
+                .commission(Double.valueOf(stockDetails[2]))
+                .buyingPrice(Double.valueOf(stockDetails[3]))
+                .buyDate(LocalDate.parse(stockDetails[4]))
+                .build();
+        stockList.add(s);
       }
-      p = new Portfolio(portfolioName, stockList); //create a portfolio object.
-      //add this portfolio to list
-      this.portfoliosList.add(p);
+      switch (portfolioType) {
+        case "Fixed":
+          IFixedPortfolio fip = new FixedPortfolio(portfolioName, stockList); //create a portfolio object.
+          this.fixedPortfolios.add(fip);
+          break;
+        case "Flexible":
+          IFlexiblePortfolio flp = new FlexiblePortfolio(portfolioName, stockList); //create a portfolio object.
+          this.flexiblePortfolios.add(flp);
+          break;
+      }
     }
   }
 
   @Override
   public void createPortFolioFromFile() {
-    this.loadExistingPortFolios();
+    this.loadExistingPortFolios("Fixed");
   }
 
   private List<String[]> readCSVFromSystem(String filePath) {
@@ -159,16 +186,8 @@ public class User implements IUserInterface {
     return listOfStocks;
   }
 
-  @Override
-  public void CreateNewPortfolio(PortfolioModel newPortfolio) {
-    portfoliosList.add(newPortfolio);
-  }
 
 
-  @Override
-  public void loadExistingPortFolios(String portfolioType) {
-    
-  }
 
   @Override
   public void createPortFolioFromFile(String typeofPortfolio) {
@@ -183,18 +202,18 @@ public class User implements IUserInterface {
 
   @Override
   public List<String> getPortfolioNamesCreated() {
-    this.loadExistingPortFolios();
+    this.loadExistingPortFolios("Fixed");
     List<String> portfolioNames = new ArrayList<>();
-    List<PortfolioModel> portfolioObjects = this.portfoliosList;
-    for (PortfolioModel p : portfolioObjects) {
+    List<IFixedPortfolio> portfolioObjects = this.fixedPortfolios;
+    for (IFixedPortfolio p : portfolioObjects) {
       portfolioNames.add(p.getNameOfPortFolio());
     }
     return portfolioNames;
   }
 
   @Override
-  public List<PortfolioModel> getPortfoliosCreatedObjects() {
-    return this.portfoliosList;
+  public List<IFixedPortfolio> getPortfoliosCreatedObjects() {
+    return this.fixedPortfolios;
   }
 
 
@@ -204,7 +223,7 @@ public class User implements IUserInterface {
     }
   }
 
-  private List<String> retrieveFileNames() { //TODO:load only if extension is csv
+  private List<String> retrieveFileNames(String portfolioType) { //TODO:load only if extension is csv
     String[] fileNames = file.list();
     this.fileNamesFromSystem.clear();
     for (String fileName : fileNames) {
@@ -217,7 +236,7 @@ public class User implements IUserInterface {
 
   @Override
   public Boolean checkIfFileExists(String fileName) {
-    this.retrieveFileNames(); // updating the fileNamesFromSystem list.
+    this.retrieveFileNames("Fixed"); // updating the fileNamesFromSystem list.
     return this.fileNamesFromSystem.contains(fileName + ".csv");
   }
 
@@ -260,42 +279,28 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public List<String[]> displayStocksOfPortFolio(int portfolioIndex) {
-    PortfolioModel toDisplay = this.getPortfoliosCreatedObjects().get(portfolioIndex - 1);
+  public List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String portfolioType) {
+    IFixedPortfolio toDisplay = this.getPortfoliosCreatedObjects().get(portfolioIndex - 1);
     List<String[]> stocksToDisplay = toDisplay.toListOfString();
-    return stocksToDisplay;
+    //return stocksToDisplay;
+    return null;
   }
 
   @Override
-  public double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date) {
-    PortfolioModel toCalcVal = this.getPortfoliosCreatedObjects().get(portfolioIndexForVal - 1);
-    double val = toCalcVal.valueOfPortfolio(date);
+  public double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date, String typeofPortfolio) {
+    IFixedPortfolio toCalcVal = this.getPortfoliosCreatedObjects().get(portfolioIndexForVal - 1);
+    double val = toCalcVal.calculateValue(date);
     return val;
   }
 
   @Override
-  public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
-    List<IstockModel> stockListToAdd = new ArrayList<>();
-    for (String[] singleStock : stockList) {
-      Stock newStock = Stock.getBuilder()
-              .tickerName(singleStock[0])
-              .numOfUnits(Integer.valueOf(singleStock[1]))
-              .build();
-      stockListToAdd.add(newStock);
-    }
-    PortfolioModel newPortfolio = new Portfolio(portfolioName, stockListToAdd);
-    this.CreateNewPortfolio(newPortfolio);
-    this.savePortfolioToFile(newPortfolio);
-    return this.checkIfFileExists(portfolioName);
-  }
-
-  @Override
-  public void buySell() {
+  public void addStocksToAPortfolio(int portfolioIndex) {
 
   }
 
+
   @Override
-  public void calculateCostBasis() {
+  public void sellStocksFromAPortfolio(int portfolioIndex) {
 
   }
 

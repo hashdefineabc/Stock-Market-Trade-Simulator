@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class AbstractFixedPortfolio implements IFixedPortfolio {
@@ -34,7 +35,12 @@ public class AbstractFixedPortfolio implements IFixedPortfolio {
   }
 
   @Override
-  public Double calculateValue() {
+  public List<String[]> toListOfString() {
+    return null;
+  }
+
+  @Override
+  public Double calculateValue(LocalDate date) {
     double value = 0.0;
     for (IstockModel ns: this.stocks) {
       double closingPrice = 0.0; //TODO: get this from API
