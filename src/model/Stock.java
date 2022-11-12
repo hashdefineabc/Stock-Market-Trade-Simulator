@@ -2,28 +2,31 @@ package model;
 
 import java.time.LocalDate;
 
-/**
- * Class that implements the stock structure and methods.
- */
 public class Stock implements IstockModel {
-  private String tickerName;
-  private Integer numOfUnits; //TODO: make this double
-  LocalDate date;
 
-  public static StockBuilder getBuilder() {
-    return new StockBuilder();
+  private final String tickerName;
+  private final double numOfUnits;
+  private double commission;
+  private double buyingPrice;
+  private final LocalDate buyDate;
+
+  public static Stock.stockBuilder getBuilder() {
+    return new Stock.stockBuilder();
   }
 
-  /**
-   * Constructor to initialize the fields of the stock class.
-   * @param tickerName name of the ticker
-   * @param numOfUnits number of units for this ticker name
-   * @param date date on which the stock was purchased
-   */
-  public Stock(String tickerName, Integer numOfUnits, LocalDate date) {
+  public Stock(String tickerName, Double numOfUnits, Double commission, Double buyingPrice,
+                  LocalDate buyDate) {
     this.tickerName = tickerName;
     this.numOfUnits = numOfUnits;
-    this.date = date;
+    this.commission = commission;
+    this.buyingPrice = buyingPrice;
+    this.buyDate = buyDate;
+  }
+
+  public Stock(String tickerName, Double numOfUnits, LocalDate buyDate) {
+    this.tickerName = tickerName;
+    this.numOfUnits = numOfUnits;
+    this.buyDate = buyDate;
   }
 
   @Override
@@ -32,56 +35,73 @@ public class Stock implements IstockModel {
   }
 
   @Override
-  public Integer getNumOfUnits() {
+  public Double getNumOfUnits() {
     return this.numOfUnits;
   }
 
   @Override
-  public LocalDate getDate() {
-    return this.date;
+  public LocalDate getBuyDate() {
+    return this.buyDate;
   }
 
-  /**
-   * Using builder method to initialize the class.
-   */
+  @Override
+  public Double getCommission() {
+    return this.commission;
+  }
 
-  public static class StockBuilder {
+  @Override
+  public Double getBuyingPrice() {
+    return this.buyingPrice;
+  }
+
+  public static class stockBuilder {
 
     private String tickerName;
-    private Integer numOfUnits;
-    private LocalDate date;
+    private double numOfUnits;
+    private LocalDate buyDate;
+    private double commission;
+    private double buyingPrice;
 
-    /**
-     * Constructor to initialize the fields of the stockBuilder class.
-     */
 
-    public StockBuilder() {
+
+    public stockBuilder() {
       tickerName = "";
-      numOfUnits = 0;
-      date = LocalDate.now();
+      numOfUnits = 0.0;
+      buyDate = LocalDate.now();
+      commission = 0.0;
+      buyingPrice = 0.0;
     }
 
-    public StockBuilder tickerName(String tickerName) {
+    public Stock.stockBuilder tickerName(String tickerName) {
       this.tickerName = tickerName;
       return this;
     }
 
-    public StockBuilder numOfUnits(int units) {
+    public Stock.stockBuilder numOfUnits(double units) {
       this.numOfUnits = units;
       return this;
     }
 
-    public StockBuilder date(LocalDate date) {
-      this.date = date;
+    public Stock.stockBuilder buyDate(LocalDate date) {
+      this.buyDate = date;
       return this;
     }
 
+    public Stock.stockBuilder buyingPrice(double buyingPrice) {
+      this.buyingPrice = buyingPrice;
+      return this;
+    }
+
+    public Stock.stockBuilder commission(double commission) {
+      this.commission = commission;
+      return this;
+    }
+
+
     public Stock build() {
       //use the currently set values to create the stock object
-      return new Stock(tickerName, numOfUnits, date);
+      return new Stock(tickerName, numOfUnits, commission, buyingPrice, buyDate);
     }
 
   }
-
-
 }

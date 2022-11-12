@@ -118,10 +118,10 @@ public class User implements IUserInterface {
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath);
 
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-      List<IstockModelNew> stockList = new ArrayList<>();
+      List<IstockModel> stockList = new ArrayList<>();
       for (String[] stockDetails : listOfStocks) {
         try {
-          NewStock s = NewStock.getBuilder()
+          Stock s = Stock.getBuilder()
                   .tickerName(stockDetails[0])
                   .numOfUnits(Integer.valueOf(stockDetails[1]))
                   .buyDate(LocalDate.parse(stockDetails[2], formatter))
@@ -275,9 +275,9 @@ public class User implements IUserInterface {
 
   @Override
   public boolean createPortfolioManually(String portfolioName, List<String[]> stockList) {
-    List<IstockModelNew> stockListToAdd = new ArrayList<>();
+    List<IstockModel> stockListToAdd = new ArrayList<>();
     for (String[] singleStock : stockList) {
-      NewStock newStock = NewStock.getBuilder()
+      Stock newStock = Stock.getBuilder()
               .tickerName(singleStock[0])
               .numOfUnits(Integer.valueOf(singleStock[1]))
               .build();
