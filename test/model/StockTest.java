@@ -14,21 +14,21 @@ public class StockTest {
 
   @Test
   public void testGetTickerName() {
-    IstockModel stock = new Stock("MSFT", 6, LocalDate.now());
+    IstockModel stock = new Stock("MSFT", 6.0, LocalDate.now());
     assertEquals("MSFT", stock.getTickerName());
   }
 
   @Test
   public void testGetNumOfUnits() {
-    IstockModel stock = new Stock("MSFT", 6, LocalDate.now());
+    IstockModel stock = new Stock("MSFT", 6.0, LocalDate.now());
     assertEquals("6", stock.getNumOfUnits().toString());
   }
 
   @Test
   public void testGetDate() {
-    IstockModel stock = new Stock("MSFT", 6, LocalDate.now());
+    IstockModel stock = new Stock("MSFT", 6.0, LocalDate.now());
     LocalDate curDate = LocalDate.now();
     String s = curDate.toString();
-    assertEquals(s, stock.getDate().toString());
+    assertEquals(s, stock.getBuyDate().toString());
   }
 }

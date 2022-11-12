@@ -26,7 +26,7 @@ public class Portfolio implements PortfolioModel {
 
   private String nameOfPortFolio;
   private LocalDate dateOfCreation;
-  private final List<IstockModelNew> stocks;
+  private final List<IstockModel> stocks;
 
   // private fields for api data fetching and file handling
   private String apiKey = "W0M1JOKC82EZEQA8";
@@ -41,7 +41,7 @@ public class Portfolio implements PortfolioModel {
    * @param stocks list of stocks
    * @throws IllegalArgumentException when we try to create portfolio with empty stocks
    */
-  public Portfolio(String nameOfPortFolio, List<IstockModelNew> stocks)
+  public Portfolio(String nameOfPortFolio, List<IstockModel> stocks)
           throws IllegalArgumentException {
     if (Objects.equals(nameOfPortFolio, "")) {
       throw new IllegalArgumentException("Please provide a name for your portfolio");
@@ -174,7 +174,7 @@ public class Portfolio implements PortfolioModel {
 
     double answer = 0;
 
-    for (IstockModelNew curStock : this.stocks) {
+    for (IstockModel curStock : this.stocks) {
       answer = answer + curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date);
     }
 
@@ -193,7 +193,7 @@ public class Portfolio implements PortfolioModel {
   public List<String[]> toListOfString() {
     List<String[]> answer = new ArrayList<>();
 
-    for (IstockModelNew stock : this.stocks) {
+    for (IstockModel stock : this.stocks) {
       String[] stocksDetails = new String[3];
       stocksDetails[0] = String.valueOf(stock.getTickerName());
       stocksDetails[1] = String.valueOf(stock.getNumOfUnits());
@@ -204,7 +204,7 @@ public class Portfolio implements PortfolioModel {
   }
 
   @Override
-  public List<IstockModelNew> getStocks() {
+  public List<IstockModel> getStocks() {
     return this.stocks;
   }
 

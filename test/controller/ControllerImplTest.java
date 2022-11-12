@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.IUserInterface;
+import model.IstockModel;
 import model.Portfolio;
 import model.PortfolioModel;
 import model.Stock;
@@ -206,10 +207,10 @@ public class ControllerImplTest {
   @Test
   public void testsavePortfolioToFile() {
     List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10,
+    Stock s = new Stock("AAPL", 5.0, LocalDate.of(2022, 10,
             26));
     stockList.add(s);
-    s = new Stock("MSFT", 5, LocalDate.of(2022, 10,
+    s = new Stock("MSFT", 5.0, LocalDate.of(2022, 10,
             26));
     stockList.add(s);
     PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
@@ -223,10 +224,10 @@ public class ControllerImplTest {
   @Test
   public void testCreateNewPortfolio() {
     List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5,
+    Stock s = new Stock("AAPL", 5.0,
             LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    s = new Stock("MSFT", 5,
+    s = new Stock("MSFT", 5.0,
             LocalDate.of(2022, 10, 26));
     stockList.add(s);
     PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
