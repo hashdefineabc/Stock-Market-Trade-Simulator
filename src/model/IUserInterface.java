@@ -83,6 +83,8 @@ public interface IUserInterface {
 
   void sellStocksFromAPortfolio(int portfolioIndex);
 
+  void buySell();
+
   //todo
   void displayChart();
 }
