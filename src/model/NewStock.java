@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class NewStock implements  IstockModelNew{
 
@@ -76,8 +77,9 @@ public class NewStock implements  IstockModelNew{
       return this;
     }
 
-    public NewStock.stockBuilder buyDate(LocalDate date) {
-      this.buyDate = date;
+    public NewStock.stockBuilder buyDate(String date) {
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      this.buyDate = LocalDate.parse(date, formatter);
       return this;
     }
 

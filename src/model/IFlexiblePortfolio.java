@@ -1,8 +1,6 @@
 package model;
 
-import java.util.List;
-
-public interface IflexiblePortfolio {
+public interface IFlexiblePortfolio {
 
   void addStocks(IstockModelNew stockToAdd);
 
