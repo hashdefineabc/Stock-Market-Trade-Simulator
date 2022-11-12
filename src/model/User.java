@@ -45,7 +45,6 @@ public class User implements IUserInterface {
     this.createFolder();
     loadExistingPortFolios(); //initially there are zero portfolios for a user
     loadNasdaqTickerNames();
-
     //todo create function to load the portfolios that are already created in the previous session
   }
 
@@ -72,6 +71,36 @@ public class User implements IUserInterface {
   @Override
   public String getFolderPath() {
     return this.folderPath;
+  }
+
+  @Override
+  public List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String typeofPortfolio) {
+    return null;
+  }
+
+  @Override
+  public double calculateValueOfPortfolio(int portfolioIndex, LocalDate date, String typeofPortfolio) {
+    return 0;
+  }
+
+  @Override
+  public boolean createNewPortfolioManually(String portfolioName, List<String[]> stockList, String typeofPortfolio) {
+    return false;
+  }
+
+  @Override
+  public double calculateCostBasisOfPortfolio(int portfolioIndex) {
+    return 0;
+  }
+
+  @Override
+  public void addStocksToAPortfolio(int portfolioIndex) {
+
+  }
+
+  @Override
+  public void sellStocksFromAPortfolio(int portfolioIndex) {
+
   }
 
   @Override
@@ -135,6 +164,16 @@ public class User implements IUserInterface {
     portfoliosList.add(newPortfolio);
   }
 
+
+  @Override
+  public void loadExistingPortFolios(String portfolioType) {
+    
+  }
+
+  @Override
+  public void createPortFolioFromFile(String typeofPortfolio) {
+
+  }
 
   /**
    * Returns the list of portfolios of a particular user.
