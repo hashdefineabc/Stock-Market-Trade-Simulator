@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 import controller.ICommandController;
 import model.IUserInterface;
-import model.User;
 import view.ViewInterface;
 
 public class Value implements ICommandController {
@@ -22,6 +21,8 @@ public class Value implements ICommandController {
   }
   @Override
   public void go() {
+
+
     if (user.getPortfolioNamesCreated().size() == 0) {
       view.displayMsgToUser("No portfolios created till now, can't calculate value");
       return;

@@ -25,5 +25,6 @@ import java.util.stream.Stream;
 public class FixedPortfolio extends AbstractFixedPortfolio {
   public FixedPortfolio(String portfolioName, List<IstockModel> stocks) {
     super(portfolioName, stocks);
+
   }
 }

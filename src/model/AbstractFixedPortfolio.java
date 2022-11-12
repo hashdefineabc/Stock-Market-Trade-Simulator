@@ -26,9 +26,10 @@ public class AbstractFixedPortfolio implements IFixedPortfolio {
   final List<IstockModel> stocks;
 
   // private fields for api data fetching and file handling
-  private String apiKey = "W0M1JOKC82EZEQA8";
+  private String apiKey = "RWI9HAQXNXJQQSJI";
   private String userDirectory = new File("").getAbsolutePath();
   private String folderPath = userDirectory + File.separator + "stockData";
+  String portfolioType;
 
 
   /**
@@ -50,8 +51,12 @@ public class AbstractFixedPortfolio implements IFixedPortfolio {
     this.nameOfPortFolio = nameOfPortFolio;
     this.stocks = stocks;
     this.dateOfCreation = LocalDate.now();
+    this.portfolioType = "fixed";
   }
 
+  public String getPortfolioType() {
+    return this.portfolioType;
+  }
   private double getStockValue(String tickerName, LocalDate date) {
     double result = 0;
     FileReader file = null;
