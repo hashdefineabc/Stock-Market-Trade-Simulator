@@ -207,11 +207,11 @@ public class ControllerImplTest {
   @Test
   public void testsavePortfolioToFile() {
     List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5.0, LocalDate.of(2022, 10,
-            26));
+    Stock s = new Stock("AAPL", 5.0, commission, transactionPrice, LocalDate.of(2022, 10,
+            26), buyOrSell);
     stockList.add(s);
-    s = new Stock("MSFT", 5.0, LocalDate.of(2022, 10,
-            26));
+    s = new Stock("MSFT", 5.0, commission, transactionPrice, LocalDate.of(2022, 10,
+            26), buyOrSell);
     stockList.add(s);
     IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
 
@@ -225,10 +225,10 @@ public class ControllerImplTest {
   public void testCreateNewPortfolio() {
     List<IstockModel> stockList = new ArrayList<>();
     Stock s = new Stock("AAPL", 5.0,
-            LocalDate.of(2022, 10, 26));
+            commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
     stockList.add(s);
     s = new Stock("MSFT", 5.0,
-            LocalDate.of(2022, 10, 26));
+            commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
     stockList.add(s);
     IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
 

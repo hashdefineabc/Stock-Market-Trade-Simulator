@@ -5,11 +5,11 @@ import java.time.LocalDate;
 public class Stock implements IstockModel {
 
   private final String tickerName;
-  private final double numOfUnits;
-  private double commission;
-  private double transactionPrice;
+  private final Double numOfUnits;
+  private final Double commission;
+  private final Double transactionPrice;
   private final LocalDate transactionDate;
-  private Boolean buyOrSell;
+  private final Boolean buyOrSell;
 
   public static Stock.stockBuilder getBuilder() {
     return new Stock.stockBuilder();
@@ -23,12 +23,6 @@ public class Stock implements IstockModel {
     this.transactionPrice = transactionPrice;
     this.transactionDate = transactionDate;
     this.buyOrSell = buyOrSell;
-  }
-
-  public Stock(String tickerName, Double numOfUnits, LocalDate transactionDate) {
-    this.tickerName = tickerName;
-    this.numOfUnits = numOfUnits;
-    this.transactionDate = transactionDate;
   }
 
   @Override
@@ -56,6 +50,11 @@ public class Stock implements IstockModel {
     return this.transactionPrice;
   }
 
+  @Override
+  public Boolean getBuyOrSell() {
+    return this.buyOrSell;
+  }
+
   public static class stockBuilder {
 
     private String tickerName;
@@ -63,6 +62,8 @@ public class Stock implements IstockModel {
     private LocalDate buyDate;
     private double commission;
     private double buyingPrice;
+
+    private boolean buyOrSell;
 
 
 
@@ -72,6 +73,7 @@ public class Stock implements IstockModel {
       buyDate = LocalDate.now();
       commission = 0.0;
       buyingPrice = 0.0;
+      buyOrSell = false;
     }
 
     public Stock.stockBuilder tickerName(String tickerName) {
@@ -99,10 +101,15 @@ public class Stock implements IstockModel {
       return this;
     }
 
+    public Stock.stockBuilder buyOrSell(boolean buyOrSell) {
+      this.buyOrSell = buyOrSell;
+      return this;
+    }
+
 
     public Stock build() {
       //use the currently set values to create the stock object
-      return new Stock(tickerName, numOfUnits, commission, buyingPrice, buyDate);
+      return new Stock(tickerName, numOfUnits, commission, buyingPrice, buyDate, buyOrSell);
     }
 
   }

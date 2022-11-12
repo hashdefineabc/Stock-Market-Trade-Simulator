@@ -29,7 +29,9 @@ public interface IUserInterface {
    * Method to get the list of portfolio objects created.
    * @return the list of portfolios.
    */
-  List<IFixedPortfolio> getPortfoliosCreatedObjects();
+  List<IFixedPortfolio> getFixedPortfoliosCreatedObjects();
+
+  List<IFlexiblePortfolio> getFlexiblePortfoliosCreatedObjects();
 
   /**
    * Method to check if a particular file exists in the system.

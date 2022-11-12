@@ -28,4 +28,6 @@ public interface IstockModel {
 
   Double getTransactionPrice();
 
+  Boolean getBuyOrSell();
+
 }
