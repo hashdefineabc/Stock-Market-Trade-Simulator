@@ -23,8 +23,8 @@ public class PortfolioTest {
     stockList.add(s);
     s = new Stock("MSFT", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
-    assertEquals("1857.75", String.valueOf(portfolio.valueOfPortfolio(LocalDate.of(2022, 10, 27))));
+    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
+    assertEquals("1857.75", String.valueOf(portfolio.calculateValue(LocalDate.of(2022, 10, 27))));
   }
 
   /**
@@ -33,8 +33,8 @@ public class PortfolioTest {
   @Test
   public void testValueOfEmptyPortfolio() {
     List<IstockModel> stockList = new ArrayList<>();
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
-    assertEquals("0.0", String.valueOf(portfolio.valueOfPortfolio(LocalDate.of(2022, 10, 27))));
+    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
+    assertEquals("0.0", String.valueOf(portfolio.calculateValue(LocalDate.of(2022, 10, 27))));
   }
 
   /**
@@ -43,7 +43,7 @@ public class PortfolioTest {
   @Test
   public void testGetNameOfPortFolio() {
     List<IstockModel> stockList = new ArrayList<>();
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
     assertEquals("Portfolio 1", portfolio.getNameOfPortFolio());
   }
 
@@ -53,7 +53,7 @@ public class PortfolioTest {
   @Test(expected = IllegalArgumentException.class)
   public void testGetNameOfPortFolioEmpty() {
     List<IstockModel> stockList = new ArrayList<>();
-    PortfolioModel portfolio = new Portfolio("", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("", stockList);
   }
 
   /**
@@ -62,7 +62,7 @@ public class PortfolioTest {
   @Test(expected = IllegalArgumentException.class)
   public void testCreatePortfolioWithEmptyStocks() {
     List<IstockModel> stockList = new ArrayList<>();
-    PortfolioModel portfolio = new Portfolio("", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("", stockList);
   }
 
   /**
@@ -77,7 +77,7 @@ public class PortfolioTest {
     s = new Stock("MSFT", 25.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
     int previous = user.getPortfolioNamesCreated().size();
-    PortfolioModel portfolio = new Portfolio("", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("", stockList);
     assertEquals(previous + 1, user.getPortfolioNamesCreated().size());
   }
 
@@ -91,7 +91,7 @@ public class PortfolioTest {
     stockList.add(s);
     s = new Stock("MSFT", 25.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
 
     List<String[]> expectedList = new ArrayList<>();
     String[] stock = {"AAPL", "5", "2022-10-26"};
