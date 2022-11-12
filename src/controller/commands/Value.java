@@ -22,16 +22,33 @@ public class Value implements ICommandController {
   @Override
   public void go() {
 
-
-    if (user.getPortfolioNamesCreated().size() == 0) {
-      view.displayMsgToUser("No portfolios created till now, can't calculate value");
-      return;
+    view.chooseFixedOrFlexible();
+    int userInput = scanner.nextInt();
+    String portfolioType = "";
+    if(userInput == 1) { //fixed portfolio
+      portfolioType = "fixed";
+      if (user.getPortfolioNamesCreated("fixed").size() == 0) {
+        view.displayMsgToUser("No fixed portfolios created till now, can't calculate value");
+        return;
+      }
     }
-    view.displayListOfPortfolios(user.getPortfolioNamesCreated());
+    else if(userInput == 2) { //flexible portfolio
+      portfolioType = "flexible";
+      if (user.getPortfolioNamesCreated("flexible").size() == 0) {
+        view.displayMsgToUser("No flexible portfolios created till now, can't calculate value");
+        return;
+      }
+    }
+    else {
+      view.displayMsgToUser("Invalid input!!!!");
+    }
+
+
+    view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndexForVal = this.getSelectedPortFolioFromView();
 
     LocalDate date = this.validateDateForValue();
-    double val = user.calculateValueOfPortfolio(portfolioIndexForVal, date, "Fixed");
+    double val = user.calculateValueOfPortfolio(portfolioIndexForVal, date, portfolioType);
 
     if (val == 0) {
       view.displayMsgToUser("Market was closed on " + date);

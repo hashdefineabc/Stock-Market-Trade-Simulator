@@ -87,4 +87,6 @@ public interface ViewInterface {
    * Method to check if the file to create a portfolio has been uploaded by the user.
    */
   void isFileUploaded();
+
+  void chooseFixedOrFlexible();
 }

@@ -203,14 +203,25 @@ public class User implements IUserInterface {
    */
 
   @Override
-  public List<String> getPortfolioNamesCreated() {
-    this.loadExistingPortFolios("Fixed");
-    List<String> portfolioNames = new ArrayList<>();
-    List<IFixedPortfolio> portfolioObjects = this.fixedPortfolios;
+  public List<String> getPortfolioNamesCreated(String portFolioType) {
 
-    for (IFixedPortfolio p : portfolioObjects) {
-      portfolioNames.add(p.getNameOfPortFolio());
+    List<String> portfolioNames = new ArrayList<>();
+
+    if(portFolioType == "fixed"){
+      this.loadExistingPortFolios(portFolioType);
+      List<IFixedPortfolio> portfolioObjects = this.fixedPortfolios;
+      for (IFixedPortfolio p : portfolioObjects) {
+        portfolioNames.add(p.getNameOfPortFolio());
+      }
     }
+    else if(portFolioType == "flexible"){
+      this.loadExistingPortFolios(portFolioType);
+      List<IFlexiblePortfolio> portfolioObjects = this.flexiblePortfolios;
+      for (IFlexiblePortfolio p : portfolioObjects) {
+        portfolioNames.add(p.getNameOfPortFolio());
+      }
+    }
+
     return portfolioNames;
   }
 
@@ -329,6 +340,11 @@ public class User implements IUserInterface {
 
   @Override
   public void sellStocksFromAPortfolio(int portfolioIndex) {
+
+  }
+
+  @Override
+  public void buySell() {
 
   }
 
