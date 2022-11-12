@@ -3,8 +3,6 @@ package model;
 import java.util.List;
 
 public class FlexiblePortfolio extends AbstractFixedPortfolio implements IFlexiblePortfolio {
-
-
   public FlexiblePortfolio(String portfolioName, List<IstockModel> stocks) {
     super(portfolioName, stocks);
   }

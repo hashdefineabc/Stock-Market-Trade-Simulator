@@ -10,18 +10,12 @@ public interface IUserInterface {
   /**
    * Method to load the existing portfolios created by this user.
    */
-  void loadExistingPortFolios();
+  void loadExistingPortFolios(String portfolioType);
 
   /**
    * Method to create port folio using a file from the user.
    */
-  void createPortFolioFromFile();
-
-  /**
-   * Method to create a new portfolio.
-   * @param newPortfolio the new portfolio
-   */
-  void CreateNewPortfolio(IFixedPortfolio newPortfolio);
+  void createPortFolioFromFile(String typeofPortfolio);
 
   /**
    * Method to get the names of the portfolios created.
@@ -67,7 +61,7 @@ public interface IUserInterface {
    *                       display the stocks.
    * @return the list = list of stocks
    */
-  List<String[]> displayStocksOfPortFolio(int portfolioIndex);
+  List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String typeofPortfolio);
 
   /**
    * Method to calculate the value of a portfolio.
@@ -75,7 +69,7 @@ public interface IUserInterface {
    * @param date the date for which we need to calculate the value.
    * @return the double total value of the portfolio.
    */
-  double calculateValueOfPortfolio(int portfolioIndex, LocalDate date);
+  double calculateValueOfPortfolio(int portfolioIndex, LocalDate date, String typeofPortfolio);
 
   /**
    * Method to create a portfolio manually by taking stock wise input.
@@ -84,13 +78,14 @@ public interface IUserInterface {
    * @param stockList the stocks  in this portfolio.
    * @return boolean = if this portfolio was created or not.
    */
-  boolean createPortfolioManually(String portfolioName, List<String[]> stockList);
+  boolean createNewPortfolioManually(String portfolioName, List<String[]> stockList,
+                                  String typeofPortfolio);
 
-  //todo
-  void buySell();
+  double calculateCostBasisOfPortfolio(int portfolioIndex);
 
-  //todo
-  void calculateCostBasis();
+  void addStocksToAPortfolio(int portfolioIndex);
+
+  void sellStocksFromAPortfolio(int portfolioIndex);
 
   //todo
   void displayChart();
