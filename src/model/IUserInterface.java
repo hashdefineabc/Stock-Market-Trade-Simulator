@@ -36,13 +36,13 @@ public interface IUserInterface {
    * @param fileName the file name to check
    * @return if file is found or not.
    */
-  Boolean checkIfFileExists(String fileName);
+  Boolean checkIfFileExists(String fileName, String portfolioType);
 
   /**
    * Method to save the created portfolio to a csv file.
-   * @param newPortfolio the portfolio to be saved.
+   *
    */
-  void savePortfolioToFile(IFixedPortfolio newPortfolio);
+  void savePortfolioToFile(List<String[]> dataToWrite, String portfolioName, String portfolioType);
 
   /**
    * Method to check if a tickerName is valid or not.
