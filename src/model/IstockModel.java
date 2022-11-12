@@ -26,6 +26,6 @@ public interface IstockModel {
 
   Double getCommission();
 
-  Double getBuyingPrice();
+  Double getTransactionPrice();
 
 }

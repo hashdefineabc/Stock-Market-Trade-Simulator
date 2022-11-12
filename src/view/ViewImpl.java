@@ -102,5 +102,12 @@ public class ViewImpl implements ViewInterface {
     this.out.print("\tHas the file been placed at the above location? 1.Yes 0.No\n");
   }
 
+  @Override
+  public void chooseFixedOrFlexible() {
+    this.out.println("Please pick one ");
+    this.out.println("1. Fixed Portfolio");
+    this.out.println("2. Flexible Portfolio");
+  }
+
 
 }
