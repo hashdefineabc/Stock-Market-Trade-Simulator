@@ -38,7 +38,7 @@ public class UserTest {
     stockList.add(s);
     s = new Stock("MSFT", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
 
     user.CreateNewPortfolio(portfolio);
     assertEquals(true, user.isTickerValid("AAPL"));
@@ -53,7 +53,7 @@ public class UserTest {
     stockList.add(s);
     s = new Stock("MSFT", 5.0, LocalDate.of(2022, 10, 26));
     stockList.add(s);
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
 
     List<String> portfoliosCreated = user.getPortfolioNamesCreated();
     int previousSize =  portfoliosCreated.size();

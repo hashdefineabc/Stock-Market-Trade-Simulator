@@ -21,7 +21,7 @@ public interface IUserInterface {
    * Method to create a new portfolio.
    * @param newPortfolio the new portfolio
    */
-  void CreateNewPortfolio(PortfolioModel newPortfolio);
+  void CreateNewPortfolio(IFixedPortfolio newPortfolio);
 
   /**
    * Method to get the names of the portfolios created.
@@ -33,7 +33,7 @@ public interface IUserInterface {
    * Method to get the list of portfolio objects created.
    * @return the list of portfolios.
    */
-  List<PortfolioModel> getPortfoliosCreatedObjects();
+  List<IFixedPortfolio> getPortfoliosCreatedObjects();
 
   /**
    * Method to check if a particular file exists in the system.
@@ -46,7 +46,7 @@ public interface IUserInterface {
    * Method to save the created portfolio to a csv file.
    * @param newPortfolio the portfolio to be saved.
    */
-  void savePortfolioToFile(PortfolioModel newPortfolio);
+  void savePortfolioToFile(IFixedPortfolio newPortfolio);
 
   /**
    * Method to check if a tickerName is valid or not.
