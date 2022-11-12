@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -212,14 +213,7 @@ public class AbstractFixedPortfolio implements IFixedPortfolio {
     return costBasis;
   }
 
-//  @Override
-//  public Double calculateValue(LocalDate date) {
-//    double value = 0.0;
-//    for (IstockModel ns: this.stocks) {
-//      double closingPrice = 0.0; //TODO: get this from API
-//      value += closingPrice * ns.getNumOfUnits();
-//    }
-//    return value;
-//  }
+
+
 
 }
