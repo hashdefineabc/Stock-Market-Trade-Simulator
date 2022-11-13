@@ -92,25 +92,37 @@ public class User implements IUserInterface {
   @Override
   public boolean createNewPortfolio(String portfolioName, List<String[]> stockList, String typeofPortfolio) {
     List<String[]> dataToWrite = null;
-    List<IstockModel> stockListToAdd = new ArrayList<IstockModel>();
-    for (String[] singleStock : stockList) {
-      Stock newStock = Stock.getBuilder()
-              .tickerName(singleStock[0])
-              .numOfUnits(Integer.valueOf(singleStock[1]))
-              .commission(Double.valueOf(singleStock[2]))
-              .buyingPrice(Double.valueOf(singleStock[3]))
-              .buyDate(LocalDate.parse(singleStock[4])).build();
-
-      stockListToAdd.add(newStock);
-    }
+    List<IstockModel> stockListToAdd = new ArrayList<>();
 
     if (typeofPortfolio.equals("fixed")) {
+
+      for (String[] singleStock : stockList) {
+        Stock newStock = Stock.getBuilder()
+                .tickerName(singleStock[0])
+                .numOfUnits(Double.valueOf(singleStock[1]))
+                .transactionDate(LocalDate.parse(singleStock[2])).build();
+
+        stockListToAdd.add(newStock);
+      }
+
       IFixedPortfolio newFixedPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
       this.fixedPortfolios.add(newFixedPortfolio);
       dataToWrite = newFixedPortfolio.toListOfString();
       this.savePortfolioToFile(dataToWrite, newFixedPortfolio.getNameOfPortFolio(),typeofPortfolio);
     }
     else if (typeofPortfolio.equals("flexible")) {
+
+      for (String[] singleStock : stockList) {
+        Stock newStock = Stock.getBuilder()
+                .tickerName(singleStock[0])
+                .numOfUnits(Double.valueOf(singleStock[1]))
+                .commission(Double.valueOf(singleStock[2]))
+                .transactionPrice(Double.valueOf(singleStock[3]))
+                .transactionDate(LocalDate.parse(singleStock[4])).build();
+
+        stockListToAdd.add(newStock);
+      }
+
       IFlexiblePortfolio newFlexPortfolio = new FlexiblePortfolio(portfolioName, stockListToAdd);
       this.flexiblePortfolios.add(newFlexPortfolio);
       dataToWrite = newFlexPortfolio.toListOfString();
@@ -154,7 +166,7 @@ public class User implements IUserInterface {
           Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
                   .tickerName(stockDetails[0])
                   .numOfUnits(Double.parseDouble(stockDetails[1]))
-                  .buyDate(LocalDate.parse(stockDetails[2]))
+                  .transactionDate(LocalDate.parse(stockDetails[2]))
                   .build();
           stockList.add(s);
         }
@@ -165,10 +177,10 @@ public class User implements IUserInterface {
         for (String[] stockDetails : listOfStocks) {
           Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
                   .tickerName(stockDetails[0])
-                  .numOfUnits(Integer.valueOf(stockDetails[1]))
-                  .commission(Double.valueOf(stockDetails[2]))
-                  .buyingPrice(Double.valueOf(stockDetails[3]))
-                  .buyDate(LocalDate.parse(stockDetails[4]))
+                  .numOfUnits(Double.valueOf(stockDetails[1]))
+                  .transactionDate(LocalDate.parse(stockDetails[2]))
+                  .commission(Double.valueOf(stockDetails[3]))
+                  .transactionPrice(Double.valueOf(stockDetails[4]))
                   .build();
           stockList.add(s);
         }

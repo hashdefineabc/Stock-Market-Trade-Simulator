@@ -109,5 +109,15 @@ public class ViewImpl implements ViewInterface {
     this.out.println("2. Flexible Portfolio");
   }
 
+  @Override
+  public void takeCommissionValue() {
+    this.out.println("Enter the commission value for this transaction");
+  }
+
+  @Override
+  public void takeDateOfTransaction() {
+    this.out.println("Please enter the date of this transaction");
+  }
+
 
 }
