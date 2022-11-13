@@ -77,9 +77,15 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public String getFolderPath() {
-    return this.folderPath;
+  public String getFixedPFPath() {
+    return this.fixedPFPath;
   }
+
+  @Override
+  public String getFlexPFPath() {
+    return this.flexiblePFPath;
+  }
+
 
 
   @Override
@@ -172,8 +178,8 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public void createPortFolioFromFile() {
-    this.loadExistingPortFolios("Fixed");
+  public void createPortFolioFromFile(String portfolioType) {
+      this.loadExistingPortFolios(portfolioType);
   }
 
   private List<String[]> readCSVFromSystem(String filePath) {
@@ -191,12 +197,6 @@ public class User implements IUserInterface {
       throw new RuntimeException(e);
     }
     return listOfStocks;
-  }
-
-
-  @Override
-  public void createPortFolioFromFile(String typeofPortfolio) {
-
   }
 
   @Override

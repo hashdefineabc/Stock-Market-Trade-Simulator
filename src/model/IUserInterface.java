@@ -12,12 +12,12 @@ public interface IUserInterface {
    */
   void loadExistingPortFolios(String portfolioType);
 
-  void createPortFolioFromFile();
+  void createPortFolioFromFile(String portfolioType);
 
   /**
    * Method to create port folio using a file from the user.
    */
-  void createPortFolioFromFile(String typeofPortfolio);
+
 
   /**
    * Method to get the names of the portfolios created.
@@ -57,7 +57,9 @@ public interface IUserInterface {
    * Method to get the folder path where all the files will be stored.
    * @return string = the intended folder path.
    */
-  String getFolderPath();
+  String getFixedPFPath();
+
+  String getFlexPFPath();
 
   abstract List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String typeofPortfolio);
 
