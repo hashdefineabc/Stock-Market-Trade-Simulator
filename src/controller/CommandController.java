@@ -61,7 +61,7 @@ public class CommandController implements ICommandController{
             cmd = new Value(view, user);
             break;
           case 4: // Buy or sell shares of a portfolio
-            cmd = new BuySell();
+            cmd = new BuySell(view, user);
             break;
           case 5: // Check cost basis of a portfolio
             cmd = new CostBasis(view, user);
