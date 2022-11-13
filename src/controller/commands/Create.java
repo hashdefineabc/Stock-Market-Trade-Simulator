@@ -117,7 +117,7 @@ public class Create implements ICommandController {
   }
 
   public String[] takeStockInputFromView() {
-    String[] userStockInput = new String[5];
+    String[] userStockInput = new String[6];
     String tickerNameFromUser = "";
     Double numUnits = 0.0;
     Double commission = 0.0;
@@ -160,6 +160,7 @@ public class Create implements ICommandController {
     userStockInput[2] = String.valueOf(transactionDate);
     userStockInput[3] = String.valueOf(commission);
     userStockInput[4] = String.valueOf(0.0); //TODO: replace with price at which it was bought/sold
+    userStockInput[5] = String.valueOf(false); //indicates shares are bought
 
     return userStockInput;
   }

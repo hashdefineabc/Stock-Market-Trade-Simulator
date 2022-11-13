@@ -100,7 +100,9 @@ public class User implements IUserInterface {
               .numOfUnits(Double.valueOf(singleStock[1]))
               .transactionDate(LocalDate.parse((singleStock[2])))
               .commission(Double.valueOf(singleStock[3]))
-              .transactionPrice(Double.valueOf(singleStock[4])).build();
+              .transactionPrice(Double.valueOf(singleStock[4]))
+              .buyOrSell(Boolean.valueOf(singleStock[5]))
+              .build();
 
       stockListToAdd.add(newStock);
     }
