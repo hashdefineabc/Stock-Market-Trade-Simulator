@@ -1,5 +1,4 @@
 import controller.CommandController;
-import controller.ControllerImpl;
 import model.IUserInterface;
 import model.User;
 import view.ViewImpl;
@@ -24,7 +23,7 @@ public class StockMarket {
 
     //create the controller and give it the model.
     CommandController controller = new CommandController(u, view, System.in);
-    controller.goController();
+    controller.go();
 
   }
 }
