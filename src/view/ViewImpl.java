@@ -67,15 +67,16 @@ public class ViewImpl implements ViewInterface {
   public void displayStocks(List<IstockModel> listOfStocks) {
     this.out.println("Following stocks are present in the portfolio : ");
     this.out.println("TickerName\t" + "NumberOfUnits\t" + "TransactionDate\t" + "Commission\t"
-                    + "Price\n");
+                    + "Price\t" + "Buy(0)/Sell(1)");
 
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     for (IstockModel stock : listOfStocks) {
-      this.out.println(stock.getTickerName() + "\t" + Double.toString(stock.getNumOfUnits())
-                      + "\t" +stock.getBuyDate().format(dateFormat) + "\t"
-              + Double.toString(stock.getCommission()) + "\t"
-              + Double.toString(stock.getTransactionPrice()) );
+      this.out.println(stock.getTickerName() + "\t\t" + Double.toString(stock.getNumOfUnits())
+                      + "\t\t\t" +stock.getBuyDate().format(dateFormat) + "\t\t"
+              + Double.toString(stock.getCommission()) + "\t\t\t"
+              + Double.toString(stock.getTransactionPrice()) + "\t\t\t"
+              + Boolean.toString((stock.getBuyOrSell())));
     }
 
   }
