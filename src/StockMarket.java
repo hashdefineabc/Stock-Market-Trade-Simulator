@@ -1,5 +1,4 @@
 import controller.CommandController;
-import controller.ControllerImpl;
 import model.IUserInterface;
 import model.User;
 import view.ViewImpl;
@@ -23,10 +22,8 @@ public class StockMarket {
     //this input stream can be used by view as well as junit tests.
 
     //create the controller and give it the model.
-    ControllerImpl controller = new ControllerImpl();
-
-    CommandController controller1 = new CommandController(u, view, System.in);
-    controller1.goController();
+    CommandController controller = new CommandController(u, view, System.in);
+    controller.go();
 
     //control to the controller.
 //    controller.goController();

@@ -60,13 +60,14 @@ public class User implements IUserInterface {
     try {
       BufferedReader csvReader = new BufferedReader(new FileReader("./resources/Nasdaq_top25.csv"));
       String row = "";
-      while (row != null) {
-        row = csvReader.readLine();
+      row = csvReader.readLine();
+      do {
         row = row.strip().split(",")[0];
         this.nasdaqTickerNames.add(row);
-      }
+        row = csvReader.readLine();
+      } while (row != null);
       csvReader.close();
-    } catch (Exception e) {
+      } catch (Exception e) {
         throw new FileNotFoundException("Nasdaq ticker names file not found");
     }
   }

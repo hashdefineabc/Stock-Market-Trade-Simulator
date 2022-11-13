@@ -18,7 +18,7 @@ import model.IUserInterface;
 import model.User;
 import view.ViewInterface;
 
-public class CommandController implements Controller{
+public class CommandController implements ICommandController{
 
   private static ViewInterface view;
   private static IUserInterface user;
@@ -46,8 +46,7 @@ public class CommandController implements Controller{
   }
 
   @Override
-  public void goController() {
-    User user = new User();
+  public void go() {
     ICommandController cmd = null;
     while (true) {
       try {
