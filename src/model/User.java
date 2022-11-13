@@ -165,9 +165,9 @@ public class User implements IUserInterface {
           Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
                   .tickerName(stockDetails[0])
                   .numOfUnits(Integer.valueOf(stockDetails[1]))
-//                  .commission(Double.valueOf(stockDetails[2]))
-//                  .buyingPrice(Double.valueOf(stockDetails[3]))
-                  .buyDate(LocalDate.parse(stockDetails[2]))
+                  .commission(Double.valueOf(stockDetails[2]))
+                  .buyingPrice(Double.valueOf(stockDetails[3]))
+                  .buyDate(LocalDate.parse(stockDetails[4]))
                   .build();
           stockList.add(s);
         }
