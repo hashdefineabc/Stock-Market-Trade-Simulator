@@ -335,9 +335,14 @@ public class User implements IUserInterface {
 
   @Override
   public List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String portfolioType) {
-    IFixedPortfolio toDisplay = this.fixedPortfolios.get(portfolioIndex - 1);
-    List<String[]> stocksToDisplay = toDisplay.toListOfString();
-    //return stocksToDisplay;
+    if (portfolioType.equals("fixed")) {
+      IFixedPortfolio toDisplay = this.fixedPortfolios.get(portfolioIndex - 1);
+      return toDisplay.getStocksInPortfolio();
+    }
+    else if (portfolioType.equals("flexible")) {
+      IFlexiblePortfolio toDisplay = this.flexiblePortfolios.get(portfolioIndex - 1);
+      return toDisplay.getStocksInPortfolio();
+    }
     return null;
   }
 
