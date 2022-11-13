@@ -25,5 +25,7 @@ public class StockMarket {
     CommandController controller = new CommandController(u, view, System.in);
     controller.go();
 
+    //control to the controller.
+//    controller.goController();
   }
 }
