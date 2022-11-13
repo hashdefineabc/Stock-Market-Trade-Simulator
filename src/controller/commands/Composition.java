@@ -52,7 +52,7 @@ public class Composition implements ICommandController {
       view.displayMsgToUser("No "+portfolioType+" portfolios created till now");
       return false;
     }
-    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
+    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:\n");
 
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);

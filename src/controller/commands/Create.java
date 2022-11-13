@@ -1,6 +1,7 @@
 package controller.commands;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +39,7 @@ public class Create implements ICommandController {
       String portfolioName = this.getPortFolioNameFromView();
       List<String[]> stockList = new ArrayList<>();
       do {
-        String[] s = this.takeStockInputFromView();
+        String[] s = this.takeStockInputFromView(portfolioType);
         stockList.add(s);
       }
       while (this.addMoreStocksFromView());
@@ -94,7 +95,7 @@ public class Create implements ICommandController {
 
   public String getPortFolioNameFromView() {
     String portfolioName = null;
-    boolean fileExists = false;
+    Boolean fileExists = false;
     do {
       try{
         this.view.getPortfolioNameFromUser();
@@ -113,11 +114,13 @@ public class Create implements ICommandController {
     return portfolioName;
   }
 
-  public String[] takeStockInputFromView() {
-    String[] userStockInput = new String[2];
+  public String[] takeStockInputFromView(String portfolioType) {
+    String[] userStockInput = new String[5];
     String tickerNameFromUser = "";
-    double numUnits = 0.0;
-    boolean isInputValid = false;
+    Double numUnits = 0.0;
+    Double commission = 0.0;
+    LocalDate transactionDate = LocalDate.now();
+    Boolean isInputValid = false;
     do {
       try{
         this.view.takeTickerName();
@@ -126,11 +129,11 @@ public class Create implements ICommandController {
           throw new IllegalArgumentException("Invalid ticker name!");
         }
         this.view.takeNumOfUnits();
-        numUnits = scanner.nextInt();
+        numUnits = scanner.nextDouble();
         if (numUnits <= 0.0) {
           throw new IllegalArgumentException("Number of units purchased cannot be -ve");
         }
-        else if (numUnits != (int)numUnits) {
+        else if (numUnits != Integer.parseInt(String.valueOf(numUnits))) {
           throw new IllegalArgumentException("Cannot purchase fractional shares");
         }
         isInputValid = true;
@@ -140,16 +143,29 @@ public class Create implements ICommandController {
       }
     } while (!isInputValid);
 
+
+    if(portfolioType.equals("flexible")) {
+      this.view.takeDateOfTransaction();
+      transactionDate = LocalDate.parse(scanner.next());
+
+      this.view.takeCommissionValue();
+      commission = scanner.nextDouble();
+
+    }
+
     userStockInput[0] = tickerNameFromUser;
     userStockInput[1] = Double.toString(numUnits);
+    userStockInput[2] = String.valueOf(transactionDate);
+    userStockInput[3] = String.valueOf(commission);
+    userStockInput[4] = String.valueOf(0.0); //replace with price at which it was bought/sold
 
     return userStockInput;
   }
 
-  public boolean addMoreStocksFromView() {
+  public Boolean addMoreStocksFromView() {
     int userInput = 0;
     List<Integer> validOptions = Arrays.asList(0, 1);
-    boolean addMore = false;
+    Boolean addMore = false;
 
     do {
       try {

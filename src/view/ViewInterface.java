@@ -89,4 +89,8 @@ public interface ViewInterface {
   void isFileUploaded();
 
   void chooseFixedOrFlexible();
+
+  void takeCommissionValue();
+
+  void takeDateOfTransaction();
 }
