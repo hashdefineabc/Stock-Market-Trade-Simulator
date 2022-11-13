@@ -93,4 +93,6 @@ public interface ViewInterface {
   void takeCommissionValue();
 
   void takeDateOfTransaction();
+
+  void displayCostBasis(double costBasis);
 }

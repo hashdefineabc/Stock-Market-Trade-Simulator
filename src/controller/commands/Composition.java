@@ -41,13 +41,12 @@ public class Composition implements ICommandController {
     this.retrievePortFolios(portfolioType);
   }
 
-  public Boolean retrievePortFolios(String portfolioType) {
+  public void retrievePortFolios(String portfolioType) {
     view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
     List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,portfolioType);
     view.displayStocks(stocksToDisplay);
-    return true;
   }
 
   public int getSelectedPortFolioFromView(String portfolioType) {
