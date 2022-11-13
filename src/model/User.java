@@ -19,9 +19,6 @@ import java.util.stream.Stream;
  */
 public class User implements IUserInterface {
 
-  private List<String> fixedPFInSystem;
-  private List<String> flexPFInSystem;
-
   List<String> nasdaqTickerNames;
   private String folderPath;
   private String fixedPFPath;
@@ -41,8 +38,6 @@ public class User implements IUserInterface {
 
     this.fixedPortfolios = new ArrayList<>();
     this.flexiblePortfolios = new ArrayList<>();
-    this.flexPFInSystem = new ArrayList<>();
-    this.fixedPFInSystem = new ArrayList<>();
     nasdaqTickerNames = new ArrayList<>();
 
     String userDirectory = new File("").getAbsolutePath();
@@ -119,27 +114,24 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public double calculateCostBasisOfPortfolio(int portfolioIndex) {
-    return 0;
+  public Double calculateCostBasisOfPortfolio(int portfolioIndex) {
+    return 0.0;
   }
 
 
   @Override
   public void loadExistingPortFolios(String portfolioType) {
-    List<String> fileNamesFromSystem =  null;
+    List<String> fileNamesFromSystem =  new ArrayList<>();
     String filePath = null;
     if (portfolioType.equals("fixed")) {
       this.fixedPortfolios.clear();
-      String existingpfpath = null;
-      String fixedpffolderpath = null;
-      fileNamesFromSystem =  this.retrieveFileNames(existingpfpath); //TODO: replace existingpfpath with real path
-      filePath = fixedpffolderpath;
+      fileNamesFromSystem =  this.retrieveFileNames(portfolioType);
+      filePath = this.fixedPFPath;
     }
     else if (portfolioType.equals("flexible")) {
       this.flexiblePortfolios.clear();
-      String existingpath = null;
-      String flexiblepffolderpath = null;
-      fileNamesFromSystem =  this.retrieveFileNames(existingpath); //TODO: replace existingpfpath with real path
+      fileNamesFromSystem =  this.retrieveFileNames(portfolioType);
+      filePath = this.flexiblePFPath;
     }
 
     if (fileNamesFromSystem.size() == 0) {
@@ -147,23 +139,32 @@ public class User implements IUserInterface {
     }
 
     for (String portfolioName : fileNamesFromSystem) { //take files from system.
-      List<String[]> listOfStocks = this.readCSVFromSystem(filePath + "/" + portfolioName);
+      List<String[]> listOfStocks = this.readCSVFromSystem(filePath + File.separator + portfolioName);
       List<IstockModel> stockList = new ArrayList<>();
-      for (String[] stockDetails : listOfStocks) {
-        Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
-                .tickerName(stockDetails[0])
-                .numOfUnits(Integer.valueOf(stockDetails[1]))
-                .commission(Double.valueOf(stockDetails[2]))
-                .buyingPrice(Double.valueOf(stockDetails[3]))
-                .buyDate(LocalDate.parse(stockDetails[4]))
-                .build();
-        stockList.add(s);
-      }
+
       if (portfolioType.equals("fixed")) {
+        for (String[] stockDetails : listOfStocks) {
+          Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
+                  .tickerName(stockDetails[0])
+                  .numOfUnits(Double.parseDouble(stockDetails[1]))
+                  .buyDate(LocalDate.parse(stockDetails[2]))
+                  .build();
+          stockList.add(s);
+        }
         IFixedPortfolio fip = new FixedPortfolio(portfolioName, stockList); //create a portfolio object.
         this.fixedPortfolios.add(fip);
       }
       else if (portfolioType.equals("flexible")) {
+        for (String[] stockDetails : listOfStocks) {
+          Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
+                  .tickerName(stockDetails[0])
+                  .numOfUnits(Integer.valueOf(stockDetails[1]))
+                  .commission(Double.valueOf(stockDetails[2]))
+                  .buyingPrice(Double.valueOf(stockDetails[3]))
+                  .buyDate(LocalDate.parse(stockDetails[4]))
+                  .build();
+          stockList.add(s);
+        }
         IFlexiblePortfolio flp = new FlexiblePortfolio(portfolioName, stockList); //create a portfolio object.
         this.flexiblePortfolios.add(flp);
       }
@@ -252,11 +253,11 @@ public class User implements IUserInterface {
   }
 
   private List<String> retrieveFileNames(String portfolioType) {
-    List<String> fileNamesFromSystem = null;
-    if (portfolioType == "Fixed") {
+    List<String> fileNamesFromSystem = new ArrayList<>();
+    if (portfolioType == "fixed") {
       file = new File(this.fixedPFPath);
     }
-    else if (portfolioType == "Flexible") {
+    else if (portfolioType == "flexible") {
       file = new File(this.flexiblePFPath);
     }
     String[] fileNames = file.list();
@@ -321,16 +322,23 @@ public class User implements IUserInterface {
 
   @Override
   public List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String portfolioType) {
-    IFixedPortfolio toDisplay = this.getPortfoliosCreatedObjects().get(portfolioIndex - 1);
+    IFixedPortfolio toDisplay = this.fixedPortfolios.get(portfolioIndex - 1);
     List<String[]> stocksToDisplay = toDisplay.toListOfString();
     //return stocksToDisplay;
     return null;
   }
 
   @Override
-  public double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date, String typeofPortfolio) {
-    IFixedPortfolio toCalcVal = this.getPortfoliosCreatedObjects().get(portfolioIndexForVal - 1);
-    double val = toCalcVal.calculateValue(date);
+  public Double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date, String portfolioType) {
+    Double val = 0.0;
+    if(portfolioType.equals("fixed")) {
+      IFixedPortfolio toCalcVal = this.fixedPortfolios.get(portfolioIndexForVal - 1);
+      val = toCalcVal.calculateValue(date);
+    }
+    else if (portfolioType.equals("flexible")) {
+      IFlexiblePortfolio toCalcVal = this.flexiblePortfolios.get(portfolioIndexForVal - 1);
+      val = toCalcVal.calculateValue(date);
+    }
     return val;
   }
 

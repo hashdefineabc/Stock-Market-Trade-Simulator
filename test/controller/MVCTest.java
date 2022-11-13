@@ -96,7 +96,7 @@ public class MVCTest {
     input = new ByteArrayInputStream("2 1".getBytes());
     Controller controller = new ControllerImpl(u,view,input);
     controller.showMenuOnView();
-    controller.retrievePortFolios();
+    controller.retrievePortFolios("fixed");
     String o = out.toString();
     assertEquals(o,out.toString());
   }
