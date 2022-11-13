@@ -311,10 +311,10 @@ public class User implements IUserInterface {
   private void createCSV(List<String[]> dataToWrite, String portFolioName, String portfolioType) {
     File csvOutputFile = null;
     switch(portfolioType) {
-      case "Fixed":
+      case "fixed":
         csvOutputFile = new File(this.fixedPFPath + File.separator + portFolioName + ".csv");
         break;
-      case "Flexible":
+      case "flexible":
         csvOutputFile = new File(this.flexiblePFPath + File.separator + portFolioName + ".csv");
         break;
     }

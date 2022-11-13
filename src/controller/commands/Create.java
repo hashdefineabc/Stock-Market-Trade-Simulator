@@ -130,10 +130,11 @@ public class Create implements ICommandController {
         }
         this.view.takeNumOfUnits();
         numUnits = scanner.nextDouble();
+        Long numOfUnitsInt = Math.round(numUnits);
         if (numUnits <= 0.0) {
           throw new IllegalArgumentException("Number of units purchased cannot be -ve");
         }
-        else if (numUnits != Integer.parseInt(String.valueOf(numUnits))) {
+        else if ((double)numOfUnitsInt != numUnits) {
           throw new IllegalArgumentException("Cannot purchase fractional shares");
         }
         isInputValid = true;
@@ -166,7 +167,6 @@ public class Create implements ICommandController {
     int userInput = 0;
     List<Integer> validOptions = Arrays.asList(0, 1);
     Boolean addMore = false;
-
     do {
       try {
         this.view.addMoreStocks();
@@ -180,7 +180,6 @@ public class Create implements ICommandController {
         addMore = true;
       }
     } while (addMore);
-
     return userInput == 1;
   }
 
