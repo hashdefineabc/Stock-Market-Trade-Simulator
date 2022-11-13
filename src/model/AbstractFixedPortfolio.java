@@ -196,10 +196,12 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     List<String[]> answer = new ArrayList<>();
 
     for (IstockModel stock : this.stocks) {
-      String[] stocksDetails = new String[3];
+      String[] stocksDetails = new String[5];
       stocksDetails[0] = String.valueOf(stock.getTickerName());
       stocksDetails[1] = String.valueOf(stock.getNumOfUnits());
       stocksDetails[2] = String.valueOf(stock.getBuyDate());
+      stocksDetails[3] = String.valueOf(stock.getCommission());
+      stocksDetails[4] = String.valueOf(stock.getTransactionPrice());
       answer.add(stocksDetails);
     }
     return answer;
