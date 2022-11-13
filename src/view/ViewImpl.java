@@ -32,7 +32,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void takeTickerName() {
-    this.out.print("Enter the ticker name:\n");
+    this.out.println("Enter the ticker name:\n");
   }
 
   @Override
@@ -72,8 +72,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void getDateFromUser() {
-    this.out.print(
-            "Enter the date for which you to check the value of the portfolio:(yyyy-mm-dd)\n");
+    this.out.println("Enter the date :(yyyy-mm-dd)\n");
   }
 
 
@@ -84,7 +83,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void displayMsgToUser(String msg) {
-    this.out.print(msg);
+    this.out.println(msg);
   }
 
   @Override
@@ -116,7 +115,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void takeDateOfTransaction() {
-    this.out.println("Please enter the date of this transaction");
+    this.out.println("Please enter the date of this transaction (yyyy-mm-dd):");
   }
 
   @Override

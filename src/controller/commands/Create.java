@@ -2,6 +2,7 @@ package controller.commands;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,11 +26,12 @@ public class Create implements ICommandController {
   @Override
   public void go() {
     String portfolioType = null;
-    if (this.showFixedOrFlexPortfolioOptionsOnView() == 1) {
+    int fixOrFlex = this.showFixedOrFlexPortfolioOptionsOnView();
+    if (fixOrFlex == 1) {
       //create a fixed portfolio
       portfolioType = "fixed";
     }
-    else if (this.showFixedOrFlexPortfolioOptionsOnView() == 2) {
+    else if (fixOrFlex== 2) {
       //create a flexible portfolio
       portfolioType = "flexible";
     }
@@ -39,7 +41,7 @@ public class Create implements ICommandController {
       String portfolioName = this.getPortFolioNameFromView();
       List<String[]> stockList = new ArrayList<>();
       do {
-        String[] s = this.takeStockInputFromView(portfolioType);
+        String[] s = this.takeStockInputFromView();
         stockList.add(s);
       }
       while (this.addMoreStocksFromView());
@@ -114,7 +116,7 @@ public class Create implements ICommandController {
     return portfolioName;
   }
 
-  public String[] takeStockInputFromView(String portfolioType) {
+  public String[] takeStockInputFromView() {
     String[] userStockInput = new String[5];
     String tickerNameFromUser = "";
     Double numUnits = 0.0;
@@ -137,6 +139,15 @@ public class Create implements ICommandController {
         else if ((double)numOfUnitsInt != numUnits) {
           throw new IllegalArgumentException("Cannot purchase fractional shares");
         }
+
+        transactionDate = this.getDateFromView();
+
+        this.view.takeCommissionValue();
+        commission = scanner.nextDouble();
+        if (commission <= 0.0) {
+          throw new IllegalArgumentException("Commission cannot be -ve");
+        }
+
         isInputValid = true;
       } catch (Exception e) {
         this.view.displayMsgToUser(e.getMessage());
@@ -144,21 +155,11 @@ public class Create implements ICommandController {
       }
     } while (!isInputValid);
 
-
-    if(portfolioType.equals("flexible")) {
-      this.view.takeDateOfTransaction();
-      transactionDate = LocalDate.parse(scanner.next());
-
-      this.view.takeCommissionValue();
-      commission = scanner.nextDouble();
-
-    }
-
     userStockInput[0] = tickerNameFromUser;
     userStockInput[1] = Double.toString(numUnits);
     userStockInput[2] = String.valueOf(transactionDate);
     userStockInput[3] = String.valueOf(commission);
-    userStockInput[4] = String.valueOf(0.0); //replace with price at which it was bought/sold
+    userStockInput[4] = String.valueOf(0.0); //TODO: replace with price at which it was bought/sold
 
     return userStockInput;
   }
@@ -195,6 +196,23 @@ public class Create implements ICommandController {
       this.view.displayMsgToUser("Please place the csv at the location:\n"
               + this.user.getFlexPFPath());
     }
+  }
+
+  public LocalDate getDateFromView() {
+    LocalDate valueDate = LocalDate.now();
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    boolean isDateOkay = false;
+    while (!isDateOkay) {
+      try {
+        view.getDateFromUser();
+        valueDate = LocalDate.parse(scanner.next(), dateFormat);
+        isDateOkay = true;
+      } catch (Exception e) {
+        view.displayMsgToUser("Invalid date. Please try again!");
+        isDateOkay = false;
+      }
+    }
+    return valueDate;
   }
 
 }

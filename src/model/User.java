@@ -94,41 +94,29 @@ public class User implements IUserInterface {
     List<String[]> dataToWrite = null;
     List<IstockModel> stockListToAdd = new ArrayList<>();
 
+    for (String[] singleStock : stockList) {
+      Stock newStock = Stock.getBuilder()
+              .tickerName(singleStock[0])
+              .numOfUnits(Double.valueOf(singleStock[1]))
+              .transactionDate(LocalDate.parse((singleStock[2])))
+              .commission(Double.valueOf(singleStock[3]))
+              .transactionPrice(Double.valueOf(singleStock[4])).build();
+
+      stockListToAdd.add(newStock);
+    }
+
     if (typeofPortfolio.equals("fixed")) {
-
-      for (String[] singleStock : stockList) {
-        Stock newStock = Stock.getBuilder()
-                .tickerName(singleStock[0])
-                .numOfUnits(Double.valueOf(singleStock[1]))
-                .transactionDate(LocalDate.parse(singleStock[2])).build();
-
-        stockListToAdd.add(newStock);
-      }
-
       IFixedPortfolio newFixedPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
       this.fixedPortfolios.add(newFixedPortfolio);
       dataToWrite = newFixedPortfolio.toListOfString();
       this.savePortfolioToFile(dataToWrite, newFixedPortfolio.getNameOfPortFolio(),typeofPortfolio);
     }
     else if (typeofPortfolio.equals("flexible")) {
-
-      for (String[] singleStock : stockList) {
-        Stock newStock = Stock.getBuilder()
-                .tickerName(singleStock[0])
-                .numOfUnits(Double.valueOf(singleStock[1]))
-                .commission(Double.valueOf(singleStock[2]))
-                .transactionPrice(Double.valueOf(singleStock[3]))
-                .transactionDate(LocalDate.parse(singleStock[4])).build();
-
-        stockListToAdd.add(newStock);
-      }
-
       IFlexiblePortfolio newFlexPortfolio = new FlexiblePortfolio(portfolioName, stockListToAdd);
       this.flexiblePortfolios.add(newFlexPortfolio);
       dataToWrite = newFlexPortfolio.toListOfString();
       this.savePortfolioToFile(dataToWrite, newFlexPortfolio.getNameOfPortFolio(),typeofPortfolio);
     }
-
     return this.checkIfFileExists(portfolioName,typeofPortfolio);
   }
 
