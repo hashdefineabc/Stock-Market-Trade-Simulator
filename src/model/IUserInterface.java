@@ -82,7 +82,7 @@ public interface IUserInterface {
   boolean createNewPortfolio(String portfolioName, List<String[]> stockList,
                                   String typeofPortfolio);
 
-  Double calculateCostBasisOfPortfolio(int portfolioIndex);
+  Double calculateCostBasisOfPortfolio(int portfolioIndex, String portfolioType);
 
   void addStocksToAPortfolio(int portfolioIndex);
 

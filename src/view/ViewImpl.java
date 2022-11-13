@@ -119,5 +119,9 @@ public class ViewImpl implements ViewInterface {
     this.out.println("Please enter the date of this transaction");
   }
 
+  @Override
+  public void displayCostBasis(double costBasis) {
+    this.out.println("Value of the portfolio is: " + String.format("%.2f", costBasis));
+  }
 
 }

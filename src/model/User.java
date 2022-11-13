@@ -133,8 +133,17 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public Double calculateCostBasisOfPortfolio(int portfolioIndex) {
-    return 0.0;
+  public Double calculateCostBasisOfPortfolio(int portfolioIndex, String portfolioType) {
+    Double costBasis = 0.0;
+    if(portfolioType.equals("fixed")) {
+      IFixedPortfolio toCalcCostBasis = this.fixedPortfolios.get(portfolioIndex - 1);
+      costBasis = toCalcCostBasis.calculateCostBasis();
+    }
+    else if (portfolioType.equals("flexible")) {
+      IFlexiblePortfolio toCalcCostBasis = this.flexiblePortfolios.get(portfolioIndex - 1);
+      costBasis = toCalcCostBasis.calculateCostBasis();
+    }
+    return costBasis;
   }
 
 
