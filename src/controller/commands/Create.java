@@ -158,11 +158,13 @@ public class Create implements ICommandController {
         if (!validOptions.contains(userInput)) {
           throw new IllegalArgumentException("Please select a valid option!");
         }
+        addMore = userInput == 1;
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser(ie.getMessage());
         addMore = true;
       }
-    } while (!addMore);
+    } while (addMore);
+
     return userInput == 1;
   }
 

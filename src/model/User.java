@@ -96,7 +96,7 @@ public class User implements IUserInterface {
     for (String[] singleStock : stockList) {
       Stock newStock = Stock.getBuilder()
               .tickerName(singleStock[0])
-              .numOfUnits(Integer.valueOf(singleStock[1]))
+              .numOfUnits(Double.valueOf(singleStock[1]))
               .commission(Double.valueOf(singleStock[2]))
               .buyingPrice(Double.valueOf(singleStock[3]))
               .buyDate(LocalDate.parse(singleStock[4])).build();
