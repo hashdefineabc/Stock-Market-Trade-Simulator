@@ -11,8 +11,8 @@ public class Stock implements IstockModel {
   private final LocalDate transactionDate;
   private final Boolean buyOrSell;
 
-  public static Stock.stockBuilder getBuilder() {
-    return new Stock.stockBuilder();
+  public static StockBuilder getBuilder() {
+    return new StockBuilder();
   }
 
   public Stock(String tickerName, Double numOfUnits, Double commission, Double transactionPrice,
@@ -55,53 +55,52 @@ public class Stock implements IstockModel {
     return this.buyOrSell;
   }
 
-  public static class stockBuilder {
+  public static class StockBuilder {
 
     private String tickerName;
-    private double numOfUnits;
-    private LocalDate buyDate;
-    private double commission;
-    private double buyingPrice;
-
-    private boolean buyOrSell;
-
+    private Double numOfUnits;
+    private LocalDate transactionDate;
+    private Double commission;
+    private Double transactionPrice;
+    private Boolean buyOrSell; // false for buy, true for sell
 
 
-    public stockBuilder() {
+
+    public StockBuilder() {
       tickerName = "";
       numOfUnits = 0.0;
-      buyDate = LocalDate.now();
+      transactionDate = LocalDate.now();
       commission = 0.0;
-      buyingPrice = 0.0;
+      transactionPrice = 0.0;
       buyOrSell = false;
     }
 
-    public Stock.stockBuilder tickerName(String tickerName) {
+    public StockBuilder tickerName(String tickerName) {
       this.tickerName = tickerName;
       return this;
     }
 
-    public Stock.stockBuilder numOfUnits(double units) {
+    public StockBuilder numOfUnits(Double units) {
       this.numOfUnits = units;
       return this;
     }
 
-    public Stock.stockBuilder buyDate(LocalDate date) {
-      this.buyDate = date;
+    public StockBuilder transactionDate(LocalDate date) {
+      this.transactionDate = date;
       return this;
     }
 
-    public Stock.stockBuilder buyingPrice(double buyingPrice) {
-      this.buyingPrice = buyingPrice;
+    public StockBuilder transactionPrice(Double buyingPrice) {
+      this.transactionPrice = buyingPrice;
       return this;
     }
 
-    public Stock.stockBuilder commission(double commission) {
+    public StockBuilder commission(Double commission) {
       this.commission = commission;
       return this;
     }
 
-    public Stock.stockBuilder buyOrSell(boolean buyOrSell) {
+    public StockBuilder buyOrSell(Boolean buyOrSell) {
       this.buyOrSell = buyOrSell;
       return this;
     }
@@ -109,7 +108,7 @@ public class Stock implements IstockModel {
 
     public Stock build() {
       //use the currently set values to create the stock object
-      return new Stock(tickerName, numOfUnits, commission, buyingPrice, buyDate, buyOrSell);
+      return new Stock(tickerName, numOfUnits, commission, transactionPrice, transactionDate, buyOrSell);
     }
 
   }

@@ -42,7 +42,6 @@ public class Composition implements ICommandController {
   }
 
   public Boolean retrievePortFolios(String portfolioType) {
-
     view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
