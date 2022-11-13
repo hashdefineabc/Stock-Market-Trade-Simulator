@@ -174,7 +174,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     // get list of stocks from portfolio
     // calculate the value and return
 
-    double answer = 0;
+    Double answer = 0.0;
 
     for (IstockModel curStock : this.stocks) {
       answer = answer + curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date);

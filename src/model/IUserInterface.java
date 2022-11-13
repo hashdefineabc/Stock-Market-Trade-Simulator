@@ -65,11 +65,12 @@ public interface IUserInterface {
 
   /**
    * Method to calculate the value of a portfolio.
+   *
    * @param portfolioIndex the portfolio index for which we need to calculate the value
-   * @param date the date for which we need to calculate the value.
-   * @return the double total value of the portfolio.
+   * @param date           the date for which we need to calculate the value.
+   * @return the Double total value of the portfolio.
    */
-  double calculateValueOfPortfolio(int portfolioIndex, LocalDate date, String typeofPortfolio);
+  Double calculateValueOfPortfolio(int portfolioIndex, LocalDate date, String typeofPortfolio);
 
   /**
    * Method to create a portfolio manually by taking stock wise input.
@@ -81,7 +82,7 @@ public interface IUserInterface {
   boolean createNewPortfolio(String portfolioName, List<String[]> stockList,
                                   String typeofPortfolio);
 
-  double calculateCostBasisOfPortfolio(int portfolioIndex);
+  Double calculateCostBasisOfPortfolio(int portfolioIndex);
 
   void addStocksToAPortfolio(int portfolioIndex);
 

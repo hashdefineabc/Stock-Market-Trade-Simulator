@@ -22,24 +22,48 @@ public class Composition implements ICommandController {
   }
   @Override
   public void go() {
-    this.retrievePortFolios();
+
+    view.chooseFixedOrFlexible();
+    int userInput = scanner.nextInt();
+    String portfolioType = "";
+    if(userInput == 1) { //fixed portfolio
+      portfolioType = "fixed";
+      if (user.getPortfolioNamesCreated("fixed").size() == 0) {
+        view.displayMsgToUser("No fixed portfolios created till now!!!");
+        return;
+      }
+    }
+    else if(userInput == 2) { //flexible portfolio
+      portfolioType = "flexible";
+      if (user.getPortfolioNamesCreated("flexible").size() == 0) {
+        view.displayMsgToUser("No flexible portfolios created till now!!!");
+        return;
+      }
+    }
+    else {
+      view.displayMsgToUser("Invalid input!!!!");
+    }
+
+    this.retrievePortFolios(portfolioType);
   }
 
-  public boolean retrievePortFolios() {
-    if (user.getPortfolioNamesCreated().size() == 0) {
-      view.displayMsgToUser("No portfolios created till now");
+  public Boolean retrievePortFolios(String portfolioType) {
+    if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
+      view.displayMsgToUser("No "+portfolioType+" portfolios created till now");
       return false;
     }
-    view.displayMsgToUser("Following are the portfolios created till now:");
-    view.displayListOfPortfolios(user.getPortfolioNamesCreated());
-    int portfolioIndex = this.getSelectedPortFolioFromView();
-    List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,"Fixed");
+    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
+
+    view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
+    int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
+    List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,portfolioType);
     view.displayStocks(stocksToDisplay);
     return true;
   }
-  public int getSelectedPortFolioFromView() {
+
+  public int getSelectedPortFolioFromView(String portfolioType) {
     int index = -1;
-    while ((index < 0) || (index > user.getPortfolioNamesCreated().size())) {
+    while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
       view.getSelectedPortfolio();
       index = scanner.nextInt();
     }

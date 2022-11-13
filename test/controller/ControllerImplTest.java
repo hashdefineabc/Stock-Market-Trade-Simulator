@@ -96,10 +96,10 @@ public class ControllerImplTest {
     }
 
     @Override
-    public double calculateValueOfPortfolio(int portfolioIndex, LocalDate date) {
+    public Double calculateValueOfPortfolio(int portfolioIndex, LocalDate date) {
       log.append("calculateValueOfPortfolio is provided with portfolioIndex = " + portfolioIndex +
               " and date = " + date);
-      return 0;
+      return 0.0;
     }
 
     @Override

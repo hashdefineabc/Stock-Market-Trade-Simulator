@@ -45,7 +45,7 @@ public class Value implements ICommandController {
 
 
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
-    int portfolioIndexForVal = this.getSelectedPortFolioFromView();
+    int portfolioIndexForVal = this.getSelectedPortFolioFromView(portfolioType);
 
     LocalDate date = this.validateDateForValue();
     double val = user.calculateValueOfPortfolio(portfolioIndexForVal, date, portfolioType);
@@ -60,9 +60,9 @@ public class Value implements ICommandController {
     }
   }
 
-  public int getSelectedPortFolioFromView() {
+  public int getSelectedPortFolioFromView(String portfolioType) {
     int index = -1;
-    while ((index < 0) || (index > user.getPortfolioNamesCreated().size())) {
+    while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
       view.getSelectedPortfolio();
       index = scanner.nextInt();
     }
