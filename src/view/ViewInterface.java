@@ -95,4 +95,6 @@ public interface ViewInterface {
   void takeDateOfTransaction();
 
   void displayCostBasis(double costBasis);
+
+  void askAddOrSell();
 }

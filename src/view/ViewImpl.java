@@ -134,4 +134,11 @@ public class ViewImpl implements ViewInterface {
     this.out.println("Value of the portfolio is: " + String.format("%.2f", costBasis));
   }
 
+  @Override
+  public void askAddOrSell() {
+    this.out.println("Please pick an operation\n " +
+            "1. Add Stock to the portfolio\n" +
+            "2. Sell Stock from the portfolio");
+  }
+
 }
