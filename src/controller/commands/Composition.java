@@ -1,5 +1,6 @@
 package controller.commands;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,38 +23,27 @@ public class Composition implements ICommandController {
   }
   @Override
   public void go() {
-
-    view.chooseFixedOrFlexible();
-    int userInput = scanner.nextInt();
-    String portfolioType = "";
-    if(userInput == 1) { //fixed portfolio
+    String portfolioType = null;
+    if (this.showFixedOrFlexPortfolioOptionsOnView() == 1) {
+      //create a fixed portfolio
       portfolioType = "fixed";
-      if (user.getPortfolioNamesCreated("fixed").size() == 0) {
-        view.displayMsgToUser("No fixed portfolios created till now!!!");
-        return;
-      }
     }
-    else if(userInput == 2) { //flexible portfolio
+    else if (this.showFixedOrFlexPortfolioOptionsOnView() == 2) {
+      //create a flexible portfolio
       portfolioType = "flexible";
-      if (user.getPortfolioNamesCreated("flexible").size() == 0) {
-        view.displayMsgToUser("No flexible portfolios created till now!!!");
-        return;
-      }
     }
-    else {
-      view.displayMsgToUser("Invalid input!!!!");
+
+    if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
+      view.displayMsgToUser("No " + portfolioType + " portfolios created till now!!!");
+      return;
     }
 
     this.retrievePortFolios(portfolioType);
   }
 
   public Boolean retrievePortFolios(String portfolioType) {
-    if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
-      view.displayMsgToUser("No "+portfolioType+" portfolios created till now");
-      return false;
-    }
-    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
 
+    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
     List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,portfolioType);
@@ -63,10 +53,36 @@ public class Composition implements ICommandController {
 
   public int getSelectedPortFolioFromView(String portfolioType) {
     int index = -1;
-    while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
-      view.getSelectedPortfolio();
-      index = scanner.nextInt();
-    }
+    boolean okay = false;
+    do {
+      try {
+        view.getSelectedPortfolio();
+        index = scanner.nextInt();
+        if ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
+            throw new IllegalArgumentException("Invalid Index");
+        }
+        okay = true;
+      } catch (IllegalArgumentException ie) {
+          this.view.displayMsgToUser(ie.getMessage());
+          okay = false;
+      }
+    } while (!okay);
+
     return index;
   }
+
+  public int showFixedOrFlexPortfolioOptionsOnView() {
+    int userOption = 0;
+    List<Integer> validMenuOptions = Arrays.asList(1, 2);
+    do {
+      try {
+        this.view.chooseFixedOrFlexible();
+        userOption = Integer.parseInt(scanner.next());
+      } catch (IllegalArgumentException ie) {
+        this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
+      }
+    } while (!validMenuOptions.contains(userOption));
+    return userOption;
+  }
+
 }
