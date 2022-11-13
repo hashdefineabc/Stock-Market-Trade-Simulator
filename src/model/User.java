@@ -160,29 +160,23 @@ public class User implements IUserInterface {
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath + File.separator + portfolioName);
       List<IstockModel> stockList = new ArrayList<>();
 
+      for (String[] stockDetails : listOfStocks) {
+        Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
+                .tickerName(stockDetails[0])
+                .numOfUnits(Double.valueOf(stockDetails[1]))
+                .transactionDate(LocalDate.parse(stockDetails[2]))
+                .commission(Double.valueOf(stockDetails[3]))
+                .transactionPrice(Double.valueOf(stockDetails[4]))
+                .buyOrSell(Boolean.valueOf(stockDetails[5]))
+                .build();
+        stockList.add(s);
+      }
+
       if (portfolioType.equals("fixed")) {
-        for (String[] stockDetails : listOfStocks) {
-          Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
-                  .tickerName(stockDetails[0])
-                  .numOfUnits(Double.parseDouble(stockDetails[1]))
-                  .transactionDate(LocalDate.parse(stockDetails[2]))
-                  .build();
-          stockList.add(s);
-        }
         IFixedPortfolio fip = new FixedPortfolio(portfolioName, stockList); //create a portfolio object.
         this.fixedPortfolios.add(fip);
       }
       else if (portfolioType.equals("flexible")) {
-        for (String[] stockDetails : listOfStocks) {
-          Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
-                  .tickerName(stockDetails[0])
-                  .numOfUnits(Double.valueOf(stockDetails[1]))
-                  .transactionDate(LocalDate.parse(stockDetails[2]))
-                  .commission(Double.valueOf(stockDetails[3]))
-                  .transactionPrice(Double.valueOf(stockDetails[4]))
-                  .build();
-          stockList.add(s);
-        }
         IFlexiblePortfolio flp = new FlexiblePortfolio(portfolioName, stockList); //create a portfolio object.
         this.flexiblePortfolios.add(flp);
       }
