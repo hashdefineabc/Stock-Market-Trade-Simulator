@@ -1,6 +1,8 @@
 package view;
 
 import java.io.PrintStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import model.IstockModel;
@@ -64,10 +66,18 @@ public class ViewImpl implements ViewInterface {
   @Override
   public void displayStocks(List<IstockModel> listOfStocks) {
     this.out.println("Following stocks are present in the portfolio : ");
-    this.out.println("Ticker\t" + "NumberOfUnits\t" + "DateBoughtAt\n");
-    /*for (String[] stockDetails : listOfStocks) {
-      this.out.println(stockDetails[0] + "\t" + stockDetails[1] + "\t\t\t\t" + stockDetails[2]);
-    }*/
+    this.out.println("TickerName\t" + "NumberOfUnits\t" + "TransactionDate\t" + "Commission\t"
+                    + "Price\n");
+
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    for (IstockModel stock : listOfStocks) {
+      this.out.println(stock.getTickerName() + "\t" + Double.toString(stock.getNumOfUnits())
+                      + "\t" +stock.getBuyDate().format(dateFormat) + "\t"
+              + Double.toString(stock.getCommission()) + "\t"
+              + Double.toString(stock.getTransactionPrice()) );
+    }
+
   }
 
   @Override

@@ -24,11 +24,12 @@ public class Composition implements ICommandController {
   @Override
   public void go() {
     String portfolioType = null;
-    if (this.showFixedOrFlexPortfolioOptionsOnView() == 1) {
+    int fixOrFlex = this.showFixedOrFlexPortfolioOptionsOnView();
+    if (fixOrFlex == 1) {
       //create a fixed portfolio
       portfolioType = "fixed";
     }
-    else if (this.showFixedOrFlexPortfolioOptionsOnView() == 2) {
+    else if (fixOrFlex == 2) {
       //create a flexible portfolio
       portfolioType = "flexible";
     }
