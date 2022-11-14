@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import model.IUserInterface;
 import controller.ICommandController;
+import model.Operation;
 import view.ViewInterface;
 
 public class Create implements ICommandController {
@@ -39,7 +40,7 @@ public class Create implements ICommandController {
       String portfolioName = this.getPortFolioNameFromView();
       List<String[]> stockList = new ArrayList<>();
       do {
-        String[] s = this.takeStockInputFromView();
+        String[] s = this.takeStockInputFromView(portfolioType);
         stockList.add(s);
       }
       while (this.addMoreStocksFromView());
@@ -114,51 +115,79 @@ public class Create implements ICommandController {
     return portfolioName;
   }
 
-  public String[] takeStockInputFromView() {
+  public String[] takeStockInputFromView(String portfolioType) {
     String[] userStockInput = new String[6];
     String tickerNameFromUser = "";
     Double numUnits = 0.0;
     Double commission = 0.0;
     LocalDate transactionDate = LocalDate.now();
     Boolean isInputValid = false;
-    do {
-      try{
-        this.view.takeTickerName();
-        tickerNameFromUser = scanner.next();
-        if (!user.isTickerValid(tickerNameFromUser)) {
-          throw new IllegalArgumentException("Invalid ticker name!");
-        }
-        this.view.takeNumOfUnits();
-        numUnits = scanner.nextDouble();
-        Long numOfUnitsInt = Math.round(numUnits);
-        if (numUnits <= 0.0) {
-          throw new IllegalArgumentException("Number of units purchased cannot be -ve");
-        }
-        else if ((double)numOfUnitsInt != numUnits) {
-          throw new IllegalArgumentException("Cannot purchase fractional shares");
-        }
 
-        transactionDate = this.getDateFromView();
+    if (portfolioType.equals("flexible")) {
+      do {
+        try{
+          this.view.takeTickerName();
+          tickerNameFromUser = scanner.next();
+          if (!user.isTickerValid(tickerNameFromUser)) {
+            throw new IllegalArgumentException("Invalid ticker name!");
+          }
+          this.view.takeNumOfUnits();
+          numUnits = scanner.nextDouble();
+          Long numOfUnitsInt = Math.round(numUnits);
+          if (numUnits <= 0.0) {
+            throw new IllegalArgumentException("Number of units purchased cannot be -ve");
+          }
+          else if ((double)numOfUnitsInt != numUnits) {
+            throw new IllegalArgumentException("Cannot purchase fractional shares");
+          }
 
-        this.view.takeCommissionValue();
-        commission = scanner.nextDouble();
-        if (commission <= 0.0) {
-          throw new IllegalArgumentException("Commission cannot be -ve");
+          transactionDate = this.getDateFromView();
+
+          this.view.takeCommissionValue();
+          commission = scanner.nextDouble();
+          if (commission <= 0.0) {
+            throw new IllegalArgumentException("Commission cannot be -ve");
+          }
+
+          isInputValid = true;
+        } catch (Exception e) {
+          this.view.displayMsgToUser(e.getMessage());
+          isInputValid = false;
         }
+      } while (!isInputValid);
+    }
+    else if (portfolioType.equals("fixed")) {
+      do {
+        try{
+          this.view.takeTickerName();
+          tickerNameFromUser = scanner.next();
+          if (!user.isTickerValid(tickerNameFromUser)) {
+            throw new IllegalArgumentException("Invalid ticker name!");
+          }
+          this.view.takeNumOfUnits();
+          numUnits = scanner.nextDouble();
+          Long numOfUnitsInt = Math.round(numUnits);
+          if (numUnits <= 0.0) {
+            throw new IllegalArgumentException("Number of units purchased cannot be -ve");
+          }
+          else if ((double)numOfUnitsInt != numUnits) {
+            throw new IllegalArgumentException("Cannot purchase fractional shares");
+          }
 
-        isInputValid = true;
-      } catch (Exception e) {
-        this.view.displayMsgToUser(e.getMessage());
-        isInputValid = false;
-      }
-    } while (!isInputValid);
-
+          isInputValid = true;
+        } catch (Exception e) {
+          this.view.displayMsgToUser(e.getMessage());
+          isInputValid = false;
+        }
+      } while (!isInputValid);
+    }
     userStockInput[0] = tickerNameFromUser;
     userStockInput[1] = Double.toString(numUnits);
-    userStockInput[2] = String.valueOf(transactionDate);
+    userStockInput[2] = String.valueOf(LocalDate.now());
     userStockInput[3] = String.valueOf(commission);
     userStockInput[4] = String.valueOf(user.getStockPriceFromDB(tickerNameFromUser, transactionDate)); //TODO: replace with price at which it was bought/sold
-    userStockInput[5] = String.valueOf(false); //indicates shares are bought
+    userStockInput[5] = String.valueOf(Operation.BUY); //indicates shares are bought
+
 
     return userStockInput;
   }

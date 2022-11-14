@@ -216,10 +216,10 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   public Double calculateCostBasis() {
     double costBasis = 0.0;
     for (IstockModel ns: this.stocks) {
-      if (ns.getBuyOrSell() == false) {
+      if (ns.getBuyOrSell() == Operation.BUY) {
         costBasis += ((ns.getTransactionPrice() * ns.getNumOfUnits()) + ns.getCommission());
       }
-      else if (ns.getBuyOrSell() == true) {
+      else if (ns.getBuyOrSell() == Operation.SELL) {
         costBasis += ns.getCommission();
       }
     }
