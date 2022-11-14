@@ -184,7 +184,7 @@ public class BuySell implements ICommandController {
   public Boolean validateSellOperation(int portfolioIndex, int buyOrSell, String[] stockDetails) {
     HashMap<String, Integer> stockMap = new HashMap<String, Integer>();
     IFlexiblePortfolio pfToCheck = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
-    for (IstockModel s : pfToCheck.getStocksInPortfolio()) {
+    for (IstockModel s : pfToCheck.getStocksInPortfolio(LocalDate.now())) {
       if (stockMap.containsKey(s.getTickerName())) {
         stockMap.get(s.getTickerName());
       }

@@ -74,7 +74,7 @@ public class ViewImpl implements ViewInterface {
 
     for (IstockModel stock : listOfStocks) {
       this.out.println(stock.getTickerName() + "\t\t" + Double.toString(stock.getNumOfUnits())
-                      + "\t\t\t" +stock.getBuyDate().format(dateFormat) + "\t\t"
+                      + "\t\t\t" +stock.getTransactionDate().format(dateFormat) + "\t\t"
               + Double.toString(stock.getCommission()) + "\t\t\t"
               + Double.toString(stock.getTransactionPrice()) + "\t\t\t"
               + stock.getBuyOrSell().toString());

@@ -30,7 +30,7 @@ public interface IFixedPortfolio {
    * Method that gets the stocks in a portfolio.
    * @return the stocks
    */
-  List<IstockModel> getStocksInPortfolio();
+  List<IstockModel> getStocksInPortfolio(LocalDate date);
 
   Double calculateCostBasis();
 

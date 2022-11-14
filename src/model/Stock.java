@@ -36,7 +36,7 @@ public class Stock implements IstockModel {
   }
 
   @Override
-  public LocalDate getBuyDate() {
+  public LocalDate getTransactionDate() {
     return this.transactionDate;
   }
 

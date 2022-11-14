@@ -22,7 +22,7 @@ public interface IstockModel {
    * Method to get the date at which this stock was purchased.
    * @return the date f the calling stock object.
    */
-  LocalDate getBuyDate();
+  LocalDate getTransactionDate();
 
   Double getCommission();
 

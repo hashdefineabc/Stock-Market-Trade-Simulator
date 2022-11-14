@@ -199,7 +199,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
       String[] stocksDetails = new String[6];
       stocksDetails[0] = String.valueOf(stock.getTickerName());
       stocksDetails[1] = String.valueOf(stock.getNumOfUnits());
-      stocksDetails[2] = String.valueOf(stock.getBuyDate());
+      stocksDetails[2] = String.valueOf(stock.getTransactionDate());
       stocksDetails[3] = String.valueOf(stock.getCommission());
       stocksDetails[4] = String.valueOf(stock.getTransactionPrice());
       stocksDetails[5] = String.valueOf((stock.getBuyOrSell()));
@@ -209,8 +209,14 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   }
 
   @Override
-  public List<IstockModel> getStocksInPortfolio() {
-    return this.stocks;
+  public List<IstockModel> getStocksInPortfolio(LocalDate date) {
+    List<IstockModel> stocksBeforeDate = new ArrayList<>();
+    for(IstockModel stock : this.stocks) {
+      if(stock.getTransactionDate().equals(date) || stock.getTransactionDate().isBefore(date)) {
+        stocksBeforeDate.add(stock);
+      }
+    }
+    return stocksBeforeDate;
   }
   @Override
   public Double calculateCostBasis() {
