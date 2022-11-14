@@ -108,7 +108,7 @@ public class User implements IUserInterface {
               .transactionDate(LocalDate.parse((singleStock[2])))
               .commission(Double.valueOf(singleStock[3]))
               .transactionPrice(Double.valueOf(singleStock[4]))
-              .buyOrSell(Boolean.valueOf(singleStock[5]))
+              .buyOrSell(Operation.valueOf(singleStock[5]))
               .build();
 
       stockListToAdd.add(newStock);
@@ -174,7 +174,7 @@ public class User implements IUserInterface {
                 .transactionDate(LocalDate.parse(stockDetails[2]))
                 .commission(Double.valueOf(stockDetails[3]))
                 .transactionPrice(Double.valueOf(stockDetails[4]))
-                .buyOrSell(Boolean.valueOf(stockDetails[5]))
+                .buyOrSell(Operation.valueOf(stockDetails[5]))
                 .build();
         stockList.add(s);
       }

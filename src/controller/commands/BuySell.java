@@ -12,6 +12,7 @@ import controller.ICommandController;
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
 import model.IstockModel;
+import model.Operation;
 import model.Stock;
 import model.User;
 import view.ViewInterface;
@@ -69,7 +70,7 @@ public class BuySell implements ICommandController {
               .transactionDate(LocalDate.parse((stockDetails[2])))
               .commission(Double.valueOf(stockDetails[3]))
               .transactionPrice(Double.valueOf(stockDetails[4]))
-              .buyOrSell(Boolean.valueOf(stockDetails[5]))
+              .buyOrSell(Operation.valueOf(stockDetails[5]))
               .build();
 
 

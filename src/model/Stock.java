@@ -9,14 +9,14 @@ public class Stock implements IstockModel {
   private final Double commission;
   private final Double transactionPrice;
   private final LocalDate transactionDate;
-  private final Boolean buyOrSell;
+  private final Operation buyOrSell;
 
   public static StockBuilder getBuilder() {
     return new StockBuilder();
   }
 
   public Stock(String tickerName, Double numOfUnits, Double commission, Double transactionPrice,
-                  LocalDate transactionDate, Boolean buyOrSell) {
+                  LocalDate transactionDate, Operation buyOrSell) {
     this.tickerName = tickerName;
     this.numOfUnits = numOfUnits;
     this.commission = commission;
@@ -51,7 +51,7 @@ public class Stock implements IstockModel {
   }
 
   @Override
-  public Boolean getBuyOrSell() {
+  public Operation getBuyOrSell() {
     return this.buyOrSell;
   }
 
@@ -62,7 +62,7 @@ public class Stock implements IstockModel {
     private LocalDate transactionDate;
     private Double commission;
     private Double transactionPrice;
-    private Boolean buyOrSell; // false for buy, true for sell
+    private Operation buyOrSell;
 
 
 
@@ -72,7 +72,7 @@ public class Stock implements IstockModel {
       transactionDate = LocalDate.now();
       commission = 0.0;
       transactionPrice = 0.0;
-      buyOrSell = false;
+      buyOrSell = Operation.BUY;
     }
 
     public StockBuilder tickerName(String tickerName) {
@@ -100,7 +100,7 @@ public class Stock implements IstockModel {
       return this;
     }
 
-    public StockBuilder buyOrSell(Boolean buyOrSell) {
+    public StockBuilder buyOrSell(Operation buyOrSell) {
       this.buyOrSell = buyOrSell;
       return this;
     }
