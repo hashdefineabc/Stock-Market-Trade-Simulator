@@ -13,6 +13,7 @@ import model.IFlexiblePortfolio;
 import model.IUserInterface;
 import model.IstockModel;
 import model.Operation;
+import model.PortfolioType;
 import model.Stock;
 import model.User;
 import view.ViewInterface;
@@ -36,19 +37,18 @@ public class BuySell implements ICommandController {
      * display flexible pf
      * ask what has to be done
      */
-    String portfolioType = "flexible";
-    if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
-      view.displayMsgToUser("No " + portfolioType + " portfolios created till now!!!"
+    if (user.getPortfolioNamesCreated(PortfolioType.flexible).size() == 0) {
+      view.displayMsgToUser("No " + PortfolioType.flexible.toString() + " portfolios created till now!!!"
                           + "\n Hence cannot add/sell stocks");
       return;
     }
-    this.buySell(portfolioType);
+    this.buySell(PortfolioType.flexible);
 
 
 
   }
 
-  public void buySell(String portfolioType) {
+  public void buySell(PortfolioType portfolioType) {
     List<String[]> dataToWrite = null;
 
     this.view.displayMsgToUser("Following is the list of portfolios available for adding/selling"
@@ -81,7 +81,7 @@ public class BuySell implements ICommandController {
             portfolioType);
   }
 
-  public int getSelectedPortFolioFromView(String portfolioType) {
+  public int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     boolean okay = false;
     do {

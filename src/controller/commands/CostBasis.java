@@ -7,6 +7,7 @@ import java.util.Scanner;
 import controller.ICommandController;
 import model.IUserInterface;
 import model.IstockModel;
+import model.PortfolioType;
 import model.User;
 import view.ViewInterface;
 
@@ -23,15 +24,15 @@ public class CostBasis implements ICommandController {
   }
   @Override
   public void go() {
-    String portfolioType = null;
+    PortfolioType portfolioType = null;
     int fixOrFlex = this.showFixedOrFlexPortfolioOptionsOnView();
     if (fixOrFlex == 1) {
       //create a fixed portfolio
-      portfolioType = "fixed";
+      portfolioType = PortfolioType.fixed;
     }
     else if (fixOrFlex == 2) {
       //create a flexible portfolio
-      portfolioType = "flexible";
+      portfolioType = PortfolioType.flexible;
     }
 
     if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
@@ -43,7 +44,7 @@ public class CostBasis implements ICommandController {
 
   }
 
-  public void calculateCostBasis(String portfolioType) {
+  public void calculateCostBasis(PortfolioType portfolioType) {
     view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
@@ -67,7 +68,7 @@ public class CostBasis implements ICommandController {
     return userOption;
   }
 
-  public int getSelectedPortFolioFromView(String portfolioType) {
+  public int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     boolean okay = false;
     do {

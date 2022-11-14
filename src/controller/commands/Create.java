@@ -10,6 +10,7 @@ import java.util.Scanner;
 import model.IUserInterface;
 import controller.ICommandController;
 import model.Operation;
+import model.PortfolioType;
 import view.ViewInterface;
 
 public class Create implements ICommandController {
@@ -24,15 +25,15 @@ public class Create implements ICommandController {
 
   @Override
   public void go() {
-    String portfolioType = null;
+    PortfolioType portfolioType = null;
     int fixOrFlex = this.showFixedOrFlexPortfolioOptionsOnView();
     if (fixOrFlex == 1) {
       //create a fixed portfolio
-      portfolioType = "fixed";
+      portfolioType = PortfolioType.fixed;
     }
     else if (fixOrFlex== 2) {
       //create a flexible portfolio
-      portfolioType = "flexible";
+      portfolioType = PortfolioType.flexible;
     }
 
     if (this.showCreatePortfolioOptionsOnView() == 1) {
@@ -101,8 +102,8 @@ public class Create implements ICommandController {
       try{
         this.view.getPortfolioNameFromUser();
         portfolioName = scanner.next();
-        if (user.checkIfFileExists(portfolioName,"fixed")
-                || user.checkIfFileExists(portfolioName, "flexible")) {
+        if (user.checkIfFileExists(portfolioName,PortfolioType.fixed)
+                || user.checkIfFileExists(portfolioName, PortfolioType.flexible)) {
           throw new IllegalArgumentException("A portfolio by this name exists already");
         }
         fileExists = false;
@@ -115,7 +116,7 @@ public class Create implements ICommandController {
     return portfolioName;
   }
 
-  public String[] takeStockInputFromView(String portfolioType) {
+  public String[] takeStockInputFromView(PortfolioType portfolioType) {
     String[] userStockInput = new String[6];
     String tickerNameFromUser = "";
     Double numUnits = 0.0;
@@ -123,7 +124,7 @@ public class Create implements ICommandController {
     LocalDate transactionDate = LocalDate.now();
     Boolean isInputValid = false;
 
-    if (portfolioType.equals("flexible")) {
+    if (portfolioType.equals(PortfolioType.flexible)) {
       do {
         try{
           this.view.takeTickerName();
@@ -156,7 +157,7 @@ public class Create implements ICommandController {
         }
       } while (!isInputValid);
     }
-    else if (portfolioType.equals("fixed")) {
+    else if (portfolioType.equals(PortfolioType.fixed)) {
       do {
         try{
           this.view.takeTickerName();
@@ -215,12 +216,12 @@ public class Create implements ICommandController {
     return userInput == 1;
   }
 
-  public void displayCsvPathToUser(String portfolioType) {
-    if (portfolioType.equals("fixed")) {
+  public void displayCsvPathToUser(PortfolioType portfolioType) {
+    if (portfolioType.equals(PortfolioType.fixed)) {
       this.view.displayMsgToUser("Please place the csv at the location:\n"
               + this.user.getFixedPFPath());
     }
-    else if (portfolioType.equals("flexible")) {
+    else if (portfolioType.equals(PortfolioType.flexible)) {
       this.view.displayMsgToUser("Please place the csv at the location:\n"
               + this.user.getFlexPFPath());
     }
