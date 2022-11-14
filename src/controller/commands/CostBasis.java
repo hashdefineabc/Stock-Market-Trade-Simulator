@@ -1,5 +1,7 @@
 package controller.commands;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -24,17 +26,8 @@ public class CostBasis implements ICommandController {
   }
   @Override
   public void go() {
-    PortfolioType portfolioType = null;
-    int fixOrFlex = this.showFixedOrFlexPortfolioOptionsOnView();
-    if (fixOrFlex == 1) {
-      //create a fixed portfolio
-      portfolioType = PortfolioType.fixed;
-    }
-    else if (fixOrFlex == 2) {
-      //create a flexible portfolio
-      portfolioType = PortfolioType.flexible;
-    }
-
+    PortfolioType portfolioType = PortfolioType.flexible;
+    view.displayMsgToUser("Cost Basis can be calculated only for flexible portfolios.5");
     if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
       view.displayMsgToUser("No " + portfolioType + " portfolios created till now!!!");
       return;
@@ -48,9 +41,10 @@ public class CostBasis implements ICommandController {
     view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
+    LocalDate costBasisDate = this.getDateFromView();
     //calculate cost basis n display to user
-    Double costBasis = user.calculateCostBasisOfPortfolio(portfolioIndex,portfolioType);
-    view.displayCostBasis(costBasis);
+    Double costBasis = user.calculateCostBasisOfPortfolio(portfolioIndex,portfolioType,costBasisDate);
+    view.displayCostBasis(costBasis, costBasisDate);
     
   }
 
@@ -86,6 +80,23 @@ public class CostBasis implements ICommandController {
     } while (!okay);
 
     return index;
+  }
+
+  public LocalDate getDateFromView() {
+    LocalDate valueDate = LocalDate.now();
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    boolean isDateOkay = false;
+    while (!isDateOkay) {
+      try {
+        view.getDateFromUser();
+        valueDate = LocalDate.parse(scanner.next(), dateFormat);
+        isDateOkay = true;
+      } catch (Exception e) {
+        view.displayMsgToUser("Invalid date. Please try again!");
+        isDateOkay = false;
+      }
+    }
+    return valueDate;
   }
 
 

@@ -114,6 +114,9 @@ public class User implements IUserInterface {
       stockListToAdd.add(newStock);
     }
 
+    //sort the stockList as per date
+    stockListToAdd = this.sortStockListDateWise(stockListToAdd);
+
     if (typeofPortfolio.equals(PortfolioType.fixed)) {
       IFixedPortfolio newFixedPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
       this.fixedPortfolios.add(newFixedPortfolio);
@@ -130,15 +133,15 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public Double calculateCostBasisOfPortfolio(int portfolioIndex, PortfolioType portfolioType) {
+  public Double calculateCostBasisOfPortfolio(int portfolioIndex, PortfolioType portfolioType, LocalDate costBasisDate) {
     Double costBasis = 0.0;
     if(portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio toCalcCostBasis = this.fixedPortfolios.get(portfolioIndex - 1);
-      costBasis = toCalcCostBasis.calculateCostBasis();
+      costBasis = toCalcCostBasis.calculateCostBasis(costBasisDate);
     }
     else if (portfolioType.equals(PortfolioType.flexible)) {
       IFlexiblePortfolio toCalcCostBasis = this.flexiblePortfolios.get(portfolioIndex - 1);
-      costBasis = toCalcCostBasis.calculateCostBasis();
+      costBasis = toCalcCostBasis.calculateCostBasis(costBasisDate);
     }
     return costBasis;
   }
@@ -166,6 +169,7 @@ public class User implements IUserInterface {
     for (String portfolioName : fileNamesFromSystem) { //take files from system.
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath + File.separator + portfolioName);
       List<IstockModel> stockList = new ArrayList<>();
+
 
       for (String[] stockDetails : listOfStocks) {
         Stock s = Stock.getBuilder()
@@ -474,6 +478,11 @@ public class User implements IUserInterface {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private List<IstockModel> sortStockListDateWise(List<IstockModel>stockList) {
+    stockList.sort((s1,s2) -> s1.getTransactionDate().compareTo(s2.getTransactionDate()));
+    return stockList;
   }
 
 }

@@ -32,6 +32,6 @@ public interface IFixedPortfolio {
    */
   List<IstockModel> getStocksInPortfolio(LocalDate date);
 
-  Double calculateCostBasis();
+  Double calculateCostBasis(LocalDate costBasisDate);
 
 }

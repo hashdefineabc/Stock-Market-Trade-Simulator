@@ -1,5 +1,6 @@
 package view;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import model.IstockModel;
@@ -94,7 +95,7 @@ public interface ViewInterface {
 
   void takeDateOfTransaction();
 
-  void displayCostBasis(double costBasis);
+  void displayCostBasis(double costBasis, LocalDate costBasisDate);
 
   void askAddOrSell();
 }
