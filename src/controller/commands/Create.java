@@ -185,6 +185,7 @@ public class Create implements ICommandController {
     }
     userStockInput[0] = tickerNameFromUser;
     userStockInput[1] = Double.toString(numUnits);
+    userStockInput[2] = String.valueOf(transactionDate);
     userStockInput[3] = String.valueOf(commission);
     userStockInput[2] = String.valueOf(transactionDate);
     Double transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate);

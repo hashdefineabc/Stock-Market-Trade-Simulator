@@ -40,7 +40,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void takeNumOfUnits() {
-    this.out.print("Enter the number of units purchased:\n");
+    this.out.print("Enter the number of units purchased/sold:\n");
   }
 
   @Override
@@ -131,8 +131,9 @@ public class ViewImpl implements ViewInterface {
   }
 
   @Override
-  public void displayCostBasis(double costBasis) {
-    this.out.println("Value of the portfolio is: " + String.format("%.2f", costBasis));
+  public void displayCostBasis(double costBasis, LocalDate costBasisDate) {
+    this.out.println("CostBasis of the portfolio as of date " + costBasisDate.toString()
+            + " is: " + String.format("%.2f", costBasis) + " USD");
   }
 
   @Override

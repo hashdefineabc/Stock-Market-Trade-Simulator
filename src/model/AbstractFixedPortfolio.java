@@ -213,14 +213,16 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     return this.stocks;
   }
   @Override
-  public Double calculateCostBasis() {
+  public Double calculateCostBasis(LocalDate costBasisDate) {
     double costBasis = 0.0;
     for (IstockModel ns: this.stocks) {
-      if (ns.getBuyOrSell() == Operation.BUY) {
-        costBasis += ((ns.getTransactionPrice() * ns.getNumOfUnits()) + ns.getCommission());
-      }
-      else if (ns.getBuyOrSell() == Operation.SELL) {
-        costBasis += ns.getCommission();
+      if (ns.getBuyDate().compareTo(costBasisDate) <= 0){
+        if (ns.getBuyOrSell() == Operation.BUY) {
+          costBasis += ((ns.getTransactionPrice() * ns.getNumOfUnits()) + ns.getCommission());
+        }
+        else if (ns.getBuyOrSell() == Operation.SELL) {
+          costBasis += ns.getCommission();
+        }
       }
     }
     return costBasis;
