@@ -1,6 +1,7 @@
 package controller.commands;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -142,13 +143,13 @@ public class Create implements ICommandController {
             throw new IllegalArgumentException("Cannot purchase fractional shares");
           }
 
-          transactionDate = this.getDateFromView();
-
           this.view.takeCommissionValue();
           commission = scanner.nextDouble();
           if (commission <= 0.0) {
             throw new IllegalArgumentException("Commission cannot be -ve");
           }
+
+          transactionDate = this.getDateFromView();
 
           isInputValid = true;
         } catch (Exception e) {
@@ -186,7 +187,20 @@ public class Create implements ICommandController {
     userStockInput[1] = Double.toString(numUnits);
     userStockInput[2] = String.valueOf(transactionDate);
     userStockInput[3] = String.valueOf(commission);
-    userStockInput[4] = String.valueOf(user.getStockPriceFromDB(tickerNameFromUser, transactionDate)); //TODO: replace with price at which it was bought/sold
+    userStockInput[2] = String.valueOf(transactionDate);
+    Double transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate);
+    LocalTime currentTime = LocalTime.now();
+    if(transactionDate.equals(LocalDate.now()) && currentTime.isBefore(LocalTime.of(16,0))) {
+      view.displayMsgToUser("Market is not closed today yet, yesterday's closing price will be considered as your transaction price...");
+      transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+    }
+    while(transactionValue == 0.0) {
+      view.displayMsgToUser("Market was closed on "+transactionDate+"\n Calculating price of previous date");
+      transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+      transactionDate = transactionDate.minusDays(1);
+    }
+    view.displayMsgToUser("Price of the stock considered is of the date "+transactionDate);
+    userStockInput[4] = String.valueOf(transactionValue); //TODO: replace with price at which it was bought/sold
     userStockInput[5] = String.valueOf(Operation.BUY); //indicates shares are bought
 
 

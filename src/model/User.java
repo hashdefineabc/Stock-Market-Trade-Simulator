@@ -172,7 +172,7 @@ public class User implements IUserInterface {
 
 
       for (String[] stockDetails : listOfStocks) {
-        Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
+        Stock s = Stock.getBuilder()
                 .tickerName(stockDetails[0])
                 .numOfUnits(Double.valueOf(stockDetails[1]))
                 .transactionDate(LocalDate.parse(stockDetails[2]))
