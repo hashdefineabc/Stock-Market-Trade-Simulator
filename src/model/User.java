@@ -114,6 +114,9 @@ public class User implements IUserInterface {
       stockListToAdd.add(newStock);
     }
 
+    //sort the stockList as per date
+    stockListToAdd = this.sortStockListDateWise(stockListToAdd);
+
     if (typeofPortfolio.equals(PortfolioType.fixed)) {
       IFixedPortfolio newFixedPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
       this.fixedPortfolios.add(newFixedPortfolio);
@@ -166,6 +169,7 @@ public class User implements IUserInterface {
     for (String portfolioName : fileNamesFromSystem) { //take files from system.
       List<String[]> listOfStocks = this.readCSVFromSystem(filePath + File.separator + portfolioName);
       List<IstockModel> stockList = new ArrayList<>();
+
 
       for (String[] stockDetails : listOfStocks) {
         Stock s = Stock.getBuilder() //TODO: check if we can replace with interface name
@@ -474,6 +478,11 @@ public class User implements IUserInterface {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private List<IstockModel> sortStockListDateWise(List<IstockModel>stockList) {
+    stockList.sort((s1,s2) -> s1.getBuyDate().compareTo(s2.getBuyDate()));
+    return stockList;
   }
 
 }
