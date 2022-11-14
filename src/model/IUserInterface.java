@@ -10,9 +10,9 @@ public interface IUserInterface {
   /**
    * Method to load the existing portfolios created by this user.
    */
-  void loadExistingPortFolios(String portfolioType);
+  void loadExistingPortFolios(PortfolioType portfolioType);
 
-  void createPortFolioFromFile(String portfolioType);
+  void createPortFolioFromFile(PortfolioType portfolioType);
 
   /**
    * Method to create port folio using a file from the user.
@@ -23,7 +23,7 @@ public interface IUserInterface {
    * Method to get the names of the portfolios created.
    * @return the list of these portfolionames.
    */
-  List<String> getPortfolioNamesCreated(String portfolioType);
+  List<String> getPortfolioNamesCreated(PortfolioType portfolioType);
 
   /**
    * Method to get the list of portfolio objects created.
@@ -38,13 +38,13 @@ public interface IUserInterface {
    * @param fileName the file name to check
    * @return if file is found or not.
    */
-  Boolean checkIfFileExists(String fileName, String portfolioType);
+  Boolean checkIfFileExists(String fileName, PortfolioType portfolioType);
 
   /**
    * Method to save the created portfolio to a csv file.
    *
    */
-  void savePortfolioToFile(List<String[]> dataToWrite, String portfolioName, String portfolioType);
+  void savePortfolioToFile(List<String[]> dataToWrite, String portfolioName, PortfolioType portfolioType);
 
   /**
    * Method to check if a tickerName is valid or not.
@@ -61,7 +61,7 @@ public interface IUserInterface {
 
   String getFlexPFPath();
 
-  abstract List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, String typeofPortfolio);
+  abstract List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, PortfolioType typeofPortfolio);
 
   /**
    * Method to calculate the value of a portfolio.
@@ -70,7 +70,7 @@ public interface IUserInterface {
    * @param date           the date for which we need to calculate the value.
    * @return the Double total value of the portfolio.
    */
-  Double calculateValueOfPortfolio(int portfolioIndex, LocalDate date, String typeofPortfolio);
+  Double calculateValueOfPortfolio(int portfolioIndex, LocalDate date, PortfolioType typeofPortfolio);
 
   /**
    * Method to create a portfolio manually by taking stock wise input.
@@ -80,9 +80,9 @@ public interface IUserInterface {
    * @return boolean = if this portfolio was created or not.
    */
   boolean createNewPortfolio(String portfolioName, List<String[]> stockList,
-                                  String typeofPortfolio);
+                             PortfolioType typeofPortfolio);
 
-  Double calculateCostBasisOfPortfolio(int portfolioIndex, String portfolioType);
+  Double calculateCostBasisOfPortfolio(int portfolioIndex, PortfolioType portfolioType);
 
   void addStocksToAPortfolio(int portfolioIndex);
 

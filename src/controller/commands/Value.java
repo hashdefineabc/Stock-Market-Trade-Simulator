@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import controller.ICommandController;
 import model.IUserInterface;
+import model.PortfolioType;
 import view.ViewInterface;
 
 public class Value implements ICommandController {
@@ -23,19 +24,19 @@ public class Value implements ICommandController {
   public void go() {
 
     int userInput;
-    String portfolioType = "";
+    PortfolioType portfolioType = null;
     do {
       view.chooseFixedOrFlexible();
       userInput = scanner.nextInt();
       if (userInput == 1) { //fixed portfolio
-        portfolioType = "fixed";
-        if (user.getPortfolioNamesCreated("fixed").size() == 0) {
+        portfolioType = PortfolioType.fixed;
+        if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
           view.displayMsgToUser("No fixed portfolios created till now, can't calculate value");
           return;
         }
       } else if (userInput == 2) { //flexible portfolio
-        portfolioType = "flexible";
-        if (user.getPortfolioNamesCreated("flexible").size() == 0) {
+        portfolioType = PortfolioType.flexible;
+        if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
           view.displayMsgToUser("No flexible portfolios created till now, can't calculate value");
           return;
         }
@@ -62,7 +63,7 @@ public class Value implements ICommandController {
     }
   }
 
-  public int getSelectedPortFolioFromView(String portfolioType) {
+  public int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
       view.getSelectedPortfolio();
