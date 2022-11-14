@@ -219,7 +219,9 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
       if (ns.getBuyOrSell() == false) {
         costBasis += ((ns.getTransactionPrice() * ns.getNumOfUnits()) + ns.getCommission());
       }
-
+      else if (ns.getBuyOrSell() == true) {
+        costBasis += ns.getCommission();
+      }
     }
     return costBasis;
   }
