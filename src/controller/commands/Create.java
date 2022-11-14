@@ -1,6 +1,5 @@
 package controller.commands;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.IUserInterface;
-import model.User;
 import controller.ICommandController;
 import view.ViewInterface;
 
@@ -159,7 +157,7 @@ public class Create implements ICommandController {
     userStockInput[1] = Double.toString(numUnits);
     userStockInput[2] = String.valueOf(transactionDate);
     userStockInput[3] = String.valueOf(commission);
-    userStockInput[4] = String.valueOf(0.0); //TODO: replace with price at which it was bought/sold
+    userStockInput[4] = String.valueOf(user.getStockPriceFromDB(tickerNameFromUser, transactionDate)); //TODO: replace with price at which it was bought/sold
     userStockInput[5] = String.valueOf(false); //indicates shares are bought
 
     return userStockInput;

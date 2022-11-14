@@ -4,11 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +30,7 @@ public class User implements IUserInterface {
   private String fixedPFPath;
   private String flexiblePFPath;
   private File file;
+  private String apiKey = "RWI9HAQXNXJQQSJI";
 
   private List<IFixedPortfolio> fixedPortfolios;
   private List<IFlexiblePortfolio> flexiblePortfolios;
@@ -372,6 +379,103 @@ public class User implements IUserInterface {
   @Override
   public void displayChart() {
 
+  }
+
+  @Override
+  public Double getStockPriceFromDB(String tickerNameFromUser, LocalDate transactionDate) {
+    Double result = 0.0;
+    FileReader file = null;
+    String fileName = "./resources/stockData/" + File.separator + tickerNameFromUser + ".csv";
+
+    try {
+      file = new FileReader(fileName);
+    } catch (FileNotFoundException e) {
+      updateStockFile(tickerNameFromUser);
+    }
+
+    try {
+      file = new FileReader(fileName);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException("File not found yet !!!!!!!!!!!");
+    }
+
+    try (BufferedReader br = new BufferedReader(file)) {
+      String line = br.readLine();
+      /* check if the date for which the value is to be determined is greater than
+          the latest date that exists in our file.
+      */
+      String[] attributes = line.split(",");
+      line = br.readLine();
+      attributes = line.split(",");
+      String timeStamp = attributes[0];
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      try {
+        LocalDate dt = LocalDate.parse(timeStamp, formatter);
+        if (dt.compareTo(transactionDate) < 0) { // date > latest (first) timestamp in file
+          updateStockFile(tickerNameFromUser);
+        }
+        BufferedReader br1 = new BufferedReader(new FileReader(fileName));
+        String line1 = br1.readLine();
+        line1 = br1.readLine();
+        while (line1 != null) {
+          attributes = line1.split(",");
+          timeStamp = attributes[0];
+          if (timeStamp.equals(transactionDate.toString())) {
+            result += Double.parseDouble(attributes[4]);
+            return result;
+          }
+          line1 = br1.readLine();
+        }
+      } catch (Exception e) {
+        // do nothing
+      }
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return result;
+  }
+
+  private void updateStockFile(String tickerName) {
+    try {
+      URL url = new URL("https://www.alphavantage"
+              + ".co/query?function=TIME_SERIES_DAILY"
+              + "&outputsize=compact"
+              + "&symbol"
+              + "=" + tickerName + "&apikey=" + apiKey + "&datatype=csv");
+
+      String filePath = "./resources/stockData" + File.separator + tickerName + ".csv";
+      new FileWriter(filePath, false).close();
+
+      List<String[]> row = new ArrayList<>();
+
+      InputStream in = null;
+      StringBuilder output = new StringBuilder();
+
+      in = url.openStream();
+
+      try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+        String line = br.readLine();
+
+        while (line != null) {
+          String[] attributes = line.split(",");
+          row.add(attributes);
+          line = br.readLine();
+        }
+        try (PrintWriter pw = new PrintWriter(filePath)) {
+          row.stream()
+                  .map(this::convertToCSV)
+                  .forEach(pw::println);
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
 }

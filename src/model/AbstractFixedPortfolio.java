@@ -57,8 +57,8 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   public String getPortfolioType() {
     return this.portfolioType;
   }
-  private double getStockValue(String tickerName, LocalDate date) {
-    double result = 0;
+  public Double getStockValue(String tickerName, LocalDate date) {
+    Double result = 0.0;
     FileReader file = null;
     String fileName = "./resources/stockData/" + File.separator + tickerName + ".csv";
 
@@ -117,7 +117,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
               + "&symbol"
               + "=" + tickerName + "&apikey=" + apiKey + "&datatype=csv");
 
-      String filePath = folderPath + File.separator + tickerName + ".csv";
+      String filePath = "./resources/stockData/" + File.separator + tickerName + ".csv";
       new FileWriter(filePath, false).close();
 
       List<String[]> row = new ArrayList<>();
@@ -223,8 +223,5 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     }
     return costBasis;
   }
-
-
-
 
 }
