@@ -22,26 +22,28 @@ public class Value implements ICommandController {
   @Override
   public void go() {
 
-    view.chooseFixedOrFlexible();
-    int userInput = scanner.nextInt();
+    int userInput;
     String portfolioType = "";
-    if(userInput == 1) { //fixed portfolio
-      portfolioType = "fixed";
-      if (user.getPortfolioNamesCreated("fixed").size() == 0) {
-        view.displayMsgToUser("No fixed portfolios created till now, can't calculate value");
-        return;
+    do {
+      view.chooseFixedOrFlexible();
+      userInput = scanner.nextInt();
+      if (userInput == 1) { //fixed portfolio
+        portfolioType = "fixed";
+        if (user.getPortfolioNamesCreated("fixed").size() == 0) {
+          view.displayMsgToUser("No fixed portfolios created till now, can't calculate value");
+          return;
+        }
+      } else if (userInput == 2) { //flexible portfolio
+        portfolioType = "flexible";
+        if (user.getPortfolioNamesCreated("flexible").size() == 0) {
+          view.displayMsgToUser("No flexible portfolios created till now, can't calculate value");
+          return;
+        }
+      } else {
+        view.displayMsgToUser("Invalid input!!!!");
       }
     }
-    else if(userInput == 2) { //flexible portfolio
-      portfolioType = "flexible";
-      if (user.getPortfolioNamesCreated("flexible").size() == 0) {
-        view.displayMsgToUser("No flexible portfolios created till now, can't calculate value");
-        return;
-      }
-    }
-    else {
-      view.displayMsgToUser("Invalid input!!!!");
-    }
+    while (userInput > 2 || userInput <= 0);
 
 
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));

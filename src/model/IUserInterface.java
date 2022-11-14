@@ -92,4 +92,6 @@ public interface IUserInterface {
 
   //todo
   void displayChart();
+
+  Double getStockPriceFromDB(String tickerNameFromUser, LocalDate transactionDate);
 }
