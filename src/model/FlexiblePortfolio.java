@@ -9,13 +9,9 @@ public class FlexiblePortfolio extends AbstractFixedPortfolio implements IFlexib
   }
 
   @Override
-  public void addStocks(IstockModel stockToAdd) {
+  public void addOrSellStocks(IstockModel stockToAdd) {
     this.stocks.add(stockToAdd);
 
   }
 
-  @Override
-  public void sellStocks(IstockModel stockToSell) {
-    this.stocks.remove(stockToSell);
-  }
 }
