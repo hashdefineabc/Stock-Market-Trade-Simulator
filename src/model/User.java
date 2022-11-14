@@ -481,7 +481,7 @@ public class User implements IUserInterface {
   }
 
   private List<IstockModel> sortStockListDateWise(List<IstockModel>stockList) {
-    stockList.sort((s1,s2) -> s1.getBuyDate().compareTo(s2.getBuyDate()));
+    stockList.sort((s1,s2) -> s1.getTransactionDate().compareTo(s2.getTransactionDate()));
     return stockList;
   }
 

@@ -29,6 +29,6 @@ public class StockTest {
     IstockModel stock = new Stock("MSFT", 6.0, commission, transactionPrice, LocalDate.now(), buyOrSell);
     LocalDate curDate = LocalDate.now();
     String s = curDate.toString();
-    assertEquals(s, stock.getBuyDate().toString());
+    assertEquals(s, stock.getTransactionDate().toString());
   }
 }
