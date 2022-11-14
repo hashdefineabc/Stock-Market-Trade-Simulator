@@ -133,7 +133,7 @@ public class ViewImpl implements ViewInterface {
   @Override
   public void displayCostBasis(double costBasis, LocalDate costBasisDate) {
     this.out.println("CostBasis of the portfolio as of date " + costBasisDate.toString()
-            + "is: " + String.format("%.2f", costBasis));
+            + " is: " + String.format("%.2f", costBasis) + " USD");
   }
 
   @Override
