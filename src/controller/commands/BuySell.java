@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -55,6 +56,7 @@ public class BuySell implements ICommandController {
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
     int buyOrSell = this.getBuyOrSellFromView();
     String[] stockDetails = this.takeStockInputFromView();
+
     if (buyOrSell == 1) {
       stockDetails[5] = Boolean.toString(false);
     }
@@ -176,6 +178,18 @@ public class BuySell implements ICommandController {
       }
     }
     return valueDate;
+  }
+
+  public Boolean validateSellOperation(int portfolioIndex, int buyOrSell, String[] stockDetails) {
+    HashMap<String, Integer> stockMap = new HashMap<String, Integer>();
+    IFlexiblePortfolio pfToCheck = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
+    for (IstockModel s : pfToCheck.getStocksInPortfolio()) {
+      if (stockMap.containsKey(s.getTickerName())) {
+        stockMap.get(s.getTickerName());
+      }
+    }
+
+    return true;
   }
 
 
