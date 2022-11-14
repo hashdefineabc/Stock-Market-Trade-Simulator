@@ -1,5 +1,6 @@
 package controller.commands;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -47,7 +48,15 @@ public class Composition implements ICommandController {
     view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
-    List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,portfolioType);
+    LocalDate dateForComposition;
+    if(portfolioType == PortfolioType.fixed) {
+      dateForComposition = LocalDate.now();
+    }
+    else {
+      view.displayMsgToUser("Please enter the date for which you want to view the composition");
+      dateForComposition = LocalDate.parse(scanner.next());
+    }
+    List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,portfolioType, dateForComposition);
     view.displayStocks(stocksToDisplay);
   }
 

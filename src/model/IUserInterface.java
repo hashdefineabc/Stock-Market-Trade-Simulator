@@ -61,7 +61,7 @@ public interface IUserInterface {
 
   String getFlexPFPath();
 
-  abstract List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, PortfolioType typeofPortfolio);
+  abstract List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, PortfolioType typeofPortfolio, LocalDate dateForComposition);
 
   /**
    * Method to calculate the value of a portfolio.
