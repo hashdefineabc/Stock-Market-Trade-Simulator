@@ -50,19 +50,34 @@ public class BuySell implements ICommandController {
 
   public void buySell(PortfolioType portfolioType) {
     List<String[]> dataToWrite = null;
+    int portfolioIndex = 0;
+    int buyOrSell = 0;
+    String[] stockDetails = null;
+    Boolean isSellOkay = false;
 
-    this.view.displayMsgToUser("Following is the list of portfolios available for adding/selling"
-            + "stocks");
-    view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
-    int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
-    int buyOrSell = this.getBuyOrSellFromView();
-    String[] stockDetails = this.takeStockInputFromView();
+    do {
+      try {
+        this.view.displayMsgToUser("Following is the list of portfolios available for adding/selling"
+                + "stocks");
+        view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
+        portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
+        buyOrSell = this.getBuyOrSellFromView();
+        stockDetails = this.takeStockInputFromView();
+        if (! this.validateSellOperation(portfolioIndex, stockDetails)) {
+          throw new Exception("Cannot sell more stocks than bought quantity!");
+        }
+        isSellOkay = true;
+      } catch (Exception e) {
+        this.view.displayMsgToUser(e.getMessage());
+        isSellOkay = false;
+      }
+    } while (!isSellOkay);
 
     if (buyOrSell == 1) {
-      stockDetails[5] = Boolean.toString(false);
+      stockDetails[5] = Operation.BUY.toString();
     }
     else if (buyOrSell == 2) {
-      stockDetails[5] = Boolean.toString(true);
+      stockDetails[5] = Operation.SELL.toString();
     }
     Stock newStock = Stock.getBuilder()
               .tickerName(stockDetails[0])
@@ -158,7 +173,7 @@ public class BuySell implements ICommandController {
     userStockInput[1] = Double.toString(numUnits);
     userStockInput[2] = String.valueOf(transactionDate);
     userStockInput[3] = String.valueOf(commission);
-    userStockInput[4] = String.valueOf(0.0); //TODO: replace with price at which it was bought/sold
+    userStockInput[4] = String.valueOf(user.getStockPriceFromDB(tickerNameFromUser, transactionDate));
     userStockInput[5] = String.valueOf(false); //indicates shares are bought
 
     return userStockInput;
@@ -181,15 +196,21 @@ public class BuySell implements ICommandController {
     return valueDate;
   }
 
-  public Boolean validateSellOperation(int portfolioIndex, int buyOrSell, String[] stockDetails) {
+  public Boolean validateSellOperation(int portfolioIndex, String[] stockDetails) {
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate sellDate = LocalDate.parse(stockDetails[2], dateFormat);
+    String tickername = stockDetails[0];
     HashMap<String, Integer> stockMap = new HashMap<String, Integer>();
+    Double numOfStocks = 0.0;
     IFlexiblePortfolio pfToCheck = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
-    for (IstockModel s : pfToCheck.getStocksInPortfolio(LocalDate.now())) {
-      if (stockMap.containsKey(s.getTickerName())) {
-        stockMap.get(s.getTickerName());
+    for (IstockModel s : pfToCheck.getStocksInPortfolio(sellDate)) {
+      if (tickername.equals(s.getTickerName()) && s.getBuyOrSell().equals(Operation.BUY)) {
+        numOfStocks += s.getNumOfUnits();
       }
     }
-
+    if (numOfStocks < Double.valueOf(stockDetails[1])) {
+      return false;
+    }
     return true;
   }
 
