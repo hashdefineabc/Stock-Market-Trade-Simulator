@@ -3,10 +3,12 @@ package controller.commands;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 import controller.ICommandController;
 import model.IUserInterface;
+import model.IstockModel;
 import model.PortfolioType;
 import view.ViewInterface;
 
@@ -51,11 +53,10 @@ public class Value implements ICommandController {
     int portfolioIndexForVal = this.getSelectedPortFolioFromView(portfolioType);
 
     LocalDate date = this.validateDateForValue();
+
     double val = user.calculateValueOfPortfolio(portfolioIndexForVal, date, portfolioType);
 
-    if (val == 0) {
-      view.displayMsgToUser("Market was closed on " + date);
-    } else if (val == -1) {
+    if (val == -1) {
       view.displayMsgToUser(
               "Value cannot be calculated for a date prior to portfolio creation");
     } else {
@@ -94,7 +95,7 @@ public class Value implements ICommandController {
     boolean isDateOkay = false;
     while (!isDateOkay) {
       try {
-        view.getDateFromUser();
+        view.displayMsgToUser("Enter Date for which you want to check the value : (yyyy-mm-dd)");
         valueDate = LocalDate.parse(scanner.next(), dateFormat);
         isDateOkay = true;
       } catch (Exception e) {
