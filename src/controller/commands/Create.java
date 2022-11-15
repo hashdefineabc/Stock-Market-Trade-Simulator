@@ -133,7 +133,7 @@ public class Create implements ICommandController {
           if (!user.isTickerValid(tickerNameFromUser)) {
             throw new IllegalArgumentException("Invalid ticker name!");
           }
-          this.view.takeNumOfUnits();
+          this.view.displayMsgToUser("Enter the number of units purchased");
           numUnits = scanner.nextDouble();
           Long numOfUnitsInt = Math.round(numUnits);
           if (numUnits <= 0.0) {
@@ -166,7 +166,7 @@ public class Create implements ICommandController {
           if (!user.isTickerValid(tickerNameFromUser)) {
             throw new IllegalArgumentException("Invalid ticker name!");
           }
-          this.view.takeNumOfUnits();
+          this.view.displayMsgToUser("Enter the number of units purchased");
           numUnits = scanner.nextDouble();
           Long numOfUnitsInt = Math.round(numUnits);
           if (numUnits <= 0.0) {
@@ -191,8 +191,9 @@ public class Create implements ICommandController {
     Double transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate);
     LocalTime currentTime = LocalTime.now();
     if(transactionDate.equals(LocalDate.now()) && currentTime.isBefore(LocalTime.of(16,0))) {
-      view.displayMsgToUser("Market is not closed today yet, yesterday's closing price will be considered as your transaction price...");
+      view.displayMsgToUser("Market is not closed today yet, previous available closing price will be considered as your transaction price...");
       transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+      transactionDate = transactionDate.minusDays(1);
     }
     while(transactionValue == 0.0) {
       view.displayMsgToUser("Market was closed on "+transactionDate+"\n Calculating price of previous date");
@@ -247,11 +248,15 @@ public class Create implements ICommandController {
     boolean isDateOkay = false;
     while (!isDateOkay) {
       try {
-        view.getDateFromUser();
+        view.displayMsgToUser("Enter the date of transaction : (yyyy-mm-dd)");
         valueDate = LocalDate.parse(scanner.next(), dateFormat);
         isDateOkay = true;
       } catch (Exception e) {
         view.displayMsgToUser("Invalid date. Please try again!");
+        isDateOkay = false;
+      }
+      if(valueDate.isAfter(LocalDate.now())) {
+        view.displayMsgToUser("Future date entered... Please enter a date that is not later than today!!! ");
         isDateOkay = false;
       }
     }

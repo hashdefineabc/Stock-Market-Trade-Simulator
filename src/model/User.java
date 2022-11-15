@@ -443,7 +443,7 @@ public class User implements IUserInterface {
     try {
       URL url = new URL("https://www.alphavantage"
               + ".co/query?function=TIME_SERIES_DAILY"
-              + "&outputsize=compact"
+              + "&outputsize=full"
               + "&symbol"
               + "=" + tickerName + "&apikey=" + apiKey + "&datatype=csv");
 
