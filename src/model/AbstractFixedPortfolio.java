@@ -106,6 +106,10 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    if(result == 0.0) {
+      User user = new User();
+      result = user.getValueOnDate(tickerName, date);
+    }
     return result;
   }
 
@@ -177,7 +181,14 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     Double answer = 0.0;
 
     for (IstockModel curStock : this.stocks) {
-      answer = answer + curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date);
+      Integer addOrSub = 1;
+      if(curStock.getBuyOrSell().equals(Operation.SELL)){
+        addOrSub = -1;
+      }
+      if(curStock.getTransactionDate().isAfter(date)) {
+        continue;
+      }
+      answer = answer + (curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date) * addOrSub);
     }
 
     return answer;

@@ -14,6 +14,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -484,5 +485,20 @@ public class User implements IUserInterface {
     stockList.sort((s1,s2) -> s1.getTransactionDate().compareTo(s2.getTransactionDate()));
     return stockList;
   }
+
+  public Double getValueOnDate(String tickerNameFromUser, LocalDate transactionDate) {
+    Double transactionValue = this.getStockPriceFromDB(tickerNameFromUser, transactionDate);
+    LocalTime currentTime = LocalTime.now();
+    if(transactionDate.equals(LocalDate.now()) && currentTime.isBefore(LocalTime.of(16,0))) {
+      transactionValue = this.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+    }
+    while(transactionValue == 0.0) {
+      // Market was closed on transactionDate, so considering price of previous date"
+      transactionValue = this.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+      transactionDate = transactionDate.minusDays(1);
+    }
+    return transactionValue;
+  }
+
 
 }
