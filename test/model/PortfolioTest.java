@@ -19,9 +19,18 @@ public class PortfolioTest {
   @Test
   public void testValueOfPortfolio() {
     List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5.0, commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
+
+    Stock s = Stock.getBuilder()
+            .tickerName("AAPL")
+            .numOfUnits(Double.valueOf(100))
+            .transactionDate(LocalDate.parse("2022-11-15"))
+            .commission(Double.valueOf(10))
+            .transactionPrice(Double.valueOf(1000))
+            .buyOrSell(Operation.valueOf("BUY"))
+            .build();
+
     stockList.add(s);
-    s = new Stock("MSFT", 5.0, commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
+    s = new Stock("MSFT", 5.0, 10.0, 1000.0, LocalDate.of(2022, 10, 26), Operation.BUY);
     stockList.add(s);
     IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
     assertEquals("1857.75", String.valueOf(portfolio.calculateValue(LocalDate.of(2022, 10, 27))));
