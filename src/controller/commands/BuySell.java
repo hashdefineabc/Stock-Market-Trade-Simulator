@@ -3,7 +3,6 @@ package controller.commands;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,12 +15,24 @@ import model.PortfolioType;
 import model.Stock;
 import view.ViewInterface;
 
+/**
+ * The class BuySell implements the command controller interface.
+ * It is one of the commands that is supported by our application.
+ * BuySell operation is available for flexible portfolios only.
+ * It allows the user to buy or sell stocks after user has created the portfolio.
+ */
 public class BuySell implements ICommandController {
 
   private ViewInterface view;
   private IUserInterface user;
   private Scanner scanner;
 
+  /**
+   * Instantiates a new BuySell.
+   * It takes in view and model (user) and intantiates them.
+   * @param view the view
+   * @param user the user
+   */
   public BuySell(ViewInterface view, IUserInterface user) {
     this.view = view;
     this.user = user;
@@ -32,21 +43,26 @@ public class BuySell implements ICommandController {
   @Override
   public void go() {
     /**
-     * display flexible pf
+     * display flexible portfolios
      * ask what has to be done
      */
     if (user.getPortfolioNamesCreated(PortfolioType.flexible).size() == 0) {
-      view.displayMsgToUser("No " + PortfolioType.flexible.toString() + " portfolios created till now!!!"
+      view.displayMsgToUser("No " + PortfolioType.flexible + " portfolios created till now!!!"
                           + "\n Hence cannot add/sell stocks");
       return;
     }
     this.buySell(PortfolioType.flexible);
 
-
-
   }
 
-  public void buySell(PortfolioType portfolioType) {
+  /**
+   * This is our main buySell method which handles the buy or sell operation.
+   * It takes in the type of portfolio.
+   * It modifies the portfolio file to update the current buy/sell transaction.*
+   *
+   * @param portfolioType the portfolio type
+   */
+  private void buySell(PortfolioType portfolioType) {
     List<String[]> dataToWrite = null;
     int portfolioIndex = 0;
     int buyOrSell = 0;
@@ -94,6 +110,12 @@ public class BuySell implements ICommandController {
             portfolioType);
   }
 
+  /**
+   * Gets selected port folio from view.
+   *
+   * @param portfolioType the portfolio type
+   * @return the selected port folio from view
+   */
   public int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     boolean okay = false;
@@ -114,7 +136,16 @@ public class BuySell implements ICommandController {
     return index;
   }
 
-  public int getBuyOrSellFromView() {
+  /**
+   * Gets buy or sell from view.
+   * It is a helper method which asks the view to display whether
+   * the user wants to buy or sell a stock.
+   *
+   * It returns 1 if the user wants to buy a stock.
+   * It returns 2 if the user wants to sell a stock.
+   * @return the buy or sell from view
+   */
+  private int getBuyOrSellFromView() {
     int userOption = 0;
     List<Integer> validMenuOptions = Arrays.asList(1, 2);
     do {
@@ -128,7 +159,17 @@ public class BuySell implements ICommandController {
     return userOption;
   }
 
-  public String[] takeStockInputFromView(int buyOrSell) {
+  /**
+   * Take stock input from view string [ ].
+   * It is a helper method that takes in details of the stocks that the user wants to buy or sell.
+   *
+   * It takes in an integer, 1 represents buy and 2 represents sell.
+   * It returns the stock details that the user wants to buy or sell.
+   *
+   * @param buyOrSell the buy or sell
+   * @return the string [ ]
+   */
+  private String[] takeStockInputFromView(int buyOrSell) {
     String[] userStockInput = new String[6];
     String tickerNameFromUser = "";
     Double numUnits = 0.0;
@@ -181,7 +222,17 @@ public class BuySell implements ICommandController {
     return userStockInput;
   }
 
-  public LocalDate getDateFromView() {
+  /**
+   * Gets date from view.
+   * It is a helper method that gets the date from view.
+   * It handles invalid date cases.
+   * It asks view to display the date format that is expected.
+   * If user doesn't enter correct date format, then we ask user to enter correct date again, until
+   * user enter correct date.
+   *
+   * @return the date from view
+   */
+  private LocalDate getDateFromView() {
     LocalDate valueDate = LocalDate.now();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     boolean isDateOkay = false;
@@ -198,11 +249,21 @@ public class BuySell implements ICommandController {
     return valueDate;
   }
 
-  public Boolean validateSellOperation(int portfolioIndex, String[] stockDetails) {
+  /**
+   * Validate sell operation boolean.
+   * This method validates if the stock details entered by the user is valid and is a legal
+   * operation that can be actually performed on the portfolio.
+   * It returns true if the stock can be either bought or sold successfully.
+   * It returns false if the stock cannot be bought or sold.
+   *
+   * @param portfolioIndex the portfolio index
+   * @param stockDetails   the stock details
+   * @return the boolean
+   */
+  private Boolean validateSellOperation(int portfolioIndex, String[] stockDetails) {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDate sellDate = LocalDate.parse(stockDetails[2], dateFormat);
     String tickername = stockDetails[0];
-    HashMap<String, Integer> stockMap = new HashMap<String, Integer>();
     Double numOfStocks = 0.0;
     IFlexiblePortfolio pfToCheck = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
     for (IstockModel s : pfToCheck.getStocksInPortfolio(sellDate)) {
@@ -215,6 +276,5 @@ public class BuySell implements ICommandController {
     }
     return true;
   }
-
 
 }
