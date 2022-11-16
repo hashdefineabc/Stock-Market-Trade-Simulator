@@ -101,13 +101,8 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void getPortfolioNameFromUser() {
-<<<<<<< HEAD
     this.out.print("\tPlease enter a name for this portfolio:\n"
     + "(No spaces or special characters allowed in the name)");
-=======
-    this.out.print("\tPlease enter a name for this portfolio: "
-    + "(No spaces or special characters in the name)\n");
->>>>>>> 2e0c3d644bc8f5d8c85498462dba9fb761381c4d
   }
 
   @Override
@@ -129,16 +124,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void takeCommissionValue() {
-<<<<<<< HEAD
     this.out.println("Enter the commission value (USD) for this transaction:");
-=======
-    this.out.println("Enter the commission value for this transaction (in dollars)");
-  }
-
-  @Override
-  public void takeDateOfTransaction() {
-    this.out.println("Please enter the date of this transaction (yyyy-mm-dd):");
->>>>>>> 2e0c3d644bc8f5d8c85498462dba9fb761381c4d
   }
 
   @Override

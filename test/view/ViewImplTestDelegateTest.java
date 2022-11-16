@@ -160,6 +160,21 @@ public class ViewImplTestDelegateTest {
     public void askAddOrSell() {
       log.append("askAddOrSell method called.");
     }
+
+    @Override
+    public void displayOptionsForChart() {
+      log.append("displayOptionsForChart method called.");
+    }
+
+    @Override
+    public void displayChartWeek(Map<LocalDate, String> chart) {
+      log.append("displayChartWeek method called.");
+    }
+
+    @Override
+    public void displayChartMonth(Map<LocalDate, String> chart) {
+      log.append("displayChartMonth method called.");
+    }
   }
 
   @Test
@@ -320,6 +335,33 @@ public class ViewImplTestDelegateTest {
     ViewInterface view = new MockView(log);
     view.isFileUploaded();
     String expectedResult = "askAddOrSell method called..";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testdisplayOptionsForChart() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockView(log);
+    view.isFileUploaded();
+    String expectedResult = "displayOptionsForChart method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testdisplayChartWeek() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockView(log);
+    view.isFileUploaded();
+    String expectedResult = "displayChartWeek method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testDisplayChartMonth() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockView(log);
+    view.isFileUploaded();
+    String expectedResult = "displayChartMonth method called.";
     assertEquals(expectedResult, log.toString());
   }
 
