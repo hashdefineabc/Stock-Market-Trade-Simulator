@@ -17,12 +17,12 @@ public class CostBasis implements ICommandController {
 
   private ViewInterface view;
   private IUserInterface user;
-  private Scanner scanner;
+  private Scanner inputScanner;
 
-  public CostBasis(ViewInterface view, IUserInterface user) {
+  public CostBasis(ViewInterface view, IUserInterface user, Scanner scanner) {
     this.view = view;
     this.user = user;
-    scanner = new Scanner(System.in);
+    this.inputScanner = scanner;
   }
   @Override
   public void go() {
@@ -54,7 +54,7 @@ public class CostBasis implements ICommandController {
     do {
       try {
         this.view.chooseFixedOrFlexible();
-        userOption = Integer.parseInt(scanner.next());
+        userOption = Integer.parseInt(this.inputScanner.next());
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
@@ -68,7 +68,7 @@ public class CostBasis implements ICommandController {
     do {
       try {
         view.getSelectedPortfolio();
-        index = scanner.nextInt();
+        index = this.inputScanner.nextInt();
         if ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
           throw new IllegalArgumentException("Invalid Index");
         }
@@ -89,7 +89,7 @@ public class CostBasis implements ICommandController {
     while (!isDateOkay) {
       try {
         view.getDateFromUser();
-        valueDate = LocalDate.parse(scanner.next(), dateFormat);
+        valueDate = LocalDate.parse(this.inputScanner.next(), dateFormat);
         isDateOkay = true;
       } catch (Exception e) {
         view.displayMsgToUser("Invalid date. Please try again!");
