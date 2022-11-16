@@ -54,7 +54,7 @@ public class ViewImpl implements ViewInterface {
     int count = 0;
     for (String p : portfolios) {
       count++;
-      this.out.println(count + " " + p);
+      this.out.print(count + " " + p + "\n");
     }
   }
 
@@ -66,18 +66,18 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void displayStocks(List<IstockModel> listOfStocks) {
-    this.out.println("Following stocks are present in the portfolio : ");
-    this.out.println("TickerName\t" + "NumberOfUnits\t" + "TransactionDate\t" + "Commission(USD)\t"
-                    + "Price(USD)\t" + "BUY/SELL");
+    this.out.print("Following stocks are present in the portfolio : \n");
+    this.out.print("TickerName\t" + "NumberOfUnits\t" + "TransactionDate\t" + "Commission(USD)\t"
+                    + "Price(USD)\t" + "BUY/SELL\n");
 
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     for (IstockModel stock : listOfStocks) {
-      this.out.println(stock.getTickerName() + "\t\t" + Double.toString(stock.getNumOfUnits())
+      this.out.print(stock.getTickerName() + "\t\t" + Double.toString(stock.getNumOfUnits())
                       + "\t\t\t" +stock.getTransactionDate().format(dateFormat) + "\t\t"
               + Double.toString(stock.getCommission()) + "\t\t\t"
               + Double.toString(stock.getTransactionPrice()) + "\t\t\t"
-              + stock.getBuyOrSell().toString());
+              + stock.getBuyOrSell().toString() + "\n");
     }
 
   }
@@ -117,9 +117,9 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void chooseFixedOrFlexible() {
-    this.out.println("Please pick one ");
-    this.out.println("1. Fixed Portfolio");
-    this.out.println("2. Flexible Portfolio");
+    this.out.print("Please pick one \n");
+    this.out.print("1. Fixed Portfolio\n");
+    this.out.print("2. Flexible Portfolio\n");
   }
 
   @Override

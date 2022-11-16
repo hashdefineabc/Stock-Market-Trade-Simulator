@@ -110,7 +110,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
       throw new RuntimeException(e);
     }
     if(result == 0.0) {
-      User user = new User();
+      User user = new User(null);
       result = user.getValueOnDate(tickerName, date);
     }
     return result;
