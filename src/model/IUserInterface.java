@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface to describe methods for a User of the stock market application.
@@ -94,4 +95,8 @@ public interface IUserInterface {
   void displayChart();
 
   Double getStockPriceFromDB(String tickerNameFromUser, LocalDate transactionDate);
+
+  Map<LocalDate, String> CalculateChart(int option, int portfolioIndexForVal, PortfolioType portfolioType);
+
+  Double getScale(int portfolioIndexForVal, PortfolioType portfolioType);
 }
