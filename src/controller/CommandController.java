@@ -90,6 +90,7 @@ public class CommandController implements ICommandController{
     }
   }
 
+
   public int showMenuOnView() {
     int userOption = 0;
     Boolean isOkay = false;

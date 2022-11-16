@@ -75,10 +75,8 @@ public class MVCTest {
     input = new ByteArrayInputStream("9 7".getBytes());
     ICommandController controller = new CommandController(u, view, input);
     controller.go();
-    assertEquals(log.toString(), out.toString());
+    assertEquals(log.toString(), out.toString() );
   }
-
-
 
 
 }
