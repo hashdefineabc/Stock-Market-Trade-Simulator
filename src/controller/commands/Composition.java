@@ -53,7 +53,8 @@ public class Composition implements ICommandController {
       dateForComposition = LocalDate.now();
     }
     else {
-      view.displayMsgToUser("Please enter the date for which you want to view the composition");
+      view.displayMsgToUser("Please enter the date for which you want to view the composition"
+      + "(yyyy-MM-dd)");
       dateForComposition = LocalDate.parse(scanner.next());
     }
     List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,portfolioType, dateForComposition);

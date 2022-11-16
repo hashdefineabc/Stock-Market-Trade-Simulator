@@ -2,6 +2,7 @@ package view;
 
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +18,11 @@ public class ViewImplTestDelegateTest {
   /**
    * Class to test the text user interface of this application.
    */
-  class MockViewModel implements ViewInterface {
+  class MockView implements ViewInterface {
 
     private StringBuilder log;
 
-    public MockViewModel(StringBuilder log) {
+    public MockView(StringBuilder log) {
       this.log = log;
     }
 
@@ -68,10 +69,7 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void displayListOfPortfolios(List<String> portfolios) {
-      log.append("List of portfolios provided is : ");
-      for (String s : portfolios) {
-        log.append(s);
-      }
+      log.append("displayListOfPortfolios method called.");
     }
 
     /**
@@ -89,10 +87,7 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void displayStocks(List<IstockModel> listOfStocks) {
-      log.append("List of stocks provided is : ");
-      for (String[] s : listOfStocks) {
-        log.append(s);
-      }
+      log.append("displayStocks method called.");
     }
 
     /**
@@ -104,14 +99,9 @@ public class ViewImplTestDelegateTest {
       log.append("getDateFromUser method called.");
     }
 
-    /**
-     * Method to display the calculated value of the portfolio.
-     *
-     * @param val = value as calculated by model.
-     */
     @Override
-    public void displayValue(double val) {
-      log.append("Value provided = " + val);
+    public void displayValue(double val, LocalDate valueDate) {
+      log.append("displayValue method called.");
     }
 
     /**
@@ -121,7 +111,7 @@ public class ViewImplTestDelegateTest {
      */
     @Override
     public void displayMsgToUser(String msg) {
-      log.append("String provided to print = " + msg);
+      log.append("displayMsgToUser method called.");
     }
 
     /**
@@ -149,18 +139,37 @@ public class ViewImplTestDelegateTest {
     public void isFileUploaded() {
       log.append("isFileUploaded method called.");
     }
+
+    @Override
+    public void chooseFixedOrFlexible() {
+      log.append("chooseFixedOrFlexible method called.");
+    }
+
+    @Override
+    public void takeCommissionValue() {
+      log.append("takeCommissionValue method called.");
+    }
+
+    @Override
+    public void displayCostBasis(double costBasis, LocalDate costBasisDate) {
+      log.append("displayCostBasis method called.");
+    }
+
+    @Override
+    public void askAddOrSell() {
+      log.append("askAddOrSell method called.");
+    }
   }
 
   @Test
   public void displayListOfPortfolios() {
 
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
 
     List<String> portfolios = new ArrayList<>();
-    portfolios.add("p1.csv");
     view.displayListOfPortfolios(portfolios);
-    String expectedResult = "List of portfolios provided is : " + portfolios.get(0);
+    String expectedResult = "displayListOfPortfolios method called.";
 
     assertEquals(expectedResult, log.toString());
   }
@@ -169,12 +178,10 @@ public class ViewImplTestDelegateTest {
   public void testDisplayListOfStocks() {
 
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
-
-    List<String[]> stocks = new ArrayList<>();
-    stocks.add(new String[]{"AAPL", "5", "2022-10-26"});
+    ViewInterface view = new MockView(log);
+    List<IstockModel> stocks = new ArrayList<>();
     view.displayStocks(stocks);
-    String expectedResult = "List of stocks provided is : " + stocks.get(0);
+    String expectedResult = "displayStocks method called.";
 
     assertEquals(expectedResult, log.toString());
   }
@@ -182,25 +189,26 @@ public class ViewImplTestDelegateTest {
   @Test
   public void testDisplayValue() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
-    view.displayValue(20);
-    String expectedResult = "Value provided = " + 20.0;
+    ViewInterface view = new MockView(log);
+    LocalDate testDate = LocalDate.now();
+    view.displayValue(20.00, testDate);
+    String expectedResult = "displayValue method called.";
     assertEquals(expectedResult, log.toString());
   }
 
   @Test
   public void testDisplayMsgToUser() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
-    view.displayMsgToUser("Hey there");
-    String expectedResult = "String provided to print = " + "Hey there";
+    ViewInterface view = new MockView(log);
+    view.displayMsgToUser("Display msg");
+    String expectedResult = "displayMsgToUser method called.";
     assertEquals(expectedResult, log.toString());
   }
 
   @Test
   public void testDisplayMenu() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
     view.displayMenu();
     String expectedResult = "DisplayMenu method called.";
     assertEquals(expectedResult, log.toString());
@@ -209,7 +217,7 @@ public class ViewImplTestDelegateTest {
   @Test
   public void testTakeTickerName() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
     view.takeTickerName();
     String expectedResult = "takeTickerName method called.";
     assertEquals(expectedResult, log.toString());
@@ -218,7 +226,7 @@ public class ViewImplTestDelegateTest {
   @Test
   public void testTakeNumOfUnits() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
     view.takeNumOfUnits();
     String expectedResult = "takeNumOfUnits method called.";
     assertEquals(expectedResult, log.toString());
@@ -227,7 +235,7 @@ public class ViewImplTestDelegateTest {
   @Test
   public void testAddMoreStocks() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
     view.addMoreStocks();
     String expectedResult = "addMoreStocks method called.";
     assertEquals(expectedResult, log.toString());
@@ -236,7 +244,7 @@ public class ViewImplTestDelegateTest {
   @Test
   public void testGetSelectedPortfolio() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
     view.getSelectedPortfolio();
     String expectedResult = "getSelectedPortfolio method called.";
     assertEquals(expectedResult, log.toString());
@@ -245,7 +253,7 @@ public class ViewImplTestDelegateTest {
   @Test
   public void testGetDateFromUser() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
     view.getDateFromUser();
     String expectedResult = "getDateFromUser method called.";
     assertEquals(expectedResult, log.toString());
@@ -254,7 +262,7 @@ public class ViewImplTestDelegateTest {
   @Test
   public void testGetPortfolioNameFromUser() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
     view.getPortfolioNameFromUser();
     String expectedResult = "getPortfolioNameFromUser method called.";
     assertEquals(expectedResult, log.toString());
@@ -263,7 +271,7 @@ public class ViewImplTestDelegateTest {
   @Test
   public void testDisplayCreatePortFolioOptions() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
     view.displayCreatePortFolioOptions();
     String expectedResult = "displayCreatePortFolioOptions method called.";
     assertEquals(expectedResult, log.toString());
@@ -272,11 +280,49 @@ public class ViewImplTestDelegateTest {
   @Test
   public void testIsFileUploaded() {
     StringBuilder log = new StringBuilder();
-    ViewInterface view = new MockViewModel(log);
+    ViewInterface view = new MockView(log);
     view.isFileUploaded();
     String expectedResult = "isFileUploaded method called.";
     assertEquals(expectedResult, log.toString());
   }
+
+  @Test
+  public void testChooseFixedOrFlexible() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockView(log);
+    view.isFileUploaded();
+    String expectedResult = "chooseFixedOrFlexible method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testTakeCommissionValue() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockView(log);
+    view.isFileUploaded();
+    String expectedResult = "takeCommissionValue method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testDisplayCostBasis() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockView(log);
+    view.isFileUploaded();
+    String expectedResult = "displayCostBasis method called.";
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testAskAddOrSell() {
+    StringBuilder log = new StringBuilder();
+    ViewInterface view = new MockView(log);
+    view.isFileUploaded();
+    String expectedResult = "askAddOrSell method called..";
+    assertEquals(expectedResult, log.toString());
+  }
+
+
 
 
 }
