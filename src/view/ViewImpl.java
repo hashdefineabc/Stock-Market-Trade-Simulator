@@ -101,7 +101,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void getPortfolioNameFromUser() {
-    this.out.print("\tPlease enter a name for this portfolio:\n"
+    this.out.print("\tPlease enter a name for this portfolio: "
     + "(No spaces or special characters allowed in the name)");
   }
 
