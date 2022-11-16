@@ -15,12 +15,12 @@ import view.ViewInterface;
 public class Value implements ICommandController {
   private ViewInterface view;
   private IUserInterface user;
-  private Scanner scanner;
+  private Scanner inputScanner;
 
-  public Value(ViewInterface view, IUserInterface user) {
+  public Value(ViewInterface view, IUserInterface user, Scanner scanner) {
     this.view = view;
     this.user = user;
-    scanner = new Scanner(System.in);
+    this.inputScanner = scanner;
   }
   @Override
   public void go() {
@@ -29,7 +29,7 @@ public class Value implements ICommandController {
     PortfolioType portfolioType = null;
     do {
       view.chooseFixedOrFlexible();
-      userInput = scanner.nextInt();
+      userInput = this.inputScanner.nextInt();
       if (userInput == 1) { //fixed portfolio
         portfolioType = PortfolioType.fixed;
         if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
@@ -48,7 +48,7 @@ public class Value implements ICommandController {
     }
     while (userInput > 2 || userInput <= 0);
 
-
+    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndexForVal = this.getSelectedPortFolioFromView(portfolioType);
 
@@ -68,7 +68,7 @@ public class Value implements ICommandController {
     int index = -1;
     while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
       view.getSelectedPortfolio();
-      index = scanner.nextInt();
+      index = this.inputScanner.nextInt();
     }
     return index;
   }
@@ -96,7 +96,7 @@ public class Value implements ICommandController {
     while (!isDateOkay) {
       try {
         view.displayMsgToUser("Enter Date for which you want to check the value : (yyyy-mm-dd)");
-        valueDate = LocalDate.parse(scanner.next(), dateFormat);
+        valueDate = LocalDate.parse(this.inputScanner.next(), dateFormat);
         isDateOkay = true;
       } catch (Exception e) {
         view.displayMsgToUser("Invalid date. Please try again!");

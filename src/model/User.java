@@ -329,7 +329,7 @@ public class User implements IUserInterface {
     try {
       this.createCSV(dataToWrite, portfolioName, portfolioType);
     } catch (Exception e) {
-      System.out.println("CSV was not created");
+      System.out.print("CSV was not created\n");
     }
   }
 
@@ -347,7 +347,7 @@ public class User implements IUserInterface {
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
       pw.close();
     } catch (Exception e) {
-      System.out.println("Error creating a csv");
+      System.out.print("Error creating a csv\n");
     }
   }
 
