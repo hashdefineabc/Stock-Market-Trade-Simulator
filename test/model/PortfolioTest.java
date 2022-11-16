@@ -19,9 +19,9 @@ public class PortfolioTest {
     User user = new User("./resources/testPortfolio");
     List<String[]> stockList = new ArrayList<>();
 
-    String[] stock = new String[] {"AAPL", "100.0", "2022-11-15", "0.0", "1000", "BUY"};
+    String[] stock = new String[] {"AAPL", "100.0", "2022-11-15", "0.0", "100", "BUY"};
     stockList.add(stock);
-    stock = new String[]{"MSFT", "200.0", "2022-10-26", "0.0", "2000", "BUY"};
+    stock = new String[]{"MSFT", "200.0", "2022-10-26", "0.0", "200", "BUY"};
     stockList.add(stock);
     user.createNewPortfolio("testFixedPortfolio1", stockList, PortfolioType.fixed);
 

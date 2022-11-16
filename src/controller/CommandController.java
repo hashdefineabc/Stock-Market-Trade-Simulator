@@ -76,7 +76,7 @@ public class CommandController implements ICommandController{
             return;
 
           default:
-            System.out.println(String.format("Unknown command"));
+            view.displayMsgToUser("Unknown command");
             System.exit(0);
             cmd = null;
             break;
@@ -86,7 +86,7 @@ public class CommandController implements ICommandController{
           cmd = null;
         }
       } catch (InputMismatchException ime) {
-        System.out.println("Unknown command");
+        view.displayMsgToUser("Unknown command");
       }
     }
   }
