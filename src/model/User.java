@@ -66,6 +66,27 @@ public class User implements IUserInterface {
     }
   }
 
+  public User(String path) {
+    this.fixedPortfolios = new ArrayList<>();
+    this.flexiblePortfolios = new ArrayList<>();
+    nasdaqTickerNames = new ArrayList<>();
+
+//    String userDirectory = new File("").getAbsolutePath();
+    this.folderPath = path;
+    this.fixedPFPath = this.folderPath + File.separator + "FixedPortfolios";
+    this.flexiblePFPath = this.folderPath + File.separator + "FlexiblePortfolios";
+
+    file = new File(folderPath);
+    this.createFolder();
+    this.loadExistingPortFolios(PortfolioType.fixed);
+    this.loadExistingPortFolios(PortfolioType.flexible);
+    try {
+      this.loadNasdaqTickerNames();
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
 
 
   private void loadNasdaqTickerNames() throws FileNotFoundException {

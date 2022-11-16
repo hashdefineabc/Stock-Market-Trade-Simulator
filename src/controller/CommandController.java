@@ -91,7 +91,7 @@ public class CommandController implements ICommandController{
     }
   }
 
-  private int showMenuOnView() {
+  int showMenuOnView() {
     int userOption = 8;
     List<Integer> validMenuOptions = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
     while (!validMenuOptions.contains(userOption)) {
