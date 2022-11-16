@@ -21,7 +21,7 @@ public class StockTest {
   @Test
   public void testGetNumOfUnits() {
     IstockModel stock = new Stock("MSFT", 6.0, 20.0, 3000.0, LocalDate.now(), Operation.BUY);
-    assertEquals("6", stock.getNumOfUnits().toString());
+    assertEquals("6.0", stock.getNumOfUnits().toString());
   }
 
   @Test
@@ -30,5 +30,29 @@ public class StockTest {
     LocalDate curDate = LocalDate.now();
     String s = curDate.toString();
     assertEquals(s, stock.getTransactionDate().toString());
+  }
+
+  @Test
+  public void testCommission() {
+    IstockModel stock = new Stock("MSFT", 6.0, 20.0, 3000.0, LocalDate.now(), Operation.BUY);
+    assertEquals("20.0", stock.getCommission().toString());
+  }
+
+  @Test
+  public void testTransactionPrice() {
+    IstockModel stock = new Stock("MSFT", 6.0, 20.0, 3000.0, LocalDate.now(), Operation.BUY);
+    assertEquals("3000.0", stock.getTransactionPrice().toString());
+  }
+
+  @Test
+  public void testOperationBUY() {
+    IstockModel stock = new Stock("MSFT", 6.0, 20.0, 3000.0, LocalDate.now(), Operation.BUY);
+    assertEquals("BUY", stock.getBuyOrSell().toString());
+  }
+
+  @Test
+  public void testOperationSELL() {
+    IstockModel stock = new Stock("MSFT", 6.0, 20.0, 3000.0, LocalDate.now(), Operation.SELL);
+    assertEquals("SELL", stock.getBuyOrSell().toString());
   }
 }

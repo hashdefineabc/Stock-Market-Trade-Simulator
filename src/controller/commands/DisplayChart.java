@@ -74,7 +74,7 @@ public class DisplayChart implements ICommandController {
         view.displayChartMonth(chart);
 
       view.displayMsgToUser("<* means the value of the portfolio for a particular timestamp is less than the scale");
-      view.displayMsgToUser("Scale: " + user.getScale(portfolioIndexForVal, portfolioType));
+      view.displayMsgToUser("Scale: * = $" + user.getScale(portfolioIndexForVal, portfolioType));
 
   }
 
