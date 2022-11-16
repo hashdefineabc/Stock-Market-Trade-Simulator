@@ -147,7 +147,6 @@ public class BuySell implements ICommandController {
         else
           this.view.displayMsgToUser("Enter the number of units to sell");
 
-        this.view.takeNumOfUnits();
         numUnits = scanner.nextDouble();
         Long numOfUnitsInt = Math.round(numUnits);
         if (numUnits <= 0.0) {
