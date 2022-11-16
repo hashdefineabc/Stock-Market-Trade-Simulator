@@ -22,11 +22,12 @@ public class CommandController implements ICommandController{
 
   private static ViewInterface view;
   private static IUserInterface user;
+  private static InputStream userInput;
 
   /**
    * The Scanner.
    */
-  Scanner scanner;
+  Scanner inputScanner;
 
   /**
    * Instantiates a new Controller.
@@ -38,11 +39,11 @@ public class CommandController implements ICommandController{
    * @param in   the input
    */
   public CommandController(IUserInterface user, ViewInterface view, InputStream in) {
-    InputStream userInput;
+
     this.view = view;
     this.user = user;
     userInput = in;
-    scanner = new Scanner(userInput);
+    inputScanner = new Scanner(userInput);
   }
 
   @Override
@@ -55,7 +56,7 @@ public class CommandController implements ICommandController{
             cmd = new Create(view, user);
             break;
           case 2: // Show composition of a Portfolio
-            cmd = new Composition(view, user);
+            cmd = new Composition(view, user, inputScanner);
             break;
           case 3: // Check value of a Portfolio
             cmd = new Value(view, user);
@@ -98,7 +99,7 @@ public class CommandController implements ICommandController{
     do {
       try {
         this.view.displayMenu();
-        userOption = Integer.parseInt(scanner.next());
+        userOption = Integer.parseInt(this.inputScanner.next());
         if (!validMenuOptions.contains(userOption)) {
           throw new IllegalArgumentException("Invalid Option!!");
         }

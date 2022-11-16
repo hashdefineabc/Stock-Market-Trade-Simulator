@@ -36,6 +36,9 @@ public class MVCTest {
   String portfolioOptions = null;
   String displayListOfFixedPortfolios = null;
   String testFixedPortfolio1 = null;
+  String displayListOfFlexiblePortfolios = null;
+  String dateFromUser = null;
+  String testFlexiblePortfolio1 = null;
 
   @Before
   public void setup() {
@@ -63,11 +66,17 @@ public class MVCTest {
             "1 testFixedPortfolio1.csv\n" +
             "2 testPortfolio1.csv\n" +
             "Pick a portfolio\n";
-
     testFixedPortfolio1 = "Following stocks are present in the portfolio : \n" +
             "TickerName\tNumberOfUnits\tTransactionDate\tCommission(USD)\tPrice(USD)\tBUY/SELL\n" +
             "MSFT\t\t200.0\t\t\t2022-10-26\t\t0.0\t\t\t2000.0\t\t\tBUY\n" +
             "AAPL\t\t100.0\t\t\t2022-11-15\t\t0.0\t\t\t1000.0\t\t\tBUY\n";
+    displayListOfFlexiblePortfolios = "Following are the flexible portfolios created till now:\n" +
+            "1 testFlexiblePortfolio1.csv\n" + "Pick a portfolio\n";
+    dateFromUser = "Please enter the date for which you want to view the composition(yyyy-MM-dd)\n";
+    testFlexiblePortfolio1 = "Following stocks are present in the portfolio : \n" +
+            "TickerName\tNumberOfUnits\tTransactionDate\tCommission(USD)\tPrice(USD)\tBUY/SELL\n" +
+            "MSFT\t\t200.0\t\t\t2022-10-26\t\t20.0\t\t\t2000.0\t\t\tBUY\n" +
+            "AAPL\t\t100.0\t\t\t2022-11-15\t\t10.0\t\t\t1000.0\t\t\tBUY\n";
 
   }
 
@@ -102,6 +111,18 @@ public class MVCTest {
     controller.go();
     assertEquals(log.toString(), out.toString());
   }
+
+  @Test
+  public void testCompositionOfFlexiblePortfolio() {
+    log = new StringBuilder();
+    log.append(menu+portfolioOptions + displayListOfFlexiblePortfolios + dateFromUser
+            + testFlexiblePortfolio1+menu+exit);
+    input = new ByteArrayInputStream("2 2 1 2022-11-15 7".getBytes());
+    ICommandController controller = new CommandController(u, view, input);
+    controller.go();
+    assertEquals(log.toString(), out.toString());
+  }
+
 
 
 }

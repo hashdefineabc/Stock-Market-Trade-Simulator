@@ -1,5 +1,6 @@
 package controller.commands;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -16,12 +17,12 @@ public class Composition implements ICommandController {
 
   private ViewInterface view;
   private IUserInterface user;
-  private Scanner scanner;
+  private Scanner inputScanner;
 
-  public Composition(ViewInterface view, IUserInterface user) {
+  public Composition(ViewInterface view, IUserInterface user, Scanner inputScanner) {
     this.view = view;
     this.user = user;
-    scanner = new Scanner(System.in);
+    this.inputScanner = inputScanner;
   }
   @Override
   public void go() {
@@ -55,7 +56,7 @@ public class Composition implements ICommandController {
     else {
       view.displayMsgToUser("Please enter the date for which you want to view the composition"
       + "(yyyy-MM-dd)");
-      dateForComposition = LocalDate.parse(scanner.next());
+      dateForComposition = LocalDate.parse(this.inputScanner.next());
     }
     List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,portfolioType, dateForComposition);
     view.displayStocks(stocksToDisplay);
@@ -67,7 +68,7 @@ public class Composition implements ICommandController {
     do {
       try {
         view.getSelectedPortfolio();
-        index = scanner.nextInt();
+        index = this.inputScanner.nextInt();
         if ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
             throw new IllegalArgumentException("Invalid Index");
         }
@@ -87,7 +88,7 @@ public class Composition implements ICommandController {
     do {
       try {
         this.view.chooseFixedOrFlexible();
-        userOption = Integer.parseInt(scanner.next());
+        userOption = Integer.parseInt(this.inputScanner.next());
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
