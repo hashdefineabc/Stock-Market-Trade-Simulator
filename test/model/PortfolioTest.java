@@ -68,28 +68,10 @@ public class PortfolioTest {
     s = new Stock("MSFT", 5.0, 10.0, 1000.0, LocalDate.of(2022, 10, 26), Operation.BUY);
     stockList.add(s);
     IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
-    assertEquals("1857.75", String.valueOf(portfolio.calculateValue(LocalDate.of(2022, 10, 27))));
+    assertEquals("1133.75", String.valueOf(portfolio.calculateValue(LocalDate.of(2022, 10, 27))));
   }
 
-  /**
-   * Test value of empty portfolio.
-   */
-  @Test
-  public void testValueOfEmptyPortfolio() {
-    List<IstockModel> stockList = new ArrayList<>();
-    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
-    assertEquals("0.0", String.valueOf(portfolio.calculateValue(LocalDate.of(2022, 10, 27))));
-  }
 
-  /**
-   * Test get name of port folio.
-   */
-  @Test
-  public void testGetNameOfPortFolio() {
-    List<IstockModel> stockList = new ArrayList<>();
-    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
-    assertEquals("Portfolio 1", portfolio.getNameOfPortFolio());
-  }
 
   /**
    * Create portfolio without a name throws an exception.
@@ -107,48 +89,6 @@ public class PortfolioTest {
   public void testCreatePortfolioWithEmptyStocks() {
     List<IstockModel> stockList = new ArrayList<>();
     IFixedPortfolio portfolio = new FixedPortfolio("", stockList);
-  }
-
-  /**
-   * Create portfolio.
-   */
-  @Test
-  public void testCreatePortfolio() {
-    List<IstockModel> stockList = new ArrayList<>();
-    IUserInterface user = new User(null);
-//    Stock s = new Stock("AAPL", 5.0, commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
-//    stockList.add(s);
-//    s = new Stock("MSFT", 25.0, commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
-//    stockList.add(s);
-    int previous = user.getPortfolioNamesCreated(PortfolioType.fixed).size();
-    IFixedPortfolio portfolio = new FixedPortfolio("", stockList);
-    assertEquals(previous + 1, user.getPortfolioNamesCreated(PortfolioType.fixed).size());
-  }
-
-  /**
-   * Test to list of string.
-   */
-  @Test
-  public void testToListOfString() {
-    List<IstockModel> stockList = new ArrayList<>();
-//    Stock s = new Stock("AAPL", 5.0, commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
-//    stockList.add(s);
-//    s = new Stock("MSFT", 25.0, commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
-//    stockList.add(s);
-    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
-
-    List<String[]> expectedList = new ArrayList<>();
-    String[] stock = {"AAPL", "5", "2022-10-26"};
-    expectedList.add(stock);
-    String[] stock2 = {"MSFT", "25", "2022-10-26"};
-    expectedList.add(stock2);
-
-    assertEquals("AAPL", portfolio.toListOfString().get(0)[0]);
-    assertEquals("5", portfolio.toListOfString().get(0)[1]);
-    assertEquals("2022-10-26", portfolio.toListOfString().get(0)[2]);
-    assertEquals("MSFT", portfolio.toListOfString().get(1)[0]);
-    assertEquals("25", portfolio.toListOfString().get(1)[1]);
-    assertEquals("2022-10-26", portfolio.toListOfString().get(1)[2]);
   }
 
 }
