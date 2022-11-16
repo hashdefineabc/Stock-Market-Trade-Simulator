@@ -105,7 +105,13 @@ public class CommandController implements ICommandController{
         }
         isOkay = true;
       } catch (IllegalArgumentException ie) {
-        this.view.displayMsgToUser(ie.getMessage());
+        if (!ie.getMessage().equals("Invalid Option!!")) {
+          this.view.displayMsgToUser("Please enter an integer value");
+        }
+        else {
+          this.view.displayMsgToUser(ie.getMessage());
+        }
+
         isOkay = false;
       }
     } while (!isOkay);

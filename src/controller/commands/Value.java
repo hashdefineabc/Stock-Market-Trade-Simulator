@@ -3,6 +3,7 @@ package controller.commands;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -65,13 +66,31 @@ public class Value implements ICommandController {
   }
 
   public int getSelectedPortFolioFromView(PortfolioType portfolioType) {
-    int index = -1;
-    while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
-      view.getSelectedPortfolio();
-      index = this.inputScanner.nextInt();
-    }
-    return index;
+    int userOption = 0;
+    Boolean isOkay = false;
+    do {
+      try {
+        this.view.getSelectedPortfolio();
+        userOption = Integer.parseInt(this.inputScanner.next());
+        if ((userOption < 0) || (userOption > user.getPortfolioNamesCreated(portfolioType).size())) {
+          throw new IllegalArgumentException("Invalid Option!!");
+        }
+        isOkay = true;
+      } catch (IllegalArgumentException ie) {
+        if (!ie.getMessage().equals("Invalid Option!!")) {
+          this.view.displayMsgToUser("Please enter an integer value");
+        } else {
+          this.view.displayMsgToUser(ie.getMessage());
+        }
+
+        isOkay = false;
+      }
+    } while (!isOkay);
+    return userOption;
   }
+
+
+
 
   private LocalDate validateDateForValue() {
     LocalDate date = this.getDateFromView();
