@@ -115,7 +115,7 @@ public class PortfolioTest {
   @Test
   public void testCreatePortfolio() {
     List<IstockModel> stockList = new ArrayList<>();
-    IUserInterface user = new User();
+    IUserInterface user = new User(null);
 //    Stock s = new Stock("AAPL", 5.0, commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
 //    stockList.add(s);
 //    s = new Stock("MSFT", 25.0, commission, transactionPrice, LocalDate.of(2022, 10, 26), buyOrSell);
