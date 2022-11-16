@@ -102,7 +102,7 @@ public class ViewImpl implements ViewInterface {
   @Override
   public void getPortfolioNameFromUser() {
     this.out.print("\tPlease enter a name for this portfolio: "
-    + "(No spaces or special characters allowed in the name)");
+    + "(No spaces or special characters allowed in the name)\n");
   }
 
   @Override
@@ -145,7 +145,7 @@ public class ViewImpl implements ViewInterface {
     this.out.println("Please pick an option\n" +
             "1. Display chart for previous week\n" +
             "2. Display chart for previous month\n" +
-            "3. Display chart for previous year\n");
+            "3. Display chart for previous year");
   }
 
   @Override

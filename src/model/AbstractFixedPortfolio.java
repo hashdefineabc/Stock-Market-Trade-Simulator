@@ -278,7 +278,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
 
 
     Double maxValue = Collections.max(values);
-    this.scale = maxValue / 10;
+    this.scale = maxValue / 30;
     LocalDate date = LocalDate.now();
     for(int i=0; i<values.size(); i++) {
       int numStars = (int) (values.get(i) / scale);
