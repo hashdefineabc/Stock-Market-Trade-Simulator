@@ -60,9 +60,6 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     this.portfolioType = "fixed";
   }
 
-  public String getPortfolioType() {
-    return this.portfolioType;
-  }
   public Double getStockValue(String tickerName, LocalDate date) {
     Double result = 0.0;
     FileReader file = null;
@@ -133,7 +130,6 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
       List<String[]> row = new ArrayList<>();
 
       InputStream in = null;
-      StringBuilder output = new StringBuilder();
 
       in = url.openStream();
 

@@ -66,6 +66,8 @@ public class User implements IUserInterface {
     }
   }
 
+
+
   private void loadNasdaqTickerNames() throws FileNotFoundException {
     try {
       BufferedReader csvReader = new BufferedReader(new FileReader("./resources/Nasdaq_top25.csv"));
@@ -531,6 +533,5 @@ public class User implements IUserInterface {
     }
     return transactionValue;
   }
-
 
 }
