@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  *Interface that describes all the operations that can be performed on a portfolio.
@@ -34,4 +35,6 @@ public interface IFixedPortfolio {
 
   Double calculateCostBasis(LocalDate costBasisDate);
 
+  Map<LocalDate, String> calculateChartValues(int option);
+  Double getScale();
 }

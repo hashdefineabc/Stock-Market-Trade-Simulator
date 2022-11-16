@@ -4,9 +4,9 @@ import java.io.PrintStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import model.IstockModel;
-import model.Operation;
 
 /**
  * Class that implements the text user interface of the stock market application.
@@ -101,8 +101,13 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void getPortfolioNameFromUser() {
+<<<<<<< HEAD
     this.out.print("\tPlease enter a name for this portfolio:\n"
     + "(No spaces or special characters allowed in the name)");
+=======
+    this.out.print("\tPlease enter a name for this portfolio: "
+    + "(No spaces or special characters in the name)\n");
+>>>>>>> 2e0c3d644bc8f5d8c85498462dba9fb761381c4d
   }
 
   @Override
@@ -124,7 +129,16 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void takeCommissionValue() {
+<<<<<<< HEAD
     this.out.println("Enter the commission value (USD) for this transaction:");
+=======
+    this.out.println("Enter the commission value for this transaction (in dollars)");
+  }
+
+  @Override
+  public void takeDateOfTransaction() {
+    this.out.println("Please enter the date of this transaction (yyyy-mm-dd):");
+>>>>>>> 2e0c3d644bc8f5d8c85498462dba9fb761381c4d
   }
 
   @Override
@@ -135,9 +149,31 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void askAddOrSell() {
-    this.out.println("Please pick an operation\n " +
+    this.out.println("Please pick an operation\n" +
             "1. Add Stock to the portfolio\n" +
             "2. Sell Stock from the portfolio");
+  }
+
+  @Override
+  public void displayOptionsForChart() {
+    this.out.println("Please pick an option\n" +
+            "1. Display chart for previous week\n" +
+            "2. Display chart for previous month\n" +
+            "3. Display chart for previous year\n");
+  }
+
+  @Override
+  public void displayChartWeek(Map<LocalDate, String> chart) {
+    for (Map.Entry<LocalDate,String> entry : chart.entrySet())
+      this.out.println(entry.getKey() +
+              ":" + entry.getValue());
+  }
+
+  @Override
+  public void displayChartMonth(Map<LocalDate, String> chart) {
+    for (Map.Entry<LocalDate,String> entry : chart.entrySet())
+      this.out.println(entry.getKey().getMonth().toString().substring(0,3) +
+              ":" + entry.getValue());
   }
 
 }

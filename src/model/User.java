@@ -17,7 +17,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -439,11 +441,41 @@ public class User implements IUserInterface {
     return result;
   }
 
+  @Override
+  public Map<LocalDate, String> CalculateChart(int option, int portfolioIndexForVal, PortfolioType portfolioType) {
+    Map<LocalDate, String> chart = new LinkedHashMap<>();
+    if(portfolioType.equals(PortfolioType.fixed)) {
+      IFixedPortfolio toDisplayChart = this.fixedPortfolios.get(portfolioIndexForVal - 1);
+      chart = toDisplayChart.calculateChartValues(option);
+    }
+    else if (portfolioType.equals(PortfolioType.flexible)) {
+      IFlexiblePortfolio toDisplayChart = this.flexiblePortfolios.get(portfolioIndexForVal - 1);
+      chart = toDisplayChart.calculateChartValues(option);
+    }
+
+    return chart;
+  }
+
+  @Override
+  public Double getScale(int portfolioIndex, PortfolioType portfolioType) {
+
+    if(portfolioType.equals(PortfolioType.fixed)) {
+      IFixedPortfolio fp = this.fixedPortfolios.get(portfolioIndex - 1);
+      return fp.getScale();
+    }
+    else {
+      IFlexiblePortfolio fp = this.flexiblePortfolios.get(portfolioIndex - 1);
+      return fp.getScale();
+    }
+
+  }
+
+
   private void updateStockFile(String tickerName) {
     try {
       URL url = new URL("https://www.alphavantage"
               + ".co/query?function=TIME_SERIES_DAILY"
-              + "&outputsize=compact"
+              + "&outputsize=full"
               + "&symbol"
               + "=" + tickerName + "&apikey=" + apiKey + "&datatype=csv");
 

@@ -2,6 +2,7 @@ package view;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import model.IstockModel;
 
@@ -96,4 +97,10 @@ public interface ViewInterface {
   void displayCostBasis(double costBasis, LocalDate costBasisDate);
 
   void askAddOrSell();
+
+  void displayOptionsForChart();
+
+  void displayChartWeek(Map<LocalDate, String> chart);
+
+  void displayChartMonth(Map<LocalDate, String> chart);
 }

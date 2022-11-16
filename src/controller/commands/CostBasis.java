@@ -27,7 +27,7 @@ public class CostBasis implements ICommandController {
   @Override
   public void go() {
     PortfolioType portfolioType = PortfolioType.flexible;
-    view.displayMsgToUser("Cost Basis can be calculated only for flexible portfolios.5");
+    view.displayMsgToUser("Cost Basis can be calculated only for flexible portfolios.");
     if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
       view.displayMsgToUser("No " + portfolioType + " portfolios created till now!!!");
       return;
