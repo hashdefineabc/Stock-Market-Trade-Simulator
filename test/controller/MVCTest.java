@@ -42,6 +42,9 @@ public class MVCTest {
   String costBasisPortfolio = null;
   String costBasisDate = null;
   String costBasis = null;
+  String valueDate = null;
+  String fixedValue = null;
+  String flexibleDate = null;
 
   @Before
   public void setup() {
@@ -93,7 +96,9 @@ public class MVCTest {
             "1 testFlex1.csv\n" + "Pick a portfolio\n";
     costBasisDate = "Enter the date :(yyyy-mm-dd)\n";
     costBasis = "CostBasis of the portfolio as of date 2022-11-16 is: 39344.75 USD\n";
-
+    valueDate = "Enter Date for which you want to check the value : (yyyy-mm-dd)\n";
+    fixedValue = "Value of the portfolio as of date 2022-11-16 is: 45566.80 USD\n";
+    flexibleDate = "Value of the portfolio as of date 2022-11-16 is: 30397.75 USD\n";
   }
 
   @Test
@@ -149,6 +154,25 @@ public class MVCTest {
     assertEquals(log.toString(), out.toString());
   }
 
+  @Test
+  public void testValueOfFixedPortfolio() {
+    log = new StringBuilder();
+    log.append(menu+portfolioOptions+displayListOfFixedPortfolios+valueDate+fixedValue+menu+exit);
+    input = new ByteArrayInputStream("3 1 1 2022-11-16 7".getBytes());
+    ICommandController controller = new CommandController(u, view, input);
+    controller.go();
+    assertEquals(log.toString(), out.toString());
+  }
+
+  @Test
+  public void testValueOfFlexiblePortfolio() {
+    log = new StringBuilder();
+    log.append(menu+portfolioOptions+displayListOfFlexiblePortfolios+valueDate+flexibleDate+menu+exit);
+    input = new ByteArrayInputStream("3 2 1 2022-11-16 7".getBytes());
+    ICommandController controller = new CommandController(u, view, input);
+    controller.go();
+    assertEquals(log.toString(), out.toString());
+  }
 
 
 }

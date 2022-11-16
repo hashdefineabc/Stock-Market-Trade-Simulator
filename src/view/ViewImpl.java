@@ -91,7 +91,7 @@ public class ViewImpl implements ViewInterface {
   @Override
   public void displayValue(double val, LocalDate valueDate) {
     this.out.print("Value of the portfolio as of date " + valueDate.toString()
-            + " is: " + String.format("%.2f", val) + " USD \n");
+            + " is: " + String.format("%.2f", val) + " USD\n");
   }
 
   @Override
