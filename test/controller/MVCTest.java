@@ -78,7 +78,7 @@ public class MVCTest {
     log = new StringBuilder();
     log.append(expectedOutputs.get("menuOk"));
     input = new ByteArrayInputStream("1".getBytes());
-    Controller controller = new CommandController(u, view, input);
+    CommandController controller = new CommandController(u, view, input);
     controller.showMenuOnView();
     assertEquals(log.toString(), out.toString());
   }
@@ -86,7 +86,7 @@ public class MVCTest {
   @Test
   public void testWrongOptionForMenu() {
     input = new ByteArrayInputStream("a 2".getBytes());
-    Controller controller = new ControllerImpl(u,view,input);
+    CommandController controller = new CommandController(u,view,input);
     controller.showMenuOnView();
     assertEquals(expectedOutputs.get("menuNotOk"),out.toString());
   }
@@ -94,9 +94,9 @@ public class MVCTest {
   @Test
   public void testRetrievePortFolio() {
     input = new ByteArrayInputStream("2 1".getBytes());
-    Controller controller = new ControllerImpl(u,view,input);
+    CommandController controller = new CommandController(u,view,input);
     controller.showMenuOnView();
-    controller.retrievePortFolios("fixed");
+//    controller.retrievePortFolios("fixed");
     String o = out.toString();
     assertEquals(o,out.toString());
   }

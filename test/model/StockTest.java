@@ -14,19 +14,19 @@ public class StockTest {
 
   @Test
   public void testGetTickerName() {
-    IstockModel stock = new Stock("MSFT", 6.0, commission, transactionPrice, LocalDate.now(), buyOrSell);
+    IstockModel stock = new Stock("MSFT", 6.0, 10.0, 2000.0, LocalDate.now(), Operation.BUY);
     assertEquals("MSFT", stock.getTickerName());
   }
 
   @Test
   public void testGetNumOfUnits() {
-    IstockModel stock = new Stock("MSFT", 6.0, commission, transactionPrice, LocalDate.now(), buyOrSell);
+    IstockModel stock = new Stock("MSFT", 6.0, 20.0, 3000.0, LocalDate.now(), Operation.BUY);
     assertEquals("6", stock.getNumOfUnits().toString());
   }
 
   @Test
   public void testGetDate() {
-    IstockModel stock = new Stock("MSFT", 6.0, commission, transactionPrice, LocalDate.now(), buyOrSell);
+    IstockModel stock = new Stock("MSFT", 6.0, 20.0, 20000.0, LocalDate.now(), Operation.BUY);
     LocalDate curDate = LocalDate.now();
     String s = curDate.toString();
     assertEquals(s, stock.getTransactionDate().toString());
