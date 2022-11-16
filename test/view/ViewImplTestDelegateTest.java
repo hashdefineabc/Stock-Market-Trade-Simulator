@@ -2,8 +2,10 @@ package view;
 
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import model.IstockModel;
 
@@ -149,6 +151,8 @@ public class ViewImplTestDelegateTest {
     public void isFileUploaded() {
       log.append("isFileUploaded method called.");
     }
+
+
   }
 
   @Test

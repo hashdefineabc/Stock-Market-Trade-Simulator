@@ -13,8 +13,12 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,6 +28,8 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   private String nameOfPortFolio;
   private LocalDate dateOfCreation;
   final List<IstockModel> stocks;
+
+  private Double scale = 0.0;
 
   // private fields for api data fetching and file handling
   private String apiKey = "RWI9HAQXNXJQQSJI";
@@ -243,6 +249,66 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
       }
     }
     return costBasis;
+  }
+
+  @Override
+  public Map<LocalDate, String> calculateChartValues(int option) {
+
+    Map<LocalDate, String> chart = new LinkedHashMap<>();
+    List<Double> values = new ArrayList<>();
+
+    LocalDate startDate = LocalDate.now();
+    LocalDate endDate;
+
+    if(option == 1) { // previous week
+      endDate = startDate.minusDays(7);
+      for(LocalDate date = startDate; date.isAfter(endDate); date = date.minusDays(1)) {
+        values.add(this.calculateValue(date));
+      }
+    } else if (option == 2) { // previous month
+      endDate = startDate.minusDays(30);
+      for(LocalDate date = startDate; date.isAfter(endDate); date = date.minusDays(1)) {
+        values.add(this.calculateValue(date));
+      }
+    }
+    else {
+      endDate = startDate.minusMonths(12);
+      endDate = endDate.with(TemporalAdjusters.lastDayOfMonth());
+      for(LocalDate date = startDate; date.isAfter(endDate); date = date.minusMonths(1)) {
+        values.add(this.calculateValue(date));
+        date = date.with(TemporalAdjusters.lastDayOfMonth());
+      }
+    }
+
+
+    Double maxValue = Collections.max(values);
+    this.scale = maxValue / 10;
+    LocalDate date = LocalDate.now();
+    for(int i=0; i<values.size(); i++) {
+      int numStars = (int) (values.get(i) / scale);
+      String stars = "";
+      if(numStars == 0)
+        stars = "<*";
+      else {
+        for(int j=0; j<numStars; j++)
+          stars = stars+"*";
+      }
+      chart.put(date, stars);
+      if(option == 3){
+        date = date.minusMonths(1);
+      }
+      else {
+        date = date.minusDays(1);
+      }
+    }
+
+    return chart;
+
+  }
+
+  @Override
+  public Double getScale() {
+    return this.scale;
   }
 
 }

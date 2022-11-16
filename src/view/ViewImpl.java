@@ -4,9 +4,9 @@ import java.io.PrintStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import model.IstockModel;
-import model.Operation;
 
 /**
  * Class that implements the text user interface of the stock market application.
@@ -139,9 +139,31 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void askAddOrSell() {
-    this.out.println("Please pick an operation\n " +
+    this.out.println("Please pick an operation\n" +
             "1. Add Stock to the portfolio\n" +
             "2. Sell Stock from the portfolio");
+  }
+
+  @Override
+  public void displayOptionsForChart() {
+    this.out.println("Please pick an option\n" +
+            "1. Display chart for previous week\n" +
+            "2. Display chart for previous month\n" +
+            "3. Display chart for previous year\n");
+  }
+
+  @Override
+  public void displayChartWeek(Map<LocalDate, String> chart) {
+    for (Map.Entry<LocalDate,String> entry : chart.entrySet())
+      this.out.println(entry.getKey() +
+              ":" + entry.getValue());
+  }
+
+  @Override
+  public void displayChartMonth(Map<LocalDate, String> chart) {
+    for (Map.Entry<LocalDate,String> entry : chart.entrySet())
+      this.out.println(entry.getKey().getMonth().toString().substring(0,3) +
+              ":" + entry.getValue());
   }
 
 }

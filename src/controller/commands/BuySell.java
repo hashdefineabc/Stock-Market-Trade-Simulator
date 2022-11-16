@@ -2,7 +2,6 @@ package controller.commands;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +14,6 @@ import model.IstockModel;
 import model.Operation;
 import model.PortfolioType;
 import model.Stock;
-import model.User;
 import view.ViewInterface;
 
 public class BuySell implements ICommandController {
@@ -62,7 +60,7 @@ public class BuySell implements ICommandController {
         view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
         portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
         buyOrSell = this.getBuyOrSellFromView();
-        stockDetails = this.takeStockInputFromView();
+        stockDetails = this.takeStockInputFromView(buyOrSell);
         if (! this.validateSellOperation(portfolioIndex, stockDetails)) {
           throw new Exception("Cannot sell more stocks than bought quantity!");
         }
@@ -130,7 +128,7 @@ public class BuySell implements ICommandController {
     return userOption;
   }
 
-  public String[] takeStockInputFromView() {
+  public String[] takeStockInputFromView(int buyOrSell) {
     String[] userStockInput = new String[6];
     String tickerNameFromUser = "";
     Double numUnits = 0.0;
@@ -144,11 +142,16 @@ public class BuySell implements ICommandController {
         if (!user.isTickerValid(tickerNameFromUser)) {
           throw new IllegalArgumentException("Invalid ticker name!");
         }
+        if(buyOrSell == 1)
+          this.view.displayMsgToUser("Enter the number of units to buy");
+        else
+          this.view.displayMsgToUser("Enter the number of units to sell");
+
         this.view.takeNumOfUnits();
         numUnits = scanner.nextDouble();
         Long numOfUnitsInt = Math.round(numUnits);
         if (numUnits <= 0.0) {
-          throw new IllegalArgumentException("Number of units purchased cannot be -ve");
+          throw new IllegalArgumentException("Number of units cannot be -ve");
         }
         else if ((double)numOfUnitsInt != numUnits) {
           throw new IllegalArgumentException("Cannot purchase fractional shares");
