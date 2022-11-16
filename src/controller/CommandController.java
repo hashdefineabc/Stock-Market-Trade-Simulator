@@ -72,8 +72,7 @@ public class CommandController implements ICommandController{
 
           case 7:
             view.displayMsgToUser("Closing the application");
-            System.exit(0);
-            break;
+            return;
 
           default:
             System.out.println(String.format("Unknown command"));
@@ -91,17 +90,23 @@ public class CommandController implements ICommandController{
     }
   }
 
-  private int showMenuOnView() {
-    int userOption = 8;
-    List<Integer> validMenuOptions = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
-    while (!validMenuOptions.contains(userOption)) {
+  public int showMenuOnView() {
+    int userOption = 0;
+    Boolean isOkay = false;
+    List<Integer> validMenuOptions = Arrays.asList(1, 2,3,4,5,6,7);
+    do {
       try {
         this.view.displayMenu();
         userOption = Integer.parseInt(scanner.next());
+        if (!validMenuOptions.contains(userOption)) {
+          throw new IllegalArgumentException("Invalid Option!!");
+        }
+        isOkay = true;
       } catch (IllegalArgumentException ie) {
-        this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
+        this.view.displayMsgToUser(ie.getMessage());
+        isOkay = false;
       }
-    }
+    } while (!isOkay);
     return userOption;
   }
 }

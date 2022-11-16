@@ -96,7 +96,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void displayMsgToUser(String msg) {
-    this.out.println(msg);
+    this.out.print(msg + "\n");
   }
 
   @Override

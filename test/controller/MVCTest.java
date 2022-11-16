@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.util.HashMap;
 
 import model.IUserInterface;
@@ -26,10 +27,12 @@ public class MVCTest {
   InputStream input;
   IUserInterface u;
   ViewInterface view;
-
   StringBuilder log;
 
   HashMap<String, String> expectedOutputs = new HashMap<>();
+  String menu = null;
+  String exit = null;
+  String wrongMenu = null;
 
   @Before
   public void setup() {
@@ -38,37 +41,18 @@ public class MVCTest {
     u = new User();
     view = new ViewImpl(new PrintStream(out));
     log = new StringBuilder();
-    expectedOutputs.put("menuOk", "\n***********************************\n"
-            + "\t1. Create a new Portfolio\n" + "\t2. Retrieve Portfolio\n"
-            + "\t3. Check value of a Portfolio\n" + "\t4. Exit the application.\n"
-            + "Pick one of the options\n");
-    expectedOutputs.put("menuNotOk", "\n***********************************\n"
+    menu = "\n***********************************\n"
             + "\t1. Create a new Portfolio\n"
-            + "\t2. Retrieve Portfolio\n"
-            + "\t3. Check value of a Portfolio\n"
-            + "\t4. Exit the application.\n"
-            + "Pick one of the options\n"
-            + "Please enter only an integer value from the below options!!\n"
-            + "***********************************\n"
-            + "\t1. Create a new Portfolio\n"
-            + "\t2. Retrieve Portfolio\n"
-            + "\t3. Check value of a Portfolio\n"
-            + "\t4. Exit the application.\n"
-            + "Pick one of the options\n");
+    +"\t2. View Composition of a Portfolio\n"
+    +"\t3. Check value of a Portfolio\n"
+    +"\t4. Buy or Sell Shares in a Portfolio\n"
+            + "\t5. View Cost Basis of a Portfolio\n"
+            + "\t6. Display bar chart of a Portfolio\n"
+            + "\t7. Close the Application\n"
+            + "Pick one of the options\n";
 
-    expectedOutputs.put("retrievePortFolio","\n***********************************\n"
-            + "\t1. Create a new Portfolio\n"
-            + "\t2. Retrieve Portfolio\n"
-            + "\t3. Check value of a Portfolio\n"
-            + "\t4. Exit the application.\n" + "Pick one of the options\n" +
-            "Following are the portfolios created till now:1 TestPortFolio1.csv\n" +
-            "2 TestPortfolio2.csv\n" +
-            "Pick a portfolio\n" +
-            "Following stocks are present in the portfolio : \n" +
-            "Ticker\tNumberOfUnits\tDateBoughtAt\n" +
-            "\n" +
-            "MSFT\t10\t\t\t\t2022-11-02\n" +
-            "GOOG\t20\t\t\t\t2022-11-02\n");
+    exit = "Closing the application\n";
+    wrongMenu = "Invalid Option!!\n";
 
   }
 
@@ -76,30 +60,25 @@ public class MVCTest {
   public void testDisplayMenu() {
 
     log = new StringBuilder();
-    log.append(expectedOutputs.get("menuOk"));
-    input = new ByteArrayInputStream("1".getBytes());
-    Controller controller = new CommandController(u, view, input);
-    controller.showMenuOnView();
+    log.append(menu+exit);
+    input = new ByteArrayInputStream("7".getBytes());
+    ICommandController controller = new CommandController(u, view, input);
+    controller.go();
     assertEquals(log.toString(), out.toString());
   }
 
   @Test
-  public void testWrongOptionForMenu() {
-    input = new ByteArrayInputStream("a 2".getBytes());
-    Controller controller = new ControllerImpl(u,view,input);
-    controller.showMenuOnView();
-    assertEquals(expectedOutputs.get("menuNotOk"),out.toString());
+  public void testWrongMenuOption() {
+
+    log = new StringBuilder();
+    log.append(menu+wrongMenu+menu+exit);
+    input = new ByteArrayInputStream("9 7".getBytes());
+    ICommandController controller = new CommandController(u, view, input);
+    controller.go();
+    assertEquals(log.toString(), out.toString());
   }
 
-  @Test
-  public void testRetrievePortFolio() {
-    input = new ByteArrayInputStream("2 1".getBytes());
-    Controller controller = new ControllerImpl(u,view,input);
-    controller.showMenuOnView();
-    controller.retrievePortFolios("fixed");
-    String o = out.toString();
-    assertEquals(o,out.toString());
-  }
+
 
 
 }
