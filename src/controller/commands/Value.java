@@ -60,7 +60,7 @@ public class Value implements ICommandController {
       view.displayMsgToUser(
               "Value cannot be calculated for a date prior to portfolio creation");
     } else {
-      view.displayValue(val);
+      view.displayValue(val, date);
     }
   }
 

@@ -28,7 +28,7 @@ public class ViewImpl implements ViewInterface {
     this.out.print("\t4. Buy or Sell Shares in a Portfolio\n");
     this.out.print("\t5. View Cost Basis of a Portfolio\n");
     this.out.print("\t6. Display bar chart of a Portfolio\n");
-    this.out.print("\t7. Close Application\n");
+    this.out.print("\t7. Close the Application\n");
     this.out.print("Pick one of the options\n");
 
   }
@@ -67,8 +67,8 @@ public class ViewImpl implements ViewInterface {
   @Override
   public void displayStocks(List<IstockModel> listOfStocks) {
     this.out.println("Following stocks are present in the portfolio : ");
-    this.out.println("TickerName\t" + "NumberOfUnits\t" + "TransactionDate\t" + "Commission\t"
-                    + "Price\t" + "BUY/SELL");
+    this.out.println("TickerName\t" + "NumberOfUnits\t" + "TransactionDate\t" + "Commission(USD)\t"
+                    + "Price(USD)\t" + "BUY/SELL");
 
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -89,8 +89,9 @@ public class ViewImpl implements ViewInterface {
 
 
   @Override
-  public void displayValue(double val) {
-    this.out.println("Value of the portfolio is: " + String.format("%.2f", val));
+  public void displayValue(double val, LocalDate valueDate) {
+    this.out.println("Value of the portfolio as of date " + valueDate.toString()
+            + " is: " + String.format("%.2f", val) + " USD");
   }
 
   @Override
@@ -100,8 +101,8 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void getPortfolioNameFromUser() {
-    this.out.print("\tPlease enter a name for this portfolio: "
-    + "(No spaces or special characters in the name)\n");
+    this.out.print("\tPlease enter a name for this portfolio:\n"
+    + "(No spaces or special characters allowed in the name)");
   }
 
   @Override
@@ -123,12 +124,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void takeCommissionValue() {
-    this.out.println("Enter the commission value for this transaction (in dollars)");
-  }
-
-  @Override
-  public void takeDateOfTransaction() {
-    this.out.println("Please enter the date of this transaction (yyyy-mm-dd):");
+    this.out.println("Enter the commission value (USD) for this transaction:");
   }
 
   @Override

@@ -65,7 +65,7 @@ public interface ViewInterface {
    * Method to display the calculated value of the portfolio.
    * @param val = value as calculated by model.
    */
-  void displayValue(double val);
+  void displayValue(double val, LocalDate valueDate);
 
   /**
    * Method to display any arbitrary msg to the user.
@@ -93,8 +93,6 @@ public interface ViewInterface {
   void chooseFixedOrFlexible();
 
   void takeCommissionValue();
-
-  void takeDateOfTransaction();
 
   void displayCostBasis(double costBasis, LocalDate costBasisDate);
 
