@@ -33,12 +33,15 @@ public class MVCTest {
   String menu = null;
   String exit = null;
   String wrongMenu = null;
+  String portfolioOptions = null;
+  String displayListOfFixedPortfolios = null;
+  String testFixedPortfolio1 = null;
 
   @Before
   public void setup() {
     out = new ByteArrayOutputStream();
     input = null;
-    u = new User();
+    u = new User("./resources/testPortfolio");
     view = new ViewImpl(new PrintStream(out));
     log = new StringBuilder();
     menu = "\n***********************************\n"
@@ -53,6 +56,18 @@ public class MVCTest {
 
     exit = "Closing the application\n";
     wrongMenu = "Invalid Option!!\n";
+    portfolioOptions = "Please pick one \n" +
+            "1. Fixed Portfolio\n" +
+            "2. Flexible Portfolio\n";
+    displayListOfFixedPortfolios = "Following are the fixed portfolios created till now:\n" +
+            "1 testFixedPortfolio1.csv\n" +
+            "2 testPortfolio1.csv\n" +
+            "Pick a portfolio\n";
+
+    testFixedPortfolio1 = "Following stocks are present in the portfolio : \n" +
+            "TickerName\tNumberOfUnits\tTransactionDate\tCommission(USD)\tPrice(USD)\tBUY/SELL\n" +
+            "MSFT\t\t200.0\t\t\t2022-10-26\t\t0.0\t\t\t2000.0\t\t\tBUY\n" +
+            "AAPL\t\t100.0\t\t\t2022-11-15\t\t0.0\t\t\t1000.0\t\t\tBUY\n";
 
   }
 
@@ -76,6 +91,16 @@ public class MVCTest {
     ICommandController controller = new CommandController(u, view, input);
     controller.go();
     assertEquals(log.toString(), out.toString() );
+  }
+
+  @Test
+  public void testCompositionOfFixedPortfolio() {
+    log = new StringBuilder();
+    log.append(menu+portfolioOptions+displayListOfFixedPortfolios+testFixedPortfolio1+menu+exit);
+    input = new ByteArrayInputStream("2 1 1 7".getBytes());
+    ICommandController controller = new CommandController(u, view, input);
+    controller.go();
+    assertEquals(log.toString(), out.toString());
   }
 
 

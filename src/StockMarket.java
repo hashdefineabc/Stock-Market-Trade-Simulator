@@ -16,7 +16,7 @@ public class StockMarket {
   public static void main(String[] args) {
 
     //create the model.
-    IUserInterface u = new User();
+    IUserInterface u = new User(null);
 
     //create the view.
     ViewInterface view = new ViewImpl(System.out);
