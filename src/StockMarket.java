@@ -20,13 +20,10 @@ public class StockMarket {
 
     //create the view.
     ViewInterface view = new ViewImpl(System.out);
-    //this input stream can be used by view as well as junit tests.
 
-    //create the controller and give it the model.
+    //create the controller and give it the model and view.
     ICommandController controller = new CommandController(u, view, System.in);
     controller.go();
 
-    //control to the controller.
-//    controller.goController();
   }
 }
