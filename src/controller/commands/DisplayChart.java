@@ -99,7 +99,7 @@ public class DisplayChart implements ICommandController {
   private int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
-      view.getSelectedPortfolio();
+      view.displayMsgToUser("Please pick a portfolio from the above list");
       index = scanner.nextInt();
     }
     return index;
