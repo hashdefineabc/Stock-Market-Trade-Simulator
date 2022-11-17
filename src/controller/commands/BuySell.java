@@ -53,30 +53,27 @@ public class BuySell implements ICommandController {
     String[] stockDetails = null;
     Boolean isSellOkay = false;
 
-    do {
-      try {
-        this.view.displayMsgToUser("Following is the list of portfolios available for adding/selling"
-                + "stocks");
-        view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
-        portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
-        buyOrSell = this.getBuyOrSellFromView();
-        stockDetails = this.takeStockInputFromView(buyOrSell);
-        if (! this.validateSellOperation(portfolioIndex, stockDetails)) {
-          throw new Exception("Cannot sell more stocks than bought quantity!");
-        }
-        isSellOkay = true;
-      } catch (Exception e) {
-        this.view.displayMsgToUser(e.getMessage());
-        isSellOkay = false;
-      }
-    } while (!isSellOkay);
-
+    this.view.displayMsgToUser("Following is the list of portfolios available for adding/selling"
+            + "stocks");
+    view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
+    portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
+    buyOrSell = this.getBuyOrSellFromView();
+    stockDetails = this.takeStockInputFromView(buyOrSell);
     if (buyOrSell == 1) {
       stockDetails[5] = Operation.BUY.toString();
     }
     else if (buyOrSell == 2) {
       stockDetails[5] = Operation.SELL.toString();
+      try {
+        if (! this.validateSellOperation(portfolioIndex, stockDetails)) {
+          throw new Exception("Cannot sell this stock!");
+        }
+      } catch (Exception e) {
+        this.view.displayMsgToUser(e.getMessage());
+        return;
+      }
     }
+
     Stock newStock = Stock.getBuilder()
               .tickerName(stockDetails[0])
               .numOfUnits(Double.valueOf(stockDetails[1]))
@@ -194,6 +191,10 @@ public class BuySell implements ICommandController {
         view.displayMsgToUser("Invalid date. Please try again!");
         isDateOkay = false;
       }
+      if(valueDate.isAfter(LocalDate.now())) {
+        view.displayMsgToUser("Future date entered... Please enter a date that is not later than today!!! ");
+        isDateOkay = false;
+      }
     }
     return valueDate;
   }
@@ -205,14 +206,20 @@ public class BuySell implements ICommandController {
     HashMap<String, Integer> stockMap = new HashMap<String, Integer>();
     Double numOfStocks = 0.0;
     IFlexiblePortfolio pfToCheck = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
-    for (IstockModel s : pfToCheck.getStocksInPortfolio(sellDate)) {
+
+    for (IstockModel s: pfToCheck.getStocksInPortfolio(LocalDate.now())) {
       if (tickername.equals(s.getTickerName()) && s.getBuyOrSell().equals(Operation.BUY)) {
         numOfStocks += s.getNumOfUnits();
       }
+      else if (tickername.equals(s.getTickerName()) && s.getBuyOrSell().equals(Operation.SELL)) {
+        numOfStocks -= s.getNumOfUnits();
+      }
     }
-    if (numOfStocks < Double.valueOf(stockDetails[1])) {
+    if (numOfStocks < Double.valueOf(stockDetails[1]) || numOfStocks == 0) {
       return false;
     }
+
+
     return true;
   }
 
