@@ -24,25 +24,37 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * AbstractFixedPortfolio class implements the IFixedPortfolio interface.
+ * It contains implementations of all the operations for a fixed portfolio.
+ * It essentially has the method definitions of the methods that are common to both fixed and
+ * flexible portfolio.
+ *
+ * This class is inherited by FixedPortfolio class and FlexiblePortfolio class.
+ */
 abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   private String nameOfPortFolio;
   private LocalDate dateOfCreation;
+  /**
+   * The list of stocks present in a portfolio.
+   */
   final List<IstockModel> stocks;
-
   private Double scale = 0.0;
-
-  // private fields for api data fetching and file handling
   private String apiKey = "RWI9HAQXNXJQQSJI";
   private String userDirectory = new File("").getAbsolutePath();
   private String folderPath = userDirectory + File.separator + "stockData";
+  /**
+   * The type of the portfolio. It can be either fixed or flexible
+   */
   String portfolioType;
 
 
   /**
    * Constructor to initialize the fields of the portfolio class.
    * It throws an exception if no stocks are provided while creating the portfolio
+   *
    * @param nameOfPortFolio name of the portfolio
-   * @param stocks list of stocks
+   * @param stocks          list of stocks in the portfolio
    * @throws IllegalArgumentException when we try to create portfolio with empty stocks
    */
   public AbstractFixedPortfolio(String nameOfPortFolio, List<IstockModel> stocks)
@@ -60,7 +72,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     this.portfolioType = "fixed";
   }
 
-  public Double getStockValue(String tickerName, LocalDate date) {
+  private Double getStockValue(String tickerName, LocalDate date) {
     Double result = 0.0;
     FileReader file = null;
     String fileName = "./resources/stockData/" + File.separator + tickerName + ".csv";

@@ -1,28 +1,20 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
- * Class to implement a portfolio.
+ * Fixed portfolio class inherits the abstract fixed portfolio.
+ * This class is specific to fixed portfolio.
+ * AbstractFixedPortfolio class contains the implementations of the methods that are common to both
+ * fixed and flexible portfolios.
  */
 public class FixedPortfolio extends AbstractFixedPortfolio {
+  /**
+   * Instantiates a new Fixed portfolio.
+   *
+   * @param portfolioName the portfolio name
+   * @param stocks        the list of stocks present in the portfolio
+   */
   public FixedPortfolio(String portfolioName, List<IstockModel> stocks) {
     super(portfolioName, stocks);
 
