@@ -25,7 +25,7 @@ public class BuySell implements ICommandController {
 
   private ViewInterface view;
   private IUserInterface user;
-  private Scanner scanner;
+  private Scanner inputScanner;
 
   /**
    * Instantiates a new BuySell.
@@ -33,10 +33,10 @@ public class BuySell implements ICommandController {
    * @param view the view
    * @param user the user
    */
-  public BuySell(ViewInterface view, IUserInterface user) {
+  public BuySell(ViewInterface view, IUserInterface user,Scanner scanner) {
     this.view = view;
     this.user = user;
-    scanner = new Scanner(System.in);
+    inputScanner = scanner;
   }
 
 
@@ -119,7 +119,7 @@ public class BuySell implements ICommandController {
     do {
       try {
         view.getSelectedPortfolio();
-        index = scanner.nextInt();
+        index = inputScanner.nextInt();
         if ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
           throw new IllegalArgumentException("Invalid Index");
         }
@@ -148,7 +148,7 @@ public class BuySell implements ICommandController {
     do {
       try {
         this.view.askAddOrSell();
-        userOption = Integer.parseInt(scanner.next());
+        userOption = Integer.parseInt(inputScanner.next());
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
@@ -176,7 +176,7 @@ public class BuySell implements ICommandController {
     do {
       try{
         this.view.takeTickerName();
-        tickerNameFromUser = scanner.next();
+        tickerNameFromUser = inputScanner.next();
         if (!user.isTickerValid(tickerNameFromUser)) {
           throw new IllegalArgumentException("Invalid ticker name!");
         }
@@ -185,7 +185,7 @@ public class BuySell implements ICommandController {
         else
           this.view.displayMsgToUser("Enter the number of units to sell");
 
-        numUnits = scanner.nextDouble();
+        numUnits = inputScanner.nextDouble();
         Long numOfUnitsInt = Math.round(numUnits);
         if (numUnits <= 0.0) {
           throw new IllegalArgumentException("Number of units cannot be -ve");
@@ -197,7 +197,7 @@ public class BuySell implements ICommandController {
         transactionDate = this.getDateFromView();
 
         this.view.takeCommissionValue();
-        commission = scanner.nextDouble();
+        commission = inputScanner.nextDouble();
         if (commission <= 0.0) {
           throw new IllegalArgumentException("Commission cannot be -ve");
         }
@@ -236,7 +236,7 @@ public class BuySell implements ICommandController {
     while (!isDateOkay) {
       try {
         view.getDateFromUser();
-        valueDate = LocalDate.parse(scanner.next(), dateFormat);
+        valueDate = LocalDate.parse(inputScanner.next(), dateFormat);
         isDateOkay = true;
       } catch (Exception e) {
         view.displayMsgToUser("Invalid date. Please try again!");
@@ -264,6 +264,7 @@ public class BuySell implements ICommandController {
   private Boolean validateSellOperation(int portfolioIndex, String[] stockDetails) {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDate sellDate = LocalDate.parse(stockDetails[2], dateFormat);
+    LocalDate firstDate = LocalDate.now();
     String tickername = stockDetails[0];
     Double numOfStocks = 0.0;
     IFlexiblePortfolio pfToCheck = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
@@ -271,12 +272,16 @@ public class BuySell implements ICommandController {
     for (IstockModel s: pfToCheck.getStocksInPortfolio(LocalDate.now())) {
       if (tickername.equals(s.getTickerName()) && s.getBuyOrSell().equals(Operation.BUY)) {
         numOfStocks += s.getNumOfUnits();
+        if (firstDate.isAfter(s.getTransactionDate())) {
+          firstDate = s.getTransactionDate();
+        }
       }
       else if (tickername.equals(s.getTickerName()) && s.getBuyOrSell().equals(Operation.SELL)) {
         numOfStocks -= s.getNumOfUnits();
       }
     }
-    if (numOfStocks < Double.valueOf(stockDetails[1]) || numOfStocks == 0) {
+    if (numOfStocks < Double.valueOf(stockDetails[1]) || numOfStocks == 0
+            || sellDate.isBefore(firstDate)) {
       return false;
     }
 

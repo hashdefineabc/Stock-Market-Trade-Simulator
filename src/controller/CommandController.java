@@ -72,7 +72,7 @@ public class CommandController implements ICommandController{
       try {
         switch (this.showMenuOnView()) {
           case 1: //Create new portfolio
-            cmd = new Create(view, user);
+            cmd = new Create(view, user, inputScanner);
             break;
           case 2: // Show composition of a Portfolio
             cmd = new Composition(view, user, inputScanner);
@@ -81,13 +81,13 @@ public class CommandController implements ICommandController{
             cmd = new Value(view, user,inputScanner);
             break;
           case 4: // Buy or sell shares of a portfolio
-            cmd = new BuySell(view, user);
+            cmd = new BuySell(view, user,inputScanner);
             break;
           case 5: // Check cost basis of a portfolio
             cmd = new CostBasis(view, user, inputScanner);
             break;
           case 6: // Display bar chart of a portfolio
-            cmd = new DisplayChart(view, user);
+            cmd = new DisplayChart(view, user,inputScanner);
             break;
 
           case 7:
