@@ -165,8 +165,8 @@ public class ViewImpl implements ViewInterface {
   @Override
   public void displayChartMonth(Map<LocalDate, String> chart) {
     for (Map.Entry<LocalDate,String> entry : chart.entrySet())
-      this.out.print(entry.getKey().getMonth().toString().substring(0,3) +
-              ":" + entry.getValue()+"\n");
+      this.out.print(entry.getKey().getMonth().toString().substring(0,3) + " "+ entry.getKey().getYear() +
+              " : " + entry.getValue()+"\n");
   }
 
 }

@@ -85,14 +85,31 @@ public class DisplayChart implements ICommandController {
       }
     }
 
-      this.chart = user.CalculateChart(option, portfolioIndexForVal, portfolioType);
-      if(option == 1 || option == 2)
-        view.displayChartWeek(chart);
-      else
-        view.displayChartMonth(chart);
+    this.chart = user.CalculateChart(option, portfolioIndexForVal, portfolioType);
+    if(option == 1) {
+      view.displayMsgToUser("Performance of the portfolio "+
+              user.getPortfolioName(portfolioIndexForVal, portfolioType) +
+              " from "+ LocalDate.now() + " to "+LocalDate.now().minusDays(7));
+      view.displayChartWeek(chart);
+    }
+    else if(option == 2) {
+      view.displayMsgToUser("Performance of the portfolio "+
+              user.getPortfolioName(portfolioIndexForVal, portfolioType) +
+              " from "+ LocalDate.now() + " to "+LocalDate.now().minusDays(30));
+      view.displayChartWeek(chart);
+    }
+    else {
+      view.displayMsgToUser("Performance of the portfolio "+
+              user.getPortfolioName(portfolioIndexForVal, portfolioType) +
+              " from "+ LocalDate.now().getMonth() + " " + LocalDate.now().getYear() +
+              " to "+LocalDate.now().minusMonths(11).getMonth() + " " +
+              LocalDate.now().minusMonths(11).getYear());
+      view.displayChartMonth(chart);
+    }
 
-      view.displayMsgToUser("<* means the value of the portfolio for a particular timestamp is less than the scale");
-      view.displayMsgToUser("Scale: * = $" + user.getScale(portfolioIndexForVal, portfolioType));
+    view.displayMsgToUser("<* means the value of the portfolio for a " +
+            "particular timestamp is less than the scale");
+    view.displayMsgToUser("Scale: * = $" + user.getScale(portfolioIndexForVal, portfolioType));
 
   }
 

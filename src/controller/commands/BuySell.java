@@ -29,7 +29,7 @@ public class BuySell implements ICommandController {
 
   /**
    * Instantiates a new BuySell.
-   * It takes in view and model (user) and intantiates them.
+   * It takes in view and model (user) and instantiates them.
    * @param view the view
    * @param user the user
    */
