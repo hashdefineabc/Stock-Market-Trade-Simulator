@@ -18,12 +18,6 @@
 //
 //  IUserInterface testUser;
 //
-//  @Before
-//  public void setUp() {
-//    testUser = new User();
-//  }
-//
-//
 //  @Test
 //  public void testStocks() {
 //    IstockModel stock = new Stock("AAPL", 5.0, commission, transactionPrice, LocalDate.now(), buyOrSell);
