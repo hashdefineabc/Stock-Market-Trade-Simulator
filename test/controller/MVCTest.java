@@ -70,7 +70,8 @@ public class MVCTest {
             "2. Flexible Portfolio\n";
     displayListOfFixedPortfolios = "Following are the fixed portfolios created till now:\n" +
             "1 testFixed1.csv\n" +
-            "2 testPortfolio1.csv\n" +
+            "2 testFixedPortfolio1.csv\n" +
+            "3 testPortfolio1.csv\n" +
             "Pick a portfolio\n";
     testFixedPortfolio1 = "Following stocks are present in the portfolio : \n" +
             "TickerName\tNumberOfUnits\tTransactionDate\tCommission(USD)\tPrice(USD)\tBUY/SELL\n" +
@@ -80,7 +81,9 @@ public class MVCTest {
             "AAPL\t\t40.0\t\t\t2022-11-16\t\t0.0\t\t\t150.04\t\t\tBUY\n" +
             "V\t\t75.0\t\t\t2022-11-16\t\t0.0\t\t\t209.99\t\t\tBUY\n";
     displayListOfFlexiblePortfolios = "Following are the flexible portfolios created till now:\n" +
-            "1 testFlex1.csv\n" + "Pick a portfolio\n";
+            "1 testFlex1.csv\n"
+            + "2 testFlexiblePortfolio1.csv\n"
+            + "Pick a portfolio\n";
     dateFromUser = "Please enter the date for which you want to view the composition(yyyy-MM-dd)\n";
     testFlexiblePortfolio1 = "Following stocks are present in the portfolio : \n" +
             "TickerName\tNumberOfUnits\tTransactionDate\tCommission(USD)\tPrice(USD)\tBUY/SELL\n" +
