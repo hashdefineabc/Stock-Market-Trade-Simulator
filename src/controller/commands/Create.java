@@ -54,7 +54,8 @@ public class Create implements ICommandController {
       portfolioType = PortfolioType.flexible;
     }
 
-    if (this.showCreatePortfolioOptionsOnView() == 1) {
+    int manualOrFile = this.showCreatePortfolioOptionsOnView();
+    if ( manualOrFile == 1) {
       view.displayMsgToUser("Creating a new portfolio...");
       String portfolioName = this.getPortFolioNameFromView();
       List<String[]> stockList = new ArrayList<>();
@@ -68,7 +69,7 @@ public class Create implements ICommandController {
       } else {
         view.displayMsgToUser("Portfolio was not saved. Try again");
       }
-    } else if (this.showCreatePortfolioOptionsOnView() == 2) {
+    } else if (manualOrFile == 2) {
       //upload a file
       this.displayCsvPathToUser(portfolioType);
       //check if file uploaded
