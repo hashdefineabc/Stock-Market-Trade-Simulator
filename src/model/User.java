@@ -373,7 +373,7 @@ public class User implements IUserInterface {
     }
     return val;
   }
-
+  
   @Override
   public Double getStockPriceFromDB(String tickerNameFromUser, LocalDate transactionDate) {
     Double result = 0.0;
