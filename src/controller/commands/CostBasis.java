@@ -2,23 +2,35 @@ package controller.commands;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 import controller.ICommandController;
 import model.IUserInterface;
-import model.IstockModel;
 import model.PortfolioType;
-import model.User;
 import view.ViewInterface;
 
+/**
+ * The class CostBasis implements the command controller interface.
+ * It is one of the commands that is supported by our application.
+ * CostBasis operation is available for flexible portfolios only.
+ * It allows the user to view the total cost spent on a portfolio.
+ * It displays the total amount of money invested in a portfolio by a specific date.
+ * This includes all the purchases made in that portfolio till that date.
+ */
 public class CostBasis implements ICommandController {
 
   private ViewInterface view;
   private IUserInterface user;
   private Scanner inputScanner;
 
+  /**
+   * Instantiates a new Cost basis.
+   *
+   * It takes view and model (user) and instantiates it.
+   * It interacts with view and main model which is user.
+   * @param view the view
+   * @param user the user
+   */
   public CostBasis(ViewInterface view, IUserInterface user, Scanner scanner) {
     this.view = view;
     this.user = user;
@@ -37,7 +49,7 @@ public class CostBasis implements ICommandController {
 
   }
 
-  public void calculateCostBasis(PortfolioType portfolioType) {
+  private void calculateCostBasis(PortfolioType portfolioType) {
     view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
@@ -48,21 +60,7 @@ public class CostBasis implements ICommandController {
     
   }
 
-  public int showFixedOrFlexPortfolioOptionsOnView() {
-    int userOption = 0;
-    List<Integer> validMenuOptions = Arrays.asList(1, 2);
-    do {
-      try {
-        this.view.chooseFixedOrFlexible();
-        userOption = Integer.parseInt(this.inputScanner.next());
-      } catch (IllegalArgumentException ie) {
-        this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
-      }
-    } while (!validMenuOptions.contains(userOption));
-    return userOption;
-  }
-
-  public int getSelectedPortFolioFromView(PortfolioType portfolioType) {
+  private int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     boolean okay = false;
     do {
@@ -78,11 +76,10 @@ public class CostBasis implements ICommandController {
         okay = false;
       }
     } while (!okay);
-
     return index;
   }
 
-  public LocalDate getDateFromView() {
+  private LocalDate getDateFromView() {
     LocalDate valueDate = LocalDate.now();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     boolean isDateOkay = false;
@@ -98,6 +95,4 @@ public class CostBasis implements ICommandController {
     }
     return valueDate;
   }
-
-
 }
