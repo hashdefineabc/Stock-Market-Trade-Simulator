@@ -1,6 +1,5 @@
 package controller.commands;
 
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -10,15 +9,28 @@ import controller.ICommandController;
 import model.IUserInterface;
 import model.IstockModel;
 import model.PortfolioType;
-import model.User;
 import view.ViewInterface;
 
+/**
+ * The class Composition implements the command controller interface.
+ * It is one of the commands that is supported by our application.
+ * Composition operation is available for both fixed and flexible portfolios.
+ * It allows the user to view the composition of the created portfolios.
+ */
 public class Composition implements ICommandController {
 
   private ViewInterface view;
   private IUserInterface user;
   private Scanner inputScanner;
 
+  /**
+   * Instantiates a new Composition.
+   * It takes view and model (user) and instantiates it.
+   * It interacts with view and main model which is user.
+   * @param view         the view
+   * @param user         the user
+   * @param inputScanner the input scanner
+   */
   public Composition(ViewInterface view, IUserInterface user, Scanner inputScanner) {
     this.view = view;
     this.user = user;
@@ -45,7 +57,7 @@ public class Composition implements ICommandController {
     this.retrievePortFolios(portfolioType);
   }
 
-  public void retrievePortFolios(PortfolioType portfolioType) {
+  private void retrievePortFolios(PortfolioType portfolioType) {
     view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
@@ -62,7 +74,7 @@ public class Composition implements ICommandController {
     view.displayStocks(stocksToDisplay);
   }
 
-  public int getSelectedPortFolioFromView(PortfolioType portfolioType) {
+  private int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     boolean okay = false;
     do {
@@ -82,7 +94,7 @@ public class Composition implements ICommandController {
     return index;
   }
 
-  public int showFixedOrFlexPortfolioOptionsOnView() {
+  private int showFixedOrFlexPortfolioOptionsOnView() {
     int userOption = 0;
     List<Integer> validMenuOptions = Arrays.asList(1, 2);
     do {

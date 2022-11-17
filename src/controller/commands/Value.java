@@ -3,20 +3,32 @@ package controller.commands;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Scanner;
 
 import controller.ICommandController;
 import model.IUserInterface;
-import model.IstockModel;
 import model.PortfolioType;
 import view.ViewInterface;
 
+/**
+ * The class Value implements the command controller interface.
+ * It is one of the commands that is supported by our application.
+ * Value operation is available for both fixed and flexible portfolios.
+ * It allows the user view the total value of a portfolio at a specific date.
+ * It provides the value of a portfolio on a specific date (to be exact, the end of that day).
+ * The value for a portfolio before the date of its first purchase is 0
+ */
 public class Value implements ICommandController {
   private ViewInterface view;
   private IUserInterface user;
   private Scanner scanner;
 
+  /**
+   * Instantiates a new Value.
+   *
+   * @param view the view
+   * @param user the user
+   */
   public Value(ViewInterface view, IUserInterface user) {
     this.view = view;
     this.user = user;
@@ -64,7 +76,7 @@ public class Value implements ICommandController {
     }
   }
 
-  public int getSelectedPortFolioFromView(PortfolioType portfolioType) {
+  private int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
       view.getSelectedPortfolio();
@@ -89,7 +101,7 @@ public class Value implements ICommandController {
     return date;
   }
 
-  public LocalDate getDateFromView() {
+  private LocalDate getDateFromView() {
     LocalDate valueDate = LocalDate.now();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     boolean isDateOkay = false;
