@@ -393,26 +393,6 @@ public class User implements IUserInterface {
     return val;
   }
 
-  @Override
-  public void addStocksToAPortfolio(int portfolioIndex) {
-
-  }
-
-
-  @Override
-  public void sellStocksFromAPortfolio(int portfolioIndex) {
-
-  }
-
-  @Override
-  public void buySell() {
-
-  }
-
-  @Override
-  public void displayChart() {
-
-  }
 
   @Override
   public Double getStockPriceFromDB(String tickerNameFromUser, LocalDate transactionDate) {
