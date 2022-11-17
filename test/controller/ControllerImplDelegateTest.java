@@ -144,6 +144,12 @@ public class ControllerImplDelegateTest {
       log.append("getScale method is called.");
       return null;
     }
+
+    @Override
+    public String getPortfolioName(int portfolioIndex, PortfolioType portfolioType) {
+      log.append("getPortfolioName method is called.");
+      return null;
+    }
   }
 
   @Test
@@ -275,6 +281,14 @@ public class ControllerImplDelegateTest {
 
     String expectedResult = "getScale method is called.";
     user.getScale(1, PortfolioType.flexible);
+    assertEquals(expectedResult, log.toString());
+  }
+
+  @Test
+  public void testGetPortfolioName(){
+
+    String expectedResult = "getPortfolioName method is called.";
+    user.getPortfolioName(1, PortfolioType.flexible);
     assertEquals(expectedResult, log.toString());
   }
 
