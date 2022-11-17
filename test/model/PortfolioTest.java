@@ -7,6 +7,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -102,39 +103,99 @@ public class PortfolioTest {
 
   @Test
   public void testValueFixed1() {
-    Double val = user.getFixedPortfoliosCreatedObjects().get(0).calculateValue(LocalDate.parse("2022-11-16"));
+    Double val = user.getFixedPortfoliosCreatedObjects().get(0).calculateValue(
+            LocalDate.parse("2022-11-16"));
     assertEquals("63225.0", String.valueOf(val));
   }
 
   @Test
   public void testValueFixed2() {
-    Double val = user.getFixedPortfoliosCreatedObjects().get(2).calculateValue(LocalDate.parse("2022-11-16"));
+    Double val = user.getFixedPortfoliosCreatedObjects().get(1).calculateValue(
+            LocalDate.parse("2022-11-16"));
     assertEquals("45566.799999999996", String.valueOf(val));
   }
 
   @Test (expected = IndexOutOfBoundsException.class)
   public void testFixedFromUnexistingFile() {
-    Double val = user.getFixedPortfoliosCreatedObjects().get(6).calculateValue(LocalDate.parse("2022-11-16"));
+    Double val = user.getFixedPortfoliosCreatedObjects().get(6).calculateValue(
+            LocalDate.parse("2022-11-16"));
     assertEquals("45566.799999999996", String.valueOf(val));
   }
 
   @Test
   public void testValueFlexible1() {
-    Double val = user.getFlexiblePortfoliosCreatedObjects().get(0).calculateValue(LocalDate.parse("2022-11-16"));
+    Double val = user.getFlexiblePortfoliosCreatedObjects().get(0).calculateValue(
+            LocalDate.parse("2022-11-16"));
     assertEquals("63225.0", String.valueOf(val));
   }
 
   @Test
   public void testValueFlexible2() {
-    Double val = user.getFlexiblePortfoliosCreatedObjects().get(1).calculateValue(LocalDate.parse("2022-11-16"));
+    Double val = user.getFlexiblePortfoliosCreatedObjects().get(1).calculateValue(
+            LocalDate.parse("2022-11-16"));
     assertEquals("30397.75", String.valueOf(val));
   }
 
   @Test (expected = IndexOutOfBoundsException.class)
   public void testFlexibleFromUnexistingFile() {
-    Double val = user.getFlexiblePortfoliosCreatedObjects().get(6).calculateValue(LocalDate.parse("2022-11-16"));
+    Double val = user.getFlexiblePortfoliosCreatedObjects().get(6).calculateValue(
+            LocalDate.parse("2022-11-16"));
     assertEquals("45566.799999999996", String.valueOf(val));
   }
 
+  @Test
+  public void testFixedCostBasis() {
+    Double costBasis = user.getFixedPortfoliosCreatedObjects().get(0).calculateCostBasis(
+            LocalDate.parse("2022-11-16"));
+    assertEquals("50000.0", String.valueOf(costBasis));
+  }
+
+  @Test
+  public void testFixedCostBasis2() {
+    Double costBasis = user.getFixedPortfoliosCreatedObjects().get(1).calculateCostBasis(
+            LocalDate.parse("2022-11-16"));
+    assertEquals("45665.55", String.valueOf(costBasis));
+  }
+
+
+  @Test
+  public void testFlexibleCostBasis() {
+    Double costBasis = user.getFlexiblePortfoliosCreatedObjects().get(0).calculateCostBasis(
+            LocalDate.parse("2022-11-16"));
+    assertEquals("500030.0", String.valueOf(costBasis));
+  }
+
+  @Test
+  public void testFlexibleCostBasis2() {
+    Double costBasis = user.getFlexiblePortfoliosCreatedObjects().get(1).calculateCostBasis(
+            LocalDate.parse("2022-11-16"));
+    assertEquals("39344.75", String.valueOf(costBasis));
+  }
+
+  @Test
+  public void testFixedChart() {
+    Map<LocalDate, String> chart =
+            user.CalculateChart(1, 1, PortfolioType.fixed);
+    assertEquals("[*****************************, " +
+            "*****************************, " +
+            "*****************************, " +
+            "**********************, " +
+            "***********************, " +
+            "***********************, " +
+            "***********************]", String.valueOf(chart.values()));
+  }
+
+  @Test
+  public void testFlexibleChart() {
+    Map<LocalDate, String> chart =
+            user.CalculateChart(1, 1, PortfolioType.flexible);
+    assertEquals("[*****************************, " +
+            "*****************************, " +
+            "*****************************, " +
+            "**********************, " +
+            "***********************, " +
+            "***********************, " +
+            "***********************]", chart.values().toString());
+  }
 
 }
