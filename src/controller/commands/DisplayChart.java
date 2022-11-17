@@ -25,7 +25,7 @@ import view.ViewInterface;
 public class DisplayChart implements ICommandController {
   private ViewInterface view;
   private IUserInterface user;
-  private Scanner scanner;
+  private Scanner inputScanner;
   private Map<LocalDate, String> chart;
 
   /**
@@ -34,11 +34,11 @@ public class DisplayChart implements ICommandController {
    * @param view the view
    * @param user the user
    */
-  public DisplayChart(ViewInterface view, IUserInterface user) {
+  public DisplayChart(ViewInterface view, IUserInterface user, Scanner scanner) {
     this.view = view;
     this.user = user;
     this.chart = new LinkedHashMap<>();
-    scanner = new Scanner(System.in);
+    inputScanner = scanner;
   }
   @Override
   public void go() {
@@ -48,7 +48,7 @@ public class DisplayChart implements ICommandController {
     PortfolioType portfolioType = null;
     do {
       view.chooseFixedOrFlexible();
-      userInput = scanner.nextInt();
+      userInput = inputScanner.nextInt();
       if (userInput == 1) { //fixed portfolio
         portfolioType = PortfolioType.fixed;
         if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
@@ -67,15 +67,16 @@ public class DisplayChart implements ICommandController {
     }
     while (userInput > 2 || userInput <= 0);
 
-
+    view.displayMsgToUser("Following are the fixed portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndexForVal = this.getSelectedPortFolioFromView(portfolioType);
+    view.displayMsgToUser("Pick a portfolio");
 
     int option = 1;
 
     while(!isValid) {
       view.displayOptionsForChart();
-      option = scanner.nextInt();
+      option = inputScanner.nextInt();
 
       if (option == 1 || option == 2 || option == 3) {
         isValid = true;
@@ -116,8 +117,7 @@ public class DisplayChart implements ICommandController {
   private int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
-      view.displayMsgToUser("Please pick a portfolio from the above list");
-      index = scanner.nextInt();
+      index = inputScanner.nextInt();
     }
     return index;
   }

@@ -27,7 +27,7 @@ import view.ViewInterface;
 public class Create implements ICommandController {
   private ViewInterface view;
   private IUserInterface user;
-  private Scanner scanner;
+  private Scanner inputScanner;
 
   /**
    * Instantiates a new Create.
@@ -35,10 +35,10 @@ public class Create implements ICommandController {
    * @param view the view
    * @param user the user
    */
-  public Create(ViewInterface view, IUserInterface user) {
+  public Create(ViewInterface view, IUserInterface user,Scanner scanner) {
     this.view = view;
     this.user = user;
-    scanner = new Scanner(System.in);
+    this.inputScanner = scanner;
   }
 
   @Override
@@ -73,7 +73,7 @@ public class Create implements ICommandController {
       this.displayCsvPathToUser(portfolioType);
       //check if file uploaded
       view.isFileUploaded();
-      if (scanner.nextInt() == 1) {
+      if (inputScanner.nextInt() == 1) {
         user.createPortFolioFromFile(portfolioType);
       }
     }
@@ -90,7 +90,7 @@ public class Create implements ICommandController {
     do {
       try {
         this.view.displayCreatePortFolioOptions();
-        userOption = Integer.parseInt(scanner.next());
+        userOption = Integer.parseInt(inputScanner.next());
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
@@ -104,7 +104,7 @@ public class Create implements ICommandController {
     do {
       try {
         this.view.chooseFixedOrFlexible();
-        userOption = Integer.parseInt(scanner.next());
+        userOption = Integer.parseInt(inputScanner.next());
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
@@ -119,7 +119,7 @@ public class Create implements ICommandController {
     do {
       try{
         this.view.getPortfolioNameFromUser();
-        portfolioName = scanner.next();
+        portfolioName = inputScanner.next();
         if (user.checkIfFileExists(portfolioName,PortfolioType.fixed)
                 || user.checkIfFileExists(portfolioName, PortfolioType.flexible)) {
           throw new IllegalArgumentException("A portfolio by this name exists already");
@@ -146,30 +146,30 @@ public class Create implements ICommandController {
       do {
         try{
           this.view.takeTickerName();
-          tickerNameFromUser = scanner.next();
+          tickerNameFromUser = inputScanner.next();
           if (!user.isTickerValid(tickerNameFromUser)) {
             throw new IllegalArgumentException("Invalid ticker name!");
           }
           this.view.displayMsgToUser("Enter the number of units purchased");
-          numUnits = scanner.nextDouble();
+          numUnits = inputScanner.nextDouble();
           Long numOfUnitsInt = Math.round(numUnits);
           while (numUnits <= 0.0) {
             view.displayMsgToUser("Number of units purchased cannot be -ve, Please enter a " +
                     "positive number");
-            numUnits = scanner.nextDouble();
+            numUnits = inputScanner.nextDouble();
             numOfUnitsInt = Math.round(numUnits);
           }
           while ((double)numOfUnitsInt != numUnits) {
             view.displayMsgToUser("Cannot purchase fractional shares, Please enter a whole number");
-            numUnits = scanner.nextDouble();
+            numUnits = inputScanner.nextDouble();
             numOfUnitsInt = Math.round(numUnits);
           }
 
           this.view.takeCommissionValue();
-          commission = scanner.nextDouble();
+          commission = inputScanner.nextDouble();
           while (commission <= 0.0) {
             view.displayMsgToUser("Commission cannot be -ve, Please enter a positive value");
-            commission = scanner.nextDouble();
+            commission = inputScanner.nextDouble();
           }
 
           transactionDate = this.getDateFromView();
@@ -185,21 +185,21 @@ public class Create implements ICommandController {
       do {
         try{
           this.view.takeTickerName();
-          tickerNameFromUser = scanner.next();
+          tickerNameFromUser = inputScanner.next();
           if (!user.isTickerValid(tickerNameFromUser)) {
             throw new IllegalArgumentException("Invalid ticker name!");
           }
           this.view.displayMsgToUser("Enter the number of units purchased");
-          numUnits = scanner.nextDouble();
+          numUnits = inputScanner.nextDouble();
           Long numOfUnitsInt = Math.round(numUnits);
           while (numUnits <= 0.0) {
             view.displayMsgToUser("Number of units purchased cannot be -ve, Please enter a postive value");
-            numUnits = scanner.nextDouble();
+            numUnits = inputScanner.nextDouble();
             numOfUnitsInt = Math.round(numUnits);
           }
           while ((double)numOfUnitsInt != numUnits) {
             view.displayMsgToUser("Cannot purchase fractional shares, Please enter a whole number");
-            numUnits = scanner.nextDouble();
+            numUnits = inputScanner.nextDouble();
             numOfUnitsInt = Math.round(numUnits);
           }
 
@@ -242,7 +242,7 @@ public class Create implements ICommandController {
     do {
       try {
         this.view.addMoreStocks();
-        userInput = scanner.nextInt();
+        userInput = inputScanner.nextInt();
         if(userInput == 1)
           return true;
         else if(userInput == 0)
@@ -276,7 +276,7 @@ public class Create implements ICommandController {
     while (!isDateOkay) {
       try {
         view.displayMsgToUser("Enter the date of transaction : (yyyy-mm-dd)");
-        valueDate = LocalDate.parse(scanner.next(), dateFormat);
+        valueDate = LocalDate.parse(inputScanner.next(), dateFormat);
         isDateOkay = true;
       } catch (Exception e) {
         view.displayMsgToUser("Invalid date. Please try again!");
