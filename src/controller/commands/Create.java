@@ -14,10 +14,27 @@ import model.Operation;
 import model.PortfolioType;
 import view.ViewInterface;
 
+/**
+ * The class Create implements the command controller interface.
+ * It is one of the commands that is supported by our application.
+ * Create operation is available for fixed and flexible portfolios.
+ * It allows the user create a new portfolio.
+ * It allows a user to create one or more portfolios with shares of one or more stock.
+ * For fixed portfolios once created, shares cannot be added or removed from the portfolio.
+ * For flexible portfolios once created, shares can be added or removed (bought or sold)
+ * from the portfolio.
+ */
 public class Create implements ICommandController {
   private ViewInterface view;
   private IUserInterface user;
   private Scanner scanner;
+
+  /**
+   * Instantiates a new Create.
+   *
+   * @param view the view
+   * @param user the user
+   */
   public Create(ViewInterface view, IUserInterface user) {
     this.view = view;
     this.user = user;
@@ -67,7 +84,7 @@ public class Create implements ICommandController {
    *
    * @return the int
    */
-  public int showCreatePortfolioOptionsOnView() {
+  private int showCreatePortfolioOptionsOnView() {
     int userOption = 0;
     List<Integer> validMenuOptions = Arrays.asList(1, 2);
     do {
@@ -81,7 +98,7 @@ public class Create implements ICommandController {
     return userOption;
   }
 
-  public int showFixedOrFlexPortfolioOptionsOnView() {
+  private int showFixedOrFlexPortfolioOptionsOnView() {
     int userOption = 0;
     List<Integer> validMenuOptions = Arrays.asList(1, 2);
     do {
@@ -96,7 +113,7 @@ public class Create implements ICommandController {
   }
 
 
-  public String getPortFolioNameFromView() {
+  private String getPortFolioNameFromView() {
     String portfolioName = null;
     Boolean fileExists = false;
     do {
@@ -117,7 +134,7 @@ public class Create implements ICommandController {
     return portfolioName;
   }
 
-  public String[] takeStockInputFromView(PortfolioType portfolioType) {
+  private String[] takeStockInputFromView(PortfolioType portfolioType) {
     String[] userStockInput = new String[6];
     String tickerNameFromUser = "";
     Double numUnits = 0.0;
@@ -208,7 +225,7 @@ public class Create implements ICommandController {
     return userStockInput;
   }
 
-  public Boolean addMoreStocksFromView() {
+  private Boolean addMoreStocksFromView() {
     int userInput = 0;
     List<Integer> validOptions = Arrays.asList(0, 1);
     Boolean addMore = false;
@@ -231,7 +248,7 @@ public class Create implements ICommandController {
     return userInput == 1;
   }
 
-  public void displayCsvPathToUser(PortfolioType portfolioType) {
+  private void displayCsvPathToUser(PortfolioType portfolioType) {
     if (portfolioType.equals(PortfolioType.fixed)) {
       this.view.displayMsgToUser("Please place the csv at the location:\n"
               + this.user.getFixedPFPath());
@@ -242,7 +259,7 @@ public class Create implements ICommandController {
     }
   }
 
-  public LocalDate getDateFromView() {
+  private LocalDate getDateFromView() {
     LocalDate valueDate = LocalDate.now();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     boolean isDateOkay = false;
