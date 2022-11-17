@@ -3,9 +3,12 @@ package controller;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -39,10 +42,10 @@ public class MVCTest {
   String displayListOfFixedPortfolios = null;
   String testFixedPortfolio1 = null;
   String displayListOfFlexiblePortfolios = null;
-  String dateFromUser = null;
-  String testFlexiblePortfolio1 = null;
+  String dateFromUser,loadedFromFile = null;
+  String testFlexiblePortfolio1, wrongDate, furtureBuy, wrongCommission = null;
   String costBasisPortfolio = null;
-  String costBasisDate = null;
+  String costBasisDate, loadFileDone, loadedFixed,loadedPf = null;
   String costBasis = null;
   String valueDate, addOrSell, unitsToSell,cannotSell, addSellList = null;
   String fixedValue,optionsForGraph, fixedWeeklyGraph, fixedMonthlyGraph, fixedYearlyGraph = null;
@@ -192,7 +195,27 @@ public class MVCTest {
             "1 testFlex1.csv\n" +
             "2 testFlexiblePortfolio1.csv\n" +
             "Pick a portfolio\n";
-
+    wrongDate = "Future date entered... Please enter a date that is not later than today!!! \n";
+    furtureBuy = "Price of the stock considered is of the date 2022-11-16\n";
+    wrongCommission = "Commission cannot be -ve, Please enter a positive value\n";
+    loadFileDone = "Please place the csv at the location:\n"
+            + "C:\\Users\\anush\\OneDrive\\Desktop\\CS5010_PDP_Projects\\Assignment5\\resources\\testPortfolio\\FixedPortfolios\n" +
+            "\tHas the file been placed at the above location? 1.Yes 0.No";
+    loadedFixed = "Following are the fixed portfolios created till now:\n" +
+            "1 testFixed1.csv\n" +
+            "2 testFixedPortfolio1.csv\n" +
+            "3 testLoad1.csv\n" +
+            "Pick a portfolio\n";
+    loadedPf = "Following stocks are present in the portfolio : \n" +
+            "TickerName\tNumberOfUnits\tTransactionDate\tCommission(USD)\tPrice(USD)\tBUY/SELL\n" +
+            "MSFT\t\t50.0\t\t\t2022-11-17\t\t0.0\t\t\t241.68\t\t\tBUY\n" +
+            "AAPL\t\t50.0\t\t\t2022-11-17\t\t0.0\t\t\t150.72\t\t\tBUY\n" +
+            "GOOG\t\t25.0\t\t\t2022-11-17\t\t0.0\t\t\t98.5\t\t\tBUY\n";
+    loadedFromFile = "TSLA\t\t10.0\t\t\t2022-11-16\t\t0.0\t\t\t194.42\t\t\tBUY\n" +
+            "MSFT\t\t50.0\t\t\t2022-11-16\t\t0.0\t\t\t241.97\t\t\tBUY\n" +
+            "GOOG\t\t100.0\t\t\t2022-11-16\t\t0.0\t\t\t98.72\t\t\tBUY\n" +
+            "AAPL\t\t40.0\t\t\t2022-11-16\t\t0.0\t\t\t150.04\t\t\tBUY\n" +
+            "V\t\t75.0\t\t\t2022-11-16\t\t0.0\t\t\t209.99\t\t\tBUY\n";
   }
 
   @Test
@@ -297,10 +320,6 @@ public class MVCTest {
     file.delete();
   }
 
-  @Test
-  public void testBuySellToFlexPortFolio() {
-
-  }
 
   @Test
   public void testWeeklyChart() {
@@ -357,6 +376,51 @@ public class MVCTest {
     ICommandController controller = new CommandController(u, view, input);
     controller.go();
     assertEquals(log.toString(), out.toString());
+  }
+
+  @Test
+  public void testFutureBuy() {
+    log = new StringBuilder();
+    log.append(menu + portfolioOptions + createOptions + nameForCreate + enterTickerName
+            + enterUnits + askCom + txnDate + wrongDate + txnDate + furtureBuy + addMoreStocks
+            + portfolioSaved + menu + exit);
+    input = new ByteArrayInputStream("1 2 1 testFutureBuy NVDA 30 10 2022-11-25 2022-11-16 0 7".getBytes());
+    ICommandController controller = new CommandController(u, view, input);
+    controller.go();
+    assertEquals(log.toString(), out.toString());
+    File file = new File("./resources/testPortfolio/FlexiblePortfolios/testFutureBuy.csv");
+    file.delete();
+  }
+
+  @Test
+  public void testNegativeComm() {
+    log = new StringBuilder();
+    log.append(menu + portfolioOptions + createOptions + nameForCreate + enterTickerName
+            + enterUnits + askCom + wrongCommission + txnDate + furtureBuy + addMoreStocks
+            + portfolioSaved + menu + exit);
+    input = new ByteArrayInputStream("1 2 1 NegCom AAPL 50 -10 10 2022-11-16 0 7".getBytes());
+    ICommandController controller = new CommandController(u, view, input);
+    controller.go();
+    assertEquals(log.toString(), out.toString());
+    File file = new File("./resources/testPortfolio/FlexiblePortfolios/NegCom.csv");
+    file.delete();
+  }
+
+  @Test
+  public void testLoadFromFile() {
+
+    String line = null;
+    StringBuilder finalString = new StringBuilder();
+    try {
+      BufferedReader br = new BufferedReader(new FileReader("resources/testPortfolio/FixedPortfolios/testFixed1.csv"));
+      while ((line = br.readLine()) != null) {
+        finalString.append(line);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    assertEquals(finalString.toString().replaceAll(",",""),loadedFromFile.toString().replaceAll("\n","").replaceAll("\t", ""));
+
   }
 
 

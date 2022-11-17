@@ -243,10 +243,12 @@ public class BuySell implements ICommandController {
         isDateOkay = false;
       }
       if(valueDate.isAfter(LocalDate.now())) {
-        view.displayMsgToUser("Future date entered... Please enter a date that is not later than today!!! ");
+        view.displayMsgToUser("Future date entered... "
+                + "Please enter a date that is not later than today!!! ");
         isDateOkay = false;
       }
     }
+
     return valueDate;
   }
 
