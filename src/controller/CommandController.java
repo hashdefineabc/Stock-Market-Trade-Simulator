@@ -78,13 +78,13 @@ public class CommandController implements ICommandController{
             cmd = new Composition(view, user, inputScanner);
             break;
           case 3: // Check value of a Portfolio
-            cmd = new Value(view, user);
+            cmd = new Value(view, user,inputScanner);
             break;
           case 4: // Buy or sell shares of a portfolio
             cmd = new BuySell(view, user);
             break;
           case 5: // Check cost basis of a portfolio
-            cmd = new CostBasis(view, user);
+            cmd = new CostBasis(view, user, inputScanner);
             break;
           case 6: // Display bar chart of a portfolio
             cmd = new DisplayChart(view, user);
@@ -129,7 +129,13 @@ public class CommandController implements ICommandController{
         }
         isOkay = true;
       } catch (IllegalArgumentException ie) {
-        this.view.displayMsgToUser(ie.getMessage());
+        if (!ie.getMessage().equals("Invalid Option!!")) {
+          this.view.displayMsgToUser("Please enter an integer value");
+        }
+        else {
+          this.view.displayMsgToUser(ie.getMessage());
+        }
+
         isOkay = false;
       }
     } while (!isOkay);

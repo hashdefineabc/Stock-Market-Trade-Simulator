@@ -1,6 +1,7 @@
 package controller.commands;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -66,12 +67,15 @@ public class Composition implements ICommandController {
       dateForComposition = LocalDate.now();
     }
     else {
-      view.displayMsgToUser("Please enter the date for which you want to view the composition"
-      + "(yyyy-MM-dd)");
-      dateForComposition = LocalDate.parse(this.inputScanner.next());
+      dateForComposition = this.getDateFromView();
     }
     List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,portfolioType, dateForComposition);
-    view.displayStocks(stocksToDisplay);
+    if (stocksToDisplay.size() == 0) {
+      view.displayMsgToUser("No stocks were present in the portfolio at this date");
+    }
+    else {
+      view.displayStocks(stocksToDisplay);
+    }
   }
 
   private int getSelectedPortFolioFromView(PortfolioType portfolioType) {
@@ -94,18 +98,48 @@ public class Composition implements ICommandController {
     return index;
   }
 
+
   private int showFixedOrFlexPortfolioOptionsOnView() {
     int userOption = 0;
+    Boolean isOkay = false;
     List<Integer> validMenuOptions = Arrays.asList(1, 2);
     do {
       try {
         this.view.chooseFixedOrFlexible();
         userOption = Integer.parseInt(this.inputScanner.next());
+        if (!validMenuOptions.contains(userOption)) {
+          throw new IllegalArgumentException("Invalid Option!!");
+        }
+        isOkay = true;
       } catch (IllegalArgumentException ie) {
-        this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
+        if (!ie.getMessage().equals("Invalid Option!!")) {
+          this.view.displayMsgToUser("Please enter an integer value");
+        } else {
+          this.view.displayMsgToUser(ie.getMessage());
+        }
+
+        isOkay = false;
       }
-    } while (!validMenuOptions.contains(userOption));
+    } while (!isOkay);
     return userOption;
+
   }
 
+  public LocalDate getDateFromView() {
+    LocalDate valueDate = LocalDate.now();
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    boolean isDateOkay = false;
+    while (!isDateOkay) {
+      try {
+        view.displayMsgToUser("Please enter the date for which you want to view the composition"
+                + "(yyyy-MM-dd)");
+        valueDate = LocalDate.parse(this.inputScanner.next(), dateFormat);
+        isDateOkay = true;
+      } catch (Exception e) {
+        view.displayMsgToUser("Invalid date. Please try again!");
+        isDateOkay = false;
+      }
+    }
+    return valueDate;
+  }
 }

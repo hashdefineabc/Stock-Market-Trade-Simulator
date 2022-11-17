@@ -21,7 +21,7 @@ import view.ViewInterface;
 public class Value implements ICommandController {
   private ViewInterface view;
   private IUserInterface user;
-  private Scanner scanner;
+  private Scanner inputScanner;
 
   /**
    * Instantiates a new Value.
@@ -29,10 +29,11 @@ public class Value implements ICommandController {
    * @param view the view
    * @param user the user
    */
-  public Value(ViewInterface view, IUserInterface user) {
+  
+  public Value(ViewInterface view, IUserInterface user, Scanner scanner) {
     this.view = view;
     this.user = user;
-    scanner = new Scanner(System.in);
+    this.inputScanner = scanner;
   }
   @Override
   public void go() {
@@ -41,7 +42,7 @@ public class Value implements ICommandController {
     PortfolioType portfolioType = null;
     do {
       view.chooseFixedOrFlexible();
-      userInput = scanner.nextInt();
+      userInput = this.inputScanner.nextInt();
       if (userInput == 1) { //fixed portfolio
         portfolioType = PortfolioType.fixed;
         if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {
@@ -60,7 +61,7 @@ public class Value implements ICommandController {
     }
     while (userInput > 2 || userInput <= 0);
 
-
+    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndexForVal = this.getSelectedPortFolioFromView(portfolioType);
 
@@ -77,13 +78,31 @@ public class Value implements ICommandController {
   }
 
   private int getSelectedPortFolioFromView(PortfolioType portfolioType) {
-    int index = -1;
-    while ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
-      view.getSelectedPortfolio();
-      index = scanner.nextInt();
-    }
-    return index;
+    int userOption = 0;
+    Boolean isOkay = false;
+    do {
+      try {
+        this.view.getSelectedPortfolio();
+        userOption = Integer.parseInt(this.inputScanner.next());
+        if ((userOption < 0) || (userOption > user.getPortfolioNamesCreated(portfolioType).size())) {
+          throw new IllegalArgumentException("Invalid Option!!");
+        }
+        isOkay = true;
+      } catch (IllegalArgumentException ie) {
+        if (!ie.getMessage().equals("Invalid Option!!")) {
+          this.view.displayMsgToUser("Please enter an integer value");
+        } else {
+          this.view.displayMsgToUser(ie.getMessage());
+        }
+
+        isOkay = false;
+      }
+    } while (!isOkay);
+    return userOption;
   }
+
+
+
 
   private LocalDate validateDateForValue() {
     LocalDate date = this.getDateFromView();
@@ -108,7 +127,7 @@ public class Value implements ICommandController {
     while (!isDateOkay) {
       try {
         view.displayMsgToUser("Enter Date for which you want to check the value : (yyyy-mm-dd)");
-        valueDate = LocalDate.parse(scanner.next(), dateFormat);
+        valueDate = LocalDate.parse(this.inputScanner.next(), dateFormat);
         isDateOkay = true;
       } catch (Exception e) {
         view.displayMsgToUser("Invalid date. Please try again!");

@@ -35,7 +35,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void takeTickerName() {
-    this.out.println("Enter the ticker name:");
+    this.out.print("Enter the ticker name:\n");
   }
 
   @Override
@@ -84,14 +84,14 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void getDateFromUser() {
-    this.out.println("Enter the date :(yyyy-mm-dd)");
+    this.out.print("Enter the date :(yyyy-mm-dd)\n");
   }
 
 
   @Override
   public void displayValue(double val, LocalDate valueDate) {
-    this.out.println("Value of the portfolio as of date " + valueDate.toString()
-            + " is: " + String.format("%.2f", val) + " USD");
+    this.out.print("Value of the portfolio as of date " + valueDate.toString()
+            + " is: " + String.format("%.2f", val) + " USD\n");
   }
 
   @Override
@@ -124,42 +124,42 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void takeCommissionValue() {
-    this.out.println("Enter the commission value (USD) for this transaction:");
+    this.out.print("Enter the commission value (USD) for this transaction: \n");
   }
 
   @Override
   public void displayCostBasis(double costBasis, LocalDate costBasisDate) {
-    this.out.println("CostBasis of the portfolio as of date " + costBasisDate.toString()
-            + " is: " + String.format("%.2f", costBasis) + " USD");
+    this.out.print("CostBasis of the portfolio as of date " + costBasisDate.toString()
+            + " is: " + String.format("%.2f", costBasis) + " USD\n");
   }
 
   @Override
   public void askAddOrSell() {
-    this.out.println("Please pick an operation\n" +
+    this.out.print("Please pick an operation\n" +
             "1. Add Stock to the portfolio\n" +
-            "2. Sell Stock from the portfolio");
+            "2. Sell Stock from the portfolio\n");
   }
 
   @Override
   public void displayOptionsForChart() {
-    this.out.println("Please pick an option\n" +
+    this.out.print("Please pick an option\n" +
             "1. Display chart for previous week\n" +
             "2. Display chart for previous month\n" +
-            "3. Display chart for previous year");
+            "3. Display chart for previous year\n");
   }
 
   @Override
   public void displayChartWeek(Map<LocalDate, String> chart) {
     for (Map.Entry<LocalDate,String> entry : chart.entrySet())
-      this.out.println(entry.getKey() +
-              ":" + entry.getValue());
+      this.out.print(entry.getKey() +
+              ":" + entry.getValue()+"\n");
   }
 
   @Override
   public void displayChartMonth(Map<LocalDate, String> chart) {
     for (Map.Entry<LocalDate,String> entry : chart.entrySet())
-      this.out.println(entry.getKey().getMonth().toString().substring(0,3) +
-              ":" + entry.getValue());
+      this.out.print(entry.getKey().getMonth().toString().substring(0,3) +
+              ":" + entry.getValue()+"\n");
   }
 
 }
