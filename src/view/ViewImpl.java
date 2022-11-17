@@ -9,11 +9,18 @@ import java.util.Map;
 import model.IstockModel;
 
 /**
- * Class that implements the text user interface of the stock market application.
+ * The ViewImpl class implements the View Interface of this application.
+ * It defines all the methods necessary for the program to interact with the user.
  */
 public class ViewImpl implements ViewInterface {
 
   private PrintStream out;
+
+  /**
+   * Constructor for the view class. It initializes all the objects that are being used in the
+   * class.
+   * @param o = printstream object that is used for printing in this class.
+   */
 
   public ViewImpl(PrintStream o) {
     this.out = o;
