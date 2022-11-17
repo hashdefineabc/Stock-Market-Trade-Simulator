@@ -25,11 +25,37 @@ import java.util.stream.Stream;
 
 /**
  * Class to implement the user's functionality for the stock market application.
+ * User model is the main model of our application.
+ * It contains the lists of fixed and flexible portfolios.
+ * A user is allowed to create one or more portfolios with shares of one or more stock.
+ * User can create two types of portfolios, fixed portfolios and flexible portfolios.
+ * Once fixed portfolios are created, shares cannot be added or removed from the portfolio.
+ * The flexible portfolios have the ability to get modified, i.e., we can buy or sell stocks from
+ * a flexible portfolio even after creating the portfolio.
+ * User can examine the composition of both fixed and flexible portfolios.
+ * User can determine the total value of a portfolio on a certain date.
+ * User can persist a portfolio so that it can be saved and loaded from the files.
+ *
+ * For flexible portfolios, user can purchase a specific number of shares of a specific stock
+ * on a specified date, and add them to the portfolio
+ * They can sell a specific number of shares of a specific stock on a specified date
+ * from a given flexible portfolio.
+ *
+ * User can determine the cost basis that is the total amount of money invested in a portfolio
+ * by a specific date. This includes all the purchases made in that portfolio till that date.
+ *
+ * User can determine the value of a portfolio on a specific date.
+ * The value for a portfolio before the date of its first purchase is 0.
+ *
+ * Each transaction in flexible portfolio has a commission value associated with it.
+ * Commission value is also used in determining the cost basis of the portfolio.
+ *
  */
 public class User implements IUserInterface {
 
   /**
    * The Nasdaq ticker names.
+   * We support NASDAQ top 25 stocks in our application.
    */
   List<String> nasdaqTickerNames;
   private String folderPath;
@@ -44,9 +70,10 @@ public class User implements IUserInterface {
 
   /**
    * Constructor for user class.
-   * it takes username and initializes the fields of this class
+   * it takes user directory where the user wants to store all the portfolios created and
+   * initializes the fields of this class
    *
-   * @param userDirectory the user directory
+   * @param userDirectory the user directory where the user wants to store the portfolios created.
    */
   public User(String userDirectory) {
 
@@ -516,10 +543,10 @@ public class User implements IUserInterface {
   }
 
   /**
-   * Gets value on date.
+   * Gets value of a portfolio on a specific date.
    *
-   * @param tickerNameFromUser the ticker name from user
-   * @param transactionDate    the transaction date
+   * @param tickerNameFromUser the ticker name for which the value needs to be computed.
+   * @param transactionDate    the transaction date on which the value needs to be determined.
    * @return the value on date
    */
   public Double getValueOnDate(String tickerNameFromUser, LocalDate transactionDate) {

@@ -72,7 +72,7 @@ public class Create implements ICommandController {
       //upload a file
       this.displayCsvPathToUser(portfolioType);
       //check if file uploaded
-      view.isFileUploaded(); //TODO: put in a controller fn
+      view.isFileUploaded();
       if (inputScanner.nextInt() == 1) {
         user.createPortFolioFromFile(portfolioType);
       }
@@ -153,17 +153,23 @@ public class Create implements ICommandController {
           this.view.displayMsgToUser("Enter the number of units purchased");
           numUnits = inputScanner.nextDouble();
           Long numOfUnitsInt = Math.round(numUnits);
-          if (numUnits <= 0.0) {
-            throw new IllegalArgumentException("Number of units purchased cannot be -ve");
+          while (numUnits <= 0.0) {
+            view.displayMsgToUser("Number of units purchased cannot be -ve, Please enter a " +
+                    "positive number");
+            numUnits = inputScanner.nextDouble();
+            numOfUnitsInt = Math.round(numUnits);
           }
-          else if ((double)numOfUnitsInt != numUnits) {
-            throw new IllegalArgumentException("Cannot purchase fractional shares");
+          while ((double)numOfUnitsInt != numUnits) {
+            view.displayMsgToUser("Cannot purchase fractional shares, Please enter a whole number");
+            numUnits = inputScanner.nextDouble();
+            numOfUnitsInt = Math.round(numUnits);
           }
 
           this.view.takeCommissionValue();
           commission = inputScanner.nextDouble();
-          if (commission <= 0.0) {
-            throw new IllegalArgumentException("Commission cannot be -ve");
+          while (commission <= 0.0) {
+            view.displayMsgToUser("Commission cannot be -ve, Please enter a positive value");
+            commission = inputScanner.nextDouble();
           }
 
           transactionDate = this.getDateFromView();
@@ -186,11 +192,15 @@ public class Create implements ICommandController {
           this.view.displayMsgToUser("Enter the number of units purchased");
           numUnits = inputScanner.nextDouble();
           Long numOfUnitsInt = Math.round(numUnits);
-          if (numUnits <= 0.0) {
-            throw new IllegalArgumentException("Number of units purchased cannot be -ve");
+          while (numUnits <= 0.0) {
+            view.displayMsgToUser("Number of units purchased cannot be -ve, Please enter a postive value");
+            numUnits = inputScanner.nextDouble();
+            numOfUnitsInt = Math.round(numUnits);
           }
-          else if ((double)numOfUnitsInt != numUnits) {
-            throw new IllegalArgumentException("Cannot purchase fractional shares");
+          while ((double)numOfUnitsInt != numUnits) {
+            view.displayMsgToUser("Cannot purchase fractional shares, Please enter a whole number");
+            numUnits = inputScanner.nextDouble();
+            numOfUnitsInt = Math.round(numUnits);
           }
 
           isInputValid = true;
@@ -218,7 +228,7 @@ public class Create implements ICommandController {
       transactionDate = transactionDate.minusDays(1);
     }
     view.displayMsgToUser("Price of the stock considered is of the date "+transactionDate);
-    userStockInput[4] = String.valueOf(transactionValue); //TODO: replace with price at which it was bought/sold
+    userStockInput[4] = String.valueOf(transactionValue);
     userStockInput[5] = String.valueOf(Operation.BUY); //indicates shares are bought
 
 
