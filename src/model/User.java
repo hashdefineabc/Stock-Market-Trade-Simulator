@@ -28,6 +28,9 @@ import java.util.stream.Stream;
  */
 public class User implements IUserInterface {
 
+  /**
+   * The Nasdaq ticker names.
+   */
   List<String> nasdaqTickerNames;
   private String folderPath;
   private String fixedPFPath;
@@ -42,8 +45,9 @@ public class User implements IUserInterface {
   /**
    * Constructor for user class.
    * it takes username and initializes the fields of this class
+   *
+   * @param userDirectory the user directory
    */
-
   public User(String userDirectory) {
 
     this.fixedPortfolios = new ArrayList<>();
@@ -69,29 +73,6 @@ public class User implements IUserInterface {
       throw new RuntimeException(e);
     }
   }
-
-  /**
-  public User(String path) {
-    this.fixedPortfolios = new ArrayList<>();
-    this.flexiblePortfolios = new ArrayList<>();
-    nasdaqTickerNames = new ArrayList<>();
-
-//    String userDirectory = new File("").getAbsolutePath();
-    this.folderPath = path;
-    this.fixedPFPath = this.folderPath + File.separator + "FixedPortfolios";
-    this.flexiblePFPath = this.folderPath + File.separator + "FlexiblePortfolios";
-
-    file = new File(folderPath);
-    this.createFolder();
-    this.loadExistingPortFolios(PortfolioType.fixed);
-    this.loadExistingPortFolios(PortfolioType.flexible);
-    try {
-      this.loadNasdaqTickerNames();
-    } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-  }
-*/
 
 
   private void loadNasdaqTickerNames() throws FileNotFoundException {
@@ -394,27 +375,6 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public void addStocksToAPortfolio(int portfolioIndex) {
-
-  }
-
-
-  @Override
-  public void sellStocksFromAPortfolio(int portfolioIndex) {
-
-  }
-
-  @Override
-  public void buySell() {
-
-  }
-
-  @Override
-  public void displayChart() {
-
-  }
-
-  @Override
   public Double getStockPriceFromDB(String tickerNameFromUser, LocalDate transactionDate) {
     Double result = 0.0;
     FileReader file = null;
@@ -485,6 +445,15 @@ public class User implements IUserInterface {
   }
 
   @Override
+  public String getPortfolioName(int portfolioIndex, PortfolioType portfolioType) {
+    if(portfolioType.equals(PortfolioType.fixed)) {
+      return this.fixedPortfolios.get(portfolioIndex-1).getNameOfPortFolio();
+    }
+    else
+      return this.flexiblePortfolios.get(portfolioIndex-1).getNameOfPortFolio();
+  }
+
+  @Override
   public Double getScale(int portfolioIndex, PortfolioType portfolioType) {
 
     if(portfolioType.equals(PortfolioType.fixed)) {
@@ -546,6 +515,13 @@ public class User implements IUserInterface {
     return stockList;
   }
 
+  /**
+   * Gets value on date.
+   *
+   * @param tickerNameFromUser the ticker name from user
+   * @param transactionDate    the transaction date
+   * @return the value on date
+   */
   public Double getValueOnDate(String tickerNameFromUser, LocalDate transactionDate) {
     Double transactionValue = this.getStockPriceFromDB(tickerNameFromUser, transactionDate);
     LocalTime currentTime = LocalTime.now();
