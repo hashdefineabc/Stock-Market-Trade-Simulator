@@ -35,7 +35,8 @@ public class PortfolioTest {
     stockList.add(stock);
     user.createNewPortfolio("testFixedPortfolio1", stockList, PortfolioType.fixed);
 
-    File newFixedPortfolioPath = new File("./resources/testPortfolio/FixedPortfolios/testFixedPortfolio1.csv");
+    File newFixedPortfolioPath =
+            new File("./resources/testPortfolio/FixedPortfolios/testFixedPortfolio1.csv");
     boolean exists = newFixedPortfolioPath.exists();
     assertEquals(true, exists);
 
@@ -52,7 +53,9 @@ public class PortfolioTest {
     stockList.add(stock);
     user.createNewPortfolio("testFlexiblePortfolio1", stockList, PortfolioType.flexible);
 
-    File newFixedPortfolioPath = new File("./resources/testPortfolio/FlexiblePortfolios/testFlexiblePortfolio1.csv");
+    File newFixedPortfolioPath =
+            new File("./resources/testPortfolio/FlexiblePortfolios/"
+                    + "testFlexiblePortfolio1.csv");
     boolean exists = newFixedPortfolioPath.exists();
     assertEquals(true, exists);
 
@@ -75,10 +78,12 @@ public class PortfolioTest {
             .build();
 
     stockList.add(s);
-    s = new Stock("MSFT", 5.0, 10.0, 1000.0, LocalDate.of(2022, 10, 26), Operation.BUY);
+    s = new Stock("MSFT", 5.0, 10.0, 1000.0,
+            LocalDate.of(2022, 10, 26), Operation.BUY);
     stockList.add(s);
     IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
-    assertEquals("1133.75", String.valueOf(portfolio.calculateValue(LocalDate.of(2022, 10, 27))));
+    assertEquals("1133.75", String.valueOf(portfolio.calculateValue(LocalDate.of(2022,
+            10, 27))));
   }
 
 
@@ -175,27 +180,27 @@ public class PortfolioTest {
   @Test
   public void testFixedChart() {
     Map<LocalDate, String> chart =
-            user.CalculateChart(1, 1, PortfolioType.fixed);
-    assertEquals("[*****************************, " +
-            "*****************************, " +
-            "*****************************, " +
-            "**********************, " +
-            "***********************, " +
-            "***********************, " +
-            "***********************]", String.valueOf(chart.values()));
+            user.calculateChart(1, 1, PortfolioType.fixed);
+    assertEquals("[*****************************, "
+            + "*****************************, "
+            + "*****************************, "
+            + "**********************, "
+            + "***********************, "
+            + "***********************, "
+            + "***********************]", String.valueOf(chart.values()));
   }
 
   @Test
   public void testFlexibleChart() {
     Map<LocalDate, String> chart =
-            user.CalculateChart(1, 1, PortfolioType.flexible);
-    assertEquals("[*****************************, " +
-            "*****************************, " +
-            "*****************************, " +
-            "**********************, " +
-            "***********************, " +
-            "***********************, " +
-            "***********************]", chart.values().toString());
+            user.calculateChart(1, 1, PortfolioType.flexible);
+    assertEquals("[*****************************, "
+            + "*****************************, "
+            + "*****************************, "
+            + "**********************, "
+            + "***********************, "
+            + "***********************, "
+            + "***********************]", chart.values().toString());
   }
 
 }

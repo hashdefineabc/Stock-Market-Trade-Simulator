@@ -35,21 +35,24 @@ import java.util.stream.Stream;
  * User can examine the composition of both fixed and flexible portfolios.
  * User can determine the total value of a portfolio on a certain date.
  * User can persist a portfolio so that it can be saved and loaded from the files.
- *
+ *<p>
  * For flexible portfolios, user can purchase a specific number of shares of a specific stock
  * on a specified date, and add them to the portfolio
  * They can sell a specific number of shares of a specific stock on a specified date
  * from a given flexible portfolio.
- *
+ *</p>
+ * <p>
  * User can determine the cost basis that is the total amount of money invested in a portfolio
  * by a specific date. This includes all the purchases made in that portfolio till that date.
- *
+ *</p>
+ * <p>
  * User can determine the value of a portfolio on a specific date.
  * The value for a portfolio before the date of its first purchase is 0.
- *
+ *</p>
+ * <p>
  * Each transaction in flexible portfolio has a commission value associated with it.
  * Commission value is also used in determining the cost basis of the portfolio.
- *
+ *</p>
  */
 public class User implements IUserInterface {
 
@@ -111,10 +114,12 @@ public class User implements IUserInterface {
         row = row.strip().split(",")[0];
         this.nasdaqTickerNames.add(row);
         row = csvReader.readLine();
-      } while (row != null);
+      }
+      while (row != null);
       csvReader.close();
-      } catch (Exception e) {
-        throw new FileNotFoundException("Nasdaq ticker names file not found");
+    }
+    catch (Exception e) {
+      throw new FileNotFoundException("Nasdaq ticker names file not found");
     }
   }
 
@@ -136,7 +141,8 @@ public class User implements IUserInterface {
 
 
   @Override
-  public boolean createNewPortfolio(String portfolioName, List<String[]> stockList, PortfolioType typeofPortfolio) {
+  public boolean createNewPortfolio(String portfolioName, List<String[]> stockList,
+                                    PortfolioType typeofPortfolio) {
     List<String[]> dataToWrite = null;
     List<IstockModel> stockListToAdd = new ArrayList<>();
 
@@ -172,9 +178,10 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public Double calculateCostBasisOfPortfolio(int portfolioIndex, PortfolioType portfolioType, LocalDate costBasisDate) {
+  public Double calculateCostBasisOfPortfolio(int portfolioIndex, PortfolioType portfolioType,
+                                              LocalDate costBasisDate) {
     Double costBasis = 0.0;
-    if(portfolioType.equals(PortfolioType.fixed)) {
+    if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio toCalcCostBasis = this.fixedPortfolios.get(portfolioIndex - 1);
       costBasis = toCalcCostBasis.calculateCostBasis(costBasisDate);
     }
@@ -206,7 +213,8 @@ public class User implements IUserInterface {
     }
 
     for (String portfolioName : fileNamesFromSystem) { //take files from system.
-      List<String[]> listOfStocks = this.readCSVFromSystem(filePath + File.separator + portfolioName);
+      List<String[]> listOfStocks = this.readCSVFromSystem(filePath
+              + File.separator + portfolioName);
       List<IstockModel> stockList = new ArrayList<>();
 
 
@@ -223,11 +231,11 @@ public class User implements IUserInterface {
       }
 
       if (portfolioType.equals(PortfolioType.fixed)) {
-        IFixedPortfolio fip = new FixedPortfolio(portfolioName, stockList); //create a portfolio object.
+        IFixedPortfolio fip = new FixedPortfolio(portfolioName, stockList);
         this.fixedPortfolios.add(fip);
       }
       else if (portfolioType.equals(PortfolioType.flexible)) {
-        IFlexiblePortfolio flp = new FlexiblePortfolio(portfolioName, stockList); //create a portfolio object.
+        IFlexiblePortfolio flp = new FlexiblePortfolio(portfolioName, stockList);
         this.flexiblePortfolios.add(flp);
       }
     }
@@ -235,7 +243,7 @@ public class User implements IUserInterface {
 
   @Override
   public void createPortFolioFromFile(PortfolioType portfolioType) {
-      this.loadExistingPortFolios(portfolioType);
+    this.loadExistingPortFolios(portfolioType);
   }
 
   private List<String[]> readCSVFromSystem(String filePath) {
@@ -260,14 +268,14 @@ public class User implements IUserInterface {
 
     List<String> portfolioNames = new ArrayList<>();
 
-    if(portFolioType.equals(PortfolioType.fixed)){
+    if (portFolioType.equals(PortfolioType.fixed)) {
       this.loadExistingPortFolios(portFolioType);
       List<IFixedPortfolio> portfolioObjects = this.fixedPortfolios;
       for (IFixedPortfolio p : portfolioObjects) {
         portfolioNames.add(p.getNameOfPortFolio());
       }
     }
-    else if(portFolioType.equals(PortfolioType.flexible)){
+    else if (portFolioType.equals(PortfolioType.flexible)) {
       this.loadExistingPortFolios(portFolioType);
       List<IFlexiblePortfolio> portfolioObjects = this.flexiblePortfolios;
       for (IFlexiblePortfolio p : portfolioObjects) {
@@ -327,12 +335,13 @@ public class User implements IUserInterface {
 
   @Override
   public Boolean checkIfFileExists(String fileName, PortfolioType portfolioType) {
-    List<String> fileNamesFromSystem = this.retrieveFileNames(portfolioType); // updating the fileNamesFromSystem list.
+    List<String> fileNamesFromSystem = this.retrieveFileNames(portfolioType);
     return fileNamesFromSystem.contains(fileName + ".csv");
   }
 
   @Override
-  public void savePortfolioToFile(List<String[]> dataToWrite, String portfolioName, PortfolioType portfolioType) {
+  public void savePortfolioToFile(List<String[]> dataToWrite, String portfolioName,
+                                  PortfolioType portfolioType) {
 
     try {
       this.createCSV(dataToWrite, portfolioName, portfolioType);
@@ -342,12 +351,14 @@ public class User implements IUserInterface {
   }
 
 
-  private void createCSV(List<String[]> dataToWrite, String portFolioName, PortfolioType portfolioType) {
+  private void createCSV(List<String[]> dataToWrite, String portFolioName,
+                         PortfolioType portfolioType) {
     File csvOutputFile = null;
     if (portfolioType.equals(PortfolioType.fixed)) {
       csvOutputFile = new File(this.fixedPFPath + File.separator + portFolioName + ".csv");
     } else if (portfolioType.equals(PortfolioType.flexible)) {
-      csvOutputFile = new File(this.flexiblePFPath + File.separator + portFolioName + ".csv");
+      csvOutputFile = new File(this.flexiblePFPath + File.separator
+              + portFolioName + ".csv");
     }
 
     try {
@@ -375,7 +386,8 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, PortfolioType portfolioType, LocalDate dateForComposition) {
+  public List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, PortfolioType portfolioType,
+                                                    LocalDate dateForComposition) {
     if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio toDisplay = this.fixedPortfolios.get(portfolioIndex - 1);
       return toDisplay.getStocksInPortfolio(dateForComposition);
@@ -388,9 +400,10 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public Double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date, PortfolioType portfolioType) {
+  public Double calculateValueOfPortfolio(int portfolioIndexForVal, LocalDate date,
+                                          PortfolioType portfolioType) {
     Double val = 0.0;
-    if(portfolioType.equals(PortfolioType.fixed)) {
+    if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio toCalcVal = this.fixedPortfolios.get(portfolioIndexForVal - 1);
       val = toCalcVal.calculateValue(date);
     }
@@ -457,9 +470,10 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public Map<LocalDate, String> CalculateChart(int option, int portfolioIndexForVal, PortfolioType portfolioType) {
+  public Map<LocalDate, String> calculateChart(int option, int portfolioIndexForVal,
+                                               PortfolioType portfolioType) {
     Map<LocalDate, String> chart = new LinkedHashMap<>();
-    if(portfolioType.equals(PortfolioType.fixed)) {
+    if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio toDisplayChart = this.fixedPortfolios.get(portfolioIndexForVal - 1);
       chart = toDisplayChart.calculateChartValues(option);
     }
@@ -473,17 +487,19 @@ public class User implements IUserInterface {
 
   @Override
   public String getPortfolioName(int portfolioIndex, PortfolioType portfolioType) {
-    if(portfolioType.equals(PortfolioType.fixed)) {
-      return this.fixedPortfolios.get(portfolioIndex-1).getNameOfPortFolio();
+    if (portfolioType.equals(PortfolioType.fixed)) {
+      return this.fixedPortfolios.get(portfolioIndex - 1).getNameOfPortFolio();
     }
-    else
-      return this.flexiblePortfolios.get(portfolioIndex-1).getNameOfPortFolio();
+    else {
+      return this.flexiblePortfolios.get(portfolioIndex - 1).getNameOfPortFolio();
+    }
+
   }
 
   @Override
   public Double getScale(int portfolioIndex, PortfolioType portfolioType) {
 
-    if(portfolioType.equals(PortfolioType.fixed)) {
+    if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio fp = this.fixedPortfolios.get(portfolioIndex - 1);
       return fp.getScale();
     }
@@ -537,7 +553,7 @@ public class User implements IUserInterface {
     }
   }
 
-  private List<IstockModel> sortStockListDateWise(List<IstockModel>stockList) {
+  private List<IstockModel> sortStockListDateWise(List<IstockModel> stockList) {
     stockList.sort((s1,s2) -> s1.getTransactionDate().compareTo(s2.getTransactionDate()));
     return stockList;
   }
@@ -552,12 +568,15 @@ public class User implements IUserInterface {
   public Double getValueOnDate(String tickerNameFromUser, LocalDate transactionDate) {
     Double transactionValue = this.getStockPriceFromDB(tickerNameFromUser, transactionDate);
     LocalTime currentTime = LocalTime.now();
-    if(transactionDate.equals(LocalDate.now()) && currentTime.isBefore(LocalTime.of(16,0))) {
-      transactionValue = this.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+    if (transactionDate.equals(LocalDate.now())
+            && currentTime.isBefore(LocalTime.of(16,0))) {
+      transactionValue = this.getStockPriceFromDB(tickerNameFromUser,
+              transactionDate.minusDays(1));
     }
-    while(transactionValue == 0.0) {
-      // Market was closed on transactionDate, so considering price of previous date"
-      transactionValue = this.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+    while (transactionValue == 0.0) {
+      // Market was closed on transactionDate, so considering price of previous date."
+      transactionValue = this.getStockPriceFromDB(tickerNameFromUser,
+              transactionDate.minusDays(1));
       transactionDate = transactionDate.minusDays(1);
     }
     return transactionValue;

@@ -31,6 +31,7 @@ public class Stock implements IstockModel {
   private final Operation buyOrSell;
 
   /**
+   * <p>
    * We use the builder method.
    * It maintains copies of all the fields that would be required to build the stock object.
    * It offers methods to edit each field individually,
@@ -39,12 +40,13 @@ public class Stock implements IstockModel {
    * set the values of these fields.
    * In the end the user can call a method in the builder that would take the set fields,
    * create the stock object and return it.
-   *
+   *</p>
+   * <p>
    * This method is particularly helpful in our application, because we have two types of stocks,
    * one for fixed portfolios and the other for flexible portfolios.
    * We don't require the fields like commission, buyOrSell for fixed portfolios, hence
    * we set the default values for these fields for fixed portfolios using this builder method.
-   *
+   *</p>
    * @return the builder
    */
   public static StockBuilder getBuilder() {
@@ -107,6 +109,7 @@ public class Stock implements IstockModel {
   }
 
   /**
+   * <p>
    * We use the builder method.
    * It maintains copies of all the fields that would be required to build the stock object.
    * It offers methods to edit each field individually,
@@ -115,11 +118,13 @@ public class Stock implements IstockModel {
    * set the values of these fields.
    * In the end the user can call a method in the builder that would take the set fields,
    * create the stock object and return it.
-   *
+   *</p>
+   * <p>
    * This method is particularly helpful in our application, because we have two types of stocks,
    * one for fixed portfolios and the other for flexible portfolios.
    * We don't require the fields like commission, buyOrSell for fixed portfolios, hence
    * we set the default values for these fields for fixed portfolios using this builder method.
+   * </p>
    */
   public static class StockBuilder {
 
@@ -215,7 +220,8 @@ public class Stock implements IstockModel {
      */
     public Stock build() {
       //use the currently set values to create the stock object
-      return new Stock(tickerName, numOfUnits, commission, transactionPrice, transactionDate, buyOrSell);
+      return new Stock(tickerName, numOfUnits, commission, transactionPrice,
+              transactionDate, buyOrSell);
     }
 
   }

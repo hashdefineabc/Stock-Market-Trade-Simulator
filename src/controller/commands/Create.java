@@ -35,27 +35,26 @@ public class Create implements ICommandController {
    * @param view the view
    * @param user the user
    */
-  public Create(ViewInterface view, IUserInterface user,Scanner scanner) {
+  public Create(ViewInterface view, IUserInterface user, Scanner scanner) {
     this.view = view;
     this.user = user;
     this.inputScanner = scanner;
   }
 
   @Override
-  public void go() {
+  public void goController() {
     PortfolioType portfolioType = null;
     int fixOrFlex = this.showFixedOrFlexPortfolioOptionsOnView();
     if (fixOrFlex == 1) {
       //create a fixed portfolio
       portfolioType = PortfolioType.fixed;
-    }
-    else if (fixOrFlex== 2) {
+    } else if (fixOrFlex == 2) {
       //create a flexible portfolio
       portfolioType = PortfolioType.flexible;
     }
 
     int manualOrFile = this.showCreatePortfolioOptionsOnView();
-    if ( manualOrFile == 1) {
+    if (manualOrFile == 1) {
       view.displayMsgToUser("Creating a new portfolio...");
       String portfolioName = this.getPortFolioNameFromView();
       List<String[]> stockList = new ArrayList<>();
@@ -95,7 +94,8 @@ public class Create implements ICommandController {
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
-    } while (!validMenuOptions.contains(userOption));
+    }
+    while (!validMenuOptions.contains(userOption));
     return userOption;
   }
 
@@ -109,7 +109,8 @@ public class Create implements ICommandController {
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
-    } while (!validMenuOptions.contains(userOption));
+    }
+    while (!validMenuOptions.contains(userOption));
     return userOption;
   }
 
@@ -118,10 +119,10 @@ public class Create implements ICommandController {
     String portfolioName = null;
     Boolean fileExists = false;
     do {
-      try{
+      try {
         this.view.getPortfolioNameFromUser();
         portfolioName = inputScanner.next();
-        if (user.checkIfFileExists(portfolioName,PortfolioType.fixed)
+        if (user.checkIfFileExists(portfolioName, PortfolioType.fixed)
                 || user.checkIfFileExists(portfolioName, PortfolioType.flexible)) {
           throw new IllegalArgumentException("A portfolio by this name exists already");
         }
@@ -131,7 +132,8 @@ public class Create implements ICommandController {
         fileExists = true;
       }
 
-    } while (fileExists);
+    }
+    while (fileExists);
     return portfolioName;
   }
 
@@ -145,7 +147,7 @@ public class Create implements ICommandController {
 
     if (portfolioType.equals(PortfolioType.flexible)) {
       do {
-        try{
+        try {
           this.view.takeTickerName();
           tickerNameFromUser = inputScanner.next();
           if (!user.isTickerValid(tickerNameFromUser)) {
@@ -155,12 +157,12 @@ public class Create implements ICommandController {
           numUnits = inputScanner.nextDouble();
           Long numOfUnitsInt = Math.round(numUnits);
           while (numUnits <= 0.0) {
-            view.displayMsgToUser("Number of units purchased cannot be -ve, Please enter a " +
-                    "positive number");
+            view.displayMsgToUser("Number of units purchased cannot be -ve, Please enter a "
+                    + "positive number");
             numUnits = inputScanner.nextDouble();
             numOfUnitsInt = Math.round(numUnits);
           }
-          while ((double)numOfUnitsInt != numUnits) {
+          while ((double) numOfUnitsInt != numUnits) {
             view.displayMsgToUser("Cannot purchase fractional shares, Please enter a whole number");
             numUnits = inputScanner.nextDouble();
             numOfUnitsInt = Math.round(numUnits);
@@ -180,11 +182,11 @@ public class Create implements ICommandController {
           this.view.displayMsgToUser(e.getMessage());
           isInputValid = false;
         }
-      } while (!isInputValid);
-    }
-    else if (portfolioType.equals(PortfolioType.fixed)) {
+      }
+      while (!isInputValid);
+    } else if (portfolioType.equals(PortfolioType.fixed)) {
       do {
-        try{
+        try {
           this.view.takeTickerName();
           tickerNameFromUser = inputScanner.next();
           if (!user.isTickerValid(tickerNameFromUser)) {
@@ -194,11 +196,12 @@ public class Create implements ICommandController {
           numUnits = inputScanner.nextDouble();
           Long numOfUnitsInt = Math.round(numUnits);
           while (numUnits <= 0.0) {
-            view.displayMsgToUser("Number of units purchased cannot be -ve, Please enter a postive value");
+            view.displayMsgToUser("Number of units purchased cannot be -ve, "
+                    + "Please enter a postive value");
             numUnits = inputScanner.nextDouble();
             numOfUnitsInt = Math.round(numUnits);
           }
-          while ((double)numOfUnitsInt != numUnits) {
+          while ((double) numOfUnitsInt != numUnits) {
             view.displayMsgToUser("Cannot purchase fractional shares, Please enter a whole number");
             numUnits = inputScanner.nextDouble();
             numOfUnitsInt = Math.round(numUnits);
@@ -218,17 +221,22 @@ public class Create implements ICommandController {
     userStockInput[2] = String.valueOf(transactionDate);
     Double transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate);
     LocalTime currentTime = LocalTime.now();
-    if(transactionDate.equals(LocalDate.now()) && currentTime.isBefore(LocalTime.of(16,0))) {
-      view.displayMsgToUser("Market is not closed today yet, previous available closing price will be considered as your transaction price...");
-      transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+    if (transactionDate.equals(LocalDate.now())
+            && currentTime.isBefore(LocalTime.of(16, 0))) {
+      view.displayMsgToUser("Market is not closed today yet, "
+              + "previous available closing price will be considered as your transaction price...");
+      transactionValue = user.getStockPriceFromDB(tickerNameFromUser,
+              transactionDate.minusDays(1));
       transactionDate = transactionDate.minusDays(1);
     }
-    while(transactionValue == 0.0) {
-      view.displayMsgToUser("Market was closed on "+transactionDate+"\n Calculating price of previous date");
-      transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+    while (transactionValue == 0.0) {
+      view.displayMsgToUser("Market was closed on "
+              + transactionDate + "\n Calculating price of previous date");
+      transactionValue = user.getStockPriceFromDB(tickerNameFromUser,
+              transactionDate.minusDays(1));
       transactionDate = transactionDate.minusDays(1);
     }
-    view.displayMsgToUser("Price of the stock considered is of the date "+transactionDate);
+    view.displayMsgToUser("Price of the stock considered is of the date " + transactionDate);
     userStockInput[4] = String.valueOf(transactionValue);
     userStockInput[5] = String.valueOf(Operation.BUY); //indicates shares are bought
 
@@ -244,10 +252,12 @@ public class Create implements ICommandController {
       try {
         this.view.addMoreStocks();
         userInput = inputScanner.nextInt();
-        if(userInput == 1)
+        if (userInput == 1) {
           return true;
-        else if(userInput == 0)
+        }
+        else if (userInput == 0) {
           return false;
+        }
         if (!validOptions.contains(userInput)) {
           throw new IllegalArgumentException("Please select a valid option!\n");
         }
@@ -255,7 +265,8 @@ public class Create implements ICommandController {
         this.view.displayMsgToUser(ie.getMessage());
         addMore = true;
       }
-    } while (addMore);
+    }
+    while (addMore);
     return userInput == 1;
   }
 
@@ -263,8 +274,7 @@ public class Create implements ICommandController {
     if (portfolioType.equals(PortfolioType.fixed)) {
       this.view.displayMsgToUser("Please place the csv at the location:\n"
               + this.user.getFixedPFPath());
-    }
-    else if (portfolioType.equals(PortfolioType.flexible)) {
+    } else if (portfolioType.equals(PortfolioType.flexible)) {
       this.view.displayMsgToUser("Please place the csv at the location:\n"
               + this.user.getFlexPFPath());
     }
@@ -283,8 +293,9 @@ public class Create implements ICommandController {
         view.displayMsgToUser("Invalid date. Please try again!");
         isDateOkay = false;
       }
-      if(valueDate.isAfter(LocalDate.now())) {
-        view.displayMsgToUser("Future date entered... Please enter a date that is not later than today!!! ");
+      if (valueDate.isAfter(LocalDate.now())) {
+        view.displayMsgToUser("Future date entered..."
+                + " Please enter a date that is not later than today!!! ");
         isDateOkay = false;
       }
     }

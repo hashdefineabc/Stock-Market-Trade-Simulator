@@ -29,14 +29,15 @@ public class Value implements ICommandController {
    * @param view the view
    * @param user the user
    */
-  
+
   public Value(ViewInterface view, IUserInterface user, Scanner scanner) {
     this.view = view;
     this.user = user;
     this.inputScanner = scanner;
   }
+
   @Override
-  public void go() {
+  public void goController() {
 
     int userInput;
     PortfolioType portfolioType = null;
@@ -61,7 +62,7 @@ public class Value implements ICommandController {
     }
     while (userInput > 2 || userInput <= 0);
 
-    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
+    view.displayMsgToUser("Following are the " + portfolioType + " portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndexForVal = this.getSelectedPortFolioFromView(portfolioType);
 
@@ -84,7 +85,8 @@ public class Value implements ICommandController {
       try {
         this.view.getSelectedPortfolio();
         userOption = Integer.parseInt(this.inputScanner.next());
-        if ((userOption < 0) || (userOption > user.getPortfolioNamesCreated(portfolioType).size())) {
+        if ((userOption < 0)
+                || (userOption > user.getPortfolioNamesCreated(portfolioType).size())) {
           throw new IllegalArgumentException("Invalid Option!!");
         }
         isOkay = true;
@@ -97,11 +99,10 @@ public class Value implements ICommandController {
 
         isOkay = false;
       }
-    } while (!isOkay);
+    }
+    while (!isOkay);
     return userOption;
   }
-
-
 
 
   private LocalDate validateDateForValue() {
