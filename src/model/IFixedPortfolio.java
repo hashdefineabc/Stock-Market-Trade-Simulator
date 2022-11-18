@@ -77,7 +77,7 @@ public interface IFixedPortfolio {
    * It returns a map, which contains the date as a key and the string of stars for this date as
    * the value.
    * If the value on a particular date is less than the scale then we would represent it by the
-   * symbol <*
+   * symbol
    * @param option the option
    * @return the map
    */
@@ -87,7 +87,7 @@ public interface IFixedPortfolio {
    * Gets the scale of the chart.
    * scale of the chart represents the value that each star would mean.
    * If the value for a particular date is less than the scale, then we would represent it with the
-   * symbole <*
+   * symbole 
    *
    * @return the scale
    */
