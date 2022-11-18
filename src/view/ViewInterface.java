@@ -55,7 +55,8 @@ public interface ViewInterface {
   void getSelectedPortfolio();
 
   /**
-   * Method that displays stocks of a particular portfolio on the text user interface.
+   * Method that displays stocks of a particular portfolio on the text user interface
+   @param listOfStocks = list of stocks.
    */
   void displayStocks(List<IstockModel> listOfStocks);
 

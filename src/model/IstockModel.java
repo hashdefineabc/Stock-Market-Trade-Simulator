@@ -48,7 +48,7 @@ public interface IstockModel {
    * This method gets the commission value of a particular transaction.
    * Commission is only used for flexible portfolios.
    *
-   * @return
+   * @return the commission
    */
 
   Double getCommission();
