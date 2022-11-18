@@ -25,7 +25,6 @@ public class CostBasis implements ICommandController {
 
   /**
    * Instantiates a new Cost basis.
-   *
    * It takes view and model (user) and instantiates it.
    * It interacts with view and main model which is user.
    * @param view the view
@@ -36,6 +35,7 @@ public class CostBasis implements ICommandController {
     this.user = user;
     this.inputScanner = scanner;
   }
+
   @Override
   public void goController() {
     PortfolioType portfolioType = PortfolioType.flexible;
@@ -50,14 +50,15 @@ public class CostBasis implements ICommandController {
   }
 
   private void calculateCostBasis(PortfolioType portfolioType) {
-    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
+    view.displayMsgToUser("Following are the " + portfolioType + " portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
     LocalDate costBasisDate = this.getDateFromView();
     //calculate cost basis n display to user
-    Double costBasis = user.calculateCostBasisOfPortfolio(portfolioIndex,portfolioType,costBasisDate);
+    Double costBasis = user.calculateCostBasisOfPortfolio(portfolioIndex,
+            portfolioType, costBasisDate);
     view.displayCostBasis(costBasis, costBasisDate);
-    
+
   }
 
   private int getSelectedPortFolioFromView(PortfolioType portfolioType) {
@@ -75,7 +76,8 @@ public class CostBasis implements ICommandController {
         this.view.displayMsgToUser(ie.getMessage());
         okay = false;
       }
-    } while (!okay);
+    }
+    while (!okay);
     return index;
   }
 

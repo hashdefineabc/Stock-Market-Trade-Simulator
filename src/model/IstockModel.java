@@ -32,12 +32,14 @@ public interface IstockModel {
 
   /**
    * Method to get the no of units of the stock.
+   *
    * @return the number of units of the calling stock object.
    */
   Double getNumOfUnits();
 
   /**
    * Method to get the date at which this stock was purchased or sold.
+   *
    * @return the date of the calling stock object.
    */
   LocalDate getTransactionDate();
@@ -45,6 +47,7 @@ public interface IstockModel {
   /**
    * This method gets the commission value of a particular transaction.
    * Commission is only used for flexible portfolios.
+   *
    * @return
    */
 
@@ -52,6 +55,7 @@ public interface IstockModel {
 
   /**
    * This method gets the transaction price of a particular transaction.
+   *
    * @return the transaction price of the calling stock object.
    */
 
@@ -60,6 +64,7 @@ public interface IstockModel {
   /**
    * This method is used to determine whether the stock is bought or sold.
    * It returns Operation.BUY if the stock was bought and Operation.SELL if the stock was sold.
+   *
    * @return Operation.Buy or Operation.SELL
    */
   Operation getBuyOrSell();

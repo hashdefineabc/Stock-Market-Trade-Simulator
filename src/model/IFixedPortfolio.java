@@ -74,14 +74,12 @@ public interface IFixedPortfolio {
    * option 1 would represent previous week
    * option 2 would represent previous month
    * option 3 would represent previous year
-   *<p>
    * It returns a map, which contains the date as a key and the string of stars for this date as
    * the value.
    * If the value on a particular date is less than the scale then we would represent it by the
    * symbol <*
    * @param option the option
    * @return the map
-   * </p>
    */
   Map<LocalDate, String> calculateChartValues(int option);
 

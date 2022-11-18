@@ -117,7 +117,7 @@ public class User implements IUserInterface {
       }
       while (row != null);
       csvReader.close();
-      }
+    }
     catch (Exception e) {
       throw new FileNotFoundException("Nasdaq ticker names file not found");
     }
@@ -488,10 +488,12 @@ public class User implements IUserInterface {
   @Override
   public String getPortfolioName(int portfolioIndex, PortfolioType portfolioType) {
     if (portfolioType.equals(PortfolioType.fixed)) {
-      return this.fixedPortfolios.get(portfolioIndex-1).getNameOfPortFolio();
+      return this.fixedPortfolios.get(portfolioIndex - 1).getNameOfPortFolio();
     }
-    else
-      return this.flexiblePortfolios.get(portfolioIndex-1).getNameOfPortFolio();
+    else {
+      return this.flexiblePortfolios.get(portfolioIndex - 1).getNameOfPortFolio();
+    }
+
   }
 
   @Override
@@ -551,7 +553,7 @@ public class User implements IUserInterface {
     }
   }
 
-  private List<IstockModel> sortStockListDateWise(List<IstockModel>stockList) {
+  private List<IstockModel> sortStockListDateWise(List<IstockModel> stockList) {
     stockList.sort((s1,s2) -> s1.getTransactionDate().compareTo(s2.getTransactionDate()));
     return stockList;
   }
@@ -566,12 +568,12 @@ public class User implements IUserInterface {
   public Double getValueOnDate(String tickerNameFromUser, LocalDate transactionDate) {
     Double transactionValue = this.getStockPriceFromDB(tickerNameFromUser, transactionDate);
     LocalTime currentTime = LocalTime.now();
-    if(transactionDate.equals(LocalDate.now())
+    if (transactionDate.equals(LocalDate.now())
             && currentTime.isBefore(LocalTime.of(16,0))) {
       transactionValue = this.getStockPriceFromDB(tickerNameFromUser,
               transactionDate.minusDays(1));
     }
-    while(transactionValue == 0.0) {
+    while (transactionValue == 0.0) {
       // Market was closed on transactionDate, so considering price of previous date."
       transactionValue = this.getStockPriceFromDB(tickerNameFromUser,
               transactionDate.minusDays(1));

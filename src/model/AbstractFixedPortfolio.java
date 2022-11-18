@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * It contains implementations of all the operations for a fixed portfolio.
  * It essentially has the method definitions of the methods that are common to both fixed and
  * flexible portfolio.
- *This class is inherited by FixedPortfolio class and FlexiblePortfolio class.
+ * This class is inherited by FixedPortfolio class and FlexiblePortfolio class.
  */
 abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   private String nameOfPortFolio;
@@ -213,7 +213,6 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   }
 
 
-
   @Override
   public List<String[]> toListOfString() {
     List<String[]> answer = new ArrayList<>();
@@ -241,15 +240,15 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     }
     return stocksBeforeDate;
   }
+
   @Override
   public Double calculateCostBasis(LocalDate costBasisDate) {
     double costBasis = 0.0;
-    for (IstockModel ns: this.stocks) {
-      if (ns.getTransactionDate().compareTo(costBasisDate) <= 0){
+    for (IstockModel ns : this.stocks) {
+      if (ns.getTransactionDate().compareTo(costBasisDate) <= 0) {
         if (ns.getBuyOrSell() == Operation.BUY) {
           costBasis += ((ns.getTransactionPrice() * ns.getNumOfUnits()) + ns.getCommission());
-        }
-        else if (ns.getBuyOrSell() == Operation.SELL) {
+        } else if (ns.getBuyOrSell() == Operation.SELL) {
           costBasis += ns.getCommission();
         }
       }
@@ -268,16 +267,15 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
 
     if (option == 1) { // previous week
       endDate = startDate.minusDays(7);
-      for(LocalDate date = startDate; date.isAfter(endDate); date = date.minusDays(1)) {
+      for (LocalDate date = startDate; date.isAfter(endDate); date = date.minusDays(1)) {
         values.add(this.calculateValue(date));
       }
     } else if (option == 2) { // previous month
       endDate = startDate.minusDays(30);
-      for(LocalDate date = startDate; date.isAfter(endDate); date = date.minusDays(1)) {
+      for (LocalDate date = startDate; date.isAfter(endDate); date = date.minusDays(1)) {
         values.add(this.calculateValue(date));
       }
-    }
-    else {
+    } else {
       endDate = startDate.minusMonths(12);
       endDate = endDate.with(TemporalAdjusters.lastDayOfMonth());
       for (LocalDate date = startDate; date.isAfter(endDate);
@@ -291,20 +289,21 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     Double maxValue = Collections.max(values);
     this.scale = maxValue / 30;
     LocalDate date = LocalDate.now();
-    for (int i=0; i<values.size(); i++) {
+    for (int i = 0; i < values.size(); i++) {
       int numStars = (int) (values.get(i) / scale);
       String stars = "";
-      if (numStars == 0)
+      if (numStars == 0) {
         stars = "<*";
+      }
       else {
-        for(int j=0; j<numStars; j++)
-          stars = stars+"*";
+        for (int j = 0; j < numStars; j++) {
+          stars = stars + "*";
+        }
       }
       chart.put(date, stars);
       if (option == 3) {
         date = date.minusMonths(1);
-      }
-      else {
+      } else {
         date = date.minusDays(1);
       }
     }

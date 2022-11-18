@@ -81,7 +81,7 @@ public class ViewImpl implements ViewInterface {
 
     for (IstockModel stock : listOfStocks) {
       this.out.print(stock.getTickerName() + "\t\t" + Double.toString(stock.getNumOfUnits())
-                      + "\t\t\t" +stock.getTransactionDate().format(dateFormat) + "\t\t"
+              + "\t\t\t" + stock.getTransactionDate().format(dateFormat) + "\t\t"
               + Double.toString(stock.getCommission()) + "\t\t\t"
               + Double.toString(stock.getTransactionPrice()) + "\t\t\t"
               + stock.getBuyOrSell().toString() + "\n");
@@ -107,9 +107,9 @@ public class ViewImpl implements ViewInterface {
   }
 
   @Override
-    public void getPortfolioNameFromUser() {
-      this.out.print("\tPlease enter a name for this portfolio: "
-      + "(No spaces or special characters allowed in the name)\n");
+  public void getPortfolioNameFromUser() {
+    this.out.print("\tPlease enter a name for this portfolio: "
+            + "(No spaces or special characters allowed in the name)\n");
   }
 
   @Override
@@ -157,17 +157,19 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void displayChartWeek(Map<LocalDate, String> chart) {
-    for (Map.Entry<LocalDate,String> entry : chart.entrySet())
-      this.out.print(entry.getKey() +
-              ":" + entry.getValue()+"\n");
+    for (Map.Entry<LocalDate,String> entry : chart.entrySet()) {
+      this.out.print(entry.getKey() + ":" + entry.getValue() + "\n");
+
+    }
   }
 
   @Override
   public void displayChartMonth(Map<LocalDate, String> chart) {
-    for (Map.Entry<LocalDate,String> entry : chart.entrySet())
-      this.out.print(entry.getKey().getMonth().toString().substring(0,3)
-              + " "+ entry.getKey().getYear() +
-              " : " + entry.getValue()+"\n");
+    for (Map.Entry<LocalDate,String> entry : chart.entrySet()) {
+      this.out.print(entry.getKey().getMonth().toString().substring(0, 3)
+              + " " + entry.getKey().getYear() +
+              " : " + entry.getValue() + "\n");
+    }
   }
 
 }

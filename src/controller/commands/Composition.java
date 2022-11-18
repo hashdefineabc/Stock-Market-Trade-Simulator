@@ -28,6 +28,7 @@ public class Composition implements ICommandController {
    * Instantiates a new Composition.
    * It takes view and model (user) and instantiates it.
    * It interacts with view and main model which is user.
+   *
    * @param view         the view
    * @param user         the user
    * @param inputScanner the input scanner
@@ -37,6 +38,7 @@ public class Composition implements ICommandController {
     this.user = user;
     this.inputScanner = inputScanner;
   }
+
   @Override
   public void goController() {
     PortfolioType portfolioType = null;
@@ -44,8 +46,7 @@ public class Composition implements ICommandController {
     if (fixOrFlex == 1) {
       //create a fixed portfolio
       portfolioType = PortfolioType.fixed;
-    }
-    else if (fixOrFlex == 2) {
+    } else if (fixOrFlex == 2) {
       //create a flexible portfolio
       portfolioType = PortfolioType.flexible;
     }
@@ -59,21 +60,20 @@ public class Composition implements ICommandController {
   }
 
   private void retrievePortFolios(PortfolioType portfolioType) {
-    view.displayMsgToUser("Following are the "+portfolioType+" portfolios created till now:");
+    view.displayMsgToUser("Following are the " + portfolioType + " portfolios created till now:");
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
     LocalDate dateForComposition;
-    if(portfolioType == PortfolioType.fixed) {
+    if (portfolioType == PortfolioType.fixed) {
       dateForComposition = LocalDate.now();
-    }
-    else {
+    } else {
       dateForComposition = this.getDateFromView();
     }
-    List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,portfolioType, dateForComposition);
+    List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,
+            portfolioType, dateForComposition);
     if (stocksToDisplay.size() == 0) {
       view.displayMsgToUser("No stocks were present in the portfolio at this date");
-    }
-    else {
+    } else {
       view.displayStocks(stocksToDisplay);
     }
   }
@@ -86,14 +86,15 @@ public class Composition implements ICommandController {
         view.getSelectedPortfolio();
         index = this.inputScanner.nextInt();
         if ((index < 0) || (index > user.getPortfolioNamesCreated(portfolioType).size())) {
-            throw new IllegalArgumentException("Invalid Index");
+          throw new IllegalArgumentException("Invalid Index");
         }
         okay = true;
       } catch (IllegalArgumentException ie) {
-          this.view.displayMsgToUser(ie.getMessage());
-          okay = false;
+        this.view.displayMsgToUser(ie.getMessage());
+        okay = false;
       }
-    } while (!okay);
+    }
+    while (!okay);
 
     return index;
   }
@@ -120,11 +121,16 @@ public class Composition implements ICommandController {
 
         isOkay = false;
       }
-    } while (!isOkay);
+    }
+    while (!isOkay);
     return userOption;
 
   }
 
+  /**
+   * Method to get date from user.
+   * @return the date enetered by the user.
+   */
   public LocalDate getDateFromView() {
     LocalDate valueDate = LocalDate.now();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");

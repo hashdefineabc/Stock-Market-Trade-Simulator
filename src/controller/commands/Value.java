@@ -29,7 +29,7 @@ public class Value implements ICommandController {
    * @param view the view
    * @param user the user
    */
-  
+
   public Value(ViewInterface view, IUserInterface user, Scanner scanner) {
     this.view = view;
     this.user = user;
@@ -99,11 +99,10 @@ public class Value implements ICommandController {
 
         isOkay = false;
       }
-    } while (!isOkay);
+    }
+    while (!isOkay);
     return userOption;
   }
-
-
 
 
   private LocalDate validateDateForValue() {

@@ -23,7 +23,7 @@ public class StockMarket {
 
     //create the controller and give it the model and view.
     ICommandController controller = new CommandController(u, view, System.in);
-    controller.go();
+    controller.goController();
 
   }
 }

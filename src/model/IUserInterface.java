@@ -155,17 +155,14 @@ public interface IUserInterface {
    * 1. Performance of the portfolio in the previous week.
    * 2. Performance of the portfolio in the previous month.
    * 3. Performance of the portfolio in the previous year.
-   *<p>
    * The number of asterisks on each line is a measure of the value of the portfolio at that
    * timestamp.
    * The value for a date is computed at the end of that day.
    * The value for a month is computed at the last working day of the month.
-   *
    * @param option               the option (week, month, year)
    * @param portfolioIndexForVal the index of the portfolio that needs to be visualized
    * @param portfolioType        the type of the portfolio that the user needs to visualize.
    * @return the map of date and string of stars for that particular date.
-   * </p>
    */
   Map<LocalDate, String> calculateChart(int option, int portfolioIndexForVal,
                                         PortfolioType portfolioType);

@@ -30,10 +30,11 @@ public class BuySell implements ICommandController {
   /**
    * Instantiates a new BuySell.
    * It takes in view and model (user) and instantiates them.
+   *
    * @param view the view
    * @param user the user
    */
-  public BuySell(ViewInterface view, IUserInterface user,Scanner scanner) {
+  public BuySell(ViewInterface view, IUserInterface user, Scanner scanner) {
     this.view = view;
     this.user = user;
     inputScanner = scanner;
@@ -42,13 +43,10 @@ public class BuySell implements ICommandController {
 
   @Override
   public void goController() {
-    /**
-     * display flexible portfolios
-     * ask what has to be done
-     */
+
     if (user.getPortfolioNamesCreated(PortfolioType.flexible).size() == 0) {
       view.displayMsgToUser("No " + PortfolioType.flexible + " portfolios created till now!!!"
-                          + "\n Hence cannot add/sell stocks");
+              + "\n Hence cannot add/sell stocks");
       return;
     }
     this.buySell(PortfolioType.flexible);
@@ -77,11 +75,10 @@ public class BuySell implements ICommandController {
     stockDetails = this.takeStockInputFromView(buyOrSell);
     if (buyOrSell == 1) {
       stockDetails[5] = Operation.BUY.toString();
-    }
-    else if (buyOrSell == 2) {
+    } else if (buyOrSell == 2) {
       stockDetails[5] = Operation.SELL.toString();
       try {
-        if (! this.validateSellOperation(portfolioIndex, stockDetails)) {
+        if (!this.validateSellOperation(portfolioIndex, stockDetails)) {
           throw new Exception("Cannot sell this stock!");
         }
       } catch (Exception e) {
@@ -90,21 +87,19 @@ public class BuySell implements ICommandController {
       }
     }
 
-    Stock newStock = Stock.getBuilder()
-              .tickerName(stockDetails[0])
-              .numOfUnits(Double.valueOf(stockDetails[1]))
-              .transactionDate(LocalDate.parse((stockDetails[2])))
-              .commission(Double.valueOf(stockDetails[3]))
-              .transactionPrice(Double.valueOf(stockDetails[4]))
-              .buyOrSell(Operation.valueOf(stockDetails[5]))
-              .build();
+    Stock newStock = Stock.getBuilder().tickerName(stockDetails[0])
+            .numOfUnits(Double.valueOf(stockDetails[1]))
+            .transactionDate(LocalDate.parse((stockDetails[2])))
+            .commission(Double.valueOf(stockDetails[3]))
+            .transactionPrice(Double.valueOf(stockDetails[4]))
+            .buyOrSell(Operation.valueOf(stockDetails[5])).build();
 
 
     IFlexiblePortfolio pf = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
     pf.addOrSellStocks(newStock);
     dataToWrite = pf.toListOfString();
-    user.savePortfolioToFile(dataToWrite, pf.getNameOfPortFolio().strip().split(".csv")[0],
-            portfolioType);
+    user.savePortfolioToFile(dataToWrite, pf.getNameOfPortFolio().strip()
+            .split(".csv")[0], portfolioType);
   }
 
   /**
@@ -128,7 +123,8 @@ public class BuySell implements ICommandController {
         this.view.displayMsgToUser(ie.getMessage());
         okay = false;
       }
-    } while (!okay);
+    }
+    while (!okay);
 
     return index;
   }
@@ -137,9 +133,9 @@ public class BuySell implements ICommandController {
    * Gets buy or sell from view.
    * It is a helper method which asks the view to display whether
    * the user wants to buy or sell a stock.
-   *
    * It returns 1 if the user wants to buy a stock.
    * It returns 2 if the user wants to sell a stock.
+   *
    * @return the buy or sell from view
    */
   private int getBuyOrSellFromView() {
@@ -152,14 +148,14 @@ public class BuySell implements ICommandController {
       } catch (IllegalArgumentException ie) {
         this.view.displayMsgToUser("Please enter only an integer value from the below options!!");
       }
-    } while (!validMenuOptions.contains(userOption));
+    }
+    while (!validMenuOptions.contains(userOption));
     return userOption;
   }
 
   /**
    * Take stock input from view string [ ].
    * It is a helper method that takes in details of the stocks that the user wants to buy or sell.
-   *
    * It takes in an integer, 1 represents buy and 2 represents sell.
    * It returns the stock details that the user wants to buy or sell.
    *
@@ -174,23 +170,24 @@ public class BuySell implements ICommandController {
     LocalDate transactionDate = LocalDate.now();
     Boolean isInputValid = false;
     do {
-      try{
+      try {
         this.view.takeTickerName();
         tickerNameFromUser = inputScanner.next();
         if (!user.isTickerValid(tickerNameFromUser)) {
           throw new IllegalArgumentException("Invalid ticker name!");
         }
-        if(buyOrSell == 1)
+        if (buyOrSell == 1) {
           this.view.displayMsgToUser("Enter the number of units to buy");
-        else
+        } else {
           this.view.displayMsgToUser("Enter the number of units to sell");
+        }
+
 
         numUnits = inputScanner.nextDouble();
         Long numOfUnitsInt = Math.round(numUnits);
         if (numUnits <= 0.0) {
           throw new IllegalArgumentException("Number of units cannot be -ve");
-        }
-        else if ((double)numOfUnitsInt != numUnits) {
+        } else if ((double) numOfUnitsInt != numUnits) {
           throw new IllegalArgumentException("Cannot purchase fractional shares");
         }
 
@@ -207,13 +204,15 @@ public class BuySell implements ICommandController {
         this.view.displayMsgToUser(e.getMessage());
         isInputValid = false;
       }
-    } while (!isInputValid);
+    }
+    while (!isInputValid);
 
     userStockInput[0] = tickerNameFromUser;
     userStockInput[1] = Double.toString(numUnits);
     userStockInput[2] = String.valueOf(transactionDate);
     userStockInput[3] = String.valueOf(commission);
-    userStockInput[4] = String.valueOf(user.getStockPriceFromDB(tickerNameFromUser, transactionDate));
+    userStockInput[4] = String.valueOf(user.getStockPriceFromDB(tickerNameFromUser,
+            transactionDate));
     userStockInput[5] = String.valueOf(false); //indicates shares are bought
 
     return userStockInput;
@@ -242,7 +241,7 @@ public class BuySell implements ICommandController {
         view.displayMsgToUser("Invalid date. Please try again!");
         isDateOkay = false;
       }
-      if(valueDate.isAfter(LocalDate.now())) {
+      if (valueDate.isAfter(LocalDate.now())) {
         view.displayMsgToUser("Future date entered... "
                 + "Please enter a date that is not later than today!!! ");
         isDateOkay = false;
@@ -269,16 +268,16 @@ public class BuySell implements ICommandController {
     LocalDate firstDate = LocalDate.now();
     String tickername = stockDetails[0];
     Double numOfStocks = 0.0;
-    IFlexiblePortfolio pfToCheck = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
+    IFlexiblePortfolio pfToCheck = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex
+            - 1);
 
-    for (IstockModel s: pfToCheck.getStocksInPortfolio(LocalDate.now())) {
+    for (IstockModel s : pfToCheck.getStocksInPortfolio(LocalDate.now())) {
       if (tickername.equals(s.getTickerName()) && s.getBuyOrSell().equals(Operation.BUY)) {
         numOfStocks += s.getNumOfUnits();
         if (firstDate.isAfter(s.getTransactionDate())) {
           firstDate = s.getTransactionDate();
         }
-      }
-      else if (tickername.equals(s.getTickerName()) && s.getBuyOrSell().equals(Operation.SELL)) {
+      } else if (tickername.equals(s.getTickerName()) && s.getBuyOrSell().equals(Operation.SELL)) {
         numOfStocks -= s.getNumOfUnits();
       }
     }

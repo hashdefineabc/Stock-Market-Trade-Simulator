@@ -75,36 +75,33 @@ public class DisplayChart implements ICommandController {
 
     int option = 1;
 
-    while(!isValid) {
+    while (!isValid) {
       view.displayOptionsForChart();
       option = inputScanner.nextInt();
 
       if (option == 1 || option == 2 || option == 3) {
         isValid = true;
-      }
-      else {
+      } else {
         view.displayMsgToUser("Please select a valid option");
       }
     }
 
     this.chart = user.calculateChart(option, portfolioIndexForVal, portfolioType);
-    if(option == 1) {
-      view.displayMsgToUser("Performance of the portfolio "+
+    if (option == 1) {
+      view.displayMsgToUser("Performance of the portfolio " +
               user.getPortfolioName(portfolioIndexForVal, portfolioType) +
-              " from "+ LocalDate.now() + " to "+LocalDate.now().minusDays(7));
+              " from " + LocalDate.now() + " to " + LocalDate.now().minusDays(7));
       view.displayChartWeek(chart);
-    }
-    else if(option == 2) {
-      view.displayMsgToUser("Performance of the portfolio "+
+    } else if (option == 2) {
+      view.displayMsgToUser("Performance of the portfolio " +
               user.getPortfolioName(portfolioIndexForVal, portfolioType) +
-              " from "+ LocalDate.now() + " to "+LocalDate.now().minusDays(30));
+              " from " + LocalDate.now() + " to " + LocalDate.now().minusDays(30));
       view.displayChartWeek(chart);
-    }
-    else {
-      view.displayMsgToUser("Performance of the portfolio "+
+    } else {
+      view.displayMsgToUser("Performance of the portfolio " +
               user.getPortfolioName(portfolioIndexForVal, portfolioType) +
-              " from "+ LocalDate.now().getMonth() + " " + LocalDate.now().getYear() +
-              " to "+LocalDate.now().minusMonths(11).getMonth() + " " +
+              " from " + LocalDate.now().getMonth() + " " + LocalDate.now().getYear() +
+              " to " + LocalDate.now().minusMonths(11).getMonth() + " " +
               LocalDate.now().minusMonths(11).getYear());
       view.displayChartMonth(chart);
     }

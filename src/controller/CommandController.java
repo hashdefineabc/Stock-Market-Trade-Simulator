@@ -23,7 +23,7 @@ import view.ViewInterface;
  * It tells view what to print and tells model what to do.
  */
 
-public class CommandController implements ICommandController{
+public class CommandController implements ICommandController {
 
   private static ViewInterface view;
   private static IUserInterface user;
@@ -34,7 +34,6 @@ public class CommandController implements ICommandController{
    * Instantiates a new Controller.
    * It takes in user, view and an input stream and
    * instantiates it to the private fields of this class.
-   *
    * It uses command design pattern which promotes delegation.
    * The commands supported in our application are as follows
    * 1. Create a new portfolio
@@ -78,16 +77,16 @@ public class CommandController implements ICommandController{
             cmd = new Composition(view, user, inputScanner);
             break;
           case 3: // Check value of a Portfolio
-            cmd = new Value(view, user,inputScanner);
+            cmd = new Value(view, user, inputScanner);
             break;
           case 4: // Buy or sell shares of a portfolio
-            cmd = new BuySell(view, user,inputScanner);
+            cmd = new BuySell(view, user, inputScanner);
             break;
           case 5: // Check cost basis of a portfolio
             cmd = new CostBasis(view, user, inputScanner);
             break;
           case 6: // Display bar chart of a portfolio
-            cmd = new DisplayChart(view, user,inputScanner);
+            cmd = new DisplayChart(view, user, inputScanner);
             break;
 
           case 7:
@@ -113,13 +112,14 @@ public class CommandController implements ICommandController{
   /**
    * Asks view to display the menu options that are supported in our application.
    * Takes user input and returns it to the caller.
+   *
    * @return user selection of the menu options.
    */
 
   private int showMenuOnView() {
     int userOption = 0;
     Boolean isOkay = false;
-    List<Integer> validMenuOptions = Arrays.asList(1, 2,3,4,5,6,7);
+    List<Integer> validMenuOptions = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
     do {
       try {
         this.view.displayMenu();
@@ -131,14 +131,14 @@ public class CommandController implements ICommandController{
       } catch (IllegalArgumentException ie) {
         if (!ie.getMessage().equals("Invalid Option!!")) {
           this.view.displayMsgToUser("Please enter an integer value");
-        }
-        else {
+        } else {
           this.view.displayMsgToUser(ie.getMessage());
         }
 
         isOkay = false;
       }
-    } while (!isOkay);
+    }
+    while (!isOkay);
     return userOption;
   }
 }
