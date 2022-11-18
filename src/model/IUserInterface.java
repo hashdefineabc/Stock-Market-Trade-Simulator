@@ -93,11 +93,11 @@ public interface IUserInterface {
   String getFlexPFPath();
 
   /**
-   * Displays the stocks that are present in a portfolio
+   * Displays the stocks that are present in a portfolio.
    *
-   * @param portfolioIndex     The index of the portfolio that is to be retrieved
-   * @param typeofPortfolio    The type of the portfolio, whether it is fixed or flexible portfolio
-   * @param dateForComposition The date for which the portfolio need to be retrieved
+   * @param portfolioIndex     The index of the portfolio that is to be retrieved.
+   * @param typeofPortfolio    The type of the portfolio, whether it is fixed or flexible portfolio.
+   * @param dateForComposition The date for which the portfolio need to be retrieved.
    * @return The list of stocks that are present in a portfolio on a particular date.
    */
   List<IstockModel> displayStocksOfPortFolio(int portfolioIndex, PortfolioType typeofPortfolio,
@@ -155,7 +155,7 @@ public interface IUserInterface {
    * 1. Performance of the portfolio in the previous week.
    * 2. Performance of the portfolio in the previous month.
    * 3. Performance of the portfolio in the previous year.
-   *
+   *<p>
    * The number of asterisks on each line is a measure of the value of the portfolio at that
    * timestamp.
    * The value for a date is computed at the end of that day.
@@ -165,8 +165,9 @@ public interface IUserInterface {
    * @param portfolioIndexForVal the index of the portfolio that needs to be visualized
    * @param portfolioType        the type of the portfolio that the user needs to visualize.
    * @return the map of date and string of stars for that particular date.
+   * </p>
    */
-  Map<LocalDate, String> CalculateChart(int option, int portfolioIndexForVal,
+  Map<LocalDate, String> calculateChart(int option, int portfolioIndexForVal,
                                         PortfolioType portfolioType);
 
   /**

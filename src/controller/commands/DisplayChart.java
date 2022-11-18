@@ -1,4 +1,5 @@
 package controller.commands;
+
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,7 +20,6 @@ import view.ViewInterface;
  * 1. To view the performance of a portfolio for the previous week
  * 2. To view the performance of a portfolio for the previous month
  * 3. To view the performance of a portfolio for the previous year
- *
  * We visualize the performance by using a bar or line chart.
  */
 public class DisplayChart implements ICommandController {
@@ -40,8 +40,9 @@ public class DisplayChart implements ICommandController {
     this.chart = new LinkedHashMap<>();
     inputScanner = scanner;
   }
+
   @Override
-  public void go() {
+  public void goController() {
     boolean isValid = false;
 
     int userInput;
@@ -86,7 +87,7 @@ public class DisplayChart implements ICommandController {
       }
     }
 
-    this.chart = user.CalculateChart(option, portfolioIndexForVal, portfolioType);
+    this.chart = user.calculateChart(option, portfolioIndexForVal, portfolioType);
     if(option == 1) {
       view.displayMsgToUser("Performance of the portfolio "+
               user.getPortfolioName(portfolioIndexForVal, portfolioType) +

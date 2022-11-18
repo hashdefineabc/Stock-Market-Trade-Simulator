@@ -38,7 +38,7 @@ public class Composition implements ICommandController {
     this.inputScanner = inputScanner;
   }
   @Override
-  public void go() {
+  public void goController() {
     PortfolioType portfolioType = null;
     int fixOrFlex = this.showFixedOrFlexPortfolioOptionsOnView();
     if (fixOrFlex == 1) {

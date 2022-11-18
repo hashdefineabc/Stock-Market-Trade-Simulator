@@ -133,9 +133,9 @@ public class ControllerImplDelegateTest {
     }
 
     @Override
-    public Map<LocalDate, String> CalculateChart(int option, int portfolioIndexForVal,
+    public Map<LocalDate, String> calculateChart(int option, int portfolioIndexForVal,
                                                  PortfolioType portfolioType) {
-      log.append("CalculateChart method is called.");
+      log.append("calculateChart method is called.");
       return null;
     }
 
@@ -237,7 +237,7 @@ public class ControllerImplDelegateTest {
   }
 
   @Test
-  public void testGetFixedPFPath(){
+  public void testGetFixedPFPath() {
 
     String expectedResult = "getFixedPFPath method is called.";
     user.getFixedPFPath();
@@ -245,7 +245,7 @@ public class ControllerImplDelegateTest {
   }
 
   @Test
-  public void testGetFlexPFPath(){
+  public void testGetFlexPFPath() {
 
     String expectedResult = "getFlexPFPath method is called.";
     user.getFlexPFPath();
@@ -253,7 +253,7 @@ public class ControllerImplDelegateTest {
   }
 
   @Test
-  public void testCalculateCostBasisOfPortfolio(){
+  public void testCalculateCostBasisOfPortfolio() {
 
     String expectedResult = "calculateCostBasisOfPortfolio method is called.";
     user.calculateCostBasisOfPortfolio(2,PortfolioType.flexible, LocalDate.now());
@@ -261,7 +261,7 @@ public class ControllerImplDelegateTest {
   }
 
   @Test
-  public void testGetStockPriceFromDB(){
+  public void testGetStockPriceFromDB() {
 
     String expectedResult = "getStockPriceFromDB method is called.";
     user.getStockPriceFromDB(null, LocalDate.now());
@@ -269,15 +269,15 @@ public class ControllerImplDelegateTest {
   }
 
   @Test
-  public void testCalculateChart(){
+  public void testCalculateChart() {
 
     String expectedResult = "CalculateChart method is called.";
-    user.CalculateChart(1,1,PortfolioType.flexible);
+    user.calculateChart(1,1,PortfolioType.flexible);
     assertEquals(expectedResult, log.toString());
   }
 
   @Test
-  public void testGetScale(){
+  public void testGetScale() {
 
     String expectedResult = "getScale method is called.";
     user.getScale(1, PortfolioType.flexible);
@@ -285,7 +285,7 @@ public class ControllerImplDelegateTest {
   }
 
   @Test
-  public void testGetPortfolioName(){
+  public void testGetPortfolioName() {
 
     String expectedResult = "getPortfolioName method is called.";
     user.getPortfolioName(1, PortfolioType.flexible);

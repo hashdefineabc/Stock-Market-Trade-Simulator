@@ -26,5 +26,5 @@ public interface ICommandController {
    *    * It initially asks view to display the list of commands that are supported.
    *    * Based on the user input, it delegates the commands to respective classes.
    */
-  void go();
+  void goController();
 }

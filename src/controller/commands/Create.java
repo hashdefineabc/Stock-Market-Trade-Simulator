@@ -42,7 +42,7 @@ public class Create implements ICommandController {
   }
 
   @Override
-  public void go() {
+  public void goController() {
     PortfolioType portfolioType = null;
     int fixOrFlex = this.showFixedOrFlexPortfolioOptionsOnView();
     if (fixOrFlex == 1) {

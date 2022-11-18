@@ -66,7 +66,7 @@ public class CommandController implements ICommandController{
    */
 
   @Override
-  public void go() {
+  public void goController() {
     ICommandController cmd = null;
     while (true) {
       try {
@@ -101,7 +101,7 @@ public class CommandController implements ICommandController{
             break;
         }
         if (cmd != null) {
-          cmd.go();
+          cmd.goController();
           cmd = null;
         }
       } catch (InputMismatchException ime) {

@@ -29,12 +29,10 @@ import java.util.stream.Stream;
  * It contains implementations of all the operations for a fixed portfolio.
  * It essentially has the method definitions of the methods that are common to both fixed and
  * flexible portfolio.
- *
- * This class is inherited by FixedPortfolio class and FlexiblePortfolio class.
+ *This class is inherited by FixedPortfolio class and FlexiblePortfolio class.
  */
 abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   private String nameOfPortFolio;
-  private LocalDate dateOfCreation;
   /**
    * The list of stocks present in a portfolio.
    */
@@ -68,7 +66,6 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     }
     this.nameOfPortFolio = nameOfPortFolio;
     this.stocks = stocks;
-    this.dateOfCreation = LocalDate.now();
     this.portfolioType = "fixed";
   }
 
@@ -121,7 +118,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    if(result == 0.0) {
+    if (result == 0.0) {
       User user = new User(null);
       result = user.getValueOnDate(tickerName, date);
     }
@@ -196,13 +193,14 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
 
     for (IstockModel curStock : this.stocks) {
       Integer addOrSub = 1;
-      if(curStock.getBuyOrSell().equals(Operation.SELL)){
+      if (curStock.getBuyOrSell().equals(Operation.SELL)) {
         addOrSub = -1;
       }
-      if(curStock.getTransactionDate().isAfter(date)) {
+      if (curStock.getTransactionDate().isAfter(date)) {
         continue;
       }
-      answer = answer + (curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date) * addOrSub);
+      answer = answer + (curStock.getNumOfUnits() * getStockValue(curStock.getTickerName(), date)
+              * addOrSub);
     }
 
     return answer;
@@ -236,8 +234,8 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
   @Override
   public List<IstockModel> getStocksInPortfolio(LocalDate date) {
     List<IstockModel> stocksBeforeDate = new ArrayList<>();
-    for(IstockModel stock : this.stocks) {
-      if(stock.getTransactionDate().equals(date) || stock.getTransactionDate().isBefore(date)) {
+    for (IstockModel stock : this.stocks) {
+      if (stock.getTransactionDate().equals(date) || stock.getTransactionDate().isBefore(date)) {
         stocksBeforeDate.add(stock);
       }
     }
@@ -268,7 +266,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     LocalDate startDate = LocalDate.now();
     LocalDate endDate;
 
-    if(option == 1) { // previous week
+    if (option == 1) { // previous week
       endDate = startDate.minusDays(7);
       for(LocalDate date = startDate; date.isAfter(endDate); date = date.minusDays(1)) {
         values.add(this.calculateValue(date));
@@ -282,7 +280,8 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     else {
       endDate = startDate.minusMonths(12);
       endDate = endDate.with(TemporalAdjusters.lastDayOfMonth());
-      for(LocalDate date = startDate; date.isAfter(endDate); date = date.minusMonths(1)) {
+      for (LocalDate date = startDate; date.isAfter(endDate);
+           date = date.minusMonths(1)) {
         values.add(this.calculateValue(date));
         date = date.with(TemporalAdjusters.lastDayOfMonth());
       }
@@ -292,17 +291,17 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     Double maxValue = Collections.max(values);
     this.scale = maxValue / 30;
     LocalDate date = LocalDate.now();
-    for(int i=0; i<values.size(); i++) {
+    for (int i=0; i<values.size(); i++) {
       int numStars = (int) (values.get(i) / scale);
       String stars = "";
-      if(numStars == 0)
+      if (numStars == 0)
         stars = "<*";
       else {
         for(int j=0; j<numStars; j++)
           stars = stars+"*";
       }
       chart.put(date, stars);
-      if(option == 3){
+      if (option == 3) {
         date = date.minusMonths(1);
       }
       else {

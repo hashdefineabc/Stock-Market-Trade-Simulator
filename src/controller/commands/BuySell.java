@@ -41,7 +41,7 @@ public class BuySell implements ICommandController {
 
 
   @Override
-  public void go() {
+  public void goController() {
     /**
      * display flexible portfolios
      * ask what has to be done

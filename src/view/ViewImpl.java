@@ -107,9 +107,9 @@ public class ViewImpl implements ViewInterface {
   }
 
   @Override
-  public void getPortfolioNameFromUser() {
-    this.out.print("\tPlease enter a name for this portfolio: "
-    + "(No spaces or special characters allowed in the name)\n");
+    public void getPortfolioNameFromUser() {
+      this.out.print("\tPlease enter a name for this portfolio: "
+      + "(No spaces or special characters allowed in the name)\n");
   }
 
   @Override
@@ -142,17 +142,17 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void askAddOrSell() {
-    this.out.print("Please pick an operation\n" +
-            "1. Add Stock to the portfolio\n" +
-            "2. Sell Stock from the portfolio\n");
+    this.out.print("Please pick an operation\n"
+            + "1. Add Stock to the portfolio\n"
+            + "2. Sell Stock from the portfolio\n");
   }
 
   @Override
   public void displayOptionsForChart() {
-    this.out.print("Please pick an option\n" +
-            "1. Display chart for previous week\n" +
-            "2. Display chart for previous month\n" +
-            "3. Display chart for previous year\n");
+    this.out.print("Please pick an option\n"
+            + "1. Display chart for previous week\n"
+            + "2. Display chart for previous month\n"
+            + "3. Display chart for previous year\n");
   }
 
   @Override
@@ -165,7 +165,8 @@ public class ViewImpl implements ViewInterface {
   @Override
   public void displayChartMonth(Map<LocalDate, String> chart) {
     for (Map.Entry<LocalDate,String> entry : chart.entrySet())
-      this.out.print(entry.getKey().getMonth().toString().substring(0,3) + " "+ entry.getKey().getYear() +
+      this.out.print(entry.getKey().getMonth().toString().substring(0,3)
+              + " "+ entry.getKey().getYear() +
               " : " + entry.getValue()+"\n");
   }
 

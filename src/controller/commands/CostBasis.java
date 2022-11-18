@@ -37,7 +37,7 @@ public class CostBasis implements ICommandController {
     this.inputScanner = scanner;
   }
   @Override
-  public void go() {
+  public void goController() {
     PortfolioType portfolioType = PortfolioType.flexible;
     view.displayMsgToUser("Cost Basis can be calculated only for flexible portfolios.");
     if (user.getPortfolioNamesCreated(portfolioType).size() == 0) {

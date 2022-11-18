@@ -62,6 +62,7 @@ public class UserTest {
     String expected = "[testFlexiblePortfolio1.csv, testFlex1.csv]";
     assertEquals(expected, user.getPortfolioNamesCreated(PortfolioType.flexible).toString());
   }
+
   @Test
   public void testSavePortFolio() {
     assertEquals(true, user.checkIfFileExists("testFlex1", PortfolioType.flexible));
