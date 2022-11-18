@@ -212,7 +212,8 @@ public class Create implements ICommandController {
           this.view.displayMsgToUser(e.getMessage());
           isInputValid = false;
         }
-      } while (!isInputValid);
+      }
+      while (!isInputValid);
     }
     userStockInput[0] = tickerNameFromUser;
     userStockInput[1] = Double.toString(numUnits);
