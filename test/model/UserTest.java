@@ -4,103 +4,68 @@ package model;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Class to check the user functionalities.
  */
 public class UserTest {
 
-  IUserInterface testUser;
+  User user;
 
   @Before
   public void setUp() {
-    testUser = new User();
+    user = new User("./resources/testPortfolio");
   }
 
+  @Test
+  public void testStocks() {
+    IstockModel stock = new Stock("AAPL", 5.0, 10.0, 2000.0, LocalDate.now(), Operation.BUY);
+    assertEquals("AAPL", stock.getTickerName());
+  }
 
   @Test
-<<<<<<< HEAD:test/model/UserTest.java
-  public void testStocks() {
-    IstockModel stock = new Stock("AAPL", 5, LocalDate.now());
-//    assertEquals();
+  public void testStocksNumUnits() {
+    IstockModel stock = new Stock("AAPL", 5.0, 10.0, 2000.0, LocalDate.now(), Operation.BUY);
+    assertEquals("5.0", stock.getNumOfUnits().toString());
   }
 
   @Test
   public void testIsTickerValid() {
-    IUserInterface user = new User("new user");
     List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
+    IstockModel s = new Stock("AAPL", 5.0, 10.0, 2000.0, LocalDate.now(), Operation.BUY);
     stockList.add(s);
-    s = new Stock("MSFT", 5, LocalDate.of(2022, 10, 26));
+    s = new Stock("MSFT", 5.0, 10.0, 2000.0, LocalDate.now(), Operation.BUY);
     stockList.add(s);
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
+    IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
 
-    user.CreateNewPortfolio(portfolio);
     assertEquals(true, user.isTickerValid("AAPL"));
   }
 
   @Test
-  public void testCreateNewPortfolio() {
-
-    IUserInterface user = new User("User 1");
-    List<IstockModel> stockList = new ArrayList<>();
-    Stock s = new Stock("AAPL", 5, LocalDate.of(2022, 10, 26));
-    stockList.add(s);
-    s = new Stock("MSFT", 5, LocalDate.of(2022, 10, 26));
-    stockList.add(s);
-    PortfolioModel portfolio = new Portfolio("Portfolio 1", stockList);
-
-    List<String> portfoliosCreated = user.getPortfolioNamesCreated();
-    int previousSize =  portfoliosCreated.size();
-    user.CreateNewPortfolio(portfolio);
-    portfoliosCreated = user.getPortfolioNamesCreated();
-    assertEquals(previousSize+1, portfoliosCreated.size());
-
-=======
-  public void testIsTickerValid() {
-    assertEquals(true, testUser.isTickerValid("AAPL"));
-  }
-
-  @Test
   public void testIsTickerInvalid() {
-    assertEquals(false, testUser.isTickerValid("zzz"));
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47:test/Model/UserTest.java
+    assertEquals(false, user.isTickerValid("zzz"));
   }
 
   @Test
-  public void testGetPortfoliosCreated() {
-    String expected = "[TestPortFolio1.csv, TestPortfolio2.csv]";
-    assertEquals(expected, testUser.getPortfolioNamesCreated().toString());
+  public void testGetFixedPortfoliosCreated() {
+    String expected = "[testFixedPortfolio1.csv, testFixed1.csv]";
+    assertEquals(expected, user.getPortfolioNamesCreated(PortfolioType.fixed).toString());
   }
 
   @Test
-  public void testCreatePortfolio() {
-    List<String[]> stockList = new ArrayList<>();
-    String[] s = new String[2];
-    s[0] = "AAPL";
-    s[1] = "5";
-    s[2] = "2022-10-26";
-    stockList.add(s);
-    int previous = testUser.getPortfolioNamesCreated().size();
-    testUser.createPortfolioManually("P1", stockList);
-    assertEquals(previous + 1, testUser.getPortfolioNamesCreated().size());
+  public void testGetFlexiblePortfoliosCreated() {
+    String expected = "[testFlexiblePortfolio1.csv, testFlex1.csv]";
+    assertEquals(expected, user.getPortfolioNamesCreated(PortfolioType.flexible).toString());
   }
 
   @Test
   public void testSavePortFolio() {
-    List<String[]> stockList = new ArrayList<>();
-    String[] s = new String[2];
-    s[0] = "GOOG";
-    s[1] = "5";
-    s[2] = "2022-11-02";
-    stockList.add(s);
-    testUser.createPortfolioManually("P2", stockList);
-    assertTrue("true", testUser.checkIfFileExists("P2"));
+    assertEquals(true, user.checkIfFileExists("testFlex1", PortfolioType.flexible));
   }
 
 

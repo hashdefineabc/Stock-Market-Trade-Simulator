@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-import Controller.ControllerImpl;
-=======
-import controller.ControllerImpl;
->>>>>>> af18596172db03b6f2b5df49441c9f3cad7b7c47
+import controller.CommandController;
+import controller.ICommandController;
 import model.IUserInterface;
 import model.User;
 import view.ViewImpl;
@@ -19,16 +16,14 @@ public class StockMarket {
   public static void main(String[] args) {
 
     //create the model.
-    IUserInterface u = new User();
+    IUserInterface u = new User(null);
 
     //create the view.
     ViewInterface view = new ViewImpl(System.out);
-    //this input stream can be used by view as well as junit tests.
 
-    //create the controller and give it the model.
-    ControllerImpl controller = new ControllerImpl(u,view,System.in);
-
-    //control to the controller.
+    //create the controller and give it the model and view.
+    ICommandController controller = new CommandController(u, view, System.in);
     controller.goController();
+
   }
 }
