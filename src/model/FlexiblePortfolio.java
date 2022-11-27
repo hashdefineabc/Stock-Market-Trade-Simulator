@@ -1,5 +1,13 @@
 package model;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,6 +33,61 @@ public class FlexiblePortfolio extends AbstractFixedPortfolio implements IFlexib
   public void addOrSellStocks(IstockModel stockToAdd) {
     this.stocks.add(stockToAdd);
 
+  }
+
+  @Override
+  public void executeInstructions(String instrFile){
+    //read the file
+    try{
+      BufferedReader br = new BufferedReader(new FileReader(instrFile));
+      Double amount = Double.parseDouble(br.readLine());
+      DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      LocalDate buyDate = LocalDate.parse(br.readLine(),dateFormat);
+      HashMap<String, Double> weights = new HashMap<>();
+      String line = "";
+      String splitBy = ",";
+      if (buyDate.isBefore(LocalDate.now()) || buyDate.isEqual(LocalDate.now())) {
+        while ((line = br.readLine()) != null) {
+         weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
+        }
+      // buy stocks
+        Stock newStock = Stock.getBuilder().tickerName(stockDetails[0])
+                .numOfUnits(Double.valueOf(stockDetails[1]))
+                .transactionDate(buyDate)
+                .commission(10) //TODO:replace with commission value
+                .transactionPrice(Double.valueOf(stockDetails[4]))
+                .buyOrSell(Operation.BUY).build();
+
+
+
+
+
+        //rename the file to 'executed'
+        File oldFile = new File(instrFile);
+        File newFile = new File(instrFile.replace(".csv","executed.csv"));
+        oldFile.renameTo(newFile);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+  }
+
+  private List<String[]> readCSVFromSystem(String filePath) {
+
+    List<String[]> listOfStocks = new ArrayList<String[]>();
+    String line = "";
+    String splitBy = ",";
+
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(filePath));
+      while ((line = br.readLine()) != null) {
+        listOfStocks.add(line.split(splitBy));
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return listOfStocks;
   }
 
 }

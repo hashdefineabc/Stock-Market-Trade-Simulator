@@ -16,4 +16,6 @@ public interface IFlexiblePortfolio extends IFixedPortfolio {
    */
   void addOrSellStocks(IstockModel stockDetails);
 
+  void executeInstructions(String instrFile);
+
 }

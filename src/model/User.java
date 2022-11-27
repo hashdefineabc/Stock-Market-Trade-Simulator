@@ -593,4 +593,26 @@ public class User implements IUserInterface {
     return transactionValue;
   }
 
+  public void updateFlexiblePortFolios() {
+    //get list of all flexible portfolios
+    for (IFlexiblePortfolio flp:this.flexiblePortfolios) {
+      //check if instructions exist for this portfolio
+      String instrFile = this.retrieveInstr(flp.getNameOfPortFolio());
+      if (!instrFile.equals(null)) {
+        flp.executeInstructions(instrFile);
+      }
+    }
+  }
+
+  private String retrieveInstr(String portfolioName) {
+    file = new File(this.investmentInstrPath);
+    String[] fileNames = file.list();
+    for (String fileName : fileNames) {
+      if (fileName.contains(portfolioName) && !fileName.contains("executed")) {
+        return fileName;
+      }
+    }
+    return null;
+  }
+
 }
