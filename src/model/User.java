@@ -60,6 +60,7 @@ public class User implements IUserInterface {
    * The Nasdaq ticker names.
    * We support NASDAQ top 25 stocks in our application.
    */
+  //minor change
   List<String> nasdaqTickerNames;
   private String folderPath;
   private String fixedPFPath;
