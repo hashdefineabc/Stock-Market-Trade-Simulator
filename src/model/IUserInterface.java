@@ -184,4 +184,6 @@ public interface IUserInterface {
    * @return the name of the portfolio
    */
   String getPortfolioName(int portfolioIndex, PortfolioType portfolioType);
+
+
 }

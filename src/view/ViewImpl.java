@@ -36,6 +36,7 @@ public class ViewImpl implements ViewInterface {
     this.out.print("\t5. View Cost Basis of a Portfolio\n");
     this.out.print("\t6. Display bar chart of a Portfolio\n");
     this.out.print("\t7. Close the Application\n");
+    this.out.print("\t9. Invest in a flexible portfolio\n");
     this.out.print("Pick one of the options\n");
 
   }
@@ -171,5 +172,11 @@ public class ViewImpl implements ViewInterface {
               " : " + entry.getValue() + "\n");
     }
   }
+
+  @Override
+  public void askUserAmountToInvest() {
+    this.out.print("Enter the amount you wish to invest in USD\n");
+  }
+
 
 }

@@ -65,6 +65,7 @@ public class User implements IUserInterface {
   private String folderPath;
   private String fixedPFPath;
   private String flexiblePFPath;
+  private String investmentInstrPath;
   private File file;
   private String apiKey = "RWI9HAQXNXJQQSJI";
 
@@ -88,11 +89,13 @@ public class User implements IUserInterface {
     if (userDirectory == null) {
       userDirectory = new File("").getAbsolutePath();
       this.folderPath = userDirectory + File.separator + "PortFolioComposition";
-    } else {
+    }
+    else {
       this.folderPath = userDirectory;
     }
     this.fixedPFPath = this.folderPath + File.separator + "FixedPortfolios";
     this.flexiblePFPath = this.folderPath + File.separator + "FlexiblePortfolios";
+    this.investmentInstrPath = this.folderPath + File.separator + "InvestmentInstructions";
 
     file = new File(folderPath);
     this.createFolder();
@@ -299,6 +302,7 @@ public class User implements IUserInterface {
 
 
 
+
   private void createFolder() {
     //creating main folder
     file = new File(this.folderPath);
@@ -315,6 +319,12 @@ public class User implements IUserInterface {
     if (!Files.exists(Path.of(this.flexiblePFPath))) {
       file.mkdir();
     }
+    //creating InvestmentInstructions folder
+    file = new File(this.investmentInstrPath);
+    if (!Files.exists(Path.of(this.investmentInstrPath))) {
+      file.mkdir();
+    }
+
   }
 
   private List<String> retrieveFileNames(PortfolioType portfolioType) {
