@@ -175,6 +175,11 @@ public class ViewImplTestDelegateTest {
     public void displayChartMonth(Map<LocalDate, String> chart) {
       log.append("displayChartMonth method called.");
     }
+
+    @Override
+    public void askUserAmountToInvest() {
+      log.append("askUserAmountToInvest method called.");
+    }
   }
 
   @Test
