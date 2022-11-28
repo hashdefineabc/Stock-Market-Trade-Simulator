@@ -1,11 +1,11 @@
-package view.viewButton;
+package view;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class HomeView extends JFrame implements ButtonView {
+public class HomeView extends JFrame {
 
   private JButton create;
   private JButton exit;
@@ -32,7 +32,6 @@ public class HomeView extends JFrame implements ButtonView {
     this.setVisible(true);
     this.pack();
   }
-  @Override
   public void addActionListener(ActionListener listener) {
     create.addActionListener(listener);
     exit.addActionListener(listener);

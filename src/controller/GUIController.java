@@ -9,27 +9,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.*;
 
 import model.IUserInterface;
 import model.Operation;
 import model.PortfolioType;
-import model.User;
 import view.BuyStocksView;
 import view.CreateNewPortfolioView;
-import view.viewButton.ButtonView;
-import view.viewButton.HomeView;
+import view.HomeView;
 
 public class GUIController implements IController, ActionListener {
 
   private IUserInterface user;
-  private ButtonView home;
+  private HomeView home;
   private CreateNewPortfolioView createNewPortfolioView;
   private Map<String, Runnable> actionMap;
 
   private BuyStocksView buyStock;
 
-  public GUIController(IUserInterface user, ButtonView view) {
+  public GUIController(IUserInterface user, HomeView view) {
     this.user = user;
     this.home = view;
     home.addActionListener(this);
@@ -141,17 +138,17 @@ public class GUIController implements IController, ActionListener {
     return s;
   }
 
-  private void disposeCreateWindowSetHome(ButtonView home, CreateNewPortfolioView createNewPortfolioView, ActionListener listener) {
+  private void disposeCreateWindowSetHome(HomeView home, CreateNewPortfolioView createNewPortfolioView, ActionListener listener) {
     home.addActionListener(listener);
-    ((JFrame) home).setLocation((createNewPortfolioView).getLocation());
+    home.setLocation((createNewPortfolioView).getLocation());
     (createNewPortfolioView).dispose();
   }
 
-  private void disposeHomeSetCreateFrame(CreateNewPortfolioView createFrame, ButtonView home,
+  private void disposeHomeSetCreateFrame(CreateNewPortfolioView createFrame, HomeView home,
                                 ActionListener listener) {
     createFrame.addActionListener(listener);
-    (createFrame).setLocation(((JFrame) home).getLocation());
-    ((JFrame) home).dispose();
+    (createFrame).setLocation(home.getLocation());
+    home.dispose();
   }
 
   /**
