@@ -147,6 +147,7 @@ public class BuyStocksView extends JFrame {
             dateComboBox.getSelectedItem().toString();
 //    dateSelected = LocalDate.parse(date);
     input[0] = tickerNameTextField.getText();
+
     input[1] = numUnitsTextField.getText();
     input[2] = date;
     input[3] = commissionTextField.getText();
@@ -163,4 +164,7 @@ public class BuyStocksView extends JFrame {
   }
 
 
+  public void setStatus(String message) {
+    status.setText(message);
+  }
 }
