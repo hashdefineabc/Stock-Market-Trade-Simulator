@@ -185,5 +185,5 @@ public interface IUserInterface {
    */
   String getPortfolioName(int portfolioIndex, PortfolioType portfolioType);
 
-
+  void updateFlexiblePortFolios();
 }

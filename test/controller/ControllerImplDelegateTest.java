@@ -150,6 +150,11 @@ public class ControllerImplDelegateTest {
       log.append("getPortfolioName method is called.");
       return null;
     }
+
+    @Override
+    public void updateFlexiblePortFolios() {
+      log.append("updateFlexiblePortFolios method is called.");
+    }
   }
 
   @Test
