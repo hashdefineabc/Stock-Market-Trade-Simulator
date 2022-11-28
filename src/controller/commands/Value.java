@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-import controller.ICommandController;
+import controller.IController;
 import model.IUserInterface;
 import model.PortfolioType;
 import view.ViewInterface;

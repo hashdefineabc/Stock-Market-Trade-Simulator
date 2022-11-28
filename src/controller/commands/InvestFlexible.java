@@ -12,7 +12,6 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import controller.ICommandController;
 import model.IUserInterface;
 import model.IstockModel;
 import model.PortfolioType;

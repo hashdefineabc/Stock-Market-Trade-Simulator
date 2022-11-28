@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.IUserInterface;
-import controller.ICommandController;
+import controller.IController;
 import model.Operation;
 import model.PortfolioType;
 import view.ViewInterface;
@@ -43,6 +43,7 @@ public class Create implements ICommandController {
 
   @Override
   public void goController() {
+
     PortfolioType portfolioType = null;
     int fixOrFlex = this.showFixedOrFlexPortfolioOptionsOnView();
     if (fixOrFlex == 1) {
