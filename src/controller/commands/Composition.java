@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import controller.ICommandController;
+import controller.IController;
 import model.IUserInterface;
 import model.IstockModel;
 import model.PortfolioType;

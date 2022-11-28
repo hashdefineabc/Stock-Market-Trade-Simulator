@@ -1,4 +1,4 @@
-package controller;
+package controller.commands;
 
 /**
  * This is the interface for our controller class.
