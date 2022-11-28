@@ -11,6 +11,7 @@ import controller.commands.Composition;
 import controller.commands.CostBasis;
 import controller.commands.Create;
 import controller.commands.DisplayChart;
+import controller.commands.ICommandController;
 import controller.commands.Value;
 import model.IUserInterface;
 import view.ViewInterface;
@@ -23,7 +24,7 @@ import view.ViewInterface;
  * It tells view what to print and tells model what to do.
  */
 
-public class CommandController implements ICommandController {
+public class CommandController implements IController {
 
   private static ViewInterface view;
   private static IUserInterface user;
@@ -65,7 +66,7 @@ public class CommandController implements ICommandController {
    */
 
   @Override
-  public void goController() {
+  public void go() {
     ICommandController cmd = null;
     while (true) {
       try {
@@ -91,6 +92,7 @@ public class CommandController implements ICommandController {
 
           case 7:
             view.displayMsgToUser("Closing the application");
+            System.exit(0);
             return;
 
           default:
