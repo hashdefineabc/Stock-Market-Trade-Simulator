@@ -197,6 +197,7 @@ public class User implements IUserInterface {
       if (costBasisDate.isAfter(LocalDate.now())) {
         String instrFile = "";
         Double amount = 0.0;
+        Double commission = 0.0;
         LocalDate buyDate = LocalDate.now();
         file = new File(this.investmentInstrPath);
         String[] fileNames = file.list();
@@ -211,12 +212,14 @@ public class User implements IUserInterface {
           amount = Double.parseDouble(br.readLine().split(",")[1]);
           DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
           buyDate = LocalDate.parse(br.readLine().split(",")[1],dateFormat);
+          commission = Double.parseDouble(br.readLine().split(",")[1]);
 
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
         if (buyDate.isBefore(costBasisDate) || buyDate.isEqual(costBasisDate)) {
           costBasis += amount;
+          costBasis += commission;
         }
       }
     }
@@ -645,6 +648,7 @@ public class User implements IUserInterface {
       Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
       DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
       LocalDate buyDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
       HashMap<String, Double> weights = new HashMap<>();
 
       if (buyDate.isBefore(LocalDate.now()) || buyDate.isEqual(LocalDate.now())) {
@@ -663,7 +667,7 @@ public class User implements IUserInterface {
           Stock newStock = Stock.getBuilder().tickerName(stockName)
                   .numOfUnits(numShares)
                   .transactionDate(buyDate)
-                  .commission(10.0) //TODO:replace with commission value
+                  .commission(commission) 
                   .transactionPrice(priceOfSingleShare)
                   .buyOrSell(Operation.BUY).build();
           flp.addOrSellStocks(newStock);
