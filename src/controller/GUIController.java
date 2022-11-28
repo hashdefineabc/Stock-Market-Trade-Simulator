@@ -54,7 +54,6 @@ public class GUIController implements IController, ActionListener {
         int i=0;
         do {
           String[] s = this.takeStockInput();
-//          String[] s = buyStock.getInput();
           stockList.add(s);
         }
         while (this.addMoreStocksFromView());
@@ -101,12 +100,14 @@ public class GUIController implements IController, ActionListener {
   }
 
   private String[] takeStockInput() {
-    String[] userStockInput = new String[6];
     String tickerNameFromUser = buyStock.getInput()[0];
     Double numUnits = Double.valueOf(buyStock.getInput()[1]);
     Double commission = Double.valueOf(buyStock.getInput()[3]);
     LocalDate transactionDate = LocalDate.parse(buyStock.getInput()[2]);
-    Boolean isInputValid = false;
+
+    if(tickerNameFromUser.isEmpty() || numUnits == null || commission == null) {
+      buyStock.setStatus("Please enter all values");
+    }
 
 
     String[] s = new String[6];
@@ -119,7 +120,7 @@ public class GUIController implements IController, ActionListener {
     LocalTime currentTime = LocalTime.now();
     if (transactionDate.equals(LocalDate.now())
             && currentTime.isBefore(LocalTime.of(16, 0))) {
-      buyStock.setPopUp("Market is not closed today yet, "
+      buyStock.setStatus("Market is not closed today yet, "
               + "previous available closing price will be considered as your transaction price...");
       transactionValue = user.getStockPriceFromDB(tickerNameFromUser,
               transactionDate.minusDays(1));
