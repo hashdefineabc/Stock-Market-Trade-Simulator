@@ -30,7 +30,7 @@ public class StockMarket {
     IController controller;
 
     while (true) {
-      System.out.println("Pick an option\n");
+      System.out.println("Please pick an option");
       System.out.println("1 - Text-Based UI");
       System.out.println("2 - GUI");
 
