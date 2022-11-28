@@ -14,10 +14,9 @@ public class CreateNewPortfolioView extends JFrame {
   private JTextField portfolioName;
   private JButton createPortfolio;
   private JButton home;
-  private JButton buyStocks;
+//  private JButton buyStocks;
   private JPanel panel;
   private JLabel popUpMsg;
-  JPanel popUpPanel = new JPanel();
   JPanel buttonsPanel = new JPanel();
 
   public CreateNewPortfolioView(String title) {
@@ -37,20 +36,18 @@ public class CreateNewPortfolioView extends JFrame {
     home = new JButton("Home");
     home.setActionCommand("homeFromCreatePortfolio");
 
-    buyStocks = new JButton("Buy Stocks");
-    buyStocks.setActionCommand("buyStocks");
+//    buyStocks = new JButton("Buy Stocks");
+//    buyStocks.setActionCommand("buyStocks");
 
     panel.add(label);
     panel.add(portfolioName);
-//    panel.add(buyStocks);
+    panel.add(createPortfolio);
 
-    popUpPanel.add(popUpMsg);
-//    buttonsPanel.add(createPortfolio);
-    buttonsPanel.add(buyStocks);
+    buttonsPanel.add(createPortfolio);
+//    buttonsPanel.add(buyStocks);
     buttonsPanel.add(home);
 
-    this.add(panel, BorderLayout.PAGE_START);
-    this.add(popUpPanel, BorderLayout.CENTER);
+    this.add(panel,  BorderLayout.CENTER);
     this.add(buttonsPanel, BorderLayout.PAGE_END);
 
     this.add(panel);
@@ -61,7 +58,7 @@ public class CreateNewPortfolioView extends JFrame {
   public void addActionListener(ActionListener listener) {
     createPortfolio.addActionListener(listener);
     home.addActionListener(listener);
-    buyStocks.addActionListener(listener);
+//    buyStocks.addActionListener(listener);
   }
 
   public List<String> getInput() {
@@ -71,6 +68,7 @@ public class CreateNewPortfolioView extends JFrame {
   }
 
   public void setPopUp(String message) {
+    JOptionPane.showMessageDialog(CreateNewPortfolioView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
     popUpMsg.setText(message);
   }
 

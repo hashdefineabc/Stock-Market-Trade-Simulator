@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 import model.IUserInterface;
 import model.Operation;
 import model.PortfolioType;
+import model.Stock;
 import view.BuyStocksView;
 import view.CreateNewPortfolioView;
 import view.HomeView;
@@ -25,6 +27,8 @@ public class GUIController implements IController, ActionListener {
   private Map<String, Runnable> actionMap;
 
   private BuyStocksView buyStock;
+  List<String[]> stockList;
+  List<String> existingPortfolios;
 
   public GUIController(IUserInterface user, HomeView view) {
     this.user = user;
@@ -37,7 +41,8 @@ public class GUIController implements IController, ActionListener {
     actionMap = initializeMap();
   }
 
-  private void initializeCreatePortfolio(Map<String, Runnable> actionMap) {
+  private void CreatingPortfolio(Map<String, Runnable> actionMap) {
+    stockList = new ArrayList<>();
     actionMap.put("create", () -> {
       createNewPortfolioView = new CreateNewPortfolioView("create portfolio");
       disposeHomeSetCreateFrame(createNewPortfolioView, home, this);
@@ -46,31 +51,89 @@ public class GUIController implements IController, ActionListener {
     actionMap.put("createPortfolio", () -> {
       String portfolioName = createNewPortfolioView.getInput().get(0);
       if (portfolioName.length() == 0) {
-        createNewPortfolioView.setPopUp("empty portfolio name");
+        createNewPortfolioView.setPopUp("Enter portfolio name");
         return;
       }
+
+//      String[] s = this.takeStockInput();
+//      if(s.equals(null))
+//        return;
+//      stockList.add(s);
+
       try {
-        List<String[]> stockList = new ArrayList<>();
-        int i=0;
-        do {
-          String[] s = this.takeStockInput();
-          stockList.add(s);
-        }
-        while (this.addMoreStocksFromView());
         if (user.createNewPortfolio(portfolioName, stockList, PortfolioType.flexible)) {
           createNewPortfolioView.setPopUp("Portfolio " + portfolioName + " created successfully");
           createNewPortfolioView.clearField();
         } else {
-          createNewPortfolioView.setPopUp("Portfolio was not saved. Try again");
+          createNewPortfolioView.setPopUp("Portfolio name already exists. Try again");
         }
       }
       catch (IllegalArgumentException e) {
-        createNewPortfolioView.setPopUp(e.getMessage());
+        createNewPortfolioView.setPopUp("Portfolio was not created, Try again");
       }
     });
     actionMap.put("homeFromCreatePortfolio", () -> {
       home = new HomeView("Home");
       disposeCreateWindowSetHome(home, createNewPortfolioView, this);
+    });
+
+  }
+
+  private void buyingStocks(Map<String, Runnable> actionMap) {
+    actionMap.put("buyStocks", () -> {
+      buyStock = new BuyStocksView("Buy Stocks");
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      buyStock.updateExistingPortfoliosList(existingPortfolios);
+
+//      String[] s = this.takeStockInput();
+//      if(s.equals(null))
+//        return;
+//      stockList.add(s);
+
+      //hide home and display buystock
+      buyStock.addActionListener(this);
+      buyStock.setLocation(home.getLocation());
+      home.dispose();
+    });
+  }
+  private void saveStock(Map<String, Runnable> actionMap) {
+    actionMap.put("saveStock", () -> {
+      String[] stockDetails = this.takeStockInput();
+      if(stockDetails.equals(null)) {
+        return;
+      }
+      stockDetails[5] = Operation.BUY.toString();
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      buyStock.updateExistingPortfoliosList(existingPortfolios);
+
+
+      Stock newStock = Stock.getBuilder().tickerName(stockDetails[0])
+              .numOfUnits(Double.valueOf(stockDetails[1]))
+              .transactionDate(LocalDate.parse((stockDetails[2])))
+              .commission(Double.valueOf(stockDetails[3]))
+              .transactionPrice(Double.valueOf(stockDetails[4]))
+              .buyOrSell(Operation.valueOf(stockDetails[5])).build();
+
+
+//      IFlexiblePortfolio pf = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
+//      pf.addOrSellStocks(newStock);
+//      dataToWrite = pf.toListOfString();
+//      user.savePortfolioToFile(dataToWrite, pf.getNameOfPortFolio().strip()
+//              .split(".csv")[0], portfolioType);
+
+    });
+  }
+
+  private void cancelFromBuy(Map<String, Runnable> actionMap) {
+    actionMap.put("cancelFromBuy", () -> {
+      home = new HomeView("Home");
+
+      //hide buy and display home
+      home.addActionListener(this);
+      home.setLocation(buyStock.getLocation());
+      this.buyStock.dispose();
     });
 
   }
@@ -82,33 +145,31 @@ public class GUIController implements IController, ActionListener {
       System.exit(0);
     });
 
-    initializeCreatePortfolio(actionMap);
+    CreatingPortfolio(actionMap);
 
-    actionMap.put("buyStocks", () -> {
-      buyStock = new BuyStocksView("Buy");
-      buyStock.addActionListener(this);
-      buyStock.setLocation((this.createNewPortfolioView).getLocation());
-      (this.createNewPortfolioView).dispose();
-    });
-
+    buyingStocks(actionMap);
+    cancelFromBuy(actionMap);
 
     return actionMap;
   }
 
-  private boolean addMoreStocksFromView() {
-    return false;
-  }
-
   private String[] takeStockInput() {
     String tickerNameFromUser = buyStock.getInput()[0];
-    Double numUnits = Double.valueOf(buyStock.getInput()[1]);
-    Double commission = Double.valueOf(buyStock.getInput()[3]);
-    LocalDate transactionDate = LocalDate.parse(buyStock.getInput()[2]);
-
-    if(tickerNameFromUser.isEmpty() || numUnits == null || commission == null) {
-      buyStock.setStatus("Please enter all values");
+    if(Objects.equals(tickerNameFromUser, "")) {
+      buyStock.setPopUp("Enter ticker name");
+      return null;
+    }
+    if(Objects.equals(buyStock.getInput()[1], "")) {
+      buyStock.setPopUp("Enter number of units");
+      return null;
     }
 
+    if(Objects.equals(buyStock.getInput()[3], "")) {
+      buyStock.setPopUp("Enter commission value");
+      return null;
+    }
+
+    LocalDate transactionDate = LocalDate.parse(buyStock.getInput()[2]);
 
     String[] s = new String[6];
     s[0] = tickerNameFromUser;
@@ -128,8 +189,7 @@ public class GUIController implements IController, ActionListener {
     }
     while (transactionValue == 0.0) {
 //      buyStock.setPopUp("Market was closed on " + transactionDate + "\n Calculating price of previous date");
-      transactionValue = user.getStockPriceFromDB(tickerNameFromUser,
-              transactionDate.minusDays(1));
+      transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
       transactionDate = transactionDate.minusDays(1);
     }
 //    buyStock.setPopUp("Price of the stock considered is of the date " + transactionDate);

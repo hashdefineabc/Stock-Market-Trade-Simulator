@@ -60,10 +60,10 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     if (Objects.equals(nameOfPortFolio, "")) {
       throw new IllegalArgumentException("Please provide a name for your portfolio");
     }
-    if (stocks.isEmpty()) {
-      throw new IllegalArgumentException(
-              "Creating a portfolio requires atleast one stock, please add a stock!!!!!");
-    }
+//    if (stocks.isEmpty()) {
+//      throw new IllegalArgumentException(
+//              "Creating a portfolio requires atleast one stock, please add a stock!!!!!");
+//    }
     this.nameOfPortFolio = nameOfPortFolio;
     this.stocks = stocks;
     this.portfolioType = "fixed";
