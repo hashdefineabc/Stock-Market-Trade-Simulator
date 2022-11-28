@@ -48,11 +48,17 @@ public class InvestFlexible implements ICommandController {
     view.displayListOfPortfolios(user.getPortfolioNamesCreated(portfolioType));
     int portfolioIndex = this.getSelectedPortFolioFromView(portfolioType);
     double amount = this.getInvestAmountFromView();
+    this.view.takeCommissionValue();
+    Double commission = inputScanner.nextDouble();
+    while (commission <= 0.0) {
+      view.displayMsgToUser("Commission cannot be -ve, Please enter a positive value");
+      commission = inputScanner.nextDouble();
+    }
     LocalDate dateToBuy = this.getDateFromView();
     List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,
             portfolioType, LocalDate.now());
     HashMap<String,Double> weights = this.getWeightsFromView(stocksToDisplay);
-    List<String[]> dataToWrite = this.getDataToWrite(amount,weights,dateToBuy);
+    List<String[]> dataToWrite = this.getDataToWrite(amount,weights,dateToBuy,commission);
     this.saveInstrToFile(user.getPortfolioName(portfolioIndex,portfolioType), dataToWrite);
     view.displayMsgToUser("Instructions saved for this Portfolio! Money will be invested as per "
             + "them");
@@ -75,7 +81,7 @@ public class InvestFlexible implements ICommandController {
   }
 
   private List<String[]> getDataToWrite(Double amount, HashMap<String,Double> weights,
-                                        LocalDate dateToBuy) {
+                                        LocalDate dateToBuy, Double commission) {
     List<String[]> answer = new ArrayList<>();
     String[] amt = new String[2];
     amt[0] = "AMOUNT";
@@ -85,6 +91,10 @@ public class InvestFlexible implements ICommandController {
     date[0] = "DATE";
     date[1] = dateToBuy.toString();
     answer.add(date);
+    String[] comm = new String[2];
+    comm[0] = "COMMISSION";
+    comm[1] = commission.toString();
+    answer.add(comm);
 
     for (Map.Entry<String,Double> element : weights.entrySet()) {
       String[] weight = new String[2];
