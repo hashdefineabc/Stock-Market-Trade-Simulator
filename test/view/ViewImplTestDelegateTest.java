@@ -176,6 +176,10 @@ public class ViewImplTestDelegateTest {
       log.append("displayChartMonth method called.");
     }
 
+    @Override
+    public void askUserAmountToInvest() {
+      log.append("askUserAmountToInvest method called.");
+    }
   }
 
   @Test

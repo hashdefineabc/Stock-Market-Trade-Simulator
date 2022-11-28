@@ -69,7 +69,7 @@ abstract class AbstractFixedPortfolio implements IFixedPortfolio {
     this.portfolioType = "fixed";
   }
 
-  private Double getStockValue(String tickerName, LocalDate date) {
+  protected Double getStockValue(String tickerName, LocalDate date) {
     Double result = 0.0;
     FileReader file = null;
     String fileName = "./resources/stockData/" + File.separator + tickerName + ".csv";

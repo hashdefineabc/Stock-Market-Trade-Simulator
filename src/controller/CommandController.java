@@ -12,6 +12,7 @@ import controller.commands.CostBasis;
 import controller.commands.Create;
 import controller.commands.DisplayChart;
 import controller.commands.ICommandController;
+import controller.commands.InvestFlexible;
 import controller.commands.Value;
 import model.IUserInterface;
 import view.ViewInterface;
@@ -95,6 +96,10 @@ public class CommandController implements IController {
             System.exit(0);
             return;
 
+          case 9:
+            cmd = new InvestFlexible(view, user, inputScanner);
+            break;
+
           default:
             view.displayMsgToUser("Unknown command");
             System.exit(0);
@@ -121,7 +126,7 @@ public class CommandController implements IController {
   private int showMenuOnView() {
     int userOption = 0;
     Boolean isOkay = false;
-    List<Integer> validMenuOptions = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
+    List<Integer> validMenuOptions = Arrays.asList(1, 2, 3, 4, 5, 6, 7,9);
     do {
       try {
         this.view.displayMenu();
