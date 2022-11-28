@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The class for flexible portfolios implements the flexible portfolio interface and extends the
@@ -51,16 +52,21 @@ public class FlexiblePortfolio extends AbstractFixedPortfolio implements IFlexib
          weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
         }
       // buy stocks
-        Stock newStock = Stock.getBuilder().tickerName(stockDetails[0])
-                .numOfUnits(Double.valueOf(stockDetails[1]))
-                .transactionDate(buyDate)
-                .commission(10) //TODO:replace with commission value
-                .transactionPrice(Double.valueOf(stockDetails[4]))
-                .buyOrSell(Operation.BUY).build();
+        for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
+          String stockName = stockWeight.getKey();
+          Double moneyToInvest = amount / stockWeight.getValue();
+          Double priceOfSingleShare = this.getStockValue(stockName,buyDate);
+          Integer numSharesBought = (int) (moneyToInvest/priceOfSingleShare);
+          Double numShares = Double.valueOf(numSharesBought);
 
-
-
-
+          Stock newStock = Stock.getBuilder().tickerName(stockName)
+                  .numOfUnits(numShares)
+                  .transactionDate(buyDate)
+                  .commission(10.0) //TODO:replace with commission value
+                  .transactionPrice(priceOfSingleShare)
+                  .buyOrSell(Operation.BUY).build();
+          this.addOrSellStocks(newStock);
+        }
 
         //rename the file to 'executed'
         File oldFile = new File(instrFile);

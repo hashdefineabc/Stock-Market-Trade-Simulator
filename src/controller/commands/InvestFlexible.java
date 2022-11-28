@@ -57,6 +57,7 @@ public class InvestFlexible implements ICommandController {
     this.saveInstrToFile(user.getPortfolioName(portfolioIndex,portfolioType), dataToWrite);
     view.displayMsgToUser("Instructions saved for this Portfolio! Money will be invested as per "
             + "them");
+    user.updateFlexiblePortFolios();
   }
 
   private void saveInstrToFile(String portfolioName, List<String[]> dataToWrite)
@@ -64,7 +65,7 @@ public class InvestFlexible implements ICommandController {
     File csvOutputFile = null;
     csvOutputFile = new File("C:\\Users\\anush\\OneDrive\\Desktop\\CS5010_PDP_Projects\\" +
             "Assignment6\\PortFolioComposition\\InvestmentInstructions" + File.separator
-            + portfolioName + ".csv"); //TODO: replace this when file writing is moved to controller
+            + portfolioName); //TODO: replace this when file writing is moved to controller
     try {
       PrintWriter pw = new PrintWriter(csvOutputFile);
       dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
