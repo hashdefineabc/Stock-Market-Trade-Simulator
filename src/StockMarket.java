@@ -7,8 +7,7 @@ import model.IUserInterface;
 import model.User;
 import view.ViewImpl;
 import view.ViewInterface;
-import view.viewButton.ButtonView;
-import view.viewButton.HomeView;
+import view.HomeView;
 
 /**
  * Driver Class of this application.
@@ -26,7 +25,7 @@ public class StockMarket {
 
     //create the view.
     ViewInterface vText;
-    ButtonView vGUI;
+    HomeView vGUI;
     //create the controller and give it the model and view.
     IController controller;
 
