@@ -1,9 +1,8 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
@@ -17,7 +16,6 @@ public class BuyStocksView extends JFrame {
   private JComboBox monthComboBox;
   private JComboBox dateComboBox;
   private JComboBox yearComboBox;
-  private JLabel status;
   private JButton save;
   private JButton cancel;
   private JLabel popUpMsg;
@@ -27,8 +25,8 @@ public class BuyStocksView extends JFrame {
   private JLabel commissionLabel;
   private JLabel dateOfTransactionLabel;
   private JPanel popUpPanel;
+  private int selectedPortfolioIndex;
 
-  private List<String> existingPortfolios;
 
   public BuyStocksView(String title) {
     super(title);
@@ -39,11 +37,19 @@ public class BuyStocksView extends JFrame {
     //Portfolio name panel
     JPanel portfolioNamePanel = new JPanel();
     portfolioNameLabel = new JLabel("Portfolio Name: ");
-    existingPortfolios = new ArrayList<>();
 
     portfolioNameComboBox = new JComboBox();
     portfolioNamePanel.add(portfolioNameLabel);
     portfolioNamePanel.add(portfolioNameComboBox);
+
+    ActionListener actionListener = new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+//        getSelectedPortfolio();
+        selectedPortfolioIndex = portfolioNameComboBox.getSelectedIndex();
+      }
+    };
+    portfolioNameComboBox.addActionListener(actionListener);
 
     //ticker Name panel
 
@@ -96,10 +102,9 @@ public class BuyStocksView extends JFrame {
     dateComboBox = new JComboBox(dates);
 
     //handle year
-    int currYear = LocalDateTime.now().getYear();
-    String[] years = new String[currYear + 20 - 2006];
+    String[] years = new String[30];
     int j = 0;
-    for (int i = 2006; i < currYear + 20; i=i+1) {
+    for (int i = 2022; i > 2006; i=i-1) {
       years[j] = Integer.toString(i);
       j = j+1;
     }
@@ -112,11 +117,6 @@ public class BuyStocksView extends JFrame {
     datePanel.add(dateComboBox);
     datePanel.add(yearLabel);
     datePanel.add(yearComboBox);
-
-
-    JPanel statusPanel = new JPanel();
-    status = new JLabel("");
-    statusPanel.add(status);
 
     JPanel buttonPanel = new JPanel();
     save = new JButton("Save");
@@ -137,7 +137,6 @@ public class BuyStocksView extends JFrame {
     buyStocksWholePanel.add(datePanel);
 
     this.add(buyStocksWholePanel, BorderLayout.PAGE_START);
-    this.add(statusPanel, BorderLayout.CENTER);
     this.add(buttonPanel, BorderLayout.PAGE_END);
 
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -173,13 +172,10 @@ public class BuyStocksView extends JFrame {
     popUpMsg.setText(message);
   }
 
-
-  public void setStatus(String message) {
-    status.setText(message);
+  public void displaySuccess(String message) {
+    JOptionPane.showMessageDialog(BuyStocksView.this, message, "Yayyyy", JOptionPane.INFORMATION_MESSAGE);
   }
-
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
-    this.existingPortfolios = existingPortfolios;
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
     for(String portfolio: existingPortfolios) {
       tempComboBox.addElement(portfolio);
@@ -187,5 +183,15 @@ public class BuyStocksView extends JFrame {
 
     this.portfolioNameComboBox.setModel(tempComboBox);
 
+  }
+
+  public void clear() {
+    tickerNameTextField.setText("");
+    numUnitsTextField.setText("");
+    commissionTextField.setText("");
+  }
+
+  public int getSelectedPortfolioIndex() {
+    return selectedPortfolioIndex;
   }
 }

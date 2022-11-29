@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 
+import model.IFlexiblePortfolio;
 import model.IUserInterface;
 import model.Operation;
 import model.PortfolioType;
@@ -108,20 +109,30 @@ public class GUIController implements IController, ActionListener {
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
       buyStock.updateExistingPortfoliosList(existingPortfolios);
 
-
-      Stock newStock = Stock.getBuilder().tickerName(stockDetails[0])
-              .numOfUnits(Double.valueOf(stockDetails[1]))
-              .transactionDate(LocalDate.parse((stockDetails[2])))
-              .commission(Double.valueOf(stockDetails[3]))
-              .transactionPrice(Double.valueOf(stockDetails[4]))
-              .buyOrSell(Operation.valueOf(stockDetails[5])).build();
+      int portfolioIndex = buyStock.getSelectedPortfolioIndex();
+      List<String[]> dataToWrite = null;
 
 
-//      IFlexiblePortfolio pf = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex - 1);
-//      pf.addOrSellStocks(newStock);
-//      dataToWrite = pf.toListOfString();
-//      user.savePortfolioToFile(dataToWrite, pf.getNameOfPortFolio().strip()
-//              .split(".csv")[0], portfolioType);
+      try {
+        Stock newStock = Stock.getBuilder().tickerName(stockDetails[0])
+                .numOfUnits(Double.valueOf(stockDetails[1]))
+                .transactionDate(LocalDate.parse((stockDetails[2])))
+                .commission(Double.valueOf(stockDetails[3]))
+                .transactionPrice(Double.valueOf(stockDetails[4]))
+                .buyOrSell(Operation.valueOf(stockDetails[5])).build();
+
+
+        IFlexiblePortfolio pf = user.getFlexiblePortfoliosCreatedObjects().get(portfolioIndex);
+        pf.addOrSellStocks(newStock);
+        dataToWrite = pf.toListOfString();
+        user.savePortfolioToFile(dataToWrite, pf.getNameOfPortFolio().strip()
+                .split(".csv")[0], PortfolioType.flexible);
+        buyStock.displaySuccess("Transaction Successful");
+        buyStock.clear();
+      } catch (IllegalArgumentException e) {
+        throw new RuntimeException(e);
+      }
+
 
     });
   }
@@ -149,6 +160,7 @@ public class GUIController implements IController, ActionListener {
 
     buyingStocks(actionMap);
     cancelFromBuy(actionMap);
+    saveStock(actionMap);
 
     return actionMap;
   }
@@ -181,7 +193,7 @@ public class GUIController implements IController, ActionListener {
     LocalTime currentTime = LocalTime.now();
     if (transactionDate.equals(LocalDate.now())
             && currentTime.isBefore(LocalTime.of(16, 0))) {
-      buyStock.setStatus("Market is not closed today yet, "
+      buyStock.setPopUp("Market is not closed today yet, "
               + "previous available closing price will be considered as your transaction price...");
       transactionValue = user.getStockPriceFromDB(tickerNameFromUser,
               transactionDate.minusDays(1));
