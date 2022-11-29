@@ -37,6 +37,7 @@ public class ViewImpl implements ViewInterface {
     this.out.print("\t6. Display bar chart of a Portfolio\n");
     this.out.print("\t7. Close the Application\n");
     this.out.print("\t9. Invest in a flexible portfolio\n");
+    this.out.print("\t8. Add DCA for a portfolio\n");
     this.out.print("Pick one of the options\n");
 
   }

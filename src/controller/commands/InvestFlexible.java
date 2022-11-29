@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import model.IUserInterface;
+import model.InvestmentType;
 import model.IstockModel;
 import model.PortfolioType;
 import view.ViewInterface;
@@ -54,6 +55,7 @@ public class InvestFlexible implements ICommandController {
       view.displayMsgToUser("Commission cannot be -ve, Please enter a positive value");
       commission = inputScanner.nextDouble();
     }
+    view.displayMsgToUser("Total amount the user will spend would be:"+( amount + commission));
     LocalDate dateToBuy = this.getDateFromView();
     List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,
             portfolioType, LocalDate.now());
@@ -62,7 +64,7 @@ public class InvestFlexible implements ICommandController {
     this.saveInstrToFile(user.getPortfolioName(portfolioIndex,portfolioType), dataToWrite);
     view.displayMsgToUser("Instructions saved for this Portfolio! Money will be invested as per "
             + "them");
-    user.updateFlexiblePortFolios();
+    user.updateFlexiblePortFolios(InvestmentType.InvestByWeights);
   }
 
   private void saveInstrToFile(String portfolioName, List<String[]> dataToWrite)

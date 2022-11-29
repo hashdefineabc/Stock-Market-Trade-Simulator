@@ -67,6 +67,7 @@ public class User implements IUserInterface {
   private String fixedPFPath;
   private String flexiblePFPath;
   private String investmentInstrPath;
+  private String dcaInstrPath;
   private File file;
   private String apiKey = "RWI9HAQXNXJQQSJI";
 
@@ -97,12 +98,13 @@ public class User implements IUserInterface {
     this.fixedPFPath = this.folderPath + File.separator + "FixedPortfolios";
     this.flexiblePFPath = this.folderPath + File.separator + "FlexiblePortfolios";
     this.investmentInstrPath = this.folderPath + File.separator + "InvestmentInstructions";
+    this.dcaInstrPath = this.folderPath + File.separator + "DCAInstructions";
 
     file = new File(folderPath);
     this.createFolder();
     this.loadExistingPortFolios(PortfolioType.fixed);
     this.loadExistingPortFolios(PortfolioType.flexible);
-    this.updateFlexiblePortFolios();
+    this.updateFlexiblePortFolios(InvestmentType.InvestByWeights);
     try {
       this.loadNasdaqTickerNames();
     } catch (FileNotFoundException e) {
@@ -352,6 +354,11 @@ public class User implements IUserInterface {
     //creating InvestmentInstructions folder
     file = new File(this.investmentInstrPath);
     if (!Files.exists(Path.of(this.investmentInstrPath))) {
+      file.mkdir();
+    }
+    //creating DCAInstructions folder
+    file = new File(this.dcaInstrPath);
+    if (!Files.exists(Path.of(this.dcaInstrPath))) {
       file.mkdir();
     }
 
@@ -624,15 +631,22 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public void updateFlexiblePortFolios() {
+  public void updateFlexiblePortFolios(InvestmentType investmentType ) {
     //get list of all flexible portfolios
     for (IFlexiblePortfolio flp:this.flexiblePortfolios) {
       //check if instructions exist for this portfolio
-      String instrFile = this.retrieveInstr(flp.getNameOfPortFolio());
+      String instrFile = this.retrieveInstr(flp.getNameOfPortFolio(),investmentType);
       if (!instrFile.equals("")) {
         //flp.executeInstructions(instrFile);
-        this.executeInstructionsForFlexPortfolio(flp, this.investmentInstrPath
-                + File.separator + instrFile);
+        if (investmentType.equals(InvestmentType.InvestByWeights)) {
+          this.executeInstructionsForFlexPortfolio(flp, this.investmentInstrPath
+                  + File.separator + instrFile, InvestmentType.InvestByWeights);
+        }
+        else if (investmentType.equals(InvestmentType.DCA)) {
+          this.executeInstructionsForFlexPortfolio(flp, this.dcaInstrPath
+                  + File.separator + instrFile, InvestmentType.DCA);
+        }
+
       }
     }
     this.loadExistingPortFolios(PortfolioType.flexible);
@@ -660,68 +674,157 @@ public class User implements IUserInterface {
   }
 
   private void executeInstructionsForFlexPortfolio(IFlexiblePortfolio flp,
-                                                   String instrFile) {
-    //read the file
-    String line = "";
-    String splitBy = ",";
-    try{
-      BufferedReader br = new BufferedReader(new FileReader(instrFile));
-      Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
-      DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-      LocalDate buyDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
-      Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
-      HashMap<String, Double> weights = new HashMap<>();
+                                                   String instrFile,
+                                                   InvestmentType investmentType) {
 
-      if (buyDate.isBefore(LocalDate.now()) || buyDate.isEqual(LocalDate.now())) {
-        while ((line = br.readLine()) != null) {
-          weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
+    if (investmentType.equals(InvestmentType.InvestByWeights)) {
+      //read the file
+      String line = "";
+      String splitBy = ",";
+      try{
+        BufferedReader br = new BufferedReader(new FileReader(instrFile));
+        Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate buyDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+        Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
+        HashMap<String, Double> weights = new HashMap<>();
+
+        if (buyDate.isBefore(LocalDate.now()) || buyDate.isEqual(LocalDate.now())) {
+          while ((line = br.readLine()) != null) {
+            weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
+          }
+          br.close();
+          // buy stocks
+          for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
+            String stockName = stockWeight.getKey();
+            Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
+            Double priceOfSingleShare = this.getStockPriceFromDB(stockName,buyDate);
+            Integer numSharesBought = (int) (moneyToInvest/priceOfSingleShare);
+            Double numShares = Double.valueOf(numSharesBought);
+
+            Stock newStock = Stock.getBuilder().tickerName(stockName)
+                    .numOfUnits(numShares)
+                    .transactionDate(buyDate)
+                    .commission(commission)
+                    .transactionPrice(priceOfSingleShare)
+                    .buyOrSell(Operation.BUY).build();
+            flp.addOrSellStocks(newStock);
+          }
+
+          List<String[]> dataToWrite = flp.toListOfString();
+          this.savePortfolioToFile(dataToWrite, flp.getNameOfPortFolio().strip()
+                  .split(".csv")[0], PortfolioType.flexible);
+
+          //rename the file to 'executed'
+          File oldFile = new File(instrFile);
+          File newFile = new File(instrFile.replace(".csv","executed.csv"));
+          oldFile.renameTo(newFile);
         }
-        br.close();
-        // buy stocks
-        for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
-          String stockName = stockWeight.getKey();
-          Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
-          Double priceOfSingleShare = this.getStockPriceFromDB(stockName,buyDate);
-          Integer numSharesBought = (int) (moneyToInvest/priceOfSingleShare);
-          Double numShares = Double.valueOf(numSharesBought);
-
-          Stock newStock = Stock.getBuilder().tickerName(stockName)
-                  .numOfUnits(numShares)
-                  .transactionDate(buyDate)
-                  .commission(commission) 
-                  .transactionPrice(priceOfSingleShare)
-                  .buyOrSell(Operation.BUY).build();
-          flp.addOrSellStocks(newStock);
-        }
-
-        List<String[]> dataToWrite = flp.toListOfString();
-        this.savePortfolioToFile(dataToWrite, flp.getNameOfPortFolio().strip()
-                .split(".csv")[0], PortfolioType.flexible);
-
-        //rename the file to 'executed'
-        File oldFile = new File(instrFile);
-        File newFile = new File(instrFile.replace(".csv","executed.csv"));
-        oldFile.renameTo(newFile);
-
-
-      }
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-
-
-
-  private String retrieveInstr(String portfolioName) {
-    file = new File(this.investmentInstrPath);
-    String[] fileNames = file.list();
-    for (String fileName : fileNames) {
-      if (fileName.contains(portfolioName) && !fileName.contains("executed")) {
-        return fileName;
+      } catch (IOException e) {
+        throw new RuntimeException(e);
       }
     }
+    else if (investmentType.equals(InvestmentType.DCA)) {
+      //read the file
+      String line = "";
+      String splitBy = ",";
+      try{
+        BufferedReader br = new BufferedReader(new FileReader(instrFile));
+        Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate buyDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+        Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
+        HashMap<String, Double> weights = new HashMap<>();
+
+        if (buyDate.isEqual(LocalDate.now())) {
+          while ((line = br.readLine()) != null) {
+            weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
+          }
+          br.close();
+          // buy stocks
+          for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
+            String stockName = stockWeight.getKey();
+            Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
+            Double priceOfSingleShare = this.getStockPriceFromDB(stockName,buyDate);
+            Double numSharesBought = (moneyToInvest/priceOfSingleShare);
+
+
+            Stock newStock = Stock.getBuilder().tickerName(stockName)
+                    .numOfUnits(numSharesBought)
+                    .transactionDate(buyDate)
+                    .commission(commission)
+                    .transactionPrice(priceOfSingleShare)
+                    .buyOrSell(Operation.BUY).build();
+            flp.addOrSellStocks(newStock);
+          }
+
+          List<String[]> dataToWrite = flp.toListOfString();
+          this.savePortfolioToFile(dataToWrite, flp.getNameOfPortFolio().strip()
+                  .split(".csv")[0], PortfolioType.flexible);
+
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    }
+
+
+
+
+
+  private String retrieveInstr(String portfolioName,InvestmentType investmentType) {
+    if (investmentType.equals(InvestmentType.InvestByWeights)) {
+      file = new File(this.investmentInstrPath);
+      String[] fileNames = file.list();
+      for (String fileName : fileNames) {
+        if (fileName.contains(portfolioName) && !fileName.contains("executed")) {
+          return fileName;
+        }
+      }
+    }
+    else if (investmentType.equals(InvestmentType.DCA)) {
+      file = new File(this.dcaInstrPath);
+      String[] fileNames = file.list();
+      for (String fileName : fileNames) {
+        if (fileName.contains(portfolioName)) {
+          return fileName;
+        }
+      }
+    }
+
     return "";
   }
 
-}
+  @Override
+  public List<String> calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
+                                    Integer daysToInvest, HashMap<String,Double> weights,
+                                    double amount, Double commission, int portfolioIndex) {
+    IFlexiblePortfolio flp = this.flexiblePortfolios.get(portfolioIndex - 1);
+    List<String> txns = new ArrayList<>();
+    LocalDate nextInvestDate = strategyStart.plusDays(daysToInvest);
+    while (nextInvestDate.isBefore(LocalDate.now()) || nextInvestDate.isEqual(LocalDate.now())) {
+      //invest as per weights
+      for (Map.Entry <String,Double> stockWeight : weights.entrySet()) {
+        String stockName = stockWeight.getKey();
+        Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
+        Double priceOfSingleShare = this.getStockPriceFromDB(stockName,nextInvestDate);
+        Double numSharesBought = (moneyToInvest/priceOfSingleShare); //allowing fractional shares.
+
+        Stock newStock = Stock.getBuilder().tickerName(stockName)
+                .numOfUnits(numSharesBought)
+                .transactionDate(nextInvestDate)
+                .commission(commission)
+                .transactionPrice(priceOfSingleShare)
+                .buyOrSell(Operation.BUY).build();
+        flp.addOrSellStocks(newStock);
+      }
+      txns.add(nextInvestDate.toString());
+      nextInvestDate = nextInvestDate.plusDays(daysToInvest);
+      }
+    return txns;
+    }
+
+
+  }
+

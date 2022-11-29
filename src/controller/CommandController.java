@@ -10,6 +10,7 @@ import controller.commands.BuySell;
 import controller.commands.Composition;
 import controller.commands.CostBasis;
 import controller.commands.Create;
+import controller.commands.DCA;
 import controller.commands.DisplayChart;
 import controller.commands.ICommandController;
 import controller.commands.InvestFlexible;
@@ -95,7 +96,9 @@ public class CommandController implements IController {
             view.displayMsgToUser("Closing the application");
             System.exit(0);
             return;
-
+          case 8:
+            cmd = new DCA(view,user,inputScanner);
+            break;
           case 9:
             cmd = new InvestFlexible(view, user, inputScanner);
             break;
