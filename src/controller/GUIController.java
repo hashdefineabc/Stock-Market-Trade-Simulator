@@ -125,7 +125,8 @@ public class GUIController implements IController, ActionListener {
   private void saveStock(Map<String, Runnable> actionMap) {
     BuySell buySellCmd = new BuySell(user);
     actionMap.put("saveStock", () -> {
-      String[] stockDetails = this.takeStockInput();
+      String[] stockDetails = new String[6];
+      stockDetails = this.takeStockInput();
       if(stockDetails.equals(null)) {
         return;
       }
@@ -138,11 +139,28 @@ public class GUIController implements IController, ActionListener {
       List<String[]> dataToWrite = null;
 
       try {
-        if (!buySellCmd.validateSellOperation(portfolioIndex+1, stockDetails)) {
+        if ((stockDetails[5] == Operation.SELL.toString()) && (!buySellCmd.validateSellOperation(portfolioIndex+1, stockDetails))) {
           buySellStock.setPopUp("Cannot sell stock");
+          buySellStock.clear();
           return;
         }
       } catch (Exception e) {
+        return;
+      }
+
+      try {
+        if(!user.validateNumUnits(stockDetails[1])) {
+          buySellStock.setPopUp("Number of units cannot be negative or fractional");
+          buySellStock.clear();
+          return;
+        }
+      } catch (Exception e) {
+        return;
+      }
+
+      if(!user.validateCommissionValue(stockDetails[3])) {
+        buySellStock.setPopUp("Commission value cannot be negative");
+        buySellStock.clear();
         return;
       }
 
@@ -191,7 +209,6 @@ public class GUIController implements IController, ActionListener {
     });
 
     CreatingPortfolio(actionMap);
-
     buyingStocks(actionMap);
     cancelFromBuy(actionMap);
     saveStock(actionMap);
