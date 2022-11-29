@@ -12,7 +12,6 @@ import java.util.Objects;
 
 
 import controller.commands.BuySell;
-import controller.commands.ICommandController;
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
 import model.Operation;
@@ -21,6 +20,7 @@ import model.Stock;
 import view.BuySellStocksView;
 import view.CreateNewPortfolioView;
 import view.HomeView;
+import view.InvestByWeightView;
 
 public class GUIController implements IController, ActionListener {
 
@@ -30,6 +30,7 @@ public class GUIController implements IController, ActionListener {
   private Map<String, Runnable> actionMap;
 
   private BuySellStocksView buySellStock;
+  private InvestByWeightView investByWeightView;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -213,8 +214,19 @@ public class GUIController implements IController, ActionListener {
     cancelFromBuy(actionMap);
     saveStock(actionMap);
     sellingStocks(actionMap);
+    investByWeight(actionMap);
 
     return actionMap;
+  }
+
+  private void investByWeight(Map<String, Runnable> actionMap) {
+    actionMap.put("invest", () ->{
+      investByWeightView = new InvestByWeightView("Invest By Weight");
+      investByWeightView.addActionListener(this);
+      investByWeightView.setLocation(home.getLocation());
+      this.home.dispose();
+    });
+
   }
 
   private String[] takeStockInput() {

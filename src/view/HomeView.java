@@ -27,15 +27,6 @@ public class HomeView extends JFrame {
     create.setActionCommand("create");
     panel.add(create);
 
-    //invest in a portfolio by specifying weights
-    invest = new JButton("Invest by percentage");
-    invest.setActionCommand("invest");
-    panel.add(invest);
-
-    //set dollar cost averaging for a portfolio
-    dca = new JButton("Set Dollar Cost Averaging for a portfolio");
-    dca.setActionCommand("dca");
-    panel.add(dca);
 
     // Buy stocks
     buyStocks = new JButton("Buy Stocks");
@@ -47,6 +38,15 @@ public class HomeView extends JFrame {
     sellStocks.setActionCommand("sellStocks");
     panel.add(sellStocks);
 
+    //invest in a portfolio by specifying weights
+    invest = new JButton("Invest by percentage");
+    invest.setActionCommand("invest");
+    panel.add(invest);
+
+    //set dollar cost averaging for a portfolio
+    dca = new JButton("Set Dollar Cost Averaging for a portfolio");
+    dca.setActionCommand("dca");
+    panel.add(dca);
 
     // Exit
     exit = new JButton("Exit");
