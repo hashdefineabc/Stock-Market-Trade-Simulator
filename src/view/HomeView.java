@@ -8,6 +8,8 @@ import javax.swing.*;
 public class HomeView extends JFrame {
 
   private JButton create;
+  private JButton invest;
+  private JButton dca;
   private JButton exit;
   private JButton buyStocks;
   private JButton sellStocks;
@@ -25,6 +27,16 @@ public class HomeView extends JFrame {
     create = new JButton("Create a new Portfolio");
     create.setActionCommand("create");
     panel.add(create);
+
+    //invest in a portfolio by specifying weights
+    invest = new JButton("Invest by percentage");
+    invest.setActionCommand("invest");
+    panel.add(invest);
+
+    //set dollar cost averaging for a portfolio
+    dca = new JButton("Set Dollar Cost Averaging for a portfolio");
+    dca.setActionCommand("dca");
+    panel.add(dca);
 
     // Buy stocks
     buyStocks = new JButton("Buy Stocks");
@@ -53,6 +65,8 @@ public class HomeView extends JFrame {
   }
   public void addActionListener(ActionListener listener) {
     create.addActionListener(listener);
+    invest.addActionListener(listener);
+    dca.addActionListener(listener);
     exit.addActionListener(listener);
     buyStocks.addActionListener(listener);
     sellStocks.addActionListener(listener);
