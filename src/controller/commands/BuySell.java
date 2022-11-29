@@ -39,6 +39,10 @@ public class BuySell implements ICommandController {
     inputScanner = scanner;
   }
 
+  public BuySell(IUserInterface user) {
+this.user = user;
+  }
+
 
   @Override
   public void goController() {
@@ -261,7 +265,7 @@ public class BuySell implements ICommandController {
    * @param stockDetails   the stock details
    * @return the boolean
    */
-  private Boolean validateSellOperation(int portfolioIndex, String[] stockDetails) {
+  public Boolean validateSellOperation(int portfolioIndex, String[] stockDetails) {
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDate sellDate = LocalDate.parse(stockDetails[2], dateFormat);
     LocalDate firstDate = LocalDate.now();
