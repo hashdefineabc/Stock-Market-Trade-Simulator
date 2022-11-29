@@ -13,6 +13,7 @@ public class HomeView extends JFrame {
   private JButton exit;
   private JButton buyStocks;
   private JButton sellStocks;
+  private JButton costBasis;
 
   public HomeView(String s) {
     super(s);
@@ -47,6 +48,10 @@ public class HomeView extends JFrame {
     sellStocks.setActionCommand("sellStocks");
     panel.add(sellStocks);
 
+    // cost basis
+    costBasis = new JButton("Check Cost Basis");
+    costBasis.setActionCommand("costBasis");
+    panel.add(costBasis);
 
     // Exit
     exit = new JButton("Exit");
@@ -65,5 +70,6 @@ public class HomeView extends JFrame {
     exit.addActionListener(listener);
     buyStocks.addActionListener(listener);
     sellStocks.addActionListener(listener);
+    costBasis.addActionListener(listener);
   }
 }

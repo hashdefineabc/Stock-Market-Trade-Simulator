@@ -12,13 +12,13 @@ import java.util.Objects;
 
 
 import controller.commands.BuySell;
-import controller.commands.ICommandController;
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
 import model.Operation;
 import model.PortfolioType;
 import model.Stock;
 import view.BuySellStocksView;
+import view.CostBasisGUIView;
 import view.CreateNewPortfolioView;
 import view.HomeView;
 
@@ -30,6 +30,7 @@ public class GUIController implements IController, ActionListener {
   private Map<String, Runnable> actionMap;
 
   private BuySellStocksView buySellStock;
+  private CostBasisGUIView costBasisView;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -198,7 +199,17 @@ public class GUIController implements IController, ActionListener {
       home.setLocation(buySellStock.getLocation());
       this.buySellStock.dispose();
     });
+  }
 
+  private void cancelFromCostBasis(Map<String, Runnable> actionMap) {
+    actionMap.put("cancelFromCostBasis", () -> {
+      home = new HomeView("Home");
+
+      //hide cost basis window and display home
+      home.addActionListener(this);
+      home.setLocation(costBasisView.getLocation());
+      this.costBasisView.dispose();
+    });
   }
 
   private Map<String, Runnable> initializeMap() {
@@ -213,8 +224,46 @@ public class GUIController implements IController, ActionListener {
     cancelFromBuy(actionMap);
     saveStock(actionMap);
     sellingStocks(actionMap);
+    costBasisFromHomeButton(actionMap);
+    viewCostBasisButton(actionMap);
+    cancelFromCostBasis(actionMap);
 
     return actionMap;
+  }
+
+  private void viewCostBasisButton(Map<String, Runnable> actionMap) {
+    actionMap.put("viewCostBasisButton", () -> {
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      costBasisView.updateExistingPortfoliosList(existingPortfolios);
+
+      int portfolioIndex = costBasisView.getSelectedPortfolioIndex();
+
+      String costBasisDate = costBasisView.getInput()[0];
+
+      try {
+        Double costBasis = user.calculateCostBasisOfPortfolio(portfolioIndex+1,
+                PortfolioType.flexible, LocalDate.parse(costBasisDate));
+        costBasisView.setPopUp("Cost Basis on " + costBasisDate + " is " + costBasis);
+      }
+      catch (Exception e) {
+        costBasisView.setErrorPopUp("Cost Basis couldn't be generated!!!");
+      }
+    });
+  }
+
+  private void costBasisFromHomeButton(Map<String, Runnable> actionMap) {
+    actionMap.put("costBasis", () -> {
+      costBasisView = new CostBasisGUIView("Cost Basis");
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      costBasisView.updateExistingPortfoliosList(existingPortfolios);
+
+      //hide home and display costBasis
+      costBasisView.addActionListener(this);
+      costBasisView.setLocation(home.getLocation());
+      home.dispose();
+    });
   }
 
   private String[] takeStockInput() {
