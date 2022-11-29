@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Objects;
 
 
+import controller.commands.BuySell;
+import controller.commands.ICommandController;
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
 import model.Operation;
@@ -121,6 +123,7 @@ public class GUIController implements IController, ActionListener {
   }
 
   private void saveStock(Map<String, Runnable> actionMap) {
+    BuySell buySellCmd = new BuySell(user);
     actionMap.put("saveStock", () -> {
       String[] stockDetails = this.takeStockInput();
       if(stockDetails.equals(null)) {
@@ -133,6 +136,15 @@ public class GUIController implements IController, ActionListener {
 
       int portfolioIndex = buySellStock.getSelectedPortfolioIndex();
       List<String[]> dataToWrite = null;
+
+      try {
+        if (!buySellCmd.validateSellOperation(portfolioIndex+1, stockDetails)) {
+          buySellStock.setPopUp("Cannot sell stock");
+          return;
+        }
+      } catch (Exception e) {
+        return;
+      }
 
 
       try {
