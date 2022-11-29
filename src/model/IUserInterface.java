@@ -186,4 +186,8 @@ public interface IUserInterface {
   String getPortfolioName(int portfolioIndex, PortfolioType portfolioType);
 
   void updateFlexiblePortFolios();
+
+  boolean validateNumUnits(String numUnits);
+
+  boolean validateCommissionValue(String commVal);
 }
