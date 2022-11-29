@@ -155,6 +155,16 @@ public class ControllerImplDelegateTest {
     public void updateFlexiblePortFolios() {
       log.append("updateFlexiblePortFolios method is called.");
     }
+
+    @Override
+    public boolean validateNumUnits(String numUnits) {
+      return false;
+    }
+
+    @Override
+    public boolean validateCommissionValue(String commVal) {
+      return false;
+    }
   }
 
   @Test

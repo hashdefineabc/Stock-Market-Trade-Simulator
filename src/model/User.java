@@ -638,6 +638,27 @@ public class User implements IUserInterface {
     this.loadExistingPortFolios(PortfolioType.flexible);
   }
 
+  @Override
+  public boolean validateNumUnits(String numUnits) {
+    Double numUnitsDouble = Double.valueOf(numUnits);
+    Long numOfUnitsInt = Math.round(numUnitsDouble);
+    if (numUnitsDouble <= 0.0) {
+      return false;
+    } else if ((double) numOfUnitsInt != numUnitsDouble) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public boolean validateCommissionValue(String commVal) {
+    Double commValDouble = Double.valueOf(commVal);
+    if (commValDouble <= 0.0) {
+      return false;
+    }
+    return true;
+  }
+
   private void executeInstructionsForFlexPortfolio(IFlexiblePortfolio flp,
                                                    String instrFile) {
     //read the file
