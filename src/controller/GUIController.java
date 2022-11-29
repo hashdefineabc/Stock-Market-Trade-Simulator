@@ -206,6 +206,11 @@ public class GUIController implements IController, ActionListener {
       buySellStock.setPopUp("Enter ticker name");
       return null;
     }
+    if(!user.isTickerValid(tickerNameFromUser)) {
+      buySellStock.setPopUp("Ticker name invalid");
+      buySellStock.clear();
+      return null;
+    }
     if(Objects.equals(buySellStock.getInput()[1], "")) {
       buySellStock.setPopUp("Enter number of units");
       return null;
@@ -258,12 +263,6 @@ public class GUIController implements IController, ActionListener {
     (createFrame).setLocation(home.getLocation());
     home.dispose();
   }
-
-  /**
-   * Invoked when an action occurs.
-   *
-   * @param e the event to be processed
-   */
 
   @Override
   public void actionPerformed(ActionEvent e) {
