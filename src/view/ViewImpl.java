@@ -175,7 +175,7 @@ public class ViewImpl implements ViewInterface {
 
   @Override
   public void askUserAmountToInvest() {
-    this.out.print("Enter the amount you wish to invest in USD\n");
+    this.out.print("Enter the amount you wish to invest in USD \n");
   }
 
 
