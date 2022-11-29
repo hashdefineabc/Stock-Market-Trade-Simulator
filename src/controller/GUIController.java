@@ -16,7 +16,7 @@ import model.IUserInterface;
 import model.Operation;
 import model.PortfolioType;
 import model.Stock;
-import view.BuyStocksView;
+import view.BuySellStocksView;
 import view.CreateNewPortfolioView;
 import view.HomeView;
 
@@ -27,7 +27,7 @@ public class GUIController implements IController, ActionListener {
   private CreateNewPortfolioView createNewPortfolioView;
   private Map<String, Runnable> actionMap;
 
-  private BuyStocksView buyStock;
+  private BuySellStocksView buySellStock;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -82,10 +82,11 @@ public class GUIController implements IController, ActionListener {
 
   private void buyingStocks(Map<String, Runnable> actionMap) {
     actionMap.put("buyStocks", () -> {
-      buyStock = new BuyStocksView("Buy Stocks");
+      buySellStock = new BuySellStocksView("Buy Stocks");
+      buySellStock.setBuyOrSell(true); // buy operation
 
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
-      buyStock.updateExistingPortfoliosList(existingPortfolios);
+      buySellStock.updateExistingPortfoliosList(existingPortfolios);
 
 //      String[] s = this.takeStockInput();
 //      if(s.equals(null))
@@ -93,23 +94,44 @@ public class GUIController implements IController, ActionListener {
 //      stockList.add(s);
 
       //hide home and display buystock
-      buyStock.addActionListener(this);
-      buyStock.setLocation(home.getLocation());
+      buySellStock.addActionListener(this);
+      buySellStock.setLocation(home.getLocation());
       home.dispose();
     });
   }
+
+  private void sellingStocks(Map<String, Runnable> actionMap) {
+    actionMap.put("sellStocks", () -> {
+      buySellStock = new BuySellStocksView("Sell Stocks");
+      buySellStock.setBuyOrSell(false); // sell operation
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      buySellStock.updateExistingPortfoliosList(existingPortfolios);
+
+//      String[] s = this.takeStockInput();
+//      if(s.equals(null))
+//        return;
+//      stockList.add(s);
+
+      //hide home and display sellStock
+      buySellStock.addActionListener(this);
+      buySellStock.setLocation(home.getLocation());
+      home.dispose();
+    });
+  }
+
   private void saveStock(Map<String, Runnable> actionMap) {
     actionMap.put("saveStock", () -> {
       String[] stockDetails = this.takeStockInput();
       if(stockDetails.equals(null)) {
         return;
       }
-      stockDetails[5] = Operation.BUY.toString();
+      stockDetails[5] = buySellStock.getBuyOrSell() ? Operation.BUY.toString() : Operation.SELL.toString();
 
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
-      buyStock.updateExistingPortfoliosList(existingPortfolios);
+      buySellStock.updateExistingPortfoliosList(existingPortfolios);
 
-      int portfolioIndex = buyStock.getSelectedPortfolioIndex();
+      int portfolioIndex = buySellStock.getSelectedPortfolioIndex();
       List<String[]> dataToWrite = null;
 
 
@@ -127,8 +149,8 @@ public class GUIController implements IController, ActionListener {
         dataToWrite = pf.toListOfString();
         user.savePortfolioToFile(dataToWrite, pf.getNameOfPortFolio().strip()
                 .split(".csv")[0], PortfolioType.flexible);
-        buyStock.displaySuccess("Transaction Successful");
-        buyStock.clear();
+        buySellStock.displaySuccess("Transaction Successful");
+        buySellStock.clear();
       } catch (IllegalArgumentException e) {
         throw new RuntimeException(e);
       }
@@ -143,8 +165,8 @@ public class GUIController implements IController, ActionListener {
 
       //hide buy and display home
       home.addActionListener(this);
-      home.setLocation(buyStock.getLocation());
-      this.buyStock.dispose();
+      home.setLocation(buySellStock.getLocation());
+      this.buySellStock.dispose();
     });
 
   }
@@ -161,39 +183,40 @@ public class GUIController implements IController, ActionListener {
     buyingStocks(actionMap);
     cancelFromBuy(actionMap);
     saveStock(actionMap);
+    sellingStocks(actionMap);
 
     return actionMap;
   }
 
   private String[] takeStockInput() {
-    String tickerNameFromUser = buyStock.getInput()[0];
+    String tickerNameFromUser = buySellStock.getInput()[0];
     if(Objects.equals(tickerNameFromUser, "")) {
-      buyStock.setPopUp("Enter ticker name");
+      buySellStock.setPopUp("Enter ticker name");
       return null;
     }
-    if(Objects.equals(buyStock.getInput()[1], "")) {
-      buyStock.setPopUp("Enter number of units");
-      return null;
-    }
-
-    if(Objects.equals(buyStock.getInput()[3], "")) {
-      buyStock.setPopUp("Enter commission value");
+    if(Objects.equals(buySellStock.getInput()[1], "")) {
+      buySellStock.setPopUp("Enter number of units");
       return null;
     }
 
-    LocalDate transactionDate = LocalDate.parse(buyStock.getInput()[2]);
+    if(Objects.equals(buySellStock.getInput()[3], "")) {
+      buySellStock.setPopUp("Enter commission value");
+      return null;
+    }
+
+    LocalDate transactionDate = LocalDate.parse(buySellStock.getInput()[2]);
 
     String[] s = new String[6];
     s[0] = tickerNameFromUser;
-    s[1] = buyStock.getInput()[1]; //num units
-    s[2] = buyStock.getInput()[2]; //transactionDate
-    s[3] = buyStock.getInput()[3]; //commission value
+    s[1] = buySellStock.getInput()[1]; //num units
+    s[2] = buySellStock.getInput()[2]; //transactionDate
+    s[3] = buySellStock.getInput()[3]; //commission value
 
     Double transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate);
     LocalTime currentTime = LocalTime.now();
     if (transactionDate.equals(LocalDate.now())
             && currentTime.isBefore(LocalTime.of(16, 0))) {
-      buyStock.setPopUp("Market is not closed today yet, "
+      buySellStock.setPopUp("Market is not closed today yet, "
               + "previous available closing price will be considered as your transaction price...");
       transactionValue = user.getStockPriceFromDB(tickerNameFromUser,
               transactionDate.minusDays(1));

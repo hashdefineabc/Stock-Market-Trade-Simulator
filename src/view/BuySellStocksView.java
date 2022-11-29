@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-public class BuyStocksView extends JFrame {
+public class BuySellStocksView extends JFrame {
 
   private JTextField tickerNameTextField;
   private JTextField numUnitsTextField;
@@ -27,8 +27,10 @@ public class BuyStocksView extends JFrame {
   private JPanel popUpPanel;
   private int selectedPortfolioIndex;
 
+  private Boolean buyOrSell;
 
-  public BuyStocksView(String title) {
+
+  public BuySellStocksView(String title) {
     super(title);
     popUpMsg = new JLabel("");
     popUpPanel = new JPanel();
@@ -168,12 +170,12 @@ public class BuyStocksView extends JFrame {
   }
 
   public void setPopUp(String message) {
-    JOptionPane.showMessageDialog(BuyStocksView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
+    JOptionPane.showMessageDialog(BuySellStocksView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
     popUpMsg.setText(message);
   }
 
   public void displaySuccess(String message) {
-    JOptionPane.showMessageDialog(BuyStocksView.this, message, "Yayyyy", JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(BuySellStocksView.this, message, "Yayyyy", JOptionPane.INFORMATION_MESSAGE);
   }
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
@@ -193,5 +195,13 @@ public class BuyStocksView extends JFrame {
 
   public int getSelectedPortfolioIndex() {
     return selectedPortfolioIndex;
+  }
+
+  public Boolean getBuyOrSell() {
+    return buyOrSell;
+  }
+
+  public void setBuyOrSell(Boolean buyOrSell) {
+    this.buyOrSell = buyOrSell;
   }
 }

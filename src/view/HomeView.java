@@ -10,6 +10,7 @@ public class HomeView extends JFrame {
   private JButton create;
   private JButton exit;
   private JButton buyStocks;
+  private JButton sellStocks;
 
   public HomeView(String s) {
     super(s);
@@ -17,7 +18,7 @@ public class HomeView extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     JPanel panel = new JPanel();
-    panel.setLayout(new FlowLayout());
+    panel.setLayout(new GridLayout(10, 1));
 
     // Create a new Portfolio
     create = new JButton("Create a new Portfolio");
@@ -28,6 +29,11 @@ public class HomeView extends JFrame {
     buyStocks = new JButton("Buy Stocks");
     buyStocks.setActionCommand("buyStocks");
     panel.add(buyStocks);
+
+    // Buy stocks
+    sellStocks = new JButton("Sell Stocks");
+    sellStocks.setActionCommand("sellStocks");
+    panel.add(sellStocks);
 
     // Exit
     exit = new JButton("Exit");
@@ -43,5 +49,6 @@ public class HomeView extends JFrame {
     create.addActionListener(listener);
     exit.addActionListener(listener);
     buyStocks.addActionListener(listener);
+    sellStocks.addActionListener(listener);
   }
 }
