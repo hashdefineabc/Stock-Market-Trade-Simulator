@@ -18,9 +18,10 @@ import model.Operation;
 import model.PortfolioType;
 import model.Stock;
 import view.BuySellStocksView;
+import view.CostBasisGUIView;
 import view.CreateNewPortfolioView;
 import view.HomeView;
-import view.InvestByWeightView;
+import view.ValueGUIView;
 
 public class GUIController implements IController, ActionListener {
 
@@ -30,7 +31,8 @@ public class GUIController implements IController, ActionListener {
   private Map<String, Runnable> actionMap;
 
   private BuySellStocksView buySellStock;
-  private InvestByWeightView investByWeightView;
+  private CostBasisGUIView costBasisView;
+  private ValueGUIView valueView;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -199,7 +201,28 @@ public class GUIController implements IController, ActionListener {
       home.setLocation(buySellStock.getLocation());
       this.buySellStock.dispose();
     });
+  }
 
+  private void cancelFromCostBasis(Map<String, Runnable> actionMap) {
+    actionMap.put("cancelFromCostBasis", () -> {
+      home = new HomeView("Home");
+
+      //hide cost basis window and display home
+      home.addActionListener(this);
+      home.setLocation(costBasisView.getLocation());
+      this.costBasisView.dispose();
+    });
+  }
+
+  private void cancelFromValue(Map<String, Runnable> actionMap) {
+    actionMap.put("cancelFromValue", () -> {
+      home = new HomeView("Home");
+
+      //hide cost basis window and display home
+      home.addActionListener(this);
+      home.setLocation(valueView.getLocation());
+      this.valueView.dispose();
+    });
   }
 
   private Map<String, Runnable> initializeMap() {
@@ -214,19 +237,88 @@ public class GUIController implements IController, ActionListener {
     cancelFromBuy(actionMap);
     saveStock(actionMap);
     sellingStocks(actionMap);
-    investByWeight(actionMap);
+    costBasisFromHomeButton(actionMap);
+    viewCostBasisButton(actionMap);
+    cancelFromCostBasis(actionMap);
+    valueButtonHome(actionMap);
+    viewValue(actionMap);
+    cancelFromValue(actionMap);
 
     return actionMap;
   }
 
-  private void investByWeight(Map<String, Runnable> actionMap) {
-    actionMap.put("invest", () ->{
-      investByWeightView = new InvestByWeightView("Invest By Weight");
-      investByWeightView.addActionListener(this);
-      investByWeightView.setLocation(home.getLocation());
-      this.home.dispose();
-    });
+  private void viewCostBasisButton(Map<String, Runnable> actionMap) {
+    actionMap.put("viewCostBasisButton", () -> {
 
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      costBasisView.updateExistingPortfoliosList(existingPortfolios);
+
+      int portfolioIndex = costBasisView.getSelectedPortfolioIndex();
+
+      String costBasisDate = costBasisView.getInput()[0];
+
+      try {
+        Double costBasis = user.calculateCostBasisOfPortfolio(portfolioIndex+1,
+                PortfolioType.flexible, LocalDate.parse(costBasisDate));
+        costBasisView.setPopUp("Cost Basis on " + costBasisDate + " is " + String.format("%.2f", costBasis) + " USD");
+      }
+      catch (Exception e) {
+        costBasisView.setErrorPopUp("Cost Basis couldn't be calculated!!!\nPlease try again...");
+      }
+    });
+  }
+
+  private void viewValue(Map<String, Runnable> actionMap) {
+    actionMap.put("viewValueButton", () -> {
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      valueView.updateExistingPortfoliosList(existingPortfolios);
+
+      int portfolioIndex = valueView.getSelectedPortfolioIndex();
+
+      String valueDate = valueView.getInput()[0];
+
+      try {
+        Double value = user.calculateValueOfPortfolio(portfolioIndex+1, LocalDate.parse(valueDate), PortfolioType.flexible);
+
+        if (value == -1) {
+          valueView.setErrorPopUp("Value cannot be calculated for a date prior to portfolio creation");
+        } else {
+          valueView.setPopUp("Value on " + valueDate + " is " + String.format("%.2f", value) + " USD");
+        }
+      }
+      catch (Exception e) {
+        valueView.setErrorPopUp("Value couldn't be calculated!!!\nPlease try again");
+      }
+    });
+  }
+
+  private void costBasisFromHomeButton(Map<String, Runnable> actionMap) {
+    actionMap.put("costBasis", () -> {
+      costBasisView = new CostBasisGUIView("Cost Basis");
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      costBasisView.updateExistingPortfoliosList(existingPortfolios);
+
+      //hide home and display costBasis
+      costBasisView.addActionListener(this);
+      costBasisView.setLocation(home.getLocation());
+      home.dispose();
+    });
+  }
+
+  private void valueButtonHome(Map<String, Runnable> actionMap) {
+    actionMap.put("valueButtonHome", () -> {
+      valueView = new ValueGUIView("Value");
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      valueView.updateExistingPortfoliosList(existingPortfolios);
+
+      //hide home and display costBasis
+      valueView.addActionListener(this);
+      valueView.setLocation(home.getLocation());
+      home.dispose();
+    });
   }
 
   private String[] takeStockInput() {
