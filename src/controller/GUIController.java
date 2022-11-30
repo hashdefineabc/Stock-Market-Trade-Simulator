@@ -14,12 +14,15 @@ import java.util.Objects;
 import controller.commands.BuySell;
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
+import model.IstockModel;
 import model.Operation;
 import model.PortfolioType;
 import model.Stock;
 import view.BuySellStocksView;
+import view.CompositionGUIView;
 import view.CostBasisGUIView;
 import view.CreateNewPortfolioView;
+import view.DisplayStocks;
 import view.HomeView;
 import view.ValueGUIView;
 
@@ -33,6 +36,8 @@ public class GUIController implements IController, ActionListener {
   private BuySellStocksView buySellStock;
   private CostBasisGUIView costBasisView;
   private ValueGUIView valueView;
+  private CompositionGUIView compositionView;
+  private DisplayStocks displayComposition;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -225,6 +230,30 @@ public class GUIController implements IController, ActionListener {
     });
   }
 
+  private void cancelFromComposition(Map<String, Runnable> actionMap) {
+    actionMap.put("cancelFromComposition", () -> {
+      home = new HomeView("Home");
+
+      //hide cost basis window and display home
+      home.addActionListener(this);
+      home.setLocation(compositionView.getLocation());
+      this.compositionView.dispose();
+    });
+  }
+
+  private void okFromDisplayStocks(Map<String, Runnable> actionMap) {
+    actionMap.put("okFromDisplayStocks", () -> {
+      compositionView = new CompositionGUIView("Composition");
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      compositionView.updateExistingPortfoliosList(existingPortfolios);
+
+      //hide cost basis window and display home
+      compositionView.addActionListener(this);
+      compositionView.setLocation(displayComposition.getLocation());
+      this.displayComposition.dispose();
+    });
+  }
+
   private Map<String, Runnable> initializeMap() {
     Map<String, Runnable> actionMap = new HashMap<>();
 
@@ -243,6 +272,10 @@ public class GUIController implements IController, ActionListener {
     valueButtonHome(actionMap);
     viewValue(actionMap);
     cancelFromValue(actionMap);
+    compositionButtonHome(actionMap);
+    viewCompositionButton(actionMap);
+    cancelFromComposition(actionMap);
+    okFromDisplayStocks(actionMap);
 
     return actionMap;
   }
@@ -293,6 +326,33 @@ public class GUIController implements IController, ActionListener {
     });
   }
 
+  private void viewCompositionButton(Map<String, Runnable> actionMap) {
+    actionMap.put("viewCompositionButton", () -> {
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      compositionView.updateExistingPortfoliosList(existingPortfolios);
+
+      int portfolioIndex = compositionView.getSelectedPortfolioIndex();
+
+      String compositionDate = compositionView.getInput()[0];
+
+      try {
+        List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex+1,
+                PortfolioType.flexible, LocalDate.parse(compositionDate));
+        if (stocksToDisplay.size() == 0) {
+          compositionView.setPopUp("No stocks are present in the portfolio at this date");
+        } else {
+          displayComposition = new DisplayStocks(stocksToDisplay);
+          displayComposition.addActionListener(this);
+          displayComposition.setLocation(compositionView.getLocation());
+          this.compositionView.dispose();
+        }}
+      catch (Exception e) {
+        compositionView.setErrorPopUp("Composition cannot be viewed at the moment!!!\nPlease try again...");
+      }
+    });
+  }
+
   private void costBasisFromHomeButton(Map<String, Runnable> actionMap) {
     actionMap.put("costBasis", () -> {
       costBasisView = new CostBasisGUIView("Cost Basis");
@@ -317,6 +377,20 @@ public class GUIController implements IController, ActionListener {
       //hide home and display costBasis
       valueView.addActionListener(this);
       valueView.setLocation(home.getLocation());
+      home.dispose();
+    });
+  }
+
+  private void compositionButtonHome(Map<String, Runnable> actionMap) {
+    actionMap.put("compositionButtonHome", () -> {
+      compositionView = new CompositionGUIView("Composition");
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      compositionView.updateExistingPortfoliosList(existingPortfolios);
+
+      //hide home and display composition
+      compositionView.addActionListener(this);
+      compositionView.setLocation(home.getLocation());
       home.dispose();
     });
   }
