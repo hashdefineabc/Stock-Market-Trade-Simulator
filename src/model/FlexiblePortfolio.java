@@ -36,48 +36,39 @@ public class FlexiblePortfolio extends AbstractFixedPortfolio implements IFlexib
 
   }
 
+
+
   @Override
-  public void executeInstructions(String instrFile){
-    //read the file
-    try{
-      BufferedReader br = new BufferedReader(new FileReader(instrFile));
-      Double amount = Double.parseDouble(br.readLine());
-      DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-      LocalDate buyDate = LocalDate.parse(br.readLine(),dateFormat);
-      HashMap<String, Double> weights = new HashMap<>();
-      String line = "";
-      String splitBy = ",";
-      if (buyDate.isBefore(LocalDate.now()) || buyDate.isEqual(LocalDate.now())) {
-        while ((line = br.readLine()) != null) {
-         weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
-        }
-      // buy stocks
-        for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
-          String stockName = stockWeight.getKey();
-          Double moneyToInvest = amount / stockWeight.getValue();
-          Double priceOfSingleShare = this.getStockValue(stockName,buyDate);
-          Integer numSharesBought = (int) (moneyToInvest/priceOfSingleShare);
-          Double numShares = Double.valueOf(numSharesBought);
+  public Double calculateCostBasisForFuture(LocalDate costBasisDate, InvestmentType investmentType,
+                                          String investInstrFile) {
 
-          Stock newStock = Stock.getBuilder().tickerName(stockName)
-                  .numOfUnits(numShares)
-                  .transactionDate(buyDate)
-                  .commission(10.0) //TODO:replace with commission value
-                  .transactionPrice(priceOfSingleShare)
-                  .buyOrSell(Operation.BUY).build();
-          this.addOrSellStocks(newStock);
-        }
+    Double addCostBasis = 0.0;
+      Double amount = 0.0;
+      Double commission = 0.0;
+      Integer daysToInvest = 0;
+      LocalDate lastTxnDate, startDate, endDate = null;
+      try {
+        BufferedReader br = new BufferedReader(new FileReader(investInstrFile));
+        amount = Double.parseDouble(br.readLine().split(",")[1]);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        startDate = LocalDate.parse(br.readLine().split(",")[1],dateFormat);
+        endDate = LocalDate.parse(br.readLine().split(",")[1],dateFormat);
+        daysToInvest = Integer.parseInt(br.readLine().split(",")[1]);
+        commission = Double.parseDouble(br.readLine().split(",")[1]);
+        lastTxnDate = LocalDate.parse(br.readLine().split(",")[1],dateFormat);
 
-        //rename the file to 'executed'
-        File oldFile = new File(instrFile);
-        File newFile = new File(instrFile.replace(".csv","executed.csv"));
-        oldFile.renameTo(newFile);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
       }
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+      if ((lastTxnDate.plusDays(daysToInvest)).isBefore(costBasisDate) ||
+              (lastTxnDate.plusDays(daysToInvest)).isEqual(costBasisDate)) {
+        addCostBasis += amount;
+        addCostBasis += commission;
+      }
 
+    return addCostBasis;
   }
+
 
   private List<String[]> readCSVFromSystem(String filePath) {
 

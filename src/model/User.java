@@ -196,33 +196,22 @@ public class User implements IUserInterface {
     else if (portfolioType.equals(PortfolioType.flexible)) {
       IFlexiblePortfolio toCalcCostBasis = this.flexiblePortfolios.get(portfolioIndex - 1);
       costBasis = toCalcCostBasis.calculateCostBasis(costBasisDate);
-      if (costBasisDate.isAfter(LocalDate.now())) {
-        String instrFile = "";
-        Double amount = 0.0;
-        Double commission = 0.0;
-        LocalDate buyDate = LocalDate.now();
-        file = new File(this.investmentInstrPath);
-        String[] fileNames = file.list();
-        for (String fileName : fileNames) {
-          if (fileName.contains(toCalcCostBasis.getNameOfPortFolio())) {
-            instrFile = fileName;
-          }
-        }
-        instrFile = this.investmentInstrPath + File.separator + instrFile;
-        try {
-          BufferedReader br = new BufferedReader(new FileReader(instrFile));
-          amount = Double.parseDouble(br.readLine().split(",")[1]);
-          DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-          buyDate = LocalDate.parse(br.readLine().split(",")[1],dateFormat);
-          commission = Double.parseDouble(br.readLine().split(",")[1]);
 
-        } catch (IOException e) {
-          throw new RuntimeException(e);
+      if (costBasisDate.isAfter(LocalDate.now())) {
+        String instrFile = this.retrieveInstr(toCalcCostBasis.getNameOfPortFolio(),
+                InvestmentType.InvestByWeights);
+        if (!instrFile.equals("")) {
+          costBasis += toCalcCostBasis.calculateCostBasisForFuture(costBasisDate,
+                  InvestmentType.InvestByWeights, instrFile);
         }
-        if (buyDate.isBefore(costBasisDate) || buyDate.isEqual(costBasisDate)) {
-          costBasis += amount;
-          costBasis += commission;
+
+        String dcaFile = this.retrieveInstr(toCalcCostBasis.getNameOfPortFolio(),
+                InvestmentType.DCA);
+        if (!dcaFile.equals("")) {
+          costBasis += toCalcCostBasis.calculateCostBasisForFuture(costBasisDate,
+                  InvestmentType.DCA, dcaFile);
         }
+
       }
     }
     return costBasis;
