@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -64,7 +65,7 @@ public class UserTest {
 
   @Test
   public void testGetFlexiblePortfoliosCreated() {
-    String expected = "[testFlexiblePortfolio1.csv, testFlex1.csv]";
+    String expected = "[CostBasis1.csv, testFlex1.csv, testFlexiblePortfolio1.csv]";
     assertEquals(expected, user.getPortfolioNamesCreated(PortfolioType.flexible).toString());
   }
 
@@ -74,8 +75,24 @@ public class UserTest {
   }
 
   @Test
-  public void testCreateInvestStrategy() {
+  public void testCostBasisForBeforeCreation_InvestByWeights() {
+    assertEquals("0.0",user.calculateCostBasisOfPortfolio(1,
+            PortfolioType.flexible,
+            LocalDate.parse("2022-11-01")).toString());
+  }
 
+  @Test
+  public void testCostBasisAfterPurchase_InvestByWeights() {
+    assertEquals("4524.1",user.calculateCostBasisOfPortfolio(1,
+            PortfolioType.flexible,
+            LocalDate.parse("2022-11-23")).toString());
+  }
+
+  @Test
+  public void testCostBasisForFuture_InvestByWeights() {
+    assertEquals("5526.1",user.calculateCostBasisOfPortfolio(1,
+            PortfolioType.flexible,
+            LocalDate.parse("2022-12-21")).toString());
   }
 
 
