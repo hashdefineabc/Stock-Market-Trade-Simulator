@@ -60,10 +60,15 @@ public class FlexiblePortfolio extends AbstractFixedPortfolio implements IFlexib
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
-      if ((lastTxnDate.plusDays(daysToInvest)).isBefore(costBasisDate) ||
+      while((lastTxnDate.plusDays(daysToInvest)).isBefore(costBasisDate) ||
               (lastTxnDate.plusDays(daysToInvest)).isEqual(costBasisDate)) {
         addCostBasis += amount;
         addCostBasis += commission;
+
+        if (investmentType.equals(InvestmentType.InvestByWeights)) {
+          daysToInvest = 1;
+        }
+        lastTxnDate = lastTxnDate.plusDays(daysToInvest);
       }
 
     return addCostBasis;
