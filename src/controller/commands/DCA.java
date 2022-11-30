@@ -54,10 +54,10 @@ public class DCA implements ICommandController{
     Integer daysToInvest = this.getDaysFromView();
 
     HashMap<String,Double> weights = this.getWeightsFromView();
-    user.calculateTxns(strategyStart,strategyEnd,daysToInvest,weights,
+    LocalDate lastTxnDate = user.calculateTxns(strategyStart,strategyEnd,daysToInvest,weights,
             amount,commission,portfolioIndex, InvestmentType.DCA);
     user.acceptStrategyFromUser(portfolioIndex,amount,commission,strategyStart,strategyEnd,weights,
-            InvestmentType.DCA);
+            InvestmentType.DCA, daysToInvest, lastTxnDate);
     view.displayMsgToUser("Instructions saved for this Portfolio! Money will be invested as per "
             + "them");
 
@@ -104,6 +104,7 @@ public class DCA implements ICommandController{
   }
 
   private LocalDate getDateFromView(String dateType) {
+
     LocalDate valueDate = LocalDate.now();
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     boolean isDateOkay = false;

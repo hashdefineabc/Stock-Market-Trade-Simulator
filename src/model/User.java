@@ -677,97 +677,64 @@ public class User implements IUserInterface {
                                                    String instrFile,
                                                    InvestmentType investmentType) {
 
-    if (investmentType.equals(InvestmentType.InvestByWeights)) {
-      //read the file
-      String line = "";
-      String splitBy = ",";
-      try{
-        BufferedReader br = new BufferedReader(new FileReader(instrFile));
-        Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate buyDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
-        Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
-        HashMap<String, Double> weights = new HashMap<>();
+    String line = "";
+    String splitBy = ",";
+    Integer numSharesBought = 0;
+    Double numShares = 0.0;
 
-        if (buyDate.isBefore(LocalDate.now()) || buyDate.isEqual(LocalDate.now())) {
-          while ((line = br.readLine()) != null) {
-            weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(instrFile));
+      Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
+      DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      LocalDate startDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      LocalDate endDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      Integer daysToInvest = Integer.parseInt(br.readLine().split(splitBy)[1]);
+      Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
+      LocalDate lastTxnDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      HashMap<String, Double> weights = new HashMap<>();
+
+      if (lastTxnDate.plusDays(daysToInvest).isEqual(LocalDate.now())) {
+        while ((line = br.readLine()) != null) {
+          weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
+        }
+        br.close();
+        for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
+          String stockName = stockWeight.getKey();
+          Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
+          Double priceOfSingleShare = this.getStockPriceFromDB(stockName,LocalDate.now());
+          if (investmentType.equals(InvestmentType.InvestByWeights)) {
+            numSharesBought = (int) (moneyToInvest/priceOfSingleShare);
+            numShares = Double.valueOf(numSharesBought);
           }
-          br.close();
-          // buy stocks
-          for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
-            String stockName = stockWeight.getKey();
-            Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
-            Double priceOfSingleShare = this.getStockPriceFromDB(stockName,buyDate);
-            Integer numSharesBought = (int) (moneyToInvest/priceOfSingleShare);
-            Double numShares = Double.valueOf(numSharesBought);
-
-            Stock newStock = Stock.getBuilder().tickerName(stockName)
-                    .numOfUnits(numShares)
-                    .transactionDate(buyDate)
-                    .commission(commission)
-                    .transactionPrice(priceOfSingleShare)
-                    .buyOrSell(Operation.BUY).build();
-            flp.addOrSellStocks(newStock);
+          else if (investmentType.equals(InvestmentType.DCA)) {
+            numShares = (moneyToInvest/priceOfSingleShare);
           }
 
-          List<String[]> dataToWrite = flp.toListOfString();
-          this.savePortfolioToFile(dataToWrite, flp.getNameOfPortFolio().strip()
-                  .split(".csv")[0], PortfolioType.flexible);
+          Stock newStock = Stock.getBuilder().tickerName(stockName)
+                  .numOfUnits(numShares)
+                  .transactionDate(LocalDate.now())
+                  .commission(commission)
+                  .transactionPrice(priceOfSingleShare)
+                  .buyOrSell(Operation.BUY).build();
+          flp.addOrSellStocks(newStock);
+        }
+        List<String[]> dataToWrite = flp.toListOfString();
+        this.savePortfolioToFile(dataToWrite, flp.getNameOfPortFolio().strip()
+                .split(".csv")[0], PortfolioType.flexible);
 
-          //rename the file to 'executed'
+        if (investmentType.equals(InvestmentType.InvestByWeights)) {
           File oldFile = new File(instrFile);
           File newFile = new File(instrFile.replace(".csv","executed.csv"));
           oldFile.renameTo(newFile);
         }
-      } catch (IOException e) {
-        throw new RuntimeException(e);
+
       }
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-    else if (investmentType.equals(InvestmentType.DCA)) {
-      //read the file
-      String line = "";
-      String splitBy = ",";
-      try{
-        BufferedReader br = new BufferedReader(new FileReader(instrFile));
-        Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate buyDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
-        Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
-        HashMap<String, Double> weights = new HashMap<>();
 
-        if (buyDate.isEqual(LocalDate.now())) {
-          while ((line = br.readLine()) != null) {
-            weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
-          }
-          br.close();
-          // buy stocks
-          for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
-            String stockName = stockWeight.getKey();
-            Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
-            Double priceOfSingleShare = this.getStockPriceFromDB(stockName,buyDate);
-            Double numSharesBought = (moneyToInvest/priceOfSingleShare);
-
-
-            Stock newStock = Stock.getBuilder().tickerName(stockName)
-                    .numOfUnits(numSharesBought)
-                    .transactionDate(buyDate)
-                    .commission(commission)
-                    .transactionPrice(priceOfSingleShare)
-                    .buyOrSell(Operation.BUY).build();
-            flp.addOrSellStocks(newStock);
-          }
-
-          List<String[]> dataToWrite = flp.toListOfString();
-          this.savePortfolioToFile(dataToWrite, flp.getNameOfPortFolio().strip()
-                  .split(".csv")[0], PortfolioType.flexible);
-
-        }
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    }
-    }
+  }
 
 
 
@@ -797,10 +764,10 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public void calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
-                                    Integer daysToInvest, HashMap<String,Double> weights,
-                                    double amount, Double commission, int portfolioIndex,
-                                    InvestmentType investmentType) {
+  public LocalDate calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
+                                 Integer daysToInvest, HashMap<String,Double> weights,
+                                 double amount, Double commission, int portfolioIndex,
+                                 InvestmentType investmentType) {
 
     LocalDate nextInvestDate = strategyStart.plusDays(daysToInvest);
     LocalDate realEndDate = null;
@@ -847,15 +814,19 @@ public class User implements IUserInterface {
     this.savePortfolioToFile(dataToFile,flp.getNameOfPortFolio().strip()
             .split(".csv")[0], PortfolioType.flexible);
 
+    return nextInvestDate.minusDays(daysToInvest);
+
     }
 
   @Override
   public void acceptStrategyFromUser(int portfolioIndex, Double amount, Double comm,
                                      LocalDate startDate, LocalDate endDate,
                                      HashMap<String,Double> weights,
-                                     InvestmentType investmentType) {
+                                     InvestmentType investmentType, Integer daysToInvest,
+                                     LocalDate lastTxnDate) {
 
-    List<String[]> dataToWrite = this.getDataToWrite(amount, comm, startDate, endDate, weights);
+    List<String[]> dataToWrite = this.getDataToWrite(amount, comm, startDate, endDate, weights,
+            daysToInvest, lastTxnDate);
     this.saveInstrToFile(this.getPortfolioName(portfolioIndex,PortfolioType.flexible), dataToWrite,
             investmentType);
   }
@@ -886,7 +857,8 @@ public class User implements IUserInterface {
 
   private List<String[]> getDataToWrite(Double amount, Double comm,
                                         LocalDate startDate, LocalDate endDate,
-                                        HashMap<String,Double> weights) {
+                                        HashMap<String,Double> weights, Integer daysToInvest,
+                                        LocalDate lastTxnDate) {
     List<String[]> answer = new ArrayList<>();
     String[] amt = new String[2];
     amt[0] = "AMOUNT";
@@ -900,10 +872,18 @@ public class User implements IUserInterface {
     endDt[0] = "END_DATE";
     endDt[1] =  endDate.toString();
     answer.add(endDt);
+    String[] days = new String[2];
+    days[0] = "DAYS_TO_INVEST";
+    days[1] =  daysToInvest.toString();
+    answer.add(days);
     String[] commission = new String[2];
     commission[0] = "COMMISSION";
     commission[1] = comm.toString();
     answer.add(commission);
+    String[] lastDate = new String[2];
+    lastDate[0] = "LAST_TXN_DATE";
+    lastDate[1] = lastTxnDate.toString();
+    answer.add(lastDate);
 
     for (Map.Entry<String,Double> element : weights.entrySet()) {
       String[] weight = new String[2];
@@ -911,6 +891,8 @@ public class User implements IUserInterface {
       weight[1] = element.getValue().toString();
       answer.add(weight);
     }
+
+
     return answer;
   }
 
