@@ -103,8 +103,9 @@ public class User implements IUserInterface {
     file = new File(folderPath);
     this.createFolder();
     this.loadExistingPortFolios(PortfolioType.fixed);
-    this.loadExistingPortFolios(PortfolioType.flexible);
     this.updateFlexiblePortFolios(InvestmentType.InvestByWeights);
+    this.updateFlexiblePortFolios(InvestmentType.DCA);
+    this.loadExistingPortFolios(PortfolioType.flexible);
     try {
       this.loadNasdaqTickerNames();
     } catch (FileNotFoundException e) {
@@ -202,14 +203,15 @@ public class User implements IUserInterface {
                 InvestmentType.InvestByWeights);
         if (!instrFile.equals("")) {
           costBasis += toCalcCostBasis.calculateCostBasisForFuture(costBasisDate,
-                  InvestmentType.InvestByWeights, instrFile);
+                  InvestmentType.InvestByWeights, this.investmentInstrPath
+                          + File.separator + instrFile);
         }
 
         String dcaFile = this.retrieveInstr(toCalcCostBasis.getNameOfPortFolio(),
                 InvestmentType.DCA);
         if (!dcaFile.equals("")) {
           costBasis += toCalcCostBasis.calculateCostBasisForFuture(costBasisDate,
-                  InvestmentType.DCA, dcaFile);
+                  InvestmentType.DCA, this.dcaInstrPath + File.separator + dcaFile);
         }
 
       }
@@ -711,11 +713,11 @@ public class User implements IUserInterface {
         this.savePortfolioToFile(dataToWrite, flp.getNameOfPortFolio().strip()
                 .split(".csv")[0], PortfolioType.flexible);
 
-        if (investmentType.equals(InvestmentType.InvestByWeights)) {
+        /*if (investmentType.equals(InvestmentType.InvestByWeights)) {
           File oldFile = new File(instrFile);
           File newFile = new File(instrFile.replace(".csv","executed.csv"));
           oldFile.renameTo(newFile);
-        }
+        }*/
 
       }
 
@@ -761,7 +763,7 @@ public class User implements IUserInterface {
     LocalDate nextInvestDate = strategyStart.plusDays(daysToInvest);
     LocalDate realEndDate = null;
     if (investmentType.equals(InvestmentType.InvestByWeights)) { //invest by weights
-      realEndDate = strategyEnd;
+      realEndDate = LocalDate.now();
     }
     else if (investmentType.equals(InvestmentType.DCA)) { // invest by DCA
       if (strategyEnd.equals(null)) { //if end date is not specified
