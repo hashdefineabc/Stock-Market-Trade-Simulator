@@ -16,6 +16,7 @@ public class HomeView extends JFrame {
   private JButton costBasis;
   private JButton value;
   private JButton composition;
+  private JButton uploadPortfolio;
 
   public HomeView(String s) {
     super(s);
@@ -42,16 +43,6 @@ public class HomeView extends JFrame {
     panel.add(sellStocks);
 
 
-    //invest in a portfolio by specifying weights
-    invest = new JButton("Invest by percentage");
-    invest.setActionCommand("invest");
-    panel.add(invest);
-
-    //set dollar cost averaging for a portfolio
-    dca = new JButton("Set Dollar Cost Averaging for a portfolio");
-    dca.setActionCommand("dca");
-    panel.add(dca);
-
     // cost basis
     costBasis = new JButton("Check Cost Basis");
     costBasis.setActionCommand("costBasis");
@@ -67,6 +58,21 @@ public class HomeView extends JFrame {
     composition = new JButton("View Composition");
     composition.setActionCommand("compositionButtonHome");
     panel.add(composition);
+
+    // upload portfolio from file
+    uploadPortfolio = new JButton("Upload a portfolio from file");
+    uploadPortfolio.setActionCommand("uploadButtonHome");
+    panel.add(uploadPortfolio);
+
+    //invest in a portfolio by specifying weights
+    invest = new JButton("Invest by percentage");
+    invest.setActionCommand("invest");
+    panel.add(invest);
+
+    //set dollar cost averaging for a portfolio
+    dca = new JButton("Set Dollar Cost Averaging for a portfolio");
+    dca.setActionCommand("dca");
+    panel.add(dca);
 
     // Exit
     exit = new JButton("Exit");
@@ -88,5 +94,6 @@ public class HomeView extends JFrame {
     costBasis.addActionListener(listener);
     value.addActionListener(listener);
     composition.addActionListener(listener);
+    uploadPortfolio.addActionListener(listener);
   }
 }
