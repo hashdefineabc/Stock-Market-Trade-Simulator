@@ -4,11 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
+import model.InvestmentType;
 import model.IstockModel;
 import model.IFixedPortfolio;
 import model.PortfolioType;
@@ -152,7 +154,7 @@ public class ControllerImplDelegateTest {
     }
 
     @Override
-    public void updateFlexiblePortFolios() {
+    public void updateFlexiblePortFolios(InvestmentType investmentType) {
       log.append("updateFlexiblePortFolios method is called.");
     }
 
@@ -164,6 +166,28 @@ public class ControllerImplDelegateTest {
     @Override
     public boolean validateCommissionValue(String commVal) {
       return false;
+    }
+
+    @Override
+    public LocalDate calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
+                                   Integer daysToInvest, HashMap<String,Double> weights,
+                                   double amount, Double commission, int portfolioIndex,
+                                   InvestmentType investmentType) {
+      return null;
+    }
+
+    @Override
+    public void acceptStrategyFromUser(int portfolioIndex, Double amount, Double comm,
+                                       LocalDate startDate, LocalDate endDate, HashMap<String,
+            Double> weights, InvestmentType investmentType, Integer daysToInvest,
+                                       LocalDate lastTxnDate) {
+
+    }
+
+    @Override
+    public void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
+                                InvestmentType investmentType) {
+
     }
   }
 

@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -185,9 +186,23 @@ public interface IUserInterface {
    */
   String getPortfolioName(int portfolioIndex, PortfolioType portfolioType);
 
-  void updateFlexiblePortFolios();
+  void updateFlexiblePortFolios(InvestmentType investmentType);
 
   boolean validateNumUnits(String numUnits);
 
   boolean validateCommissionValue(String commVal);
+
+  LocalDate calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
+                          Integer daysToInvest, HashMap<String,Double> weights, double amount,
+                          Double commission, int portfolioIndex, InvestmentType investmentType);
+
+  void acceptStrategyFromUser(int portfolioIndex, Double amount, Double comm,LocalDate startDate,
+                              LocalDate endDate, HashMap<String,Double> weights,
+                              InvestmentType investmentType, Integer daysToInvest,
+                              LocalDate lastTxnDate);
+
+
+  void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
+                       InvestmentType investmentType);
+
 }

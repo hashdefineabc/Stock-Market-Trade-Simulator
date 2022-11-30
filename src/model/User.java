@@ -67,6 +67,7 @@ public class User implements IUserInterface {
   private String fixedPFPath;
   private String flexiblePFPath;
   private String investmentInstrPath;
+  private String dcaInstrPath;
   private File file;
   private String apiKey = "RWI9HAQXNXJQQSJI";
 
@@ -97,12 +98,13 @@ public class User implements IUserInterface {
     this.fixedPFPath = this.folderPath + File.separator + "FixedPortfolios";
     this.flexiblePFPath = this.folderPath + File.separator + "FlexiblePortfolios";
     this.investmentInstrPath = this.folderPath + File.separator + "InvestmentInstructions";
+    this.dcaInstrPath = this.folderPath + File.separator + "DCAInstructions";
 
     file = new File(folderPath);
     this.createFolder();
     this.loadExistingPortFolios(PortfolioType.fixed);
     this.loadExistingPortFolios(PortfolioType.flexible);
-    this.updateFlexiblePortFolios();
+    this.updateFlexiblePortFolios(InvestmentType.InvestByWeights);
     try {
       this.loadNasdaqTickerNames();
     } catch (FileNotFoundException e) {
@@ -352,6 +354,11 @@ public class User implements IUserInterface {
     //creating InvestmentInstructions folder
     file = new File(this.investmentInstrPath);
     if (!Files.exists(Path.of(this.investmentInstrPath))) {
+      file.mkdir();
+    }
+    //creating DCAInstructions folder
+    file = new File(this.dcaInstrPath);
+    if (!Files.exists(Path.of(this.dcaInstrPath))) {
       file.mkdir();
     }
 
@@ -624,15 +631,22 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public void updateFlexiblePortFolios() {
+  public void updateFlexiblePortFolios(InvestmentType investmentType ) {
     //get list of all flexible portfolios
     for (IFlexiblePortfolio flp:this.flexiblePortfolios) {
       //check if instructions exist for this portfolio
-      String instrFile = this.retrieveInstr(flp.getNameOfPortFolio());
+      String instrFile = this.retrieveInstr(flp.getNameOfPortFolio(),investmentType);
       if (!instrFile.equals("")) {
         //flp.executeInstructions(instrFile);
-        this.executeInstructionsForFlexPortfolio(flp, this.investmentInstrPath
-                + File.separator + instrFile);
+        if (investmentType.equals(InvestmentType.InvestByWeights)) {
+          this.executeInstructionsForFlexPortfolio(flp, this.investmentInstrPath
+                  + File.separator + instrFile, InvestmentType.InvestByWeights);
+        }
+        else if (investmentType.equals(InvestmentType.DCA)) {
+          this.executeInstructionsForFlexPortfolio(flp, this.dcaInstrPath
+                  + File.separator + instrFile, InvestmentType.DCA);
+        }
+
       }
     }
     this.loadExistingPortFolios(PortfolioType.flexible);
@@ -660,68 +674,228 @@ public class User implements IUserInterface {
   }
 
   private void executeInstructionsForFlexPortfolio(IFlexiblePortfolio flp,
-                                                   String instrFile) {
-    //read the file
+                                                   String instrFile,
+                                                   InvestmentType investmentType) {
+
     String line = "";
     String splitBy = ",";
-    try{
+    Integer numSharesBought = 0;
+    Double numShares = 0.0;
+
+    try {
       BufferedReader br = new BufferedReader(new FileReader(instrFile));
       Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
       DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-      LocalDate buyDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      LocalDate startDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      LocalDate endDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      Integer daysToInvest = Integer.parseInt(br.readLine().split(splitBy)[1]);
       Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
+      LocalDate lastTxnDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
       HashMap<String, Double> weights = new HashMap<>();
 
-      if (buyDate.isBefore(LocalDate.now()) || buyDate.isEqual(LocalDate.now())) {
+      if (lastTxnDate.plusDays(daysToInvest).isEqual(LocalDate.now())) {
         while ((line = br.readLine()) != null) {
           weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
         }
         br.close();
-        // buy stocks
         for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
           String stockName = stockWeight.getKey();
           Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
-          Double priceOfSingleShare = this.getStockPriceFromDB(stockName,buyDate);
-          Integer numSharesBought = (int) (moneyToInvest/priceOfSingleShare);
-          Double numShares = Double.valueOf(numSharesBought);
+          Double priceOfSingleShare = this.getStockPriceFromDB(stockName,LocalDate.now());
+          if (investmentType.equals(InvestmentType.InvestByWeights)) {
+            numSharesBought = (int) (moneyToInvest/priceOfSingleShare);
+            numShares = Double.valueOf(numSharesBought);
+          }
+          else if (investmentType.equals(InvestmentType.DCA)) {
+            numShares = (moneyToInvest/priceOfSingleShare);
+          }
 
           Stock newStock = Stock.getBuilder().tickerName(stockName)
                   .numOfUnits(numShares)
-                  .transactionDate(buyDate)
-                  .commission(commission) 
+                  .transactionDate(LocalDate.now())
+                  .commission(commission)
                   .transactionPrice(priceOfSingleShare)
                   .buyOrSell(Operation.BUY).build();
           flp.addOrSellStocks(newStock);
         }
-
         List<String[]> dataToWrite = flp.toListOfString();
         this.savePortfolioToFile(dataToWrite, flp.getNameOfPortFolio().strip()
                 .split(".csv")[0], PortfolioType.flexible);
 
-        //rename the file to 'executed'
-        File oldFile = new File(instrFile);
-        File newFile = new File(instrFile.replace(".csv","executed.csv"));
-        oldFile.renameTo(newFile);
-
+        if (investmentType.equals(InvestmentType.InvestByWeights)) {
+          File oldFile = new File(instrFile);
+          File newFile = new File(instrFile.replace(".csv","executed.csv"));
+          oldFile.renameTo(newFile);
+        }
 
       }
+
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
   }
 
 
 
 
-  private String retrieveInstr(String portfolioName) {
-    file = new File(this.investmentInstrPath);
-    String[] fileNames = file.list();
-    for (String fileName : fileNames) {
-      if (fileName.contains(portfolioName) && !fileName.contains("executed")) {
-        return fileName;
+
+  private String retrieveInstr(String portfolioName,InvestmentType investmentType) {
+    if (investmentType.equals(InvestmentType.InvestByWeights)) {
+      file = new File(this.investmentInstrPath);
+      String[] fileNames = file.list();
+      for (String fileName : fileNames) {
+        if (fileName.contains(portfolioName) && !fileName.contains("executed")) {
+          return fileName;
+        }
       }
     }
+    else if (investmentType.equals(InvestmentType.DCA)) {
+      file = new File(this.dcaInstrPath);
+      String[] fileNames = file.list();
+      for (String fileName : fileNames) {
+        if (fileName.contains(portfolioName)) {
+          return fileName;
+        }
+      }
+    }
+
     return "";
   }
 
+  @Override
+  public LocalDate calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
+                                 Integer daysToInvest, HashMap<String,Double> weights,
+                                 double amount, Double commission, int portfolioIndex,
+                                 InvestmentType investmentType) {
+
+    LocalDate nextInvestDate = strategyStart.plusDays(daysToInvest);
+    LocalDate realEndDate = null;
+    if (investmentType.equals(InvestmentType.InvestByWeights)) { //invest by weights
+      realEndDate = strategyEnd;
+    }
+    else if (investmentType.equals(InvestmentType.DCA)) { // invest by DCA
+      if (strategyEnd.equals(null)) { //if end date is not specified
+        realEndDate = LocalDate.now();
+      }
+    }
+    IFlexiblePortfolio flp = this.flexiblePortfolios.get(portfolioIndex - 1);
+    Double numSharesBought = 0.0;
+
+    while (nextInvestDate.isBefore(realEndDate) || nextInvestDate.isEqual(realEndDate)) {
+      for (Map.Entry <String,Double> stockWeight : weights.entrySet()) {
+        String stockName = stockWeight.getKey();
+        Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
+        Double priceOfSingleShare = this.getStockPriceFromDB(stockName,nextInvestDate);
+        if (investmentType.equals(InvestmentType.DCA)) {
+          numSharesBought = (moneyToInvest/priceOfSingleShare); //allowing fractional shares.
+        }
+        else if (investmentType.equals(InvestmentType.InvestByWeights)) {
+          int numShares = (int) (moneyToInvest/priceOfSingleShare); //not allowing fractionalshares.
+          numSharesBought = Double.valueOf(numShares);
+        }
+
+        Stock newStock = Stock.getBuilder().tickerName(stockName)
+                .numOfUnits(numSharesBought)
+                .transactionDate(nextInvestDate)
+                .commission(commission)
+                .transactionPrice(priceOfSingleShare)
+                .buyOrSell(Operation.BUY).build();
+        flp.addOrSellStocks(newStock);
+      }
+
+      if (investmentType.equals(InvestmentType.InvestByWeights)) {
+        daysToInvest = 1;
+      }
+      nextInvestDate = nextInvestDate.plusDays(daysToInvest);
+
+    }
+    List<String[]> dataToFile = flp.toListOfString();
+    this.savePortfolioToFile(dataToFile,flp.getNameOfPortFolio().strip()
+            .split(".csv")[0], PortfolioType.flexible);
+
+    return nextInvestDate.minusDays(daysToInvest);
+
+    }
+
+  @Override
+  public void acceptStrategyFromUser(int portfolioIndex, Double amount, Double comm,
+                                     LocalDate startDate, LocalDate endDate,
+                                     HashMap<String,Double> weights,
+                                     InvestmentType investmentType, Integer daysToInvest,
+                                     LocalDate lastTxnDate) {
+
+    List<String[]> dataToWrite = this.getDataToWrite(amount, comm, startDate, endDate, weights,
+            daysToInvest, lastTxnDate);
+    this.saveInstrToFile(this.getPortfolioName(portfolioIndex,PortfolioType.flexible), dataToWrite,
+            investmentType);
+  }
+
+  @Override
+  public void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
+                              InvestmentType investmentType)
+  {
+    File csvOutputFile = null;
+    if (investmentType.equals(InvestmentType.InvestByWeights)) {
+      csvOutputFile = new File(this.investmentInstrPath + File.separator
+              + portfolioName); //TODO: replace this when file writing is moved to controller
+    }
+    else if (investmentType.equals(InvestmentType.DCA)) {
+      csvOutputFile = new File(this.dcaInstrPath + File.separator
+              + portfolioName); //TODO: replace this when file writing is moved to controller
+    }
+
+    try {
+      PrintWriter pw = new PrintWriter(csvOutputFile);
+      dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
+      pw.close();
+    } catch (Exception e) {
+      System.out.print("Error creating a csv\n");
+    }
+  }
+
+
+  private List<String[]> getDataToWrite(Double amount, Double comm,
+                                        LocalDate startDate, LocalDate endDate,
+                                        HashMap<String,Double> weights, Integer daysToInvest,
+                                        LocalDate lastTxnDate) {
+    List<String[]> answer = new ArrayList<>();
+    String[] amt = new String[2];
+    amt[0] = "AMOUNT";
+    amt[1] = amount.toString();
+    answer.add(amt);
+    String[] startDt = new String[2];
+    startDt[0] = "START_DATE";
+    startDt[1] = startDate.toString();
+    answer.add(startDt);
+    String[] endDt = new String[2];
+    endDt[0] = "END_DATE";
+    endDt[1] =  endDate.toString();
+    answer.add(endDt);
+    String[] days = new String[2];
+    days[0] = "DAYS_TO_INVEST";
+    days[1] =  daysToInvest.toString();
+    answer.add(days);
+    String[] commission = new String[2];
+    commission[0] = "COMMISSION";
+    commission[1] = comm.toString();
+    answer.add(commission);
+    String[] lastDate = new String[2];
+    lastDate[0] = "LAST_TXN_DATE";
+    lastDate[1] = lastTxnDate.toString();
+    answer.add(lastDate);
+
+    for (Map.Entry<String,Double> element : weights.entrySet()) {
+      String[] weight = new String[2];
+      weight[0] = element.getKey().toString();
+      weight[1] = element.getValue().toString();
+      answer.add(weight);
+    }
+
+
+    return answer;
+  }
+
+
 }
+
