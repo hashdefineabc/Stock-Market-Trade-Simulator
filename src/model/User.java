@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.lang.Math;
 
 /**
  * Class to implement the user's functionality for the stock market application.
@@ -760,30 +761,31 @@ public class User implements IUserInterface {
                                  double amount, Double commission, int portfolioIndex,
                                  InvestmentType investmentType) {
 
-    LocalDate nextInvestDate = strategyStart.plusDays(daysToInvest);
+    LocalDate nextInvestDate = strategyStart;
     LocalDate realEndDate = null;
-    if (investmentType.equals(InvestmentType.InvestByWeights)) { //invest by weights
-      realEndDate = LocalDate.now();
-    }
-    else if (investmentType.equals(InvestmentType.DCA)) { // invest by DCA
-      if (strategyEnd.equals(null)) { //if end date is not specified
+      int compare = LocalDate.now().compareTo(strategyEnd);
+      if (compare == 1) {
+        realEndDate = strategyEnd;
+      } else if (compare == -1 || compare == 0) {
         realEndDate = LocalDate.now();
       }
-    }
     IFlexiblePortfolio flp = this.flexiblePortfolios.get(portfolioIndex - 1);
     Double numSharesBought = 0.0;
 
-    while (nextInvestDate.isBefore(realEndDate) || nextInvestDate.isEqual(realEndDate)) {
+    while (nextInvestDate.isBefore(realEndDate)
+            || nextInvestDate.isEqual(realEndDate)) {
       for (Map.Entry <String,Double> stockWeight : weights.entrySet()) {
         String stockName = stockWeight.getKey();
         Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
         Double priceOfSingleShare = this.getStockPriceFromDB(stockName,nextInvestDate);
         if (investmentType.equals(InvestmentType.DCA)) {
-          numSharesBought = (moneyToInvest/priceOfSingleShare); //allowing fractional shares.
+          //numSharesBought = (moneyToInvest/priceOfSingleShare); //allowing fractional shares.
+          numSharesBought = Math.round(Double.valueOf( (moneyToInvest/priceOfSingleShare))
+                  * 1000d) / 1000d;
         }
         else if (investmentType.equals(InvestmentType.InvestByWeights)) {
           int numShares = (int) (moneyToInvest/priceOfSingleShare); //not allowing fractionalshares.
-          numSharesBought = Double.valueOf(numShares);
+          numSharesBought = Double.valueOf(numSharesBought);
         }
 
         Stock newStock = Stock.getBuilder().tickerName(stockName)
