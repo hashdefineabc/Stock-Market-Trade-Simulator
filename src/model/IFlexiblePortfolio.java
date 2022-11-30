@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+
 /**
  * The interface for Flexible portfolio.
  * It extends the interface for fixed portfolios as there are several common operation to be
@@ -16,6 +18,7 @@ public interface IFlexiblePortfolio extends IFixedPortfolio {
    */
   void addOrSellStocks(IstockModel stockDetails);
 
-  void executeInstructions(String instrFile);
+  Double calculateCostBasisForFuture(LocalDate costBasisDate, InvestmentType investmentType,
+                                     String investInstrFile);
 
 }
