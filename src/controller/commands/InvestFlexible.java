@@ -59,10 +59,10 @@ public class InvestFlexible implements ICommandController {
     view.displayMsgToUser("Total amount the user will spend would be:"+(amount + commission));
     LocalDate dateToBuy = this.getDateFromView();
     HashMap<String,Double> weights = this.getWeightsFromView();
-    user.calculateTxns(dateToBuy,dateToBuy,0,weights,amount,commission,portfolioIndex,
-            InvestmentType.InvestByWeights);
+    LocalDate lastTxnDate =  user.calculateTxns(dateToBuy,dateToBuy,0,
+            weights,amount,commission,portfolioIndex, InvestmentType.InvestByWeights);
     user.acceptStrategyFromUser(portfolioIndex,amount,commission,dateToBuy,dateToBuy,weights,
-            InvestmentType.InvestByWeights);
+            InvestmentType.InvestByWeights,0,lastTxnDate);
     view.displayMsgToUser("Instructions saved for this Portfolio! Money will be invested as per "
             + "them");
   }
