@@ -848,6 +848,18 @@ public class User implements IUserInterface {
     }
   }
 
+  @Override
+  public Boolean validateWeightsForInvestment(Double[] weights) {
+    Double sum = 0.0;
+    for (Double weight: weights) {
+      sum += weight;
+    }
+    if (sum == 100.0) {
+      return true;
+    }
+    return false;
+  }
+
 
   private List<String[]> getDataToWrite(Double amount, Double comm,
                                         LocalDate startDate, LocalDate endDate,

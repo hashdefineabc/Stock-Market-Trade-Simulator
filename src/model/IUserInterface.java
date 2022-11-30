@@ -205,4 +205,6 @@ public interface IUserInterface {
   void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
                        InvestmentType investmentType);
 
+  Boolean validateWeightsForInvestment(Double[] weights);
+
 }
