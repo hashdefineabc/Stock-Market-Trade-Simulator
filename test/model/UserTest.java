@@ -24,22 +24,26 @@ public class UserTest {
 
   @Test
   public void testStocks() {
-    IstockModel stock = new Stock("AAPL", 5.0, 10.0, 2000.0, LocalDate.now(), Operation.BUY);
+    IstockModel stock = new Stock("AAPL", 5.0, 10.0,
+            2000.0, LocalDate.now(), Operation.BUY);
     assertEquals("AAPL", stock.getTickerName());
   }
 
   @Test
   public void testStocksNumUnits() {
-    IstockModel stock = new Stock("AAPL", 5.0, 10.0, 2000.0, LocalDate.now(), Operation.BUY);
+    IstockModel stock = new Stock("AAPL", 5.0, 10.0,
+            2000.0, LocalDate.now(), Operation.BUY);
     assertEquals("5.0", stock.getNumOfUnits().toString());
   }
 
   @Test
   public void testIsTickerValid() {
     List<IstockModel> stockList = new ArrayList<>();
-    IstockModel s = new Stock("AAPL", 5.0, 10.0, 2000.0, LocalDate.now(), Operation.BUY);
+    IstockModel s = new Stock("AAPL", 5.0, 10.0, 2000.0,
+            LocalDate.now(), Operation.BUY);
     stockList.add(s);
-    s = new Stock("MSFT", 5.0, 10.0, 2000.0, LocalDate.now(), Operation.BUY);
+    s = new Stock("MSFT", 5.0, 10.0, 2000.0,
+            LocalDate.now(), Operation.BUY);
     stockList.add(s);
     IFixedPortfolio portfolio = new FixedPortfolio("Portfolio 1", stockList);
 
@@ -48,7 +52,8 @@ public class UserTest {
 
   @Test
   public void testIsTickerInvalid() {
-    assertEquals(false, user.isTickerValid("zzz"));
+    assertEquals(false,
+            user.isTickerValid("zzz"));
   }
 
   @Test
@@ -66,6 +71,11 @@ public class UserTest {
   @Test
   public void testSavePortFolio() {
     assertEquals(true, user.checkIfFileExists("testFlex1", PortfolioType.flexible));
+  }
+
+  @Test
+  public void testCreateInvestStrategy() {
+
   }
 
 

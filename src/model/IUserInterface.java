@@ -192,7 +192,16 @@ public interface IUserInterface {
 
   boolean validateCommissionValue(String commVal);
 
-  List<String> calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
+  void calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
                              Integer daysToInvest, HashMap<String,Double> weights, double amount,
-                             Double commission, int portfolioIndex);
+                             Double commission, int portfolioIndex, InvestmentType investmentType);
+
+  void acceptStrategyFromUser(int portfolioIndex, Double amount, Double comm,LocalDate startDate,
+                              LocalDate endDate, HashMap<String,Double> weights,
+                              InvestmentType investmentType);
+
+
+  void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
+                       InvestmentType investmentType);
+
 }

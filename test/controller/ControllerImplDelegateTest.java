@@ -169,8 +169,23 @@ public class ControllerImplDelegateTest {
     }
 
     @Override
-    public List<String> calculateTxns(LocalDate strategyStart, LocalDate strategyEnd, Integer daysToInvest, HashMap<String, Double> weights, double amount, Double commission, int portfolioIndex) {
-      return null;
+    public void calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
+                                      Integer daysToInvest, HashMap<String,Double> weights,
+                                      double amount, Double commission, int portfolioIndex,
+                                      InvestmentType investmentType) {
+    }
+
+    @Override
+    public void acceptStrategyFromUser(int portfolioIndex, Double amount, Double comm,
+                                       LocalDate startDate, LocalDate endDate, HashMap<String,
+            Double> weights, InvestmentType investmentType) {
+
+    }
+
+    @Override
+    public void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
+                                InvestmentType investmentType) {
+
     }
   }
 

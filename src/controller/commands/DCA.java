@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import model.IUserInterface;
+import model.InvestmentType;
 import model.IstockModel;
 import model.PortfolioType;
 import view.ViewInterface;
@@ -50,16 +52,12 @@ public class DCA implements ICommandController{
     LocalDate strategyStart = this.getDateFromView("investment start");
     LocalDate strategyEnd = this.getDateFromView("investment end");
     Integer daysToInvest = this.getDaysFromView();
-    List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex,
-            portfolioType, LocalDate.now());
-    HashMap<String,Double> weights = this.getWeightsFromView(stocksToDisplay);
-    List<String> txnDates =  user.calculateTxns(strategyStart,strategyEnd,daysToInvest,weights,
-            amount,commission,portfolioIndex);
-    List<String[]> dataToWrite = this.getDataToWrite(amount,weights,strategyStart,strategyEnd,
-            daysToInvest, commission, txnDates);
 
-    //save to File
-    this.saveInstrToFile(user.getPortfolioName(portfolioIndex,portfolioType), dataToWrite);
+    HashMap<String,Double> weights = this.getWeightsFromView();
+    user.calculateTxns(strategyStart,strategyEnd,daysToInvest,weights,
+            amount,commission,portfolioIndex, InvestmentType.DCA);
+    user.acceptStrategyFromUser(portfolioIndex,amount,commission,strategyStart,strategyEnd,weights,
+            InvestmentType.DCA);
     view.displayMsgToUser("Instructions saved for this Portfolio! Money will be invested as per "
             + "them");
 
@@ -122,27 +120,40 @@ public class DCA implements ICommandController{
     return valueDate;
   }
 
-  private HashMap<String,Double> getWeightsFromView( List<IstockModel> stocksToDisplay ) {
-    HashMap<String,Double> weights = new HashMap<>();
-    for (IstockModel stock : stocksToDisplay) {
-      boolean okay = false;
-      double weight = 0.0;
-      do {
-        try {
-          view.displayMsgToUser("Enter the percentage for the stock:" + stock.getTickerName());
-          weight = this.inputScanner.nextDouble();
-          if (weight < 0.0) {
-            throw new IllegalArgumentException("Percentage cannot be -ve");
-          }
-          okay = true;
-        } catch (IllegalArgumentException ie) {
-          this.view.displayMsgToUser(ie.getMessage());
-          okay = false;
-        }
-      } while (!okay);
-      weights.put(stock.getTickerName(), weight);
+  private HashMap<String, Double> getWeightsFromView() {
+    HashMap <String, Double> weights = new HashMap<>();
+    do {
+      String[] w = this.getWeightFromView();
+      weights.put(w[0],Double.parseDouble(w[1]));
     }
+    while (this.addMoreWeightsFromView());
     return weights;
+  }
+  private String[] getWeightFromView() {
+    Boolean isInputValid = false;
+    String tickerNameFromUser = "";
+    Double percentage = 0.0;
+    do {
+      try {
+        this.view.takeTickerName();
+        tickerNameFromUser = inputScanner.next();
+        if (!user.isTickerValid(tickerNameFromUser)) {
+          throw new IllegalArgumentException("Invalid ticker name!");
+        }
+        this.view.displayMsgToUser("Enter the weight for this stock (%):");
+        percentage = this.inputScanner.nextDouble();
+        if (percentage < 0.0) {
+          throw new IllegalArgumentException("Percentage cannot be -ve");
+        }
+        isInputValid = true;
+
+      } catch (Exception e) {
+        this.view.displayMsgToUser(e.getMessage());
+        isInputValid = false;
+      }
+    } while (!isInputValid);
+
+    return new String[]{tickerNameFromUser, Double.toString(percentage)};
   }
 
   private List<String[]> getDataToWrite(Double amount, HashMap<String,Double> weights,
@@ -240,4 +251,31 @@ public class DCA implements ICommandController{
             .map(this::escapeSpecialCharacters)
             .collect(Collectors.joining(","));
   }
+
+  private Boolean addMoreWeightsFromView() {
+    int userInput = 0;
+    List<Integer> validOptions = Arrays.asList(0, 1);
+    Boolean addMore = false;
+    do {
+      try {
+        this.view.displayMsgToUser("Do you want to add more weights? 1.Yes 0.No");
+        userInput = inputScanner.nextInt();
+        if (userInput == 1) {
+          return true;
+        }
+        else if (userInput == 0) {
+          return false;
+        }
+        if (!validOptions.contains(userInput)) {
+          throw new IllegalArgumentException("Please select a valid option!\n");
+        }
+      } catch (IllegalArgumentException ie) {
+        this.view.displayMsgToUser(ie.getMessage());
+        addMore = true;
+      }
+    }
+    while (addMore);
+    return userInput == 1;
+  }
+
 }
