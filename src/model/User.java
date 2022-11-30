@@ -103,8 +103,9 @@ public class User implements IUserInterface {
     file = new File(folderPath);
     this.createFolder();
     this.loadExistingPortFolios(PortfolioType.fixed);
-    this.loadExistingPortFolios(PortfolioType.flexible);
     this.updateFlexiblePortFolios(InvestmentType.InvestByWeights);
+    this.updateFlexiblePortFolios(InvestmentType.DCA);
+    this.loadExistingPortFolios(PortfolioType.flexible);
     try {
       this.loadNasdaqTickerNames();
     } catch (FileNotFoundException e) {
@@ -196,33 +197,23 @@ public class User implements IUserInterface {
     else if (portfolioType.equals(PortfolioType.flexible)) {
       IFlexiblePortfolio toCalcCostBasis = this.flexiblePortfolios.get(portfolioIndex - 1);
       costBasis = toCalcCostBasis.calculateCostBasis(costBasisDate);
-      if (costBasisDate.isAfter(LocalDate.now())) {
-        String instrFile = "";
-        Double amount = 0.0;
-        Double commission = 0.0;
-        LocalDate buyDate = LocalDate.now();
-        file = new File(this.investmentInstrPath);
-        String[] fileNames = file.list();
-        for (String fileName : fileNames) {
-          if (fileName.contains(toCalcCostBasis.getNameOfPortFolio())) {
-            instrFile = fileName;
-          }
-        }
-        instrFile = this.investmentInstrPath + File.separator + instrFile;
-        try {
-          BufferedReader br = new BufferedReader(new FileReader(instrFile));
-          amount = Double.parseDouble(br.readLine().split(",")[1]);
-          DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-          buyDate = LocalDate.parse(br.readLine().split(",")[1],dateFormat);
-          commission = Double.parseDouble(br.readLine().split(",")[1]);
 
-        } catch (IOException e) {
-          throw new RuntimeException(e);
+      if (costBasisDate.isAfter(LocalDate.now())) {
+        String instrFile = this.retrieveInstr(toCalcCostBasis.getNameOfPortFolio(),
+                InvestmentType.InvestByWeights);
+        if (!instrFile.equals("")) {
+          costBasis += toCalcCostBasis.calculateCostBasisForFuture(costBasisDate,
+                  InvestmentType.InvestByWeights, this.investmentInstrPath
+                          + File.separator + instrFile);
         }
-        if (buyDate.isBefore(costBasisDate) || buyDate.isEqual(costBasisDate)) {
-          costBasis += amount;
-          costBasis += commission;
+
+        String dcaFile = this.retrieveInstr(toCalcCostBasis.getNameOfPortFolio(),
+                InvestmentType.DCA);
+        if (!dcaFile.equals("")) {
+          costBasis += toCalcCostBasis.calculateCostBasisForFuture(costBasisDate,
+                  InvestmentType.DCA, this.dcaInstrPath + File.separator + dcaFile);
         }
+
       }
     }
     return costBasis;
@@ -722,11 +713,11 @@ public class User implements IUserInterface {
         this.savePortfolioToFile(dataToWrite, flp.getNameOfPortFolio().strip()
                 .split(".csv")[0], PortfolioType.flexible);
 
-        if (investmentType.equals(InvestmentType.InvestByWeights)) {
+        /*if (investmentType.equals(InvestmentType.InvestByWeights)) {
           File oldFile = new File(instrFile);
           File newFile = new File(instrFile.replace(".csv","executed.csv"));
           oldFile.renameTo(newFile);
-        }
+        }*/
 
       }
 
@@ -772,7 +763,7 @@ public class User implements IUserInterface {
     LocalDate nextInvestDate = strategyStart.plusDays(daysToInvest);
     LocalDate realEndDate = null;
     if (investmentType.equals(InvestmentType.InvestByWeights)) { //invest by weights
-      realEndDate = strategyEnd;
+      realEndDate = LocalDate.now();
     }
     else if (investmentType.equals(InvestmentType.DCA)) { // invest by DCA
       if (strategyEnd.equals(null)) { //if end date is not specified
