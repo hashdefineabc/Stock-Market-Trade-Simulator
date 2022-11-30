@@ -2,6 +2,10 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -10,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
+import javax.swing.*;
 
 import controller.commands.BuySell;
 import model.IFlexiblePortfolio;
@@ -24,7 +30,11 @@ import view.CostBasisGUIView;
 import view.CreateNewPortfolioView;
 import view.DisplayStocks;
 import view.HomeView;
+import view.UploadFromFileGUIView;
 import view.ValueGUIView;
+
+import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 
 public class GUIController implements IController, ActionListener {
 
@@ -37,6 +47,7 @@ public class GUIController implements IController, ActionListener {
   private CostBasisGUIView costBasisView;
   private ValueGUIView valueView;
   private CompositionGUIView compositionView;
+  private UploadFromFileGUIView uploadFromFileGUIView;
   private DisplayStocks displayComposition;
   List<String[]> stockList;
   List<String> existingPortfolios;
@@ -247,7 +258,7 @@ public class GUIController implements IController, ActionListener {
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
       compositionView.updateExistingPortfoliosList(existingPortfolios);
 
-      //hide cost basis window and display home
+      //hide cost basis window and display pick portfolio for composition view
       compositionView.addActionListener(this);
       compositionView.setLocation(displayComposition.getLocation());
       this.displayComposition.dispose();
@@ -276,6 +287,7 @@ public class GUIController implements IController, ActionListener {
     viewCompositionButton(actionMap);
     cancelFromComposition(actionMap);
     okFromDisplayStocks(actionMap);
+    uploadFromHomeButton(actionMap);
 
     return actionMap;
   }
@@ -395,6 +407,48 @@ public class GUIController implements IController, ActionListener {
     });
   }
 
+  private void uploadFromHomeButton(Map<String, Runnable> actionMap) {
+    actionMap.put("uploadButtonHome", () -> {
+
+      uploadFromFileGUIView = new UploadFromFileGUIView();
+
+      File fileUploaded = uploadFromFileGUIView.FilePopUp();
+
+      if(fileUploaded == null){
+        uploadFromFileGUIView.showError("File couldn't be uploaded");
+        return;
+      }
+
+      Path source = null;
+      try {
+        source = fileUploaded.getCanonicalFile().toPath();
+      } catch (IOException e) {
+        uploadFromFileGUIView.showError("File couldn't be uploaded");
+      }
+      String sourceFileName = fileUploaded.getName();
+
+      Path userDirectory = Path.of(new File("").getAbsolutePath());
+      String folderPath = userDirectory + File.separator + "PortFolioComposition" + File.separator + "FlexiblePortfolios" + File.separator+sourceFileName;
+      Path target = Path.of(folderPath);
+
+      File newFile = new File(folderPath);
+      if(newFile.exists()) {
+        uploadFromFileGUIView.showError("File name already exists");
+        return;
+      }
+
+      try {
+        Files.copy(source, target, COPY_ATTRIBUTES);
+      } catch (IOException e) {
+        uploadFromFileGUIView.showError("File couldn't be uploaded");
+      }
+      uploadFromFileGUIView.setPopUp();
+
+      uploadFromFileGUIView.addActionListener(this);
+      uploadFromFileGUIView.setLocation(home.getLocation());
+    });
+  }
+
   private String[] takeStockInput() {
     String tickerNameFromUser = buySellStock.getInput()[0];
     if(Objects.equals(tickerNameFromUser, "")) {
@@ -448,8 +502,8 @@ public class GUIController implements IController, ActionListener {
 
   private void disposeCreateWindowSetHome(HomeView home, CreateNewPortfolioView createNewPortfolioView, ActionListener listener) {
     home.addActionListener(listener);
-    home.setLocation((createNewPortfolioView).getLocation());
-    (createNewPortfolioView).dispose();
+    home.setLocation(createNewPortfolioView.getLocation());
+    createNewPortfolioView.dispose();
   }
 
   private void disposeHomeSetCreateFrame(CreateNewPortfolioView createFrame, HomeView home,
