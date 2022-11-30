@@ -217,7 +217,8 @@ public class User implements IUserInterface {
 
       }
     }
-    return costBasis;
+    return Math.round(costBasis *100d) / 100d;
+
   }
 
 
@@ -763,12 +764,12 @@ public class User implements IUserInterface {
 
     LocalDate nextInvestDate = strategyStart;
     LocalDate realEndDate = null;
-      int compare = LocalDate.now().compareTo(strategyEnd);
-      if (compare == 1) {
+    int compare = LocalDate.now().compareTo(strategyEnd);
+    if (compare == 1) {
         realEndDate = strategyEnd;
-      } else if (compare == -1 || compare == 0) {
+    } else if (compare == -1 || compare == 0) {
         realEndDate = LocalDate.now();
-      }
+    }
     IFlexiblePortfolio flp = this.flexiblePortfolios.get(portfolioIndex - 1);
     Double numSharesBought = 0.0;
 
@@ -785,7 +786,7 @@ public class User implements IUserInterface {
         }
         else if (investmentType.equals(InvestmentType.InvestByWeights)) {
           int numShares = (int) (moneyToInvest/priceOfSingleShare); //not allowing fractionalshares.
-          numSharesBought = Double.valueOf(numSharesBought);
+          numSharesBought = Double.valueOf(numShares);
         }
 
         Stock newStock = Stock.getBuilder().tickerName(stockName)
