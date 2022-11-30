@@ -131,6 +131,56 @@ public class UserTest {
 
   }
 
+  @Test
+  public void testDCA() {
+    List<String[]> stockList = new ArrayList<>();
+    String[] stock = new String[] {"AAPL", "15.0", "2022-11-17", "2.0", "150.72", "BUY"};
+    stockList.add(stock);
+    stock = new String[] {"MSFT", "20.0", "2022-11-22", "2.0", "245.03", "BUY"};
+    stockList.add(stock);
+    user.createNewPortfolio("DCATest1",stockList,PortfolioType.flexible);
+    int pfIndex = 0;
+    for (IFlexiblePortfolio flp:user.getFlexiblePortfoliosCreatedObjects()) {
+      if (flp.getNameOfPortFolio().equals("DCATest1")) {
+        pfIndex = user.getFlexiblePortfoliosCreatedObjects().indexOf(flp) + 1;
+      }
+    }
+    HashMap<String, Double> weights =  new HashMap<>();
+    weights.put("GOOG",50.0);
+    user.calculateTxns(LocalDate.parse("2022-11-01"), LocalDate.parse("2022-12-31"),
+            15, weights, 2000.0, 2.0, pfIndex,
+            InvestmentType.DCA);
+    user.acceptStrategyFromUser(pfIndex,2000.0,2.0, LocalDate.parse("2022-11-01"),
+            LocalDate.parse("2022-12-31"), weights, InvestmentType.DCA,
+            15, LocalDate.parse("2022-11-16"));
+
+    assertEquals("1002.03", user.calculateCostBasisOfPortfolio(pfIndex,
+            PortfolioType.flexible, LocalDate.parse("2022-11-01")).toString());
+
+    assertEquals("2004.02", user.calculateCostBasisOfPortfolio(pfIndex,
+            PortfolioType.flexible, LocalDate.parse("2022-11-16")).toString());
+
+    assertEquals("9169.42", user.calculateCostBasisOfPortfolio(pfIndex,
+            PortfolioType.flexible, LocalDate.parse("2022-11-30")).toString());
+
+    assertEquals("11171.42", user.calculateCostBasisOfPortfolio(pfIndex,
+            PortfolioType.flexible, LocalDate.parse("2022-12-01")).toString());
+
+    assertEquals("13173.42", user.calculateCostBasisOfPortfolio(pfIndex,
+            PortfolioType.flexible, LocalDate.parse("2022-12-16")).toString());
+    assertEquals("15175.42", user.calculateCostBasisOfPortfolio(pfIndex,
+            PortfolioType.flexible, LocalDate.parse("2022-12-31")).toString());
+
+    File file = new File("./resources/testPortfolio/FlexiblePortfolios/" +
+            "DCATest1.csv");
+    file.delete();
+
+    file = new File("./resources/testPortfolio/DCAInstructions/" +
+            "DCATest1");
+    file.delete();
+
+  }
+
 
 
 }

@@ -129,7 +129,7 @@ public class CommandController implements IController {
   private int showMenuOnView() {
     int userOption = 0;
     Boolean isOkay = false;
-    List<Integer> validMenuOptions = Arrays.asList(1, 2, 3, 4, 5, 6, 7,8,19);
+    List<Integer> validMenuOptions = Arrays.asList(1, 2, 3, 4, 5, 6, 7,8,9);
     do {
       try {
         this.view.displayMenu();
