@@ -797,19 +797,36 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public List<String> calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
+  public void calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
                                     Integer daysToInvest, HashMap<String,Double> weights,
-                                    double amount, Double commission, int portfolioIndex) {
-    IFlexiblePortfolio flp = this.flexiblePortfolios.get(portfolioIndex - 1);
-    List<String> txns = new ArrayList<>();
+                                    double amount, Double commission, int portfolioIndex,
+                                    InvestmentType investmentType) {
+
     LocalDate nextInvestDate = strategyStart.plusDays(daysToInvest);
-    while (nextInvestDate.isBefore(LocalDate.now()) || nextInvestDate.isEqual(LocalDate.now())) {
-      //invest as per weights
+    LocalDate realEndDate = null;
+    if (investmentType.equals(InvestmentType.InvestByWeights)) { //invest by weights
+      realEndDate = strategyEnd;
+    }
+    else if (investmentType.equals(InvestmentType.DCA)) { // invest by DCA
+      if (strategyEnd.equals(null)) { //if end date is not specified
+        realEndDate = LocalDate.now();
+      }
+    }
+    IFlexiblePortfolio flp = this.flexiblePortfolios.get(portfolioIndex - 1);
+    Double numSharesBought = 0.0;
+
+    while (nextInvestDate.isBefore(realEndDate) || nextInvestDate.isEqual(realEndDate)) {
       for (Map.Entry <String,Double> stockWeight : weights.entrySet()) {
         String stockName = stockWeight.getKey();
         Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
         Double priceOfSingleShare = this.getStockPriceFromDB(stockName,nextInvestDate);
-        Double numSharesBought = (moneyToInvest/priceOfSingleShare); //allowing fractional shares.
+        if (investmentType.equals(InvestmentType.DCA)) {
+          numSharesBought = (moneyToInvest/priceOfSingleShare); //allowing fractional shares.
+        }
+        else if (investmentType.equals(InvestmentType.InvestByWeights)) {
+          int numShares = (int) (moneyToInvest/priceOfSingleShare); //not allowing fractionalshares.
+          numSharesBought = Double.valueOf(numShares);
+        }
 
         Stock newStock = Stock.getBuilder().tickerName(stockName)
                 .numOfUnits(numSharesBought)
@@ -819,12 +836,84 @@ public class User implements IUserInterface {
                 .buyOrSell(Operation.BUY).build();
         flp.addOrSellStocks(newStock);
       }
-      txns.add(nextInvestDate.toString());
-      nextInvestDate = nextInvestDate.plusDays(daysToInvest);
+
+      if (investmentType.equals(InvestmentType.InvestByWeights)) {
+        daysToInvest = 1;
       }
-    return txns;
+      nextInvestDate = nextInvestDate.plusDays(daysToInvest);
+
+    }
+    List<String[]> dataToFile = flp.toListOfString();
+    this.savePortfolioToFile(dataToFile,flp.getNameOfPortFolio().strip()
+            .split(".csv")[0], PortfolioType.flexible);
+
     }
 
+  @Override
+  public void acceptStrategyFromUser(int portfolioIndex, Double amount, Double comm,
+                                     LocalDate startDate, LocalDate endDate,
+                                     HashMap<String,Double> weights,
+                                     InvestmentType investmentType) {
 
+    List<String[]> dataToWrite = this.getDataToWrite(amount, comm, startDate, endDate, weights);
+    this.saveInstrToFile(this.getPortfolioName(portfolioIndex,PortfolioType.flexible), dataToWrite,
+            investmentType);
   }
+
+  @Override
+  public void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
+                              InvestmentType investmentType)
+  {
+    File csvOutputFile = null;
+    if (investmentType.equals(InvestmentType.InvestByWeights)) {
+      csvOutputFile = new File(this.investmentInstrPath + File.separator
+              + portfolioName); //TODO: replace this when file writing is moved to controller
+    }
+    else if (investmentType.equals(InvestmentType.DCA)) {
+      csvOutputFile = new File(this.dcaInstrPath + File.separator
+              + portfolioName); //TODO: replace this when file writing is moved to controller
+    }
+
+    try {
+      PrintWriter pw = new PrintWriter(csvOutputFile);
+      dataToWrite.stream().map(this::convertToCSV).forEach(pw::println);
+      pw.close();
+    } catch (Exception e) {
+      System.out.print("Error creating a csv\n");
+    }
+  }
+
+
+  private List<String[]> getDataToWrite(Double amount, Double comm,
+                                        LocalDate startDate, LocalDate endDate,
+                                        HashMap<String,Double> weights) {
+    List<String[]> answer = new ArrayList<>();
+    String[] amt = new String[2];
+    amt[0] = "AMOUNT";
+    amt[1] = amount.toString();
+    answer.add(amt);
+    String[] startDt = new String[2];
+    startDt[0] = "START_DATE";
+    startDt[1] = startDate.toString();
+    answer.add(startDt);
+    String[] endDt = new String[2];
+    endDt[0] = "END_DATE";
+    endDt[1] =  endDate.toString();
+    answer.add(endDt);
+    String[] commission = new String[2];
+    commission[0] = "COMMISSION";
+    commission[1] = comm.toString();
+    answer.add(commission);
+
+    for (Map.Entry<String,Double> element : weights.entrySet()) {
+      String[] weight = new String[2];
+      weight[0] = element.getKey().toString();
+      weight[1] = element.getValue().toString();
+      answer.add(weight);
+    }
+    return answer;
+  }
+
+
+}
 
