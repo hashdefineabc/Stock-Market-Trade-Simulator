@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Objects;
 
 
-import javax.swing.*;
-
 import controller.commands.BuySell;
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
@@ -30,10 +28,10 @@ import view.CostBasisGUIView;
 import view.CreateNewPortfolioView;
 import view.DisplayStocks;
 import view.HomeView;
+import view.InvestByWeightView;
 import view.UploadFromFileGUIView;
 import view.ValueGUIView;
 
-import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 
 public class GUIController implements IController, ActionListener {
@@ -49,6 +47,7 @@ public class GUIController implements IController, ActionListener {
   private CompositionGUIView compositionView;
   private UploadFromFileGUIView uploadFromFileGUIView;
   private DisplayStocks displayComposition;
+  private InvestByWeightView investView;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -146,7 +145,7 @@ public class GUIController implements IController, ActionListener {
     actionMap.put("saveStock", () -> {
       String[] stockDetails = new String[6];
       stockDetails = this.takeStockInput();
-      if(stockDetails.equals(null)) {
+      if(stockDetails == null) {
         return;
       }
       stockDetails[5] = buySellStock.getBuyOrSell() ? Operation.BUY.toString() : Operation.SELL.toString();
@@ -288,8 +287,52 @@ public class GUIController implements IController, ActionListener {
     cancelFromComposition(actionMap);
     okFromDisplayStocks(actionMap);
     uploadFromHomeButton(actionMap);
+    investButtonHome(actionMap);
+//    addWeights(actionMap);
 
     return actionMap;
+  }
+
+//  private void addWeights(Map<String, Runnable> actionMap) {
+//    actionMap.put("addWeights", () -> {
+//      addWeights = new AddMoreWeights();
+//
+//
+//      //hide invest and display more weights frame
+//      addWeights.addActionListener(this);
+//      addWeights.setLocation(investView.getLocation());
+//      investView.dispose();
+//    });
+//  }
+
+//  private void addMoreWeights(Map<String, Runnable> actionMap) {
+//    actionMap.put("addWeights", () -> {
+//      addMoreWeights = new AddMoreWeights();
+//
+//
+//      //hide addWeights and display more weights frame
+//      addMoreWeights.addActionListener(this);
+//      addMoreWeights.setLocation(investView.getLocation());
+//      addMoreWeights.setLocation(addWeights.getLocation());
+//      addWeights.dispose();
+//    });
+//  }
+
+  private void investButtonHome(Map<String, Runnable> actionMap) {
+    actionMap.put("investButtonHome", () -> {
+      investView = new InvestByWeightView("Invest by weight");
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      investView.updateExistingPortfoliosList(existingPortfolios);
+
+      int portfolioIndex = investView.getSelectedPortfolioIndex();
+
+
+      //hide home and display invest
+      investView.addActionListener(this);
+      investView.setLocation(home.getLocation());
+      home.dispose();
+    });
   }
 
   private void viewCostBasisButton(Map<String, Runnable> actionMap) {
@@ -464,9 +507,23 @@ public class GUIController implements IController, ActionListener {
       buySellStock.setPopUp("Enter number of units");
       return null;
     }
+    try {
+      Double.parseDouble(buySellStock.getInput()[1]);
+    }
+    catch (NumberFormatException e) {
+      buySellStock.setPopUp("Please enter a valid number of units");
+      return null;
+    }
 
     if(Objects.equals(buySellStock.getInput()[3], "")) {
       buySellStock.setPopUp("Enter commission value");
+      return null;
+    }
+    try {
+      Double.parseDouble(buySellStock.getInput()[3]);
+    }
+    catch (NumberFormatException e) {
+      buySellStock.setPopUp("Please enter a valid commission value");
       return null;
     }
 
