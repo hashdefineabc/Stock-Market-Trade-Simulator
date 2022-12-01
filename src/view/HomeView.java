@@ -66,7 +66,7 @@ public class HomeView extends JFrame {
 
     //invest in a portfolio by specifying weights
     invest = new JButton("Invest by percentage");
-    invest.setActionCommand("invest");
+    invest.setActionCommand("investButtonHome");
     panel.add(invest);
 
     //set dollar cost averaging for a portfolio
