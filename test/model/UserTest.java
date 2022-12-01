@@ -77,6 +77,88 @@ public class UserTest {
   }
 
   @Test
+  public void testValueForInvest() {
+    List<String[]> stockList = new ArrayList<>();
+    String[] stock = new String[] {"MSFT", "10.0", "2022-11-17", "2.0", "241.68", "BUY"};
+    stockList.add(stock);
+    user.createNewPortfolio("InvestValue",stockList,PortfolioType.flexible);
+    int pfIndex = 0;
+    for (IFlexiblePortfolio flp:user.getFlexiblePortfoliosCreatedObjects()) {
+      if (flp.getNameOfPortFolio().equals("InvestValue")) {
+        pfIndex = user.getFlexiblePortfoliosCreatedObjects().indexOf(flp) + 1;
+      }
+    }
+    HashMap<String, Double> weights =  new HashMap<>();
+    weights.put("GOOG",100.0);
+    user.calculateTxns(LocalDate.parse("2022-10-17"), LocalDate.parse("2022-10-17"),
+            0, weights, 2000.0, 2.0, pfIndex,
+            InvestmentType.InvestByWeights);
+    user.acceptStrategyFromUser(pfIndex,2000.0,2.0, LocalDate.parse("2022-10-17"),
+            LocalDate.parse("2022-10-17"), weights, InvestmentType.InvestByWeights,
+            0, LocalDate.parse("2022-10-17"));
+
+    //user.calculateValueOfPortfolio(pfIndex,LocalDate.parse("2022-10-01"),PortfolioType.flexible);
+    assertEquals("0.0", user.calculateValueOfPortfolio(pfIndex,
+            LocalDate.parse("2022-10-01"),PortfolioType.flexible).toString());
+
+    assertEquals("1914.82", user.calculateValueOfPortfolio(pfIndex,
+            LocalDate.parse("2022-10-17"),PortfolioType.flexible).toString());
+
+    assertEquals("4288.30", user.calculateValueOfPortfolio(pfIndex,
+            LocalDate.parse("2022-11-17"),PortfolioType.flexible).toString());
+
+    File file = new File("./resources/testPortfolio/FlexiblePortfolios/" +
+            "InvestValue.csv");
+    file.delete();
+
+    file = new File("./resources/testPortfolio/InvestmentInstructions/" +
+            "InvestValue");
+    file.delete();
+  }
+
+  @Test
+  public void testValueForDCA() {
+    List<String[]> stockList = new ArrayList<>();
+    String[] stock = new String[] {"MSFT", "10.0", "2022-11-17", "2.0", "241.68", "BUY"};
+    stockList.add(stock);
+    user.createNewPortfolio("InvestValue",stockList,PortfolioType.flexible);
+    int pfIndex = 0;
+    for (IFlexiblePortfolio flp:user.getFlexiblePortfoliosCreatedObjects()) {
+      if (flp.getNameOfPortFolio().equals("InvestValue")) {
+        pfIndex = user.getFlexiblePortfoliosCreatedObjects().indexOf(flp) + 1;
+      }
+    }
+    HashMap<String, Double> weights =  new HashMap<>();
+    weights.put("GOOG",100.0);
+    user.calculateTxns(LocalDate.parse("2022-10-17"), LocalDate.parse("2022-10-17"),
+            0, weights, 2000.0, 2.0, pfIndex,
+            InvestmentType.DCA);
+    user.acceptStrategyFromUser(pfIndex,2000.0,2.0, LocalDate.parse("2022-10-17"),
+            LocalDate.parse("2022-10-17"), weights, InvestmentType.DCA,
+            0, LocalDate.parse("2022-10-17"));
+
+    //user.calculateValueOfPortfolio(pfIndex,LocalDate.parse("2022-10-01"),PortfolioType.flexible);
+    assertEquals("0.0", user.calculateValueOfPortfolio(pfIndex,
+            LocalDate.parse("2022-10-01"),PortfolioType.flexible).toString());
+
+    assertEquals("1914.82", user.calculateValueOfPortfolio(pfIndex,
+            LocalDate.parse("2022-10-17"),PortfolioType.flexible).toString());
+
+    assertEquals("4288.30", user.calculateValueOfPortfolio(pfIndex,
+            LocalDate.parse("2022-11-17"),PortfolioType.flexible).toString());
+
+    File file = new File("./resources/testPortfolio/FlexiblePortfolios/" +
+            "InvestValue.csv");
+    file.delete();
+
+    file = new File("./resources/testPortfolio/DCAInstructions/" +
+            "InvestValue");
+    file.delete();
+  }
+
+
+
+  @Test
   public void testCostBasisForBeforeCreation_InvestByWeights() {
     assertEquals("0.0",user.calculateCostBasisOfPortfolio(1,
             PortfolioType.flexible,
@@ -117,6 +199,15 @@ public class UserTest {
     user.acceptStrategyFromUser(pfIndex,2000.0,2.0, LocalDate.parse("2022-10-17"),
             LocalDate.parse("2022-10-17"), weights, InvestmentType.InvestByWeights,
             0, LocalDate.parse("2022-10-17"));
+
+    assertEquals("0.0", user.calculateCostBasisOfPortfolio(pfIndex,
+            PortfolioType.flexible, LocalDate.parse("2022-10-01")).toString());
+
+    assertEquals("1916.82", user.calculateCostBasisOfPortfolio(pfIndex,
+            PortfolioType.flexible, LocalDate.parse("2022-10-17")).toString());
+
+    assertEquals("4335.62", user.calculateCostBasisOfPortfolio(pfIndex,
+            PortfolioType.flexible, LocalDate.parse("2022-11-17")).toString());
 
     assertEquals("4335.62", user.calculateCostBasisOfPortfolio(pfIndex,
             PortfolioType.flexible, LocalDate.parse("2022-11-30")).toString());
