@@ -680,7 +680,15 @@ public class User implements IUserInterface {
       Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
       DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
       LocalDate startDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
-      LocalDate endDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      LocalDate endDate = null;
+      String endDateS  = br.readLine();
+      if (endDateS.equals("END_DATE,")) {
+        endDate = null;
+      }
+      else {
+        endDate = LocalDate.parse(endDateS.split(splitBy)[1],dateFormat);
+      }
+
       Integer daysToInvest = Integer.parseInt(br.readLine().split(splitBy)[1]);
       Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
       LocalDate lastTxnDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
@@ -764,12 +772,17 @@ public class User implements IUserInterface {
 
     LocalDate nextInvestDate = strategyStart;
     LocalDate realEndDate = null;
-    int compare = LocalDate.now().compareTo(strategyEnd);
-    if (compare > 0) {
+    if (strategyEnd == null) {
+      realEndDate = LocalDate.now();
+    } else {
+      int compare = LocalDate.now().compareTo(strategyEnd);
+      if (compare > 0) {
         realEndDate = strategyEnd;
-    } else if (compare < 0 || compare == 0) {
+      } else if (compare < 0 || compare == 0) {
         realEndDate = LocalDate.now();
+      }
     }
+
     IFlexiblePortfolio flp = this.flexiblePortfolios.get(portfolioIndex - 1);
     Double numSharesBought = 0.0;
 
@@ -897,7 +910,12 @@ public class User implements IUserInterface {
     answer.add(startDt);
     String[] endDt = new String[2];
     endDt[0] = "END_DATE";
-    endDt[1] =  endDate.toString();
+    if (endDate == null) {
+      endDt[1] = "";
+    }
+    else {
+      endDt[1] =  endDate.toString();
+    }
     answer.add(endDt);
     String[] days = new String[2];
     days[0] = "DAYS_TO_INVEST";
