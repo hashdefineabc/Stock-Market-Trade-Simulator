@@ -17,6 +17,7 @@ public class HomeView extends JFrame {
   private JButton value;
   private JButton composition;
   private JButton uploadPortfolio;
+  private JButton displayChart;
 
   public HomeView(String s) {
     super(s);
@@ -74,12 +75,21 @@ public class HomeView extends JFrame {
     dca.setActionCommand("dcaButtonHomeMain");
     panel.add(dca);
 
+    //display chart
+    displayChart = new JButton("Display performance chart");
+    displayChart.setActionCommand("displayChartHome");
+    panel.add(displayChart);
+
+
     // Exit
+    JPanel exitbuttonPanel = new JPanel();
+
     exit = new JButton("Exit");
     exit.setActionCommand("exit");
-    panel.add(exit);
+    exitbuttonPanel.add(exit);
 
     this.getContentPane().add(panel);
+    this.add(exitbuttonPanel, BorderLayout.PAGE_END);
     this.setLocation(100, 100);
     this.setVisible(true);
     this.pack();
@@ -95,5 +105,6 @@ public class HomeView extends JFrame {
     value.addActionListener(listener);
     composition.addActionListener(listener);
     uploadPortfolio.addActionListener(listener);
+    displayChart.addActionListener(listener);
   }
 }

@@ -30,6 +30,7 @@ import view.CostBasisGUIView;
 import view.CreateNewPortfolioView;
 import view.DCAFromHome;
 import view.DCAGuiView;
+import view.DisplayChartGUIView;
 import view.DisplayStocks;
 import view.HomeView;
 import view.InvestByWeightView;
@@ -54,6 +55,7 @@ public class GUIController implements IController, ActionListener {
   private InvestByWeightView investView;
   private DCAGuiView dcaView;
   private DCAFromHome dcaViewHome;
+  private DisplayChartGUIView displayChartHome;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -350,6 +352,16 @@ public class GUIController implements IController, ActionListener {
       this.valueView.dispose();
     });
   }
+  private void backFromDisplayChart(Map<String, Runnable> actionMap) {
+    actionMap.put("backFromDisplayChart", () -> {
+      home = new HomeView("Home");
+
+      //hide cost basis window and display home
+      home.addActionListener(this);
+      home.setLocation(displayChartHome.getLocation());
+      this.displayChartHome.dispose();
+    });
+  }
 
   private void cancelFromComposition(Map<String, Runnable> actionMap) {
     actionMap.put("cancelFromComposition", () -> {
@@ -406,6 +418,8 @@ public class GUIController implements IController, ActionListener {
     doneFromDCA(actionMap);
     cancelFromInvestWeights(actionMap);
     cancelFromDCA(actionMap);
+    displayChartHome(actionMap);
+    backFromDisplayChart(actionMap);
 
     return actionMap;
   }
@@ -417,6 +431,20 @@ public class GUIController implements IController, ActionListener {
       //hide home and display dca
       dcaViewHome.addActionListener(this);
       dcaViewHome.setLocation(home.getLocation());
+      home.dispose();
+    });
+  }
+
+  private void displayChartHome(Map<String, Runnable> actionMap) {
+    actionMap.put("displayChartHome", () -> {
+      displayChartHome = new DisplayChartGUIView();
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      displayChartHome.updateExistingPortfoliosList(existingPortfolios);
+      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex()+1;
+
+      //hide home and display chart
+      displayChartHome.addActionListener(this);
+      displayChartHome.setLocation(home.getLocation());
       home.dispose();
     });
   }
