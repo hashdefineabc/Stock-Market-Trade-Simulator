@@ -197,7 +197,7 @@ public class ControllerImplDelegateTest {
      * @return if the sum of all weights is valid or not.
      */
     @Override
-    public Boolean validateWeightsForInvestment(Double[] weights) {
+    public Boolean validateWeightsForInvestment(double[] weights) {
       return null;
     }
 

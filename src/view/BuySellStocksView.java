@@ -89,37 +89,11 @@ public class BuySellStocksView extends JFrame {
             , "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27"
             , "28", "29", "30", "31"};
 
-    ActionListener monthListener = new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        int numMonth = monthComboBox.getSelectedIndex();
-        if(numMonth == 1 || numMonth == 3 || numMonth == 5 || numMonth == 7 || numMonth == 8 || numMonth==10 || numMonth==12) {
-          String[] dates = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"
-                  , "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27"
-                  , "28", "29", "30", "31"};
-          dateComboBox = new JComboBox(dates);
-        }
-        else if(numMonth == 4 || numMonth == 6 || numMonth == 9 || numMonth == 11 ) {
-          String[] dates = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"
-                  , "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27"
-                  , "28", "29", "30"};
-          dateComboBox = new JComboBox(dates);
-        }
-        else {
-          String[] dates = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"
-                  , "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27"
-                  , "28"};
-          dateComboBox = new JComboBox(dates);
-        }
-      }
-    };
 
     //handle month
     String[] months = {"01", "02", "03", "04", "05", "06", "07", "08",
             "09", "10", "11", "12"};
     monthComboBox = new JComboBox(months);
-
-    monthComboBox.addActionListener(monthListener);
 
     //handle date
     dateComboBox = new JComboBox(dates);

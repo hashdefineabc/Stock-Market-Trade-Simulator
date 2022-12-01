@@ -258,7 +258,7 @@ public interface IUserInterface {
    * @return if the sum of all weights is valid or not.
    */
 
-  Boolean validateWeightsForInvestment(Double[] weights);
+  Boolean validateWeightsForInvestment(double[] weights);
 
   boolean isDoubleValid(String s);
 }
