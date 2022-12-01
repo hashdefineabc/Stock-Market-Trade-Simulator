@@ -28,6 +28,7 @@ import view.BuySellStocksView;
 import view.CompositionGUIView;
 import view.CostBasisGUIView;
 import view.CreateNewPortfolioView;
+import view.DCAFromHome;
 import view.DCAGuiView;
 import view.DisplayStocks;
 import view.HomeView;
@@ -52,6 +53,7 @@ public class GUIController implements IController, ActionListener {
   private DisplayStocks displayComposition;
   private InvestByWeightView investView;
   private DCAGuiView dcaView;
+  private DCAFromHome dcaViewHome;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -70,7 +72,14 @@ public class GUIController implements IController, ActionListener {
     stockList = new ArrayList<>();
     actionMap.put("create", () -> {
       createNewPortfolioView = new CreateNewPortfolioView("create portfolio");
-      disposeHomeSetCreateFrame(createNewPortfolioView, home, this);
+      createNewPortfolioView.addActionListener(this);
+      createNewPortfolioView.setLocation(home.getLocation());
+      home.dispose();
+      try {
+        dcaViewHome.dispose();
+      } catch (Exception e) {
+
+      }
     });
 
     actionMap.put("createPortfolio", () -> {
@@ -99,7 +108,9 @@ public class GUIController implements IController, ActionListener {
     });
     actionMap.put("homeFromCreatePortfolio", () -> {
       home = new HomeView("Home");
-      disposeCreateWindowSetHome(home, createNewPortfolioView, this);
+      home.addActionListener(this);
+      home.setLocation(createNewPortfolioView.getLocation());
+      createNewPortfolioView.dispose();
     });
 
   }
@@ -315,6 +326,17 @@ public class GUIController implements IController, ActionListener {
       home.addActionListener(this);
       home.setLocation(dcaView.getLocation());
       this.dcaView.dispose();
+      this.dcaViewHome.dispose();
+    });
+  }
+  private void cancelFromDCAHome(Map<String, Runnable> actionMap) {
+    actionMap.put("cancelFromDCAHome", () -> {
+      home = new HomeView("Home");
+
+      //hide dca home and display home
+      home.addActionListener(this);
+      home.setLocation(dcaViewHome.getLocation());
+      this.dcaViewHome.dispose();
     });
   }
 
@@ -378,12 +400,25 @@ public class GUIController implements IController, ActionListener {
     uploadFromHomeButton(actionMap);
     investButtonHome(actionMap);
     dcaButtonHome(actionMap);
+    dcaButtonHomeMain(actionMap);
+    cancelFromDCAHome(actionMap);
     doneFromInvestWeights(actionMap);
     doneFromDCA(actionMap);
     cancelFromInvestWeights(actionMap);
     cancelFromDCA(actionMap);
 
     return actionMap;
+  }
+
+  private void dcaButtonHomeMain(Map<String, Runnable> actionMap) {
+    actionMap.put("dcaButtonHomeMain", () -> {
+      dcaViewHome = new DCAFromHome();
+
+      //hide home and display dca
+      dcaViewHome.addActionListener(this);
+      dcaViewHome.setLocation(home.getLocation());
+      home.dispose();
+    });
   }
 
   private void investButtonHome(Map<String, Runnable> actionMap) {
@@ -773,12 +808,6 @@ public class GUIController implements IController, ActionListener {
     s[5] = String.valueOf(Operation.BUY); //indicates shares are bought
 
     return s;
-  }
-
-  private void disposeCreateWindowSetHome(HomeView home, CreateNewPortfolioView createNewPortfolioView, ActionListener listener) {
-    home.addActionListener(listener);
-    home.setLocation(createNewPortfolioView.getLocation());
-    createNewPortfolioView.dispose();
   }
 
   private void disposeHomeSetCreateFrame(CreateNewPortfolioView createFrame, HomeView home,
