@@ -18,6 +18,7 @@ import java.util.Objects;
 import controller.commands.BuySell;
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
+import model.InvestmentType;
 import model.IstockModel;
 import model.Operation;
 import model.PortfolioType;
@@ -207,6 +208,35 @@ public class GUIController implements IController, ActionListener {
     });
   }
 
+  private void doneFromInvestWeights(Map<String, Runnable> actionMap) {
+    BuySell buySellCmd = new BuySell(user);
+    actionMap.put("doneFromInvestWeights", () -> {
+      String[] investInput = new String[13];
+      HashMap<String,Double> weights = new HashMap<>();
+      investInput = this.takeInvestInput(weights);
+      if(investInput == null) {
+        return;
+      }
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      investView.updateExistingPortfoliosList(existingPortfolios);
+
+      int portfolioIndex = investView.getSelectedPortfolioIndex();
+
+      Double amount = Double.valueOf(investInput[0]);
+      Double commissionValue = Double.valueOf(investInput[1]);
+      LocalDate dateToBuy = LocalDate.parse(investInput[2]);
+
+      LocalDate lastTxnDate =  user.calculateTxns(dateToBuy,dateToBuy,0,
+              weights,amount,commissionValue,portfolioIndex+1, InvestmentType.InvestByWeights);
+
+      user.acceptStrategyFromUser(portfolioIndex,amount,commissionValue,dateToBuy,dateToBuy,weights,
+              InvestmentType.InvestByWeights,0,lastTxnDate);
+      investView.setSuccessMsg("Instructions saved for this Portfolio! Money will be invested as per "
+              + "them");
+    });
+  }
+
   private void cancelFromBuy(Map<String, Runnable> actionMap) {
     actionMap.put("cancelFromBuy", () -> {
       home = new HomeView("Home");
@@ -226,6 +256,17 @@ public class GUIController implements IController, ActionListener {
       home.addActionListener(this);
       home.setLocation(costBasisView.getLocation());
       this.costBasisView.dispose();
+    });
+  }
+
+  private void cancelFromInvestWeights(Map<String, Runnable> actionMap) {
+    actionMap.put("cancelFromInvestWeights", () -> {
+      home = new HomeView("Home");
+
+      //hide invest weights and display home
+      home.addActionListener(this);
+      home.setLocation(investView.getLocation());
+      this.investView.dispose();
     });
   }
 
@@ -288,35 +329,11 @@ public class GUIController implements IController, ActionListener {
     okFromDisplayStocks(actionMap);
     uploadFromHomeButton(actionMap);
     investButtonHome(actionMap);
-//    addWeights(actionMap);
+    doneFromInvestWeights(actionMap);
+    cancelFromInvestWeights(actionMap);
 
     return actionMap;
   }
-
-//  private void addWeights(Map<String, Runnable> actionMap) {
-//    actionMap.put("addWeights", () -> {
-//      addWeights = new AddMoreWeights();
-//
-//
-//      //hide invest and display more weights frame
-//      addWeights.addActionListener(this);
-//      addWeights.setLocation(investView.getLocation());
-//      investView.dispose();
-//    });
-//  }
-
-//  private void addMoreWeights(Map<String, Runnable> actionMap) {
-//    actionMap.put("addWeights", () -> {
-//      addMoreWeights = new AddMoreWeights();
-//
-//
-//      //hide addWeights and display more weights frame
-//      addMoreWeights.addActionListener(this);
-//      addMoreWeights.setLocation(investView.getLocation());
-//      addMoreWeights.setLocation(addWeights.getLocation());
-//      addWeights.dispose();
-//    });
-//  }
 
   private void investButtonHome(Map<String, Runnable> actionMap) {
     actionMap.put("investButtonHome", () -> {
@@ -490,6 +507,69 @@ public class GUIController implements IController, ActionListener {
       uploadFromFileGUIView.addActionListener(this);
       uploadFromFileGUIView.setLocation(home.getLocation());
     });
+  }
+
+  private String[] takeInvestInput(HashMap<String, Double> tickerWeights) {
+    String[] input = new String[13];
+    input = investView.getInput();
+    String amountFromUser = input[0];
+    if(Objects.equals(amountFromUser, "")) {
+      investView.setWarning("Enter amount");
+      return null;
+    }
+    try {
+      Double.parseDouble(amountFromUser);
+    }
+    catch (NumberFormatException e) {
+      investView.setWarning("Please enter a valid amount");
+      return null;
+    }
+
+    String commissionFromUser = input[1];
+    if(Objects.equals(commissionFromUser, "")) {
+      investView.setWarning("Enter commission");
+      return null;
+    }
+    try {
+      Double.parseDouble(commissionFromUser);
+    }
+    catch (NumberFormatException e) {
+      investView.setWarning("Please enter a valid commission value");
+      return null;
+    }
+
+    Double[] weights = new Double[5];
+    int j=0;
+
+    String tickerName = null;
+    Double weight = null;
+    int flag = 0;
+
+    for(int i=3; i<13; i++) {
+      if(i % 2 != 0) { //validate ticker Name
+        if(Objects.equals(input[i], ""))
+          break;
+        if(!user.isTickerValid(input[i])) {
+          investView.setWarning("Ticker name invalid");
+          return null;
+        }
+        tickerName = input[i];
+        flag = 0;
+      }
+      else if(i%2 == 0 ) { //validate weights
+        if(!user.isDoubleValid(input[i])) {
+          investView.setWarning("Enter a valid weight");
+          return null;
+        }
+        weights[j++] = Double.valueOf(input[i]);
+        weight = Double.valueOf(input[i]);
+        flag = 1;
+      }
+      if(flag == 1)
+        tickerWeights.put(tickerName, weight);
+    }
+
+    return input;
   }
 
   private String[] takeStockInput() {

@@ -189,6 +189,22 @@ public class ControllerImplDelegateTest {
                                 InvestmentType investmentType) {
 
     }
+
+    /**
+     * Check if the weightage for investment adds up to 100%.
+     *
+     * @param weights = weightages for different stocks in the investment strategy.
+     * @return if the sum of all weights is valid or not.
+     */
+    @Override
+    public Boolean validateWeightsForInvestment(Double[] weights) {
+      return null;
+    }
+
+    @Override
+    public boolean isDoubleValid(String s) {
+      return false;
+    }
   }
 
   @Test

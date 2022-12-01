@@ -260,4 +260,5 @@ public interface IUserInterface {
 
   Boolean validateWeightsForInvestment(Double[] weights);
 
+  boolean isDoubleValid(String s);
 }
