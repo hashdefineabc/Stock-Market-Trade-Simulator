@@ -257,7 +257,13 @@ public class GUIController implements IController, ActionListener {
       Double amount = Double.valueOf(dcaInput[0]);
       Double commissionValue = Double.valueOf(dcaInput[1]);
       LocalDate strategyStart = LocalDate.parse(dcaInput[2]);
-      LocalDate strategyEnd = LocalDate.parse(dcaInput[3]);
+      LocalDate strategyEnd;
+      if (dcaInput[3] == null) {
+        strategyEnd = null;
+      }
+      else {
+        strategyEnd = LocalDate.parse(dcaInput[3]);
+      }
       Integer daysToInvest = Integer.valueOf(dcaInput[4]);
 
       LocalDate lastTxnDate = user.calculateTxns(strategyStart,strategyEnd,daysToInvest,weights,

@@ -31,6 +31,7 @@ public class DCAGuiView extends JFrame {
   private JComboBox endYearComboBox;
   private JTextField frequencyTextField;
   private JCheckBox infiniteDate;
+  private Boolean infiniteDateEnabled = false;
   TickerWeightPanel tw1;
   TickerWeightPanel tw2;
   TickerWeightPanel tw3;
@@ -137,9 +138,32 @@ public class DCAGuiView extends JFrame {
       endYears[k] = Integer.toString(i);
       k = k+1;
     }
+
+    //infinite date checkbox
+
+    infiniteDate = new JCheckBox("Infinite Date / ", false);
+    infiniteDate.addItemListener(new ItemListener() {
+      public void itemStateChanged(ItemEvent e) {
+        e.getStateChange();
+        if(e.getStateChange()==1) { //checked
+          endMonthComboBox.setEnabled(false);
+          endDateComboBox.setEnabled(false);
+          endYearComboBox.setEnabled(false);
+          infiniteDateEnabled = true;
+        }
+        else {
+          endMonthComboBox.setEnabled(true);
+          endDateComboBox.setEnabled(true);
+          endYearComboBox.setEnabled(true);
+          infiniteDateEnabled = false;
+        }
+      }
+    });
+
     endYearComboBox = new JComboBox(endYears);
 
     endDatePanel.add(endDateOfTransactionLabel);
+    endDatePanel.add(infiniteDate);
     endDatePanel.add(endMonthLabel);
     endDatePanel.add(endMonthComboBox);
     endDatePanel.add(endDateLabel);
@@ -147,14 +171,6 @@ public class DCAGuiView extends JFrame {
     endDatePanel.add(endYearLabel);
     endDatePanel.add(endYearComboBox);
 
-    infiniteDate = new JCheckBox("Infinite Date", false);
-    final JLabel label = new JLabel();
-    infiniteDate.addItemListener(new ItemListener() {
-      public void itemStateChanged(ItemEvent e) {
-        label.setText("Java Checkbox: "
-                + (e.getStateChange()==1?"checked":"unchecked"));
-      }
-    });
 
     // frequency panel
 
@@ -240,8 +256,9 @@ public class DCAGuiView extends JFrame {
             endMonthComboBox.getSelectedItem().toString() + "-"+
             endDateComboBox.getSelectedItem().toString();
 
-
-
+    if(infiniteDateEnabled == true) {
+      endDate = null;
+    }
 
     input[3] = endDate;
     input[4] = frequencyTextField.getText();
