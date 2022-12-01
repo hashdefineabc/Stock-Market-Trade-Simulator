@@ -18,6 +18,15 @@ public interface IFlexiblePortfolio extends IFixedPortfolio {
    */
   void addOrSellStocks(IstockModel stockDetails);
 
+  /**
+   * Used to calculate how much money will be invested in a portfolio at a future date as part of
+   * the investment strategy.
+   * @param costBasisDate = date at which the cost basis is to be calculated.
+   * @param investmentType = investment strategies that are applied to the portfolio.
+   * @param investInstrFile = file which stores the investment strategies for the portfolio.
+   * @return calculated cost basis.
+   */
+
   Double calculateCostBasisForFuture(LocalDate costBasisDate, InvestmentType investmentType,
                                      String investInstrFile);
 
