@@ -765,9 +765,9 @@ public class User implements IUserInterface {
     LocalDate nextInvestDate = strategyStart;
     LocalDate realEndDate = null;
     int compare = LocalDate.now().compareTo(strategyEnd);
-    if (compare == 1) {
+    if (compare > 0) {
         realEndDate = strategyEnd;
-    } else if (compare == -1 || compare == 0) {
+    } else if (compare < 0 || compare == 0) {
         realEndDate = LocalDate.now();
     }
     IFlexiblePortfolio flp = this.flexiblePortfolios.get(portfolioIndex - 1);
@@ -779,6 +779,13 @@ public class User implements IUserInterface {
         String stockName = stockWeight.getKey();
         Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
         Double priceOfSingleShare = this.getStockPriceFromDB(stockName,nextInvestDate);
+        while (priceOfSingleShare == 0.0) {
+          // Market was closed on transactionDate, so considering price of next date."
+          nextInvestDate = nextInvestDate.plusDays(1);
+          priceOfSingleShare = this.getStockPriceFromDB(stockName, nextInvestDate);
+        }
+
+
         if (investmentType.equals(InvestmentType.DCA)) {
           //numSharesBought = (moneyToInvest/priceOfSingleShare); //allowing fractional shares.
           numSharesBought = Math.round(Double.valueOf( (moneyToInvest/priceOfSingleShare))

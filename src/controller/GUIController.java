@@ -230,7 +230,7 @@ public class GUIController implements IController, ActionListener {
       LocalDate dateToBuy = LocalDate.parse(investInput[2]);
 
       LocalDate lastTxnDate =  user.calculateTxns(dateToBuy,dateToBuy,0,
-              weights,amount,commissionValue,portfolioIndex+1, InvestmentType.InvestByWeights);
+              weights,amount,commissionValue,portfolioIndex, InvestmentType.InvestByWeights);
 
       user.acceptStrategyFromUser(portfolioIndex,amount,commissionValue,dateToBuy,dateToBuy,weights,
               InvestmentType.InvestByWeights,0,lastTxnDate);
