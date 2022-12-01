@@ -186,24 +186,77 @@ public interface IUserInterface {
    */
   String getPortfolioName(int portfolioIndex, PortfolioType portfolioType);
 
+  /**
+   * Updates the Flexible portfolios as per the investment strategies decided for them
+   * @param investmentType = Type of investment strategy for a portfolio, can be investing by
+   *                       weights or DCA.
+   */
   void updateFlexiblePortFolios(InvestmentType investmentType);
 
+  /**
+   * Checks if the num of shares bought/sold for a ticker are whole numbers and non-negative.
+   * @param numUnits = the num of shares
+   * @return if the num of units are valid.
+   */
   boolean validateNumUnits(String numUnits);
 
+  /**
+   * Check if the commission value is non-negative.
+   * @param commVal = commission value as entered by the user.
+   * @return if the commission is valid or not.
+   */
   boolean validateCommissionValue(String commVal);
+
+  /**
+   * This function will calculate all the txns that must be done as per an investment strategy.
+   * @param strategyStart = start Date of the strategy.
+   * @param strategyEnd = end Date of the strategy.
+   * @param daysToInvest = daysToInvest periodically.
+   * @param weights = weightage to distribute the amount among the stocks.
+   * @param amount = total amount to invest.
+   * @param commission = commission that will be charged for the txns.
+   * @param portfolioIndex = portfolio on which the strategy would be applied.
+   * @param investmentType = Investment by weight or DCA.
+   * @return the last txn date.
+   */
 
   LocalDate calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
                           Integer daysToInvest, HashMap<String,Double> weights, double amount,
                           Double commission, int portfolioIndex, InvestmentType investmentType);
+
+  /**
+   * Accept the information from the user for the investment strategy.
+   * @param portfolioIndex =portfolio on which the strategy would be applied.
+   * @param amount = total amount to invest.
+   * @param comm = commission that will be charged for the txns.
+   * @param startDate = start Date of the strategy.
+   * @param endDate = end Date of the strategy.
+   * @param weights = weightage to distribute the amount among the stocks.
+   * @param investmentType = Investment by weight or DCA.
+   * @param daysToInvest = daysToInvest periodically.
+   * @param lastTxnDate = last date when the investment was made.
+   */
 
   void acceptStrategyFromUser(int portfolioIndex, Double amount, Double comm,LocalDate startDate,
                               LocalDate endDate, HashMap<String,Double> weights,
                               InvestmentType investmentType, Integer daysToInvest,
                               LocalDate lastTxnDate);
 
+  /**
+   * Saving the investment strategy to file for future use.
+   * @param portfolioName = portfolio on which the strategy would be applied.
+   * @param dataToWrite = the strategy details.
+   * @param investmentType = Investment by weight or DCA.
+   */
 
   void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
                        InvestmentType investmentType);
+
+  /**
+   * Check if the weightage for investment adds up to 100%.
+   * @param weights = weightages for different stocks in the investment strategy.
+   * @return if the sum of all weights is valid or not.
+   */
 
   Boolean validateWeightsForInvestment(Double[] weights);
 
