@@ -3,6 +3,8 @@ package view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.*;
@@ -28,6 +30,7 @@ public class DCAGuiView extends JFrame {
   private JComboBox endDateComboBox;
   private JComboBox endYearComboBox;
   private JTextField frequencyTextField;
+  private JCheckBox infiniteDate;
   TickerWeightPanel tw1;
   TickerWeightPanel tw2;
   TickerWeightPanel tw3;
@@ -144,6 +147,15 @@ public class DCAGuiView extends JFrame {
     endDatePanel.add(endYearLabel);
     endDatePanel.add(endYearComboBox);
 
+    infiniteDate = new JCheckBox("Infinite Date", false);
+    final JLabel label = new JLabel();
+    infiniteDate.addItemListener(new ItemListener() {
+      public void itemStateChanged(ItemEvent e) {
+        label.setText("Java Checkbox: "
+                + (e.getStateChange()==1?"checked":"unchecked"));
+      }
+    });
+
     // frequency panel
 
     JPanel frequencyPanel = new JPanel();
@@ -228,6 +240,9 @@ public class DCAGuiView extends JFrame {
             endMonthComboBox.getSelectedItem().toString() + "-"+
             endDateComboBox.getSelectedItem().toString();
 
+
+
+
     input[3] = endDate;
     input[4] = frequencyTextField.getText();
     input[5] = tw1.getTickerNameTextField();
@@ -254,5 +269,16 @@ public class DCAGuiView extends JFrame {
 
   public void setSuccessMsg(String s) {
     JOptionPane.showMessageDialog(DCAGuiView.this, s, "Success", JOptionPane.INFORMATION_MESSAGE);
+  }
+
+  public void clear() {
+    amountTextField.setText("");
+    commissionTextField.setText("");
+    frequencyTextField.setText("");
+    tw1.clear();
+    tw2.clear();
+    tw3.clear();
+    tw4.clear();
+    tw5.clear();
   }
 }

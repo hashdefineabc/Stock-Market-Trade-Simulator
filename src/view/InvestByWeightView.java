@@ -194,6 +194,16 @@ public class InvestByWeightView extends JFrame {
     return input;
   }
 
+  public void clear() {
+    amountTextField.setText("");
+    commissionTextField.setText("");
+    tw1.clear();
+    tw2.clear();
+    tw3.clear();
+    tw4.clear();
+    tw5.clear();
+  }
+
   public void setWarning(String message) {
     JOptionPane.showMessageDialog(InvestByWeightView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
   }

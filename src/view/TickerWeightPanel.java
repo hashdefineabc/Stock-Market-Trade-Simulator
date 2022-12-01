@@ -49,4 +49,9 @@ public class TickerWeightPanel extends JPanel {
   public String getWeightTextField() {
     return weightTextField.getText();
   }
+
+  public void clear() {
+    tickerNameTextField.setText("");
+    weightTextField.setText("");
+  }
 }

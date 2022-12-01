@@ -225,7 +225,6 @@ public class GUIController implements IController, ActionListener {
 
       int portfolioIndex = investView.getSelectedPortfolioIndex() + 1;
 
-
       Double amount = Double.valueOf(investInput[0]);
       Double commissionValue = Double.valueOf(investInput[1]);
       LocalDate dateToBuy = LocalDate.parse(investInput[2]);
@@ -237,6 +236,7 @@ public class GUIController implements IController, ActionListener {
               InvestmentType.InvestByWeights,0,lastTxnDate);
       investView.setSuccessMsg("Instructions saved for this Portfolio! Money will be invested as per "
               + "them");
+      investView.clear();
     });
   }
 
@@ -266,6 +266,7 @@ public class GUIController implements IController, ActionListener {
               InvestmentType.DCA, daysToInvest, lastTxnDate);
       dcaView.setSuccessMsg("Instructions saved for this Portfolio! Money will be invested as per "
               + "them");
+      dcaView.clear();
     });
   }
   private void cancelFromBuy(Map<String, Runnable> actionMap) {
@@ -597,7 +598,7 @@ public class GUIController implements IController, ActionListener {
       return null;
     }
 
-    Double[] weights = new Double[5];
+    double[] weights = new double[5];
     int j=0;
 
     String tickerName = null;
@@ -626,6 +627,10 @@ public class GUIController implements IController, ActionListener {
       }
       if(flag == 1)
         tickerWeights.put(tickerName, weight);
+    }
+    if(!user.validateWeightsForInvestment(weights)) {
+      investView.setWarning("Total weights of all stocks should be 100...");
+      return null;
     }
 
     return input;
@@ -660,7 +665,7 @@ public class GUIController implements IController, ActionListener {
       return null;
     }
 
-    Double[] weights = new Double[5];
+    double[] weights = new double[5];
     int j=0;
 
     String tickerName = null;
@@ -689,6 +694,11 @@ public class GUIController implements IController, ActionListener {
       }
       if(flag == 1)
         tickerWeights.put(tickerName, weight);
+    }
+
+    if(!user.validateWeightsForInvestment(weights)) {
+      dcaView.setWarning("Total weights of all stocks should be 100...");
+      return null;
     }
 
     return input;

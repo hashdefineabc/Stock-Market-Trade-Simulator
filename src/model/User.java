@@ -856,7 +856,7 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public Boolean validateWeightsForInvestment(Double[] weights) {
+  public Boolean validateWeightsForInvestment(double[] weights) {
     Double sum = 0.0;
     for (Double weight: weights) {
       sum += weight;
