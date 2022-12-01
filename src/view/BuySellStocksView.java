@@ -77,6 +77,14 @@ public class BuySellStocksView extends JFrame {
     commissionPanel.add(commissionLabel);
     commissionPanel.add(commissionTextField);
 
+
+    ActionListener listener = new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        CalculateDate.setDate(monthComboBox, dateComboBox);
+      }
+    };
+
     //date of transaction panel
 
     JPanel datePanel = new JPanel();
@@ -94,6 +102,7 @@ public class BuySellStocksView extends JFrame {
     String[] months = {"01", "02", "03", "04", "05", "06", "07", "08",
             "09", "10", "11", "12"};
     monthComboBox = new JComboBox(months);
+    monthComboBox.addActionListener(listener);
 
     //handle date
     dateComboBox = new JComboBox(dates);
