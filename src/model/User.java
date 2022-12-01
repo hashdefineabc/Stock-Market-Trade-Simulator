@@ -680,7 +680,15 @@ public class User implements IUserInterface {
       Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
       DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
       LocalDate startDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
-      LocalDate endDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      LocalDate endDate = null;
+      String endDateS  = br.readLine();
+      if (endDateS.equals("END_DATE,")) {
+        endDate = null;
+      }
+      else {
+        endDate = LocalDate.parse(endDateS.split(splitBy)[1],dateFormat);
+      }
+
       Integer daysToInvest = Integer.parseInt(br.readLine().split(splitBy)[1]);
       Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
       LocalDate lastTxnDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
