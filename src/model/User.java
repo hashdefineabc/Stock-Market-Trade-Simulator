@@ -764,12 +764,17 @@ public class User implements IUserInterface {
 
     LocalDate nextInvestDate = strategyStart;
     LocalDate realEndDate = null;
-    int compare = LocalDate.now().compareTo(strategyEnd);
-    if (compare > 0) {
+    if (strategyEnd == null) {
+      realEndDate = LocalDate.now();
+    } else {
+      int compare = LocalDate.now().compareTo(strategyEnd);
+      if (compare > 0) {
         realEndDate = strategyEnd;
-    } else if (compare < 0 || compare == 0) {
+      } else if (compare < 0 || compare == 0) {
         realEndDate = LocalDate.now();
+      }
     }
+
     IFlexiblePortfolio flp = this.flexiblePortfolios.get(portfolioIndex - 1);
     Double numSharesBought = 0.0;
 
@@ -897,7 +902,12 @@ public class User implements IUserInterface {
     answer.add(startDt);
     String[] endDt = new String[2];
     endDt[0] = "END_DATE";
-    endDt[1] =  endDate.toString();
+    if (endDate == null) {
+      endDt[1] = "";
+    }
+    else {
+      endDt[1] =  endDate.toString();
+    }
     answer.add(endDt);
     String[] days = new String[2];
     days[0] = "DAYS_TO_INVEST";

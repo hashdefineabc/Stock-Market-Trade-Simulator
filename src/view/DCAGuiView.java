@@ -141,7 +141,7 @@ public class DCAGuiView extends JFrame {
 
     //infinite date checkbox
 
-    infiniteDate = new JCheckBox("Infinite Date / ", false);
+    infiniteDate = new JCheckBox("No End Date / ", false);
     infiniteDate.addItemListener(new ItemListener() {
       public void itemStateChanged(ItemEvent e) {
         e.getStateChange();
