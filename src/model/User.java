@@ -774,7 +774,7 @@ public class User implements IUserInterface {
     Double numSharesBought = 0.0;
 
     while (nextInvestDate.isBefore(realEndDate)
-            || nextInvestDate.isEqual(realEndDate)) {
+            || (nextInvestDate.isEqual(realEndDate) && realEndDate.isBefore(LocalDate.now()))) {
       for (Map.Entry <String,Double> stockWeight : weights.entrySet()) {
         String stockName = stockWeight.getKey();
         Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
