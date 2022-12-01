@@ -6,9 +6,6 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
-
-import controller.GUIController;
 
 public class InvestByWeightView extends JFrame {
 
@@ -19,24 +16,24 @@ public class InvestByWeightView extends JFrame {
   private JTextField amountTextField;
   private JLabel commissionLabel;
   private JTextField commissionTextField;
-  private JLabel tickerNameLabel;
-  private JTextField tickerNameTextField;
-  private JLabel weightLabel;
-  private JTextField weightTextField;
   private JLabel dateOfTransactionLabel;
   private JComboBox monthComboBox;
   private JComboBox dateComboBox;
   private JComboBox yearComboBox;
-  private JButton addMoreWeightsButton;
+  private JButton cancel;
+
   private JButton done;
-  private JPanel tickerNamePanel;
-  private JPanel weightPanel;
-  private JPanel tickerWeightPanel;
   private JPanel buttonPanel;
   private JPanel amountPanel;
+  TickerWeightPanel tw1;
+  TickerWeightPanel tw2;
+  TickerWeightPanel tw3;
+  TickerWeightPanel tw4;
+  TickerWeightPanel tw5;
 
   public InvestByWeightView(String title) {
     super(title);
+    this.setLayout(new BorderLayout());
 
     // pick portfolio panel
     JPanel portfolioNamePanel = new JPanel();
@@ -80,13 +77,6 @@ public class InvestByWeightView extends JFrame {
     JLabel monthLabel = new JLabel("Month:");
     JLabel dateLabel = new JLabel("Date:");
 
-//    ActionListener listener = new ActionListener() {
-//      @Override
-//      public void actionPerformed(ActionEvent e) {
-//        SetDay(yearComboBox, monthComboBox, dateComboBox);
-//      }
-//    };
-
     //handle month
     String[] months = {"01", "02", "03", "04", "05", "06", "07", "08",
             "09", "10", "11", "12"};
@@ -115,81 +105,38 @@ public class InvestByWeightView extends JFrame {
     datePanel.add(yearLabel);
     datePanel.add(yearComboBox);
 
-    //ticker Name panel
-
-    tickerNamePanel = new JPanel();
-    tickerNameLabel = new JLabel("Ticker Name: ");
-    tickerNameTextField = new JTextField(15);
-    tickerNamePanel.add(tickerNameLabel);
-    tickerNamePanel.add(tickerNameTextField);
-
-    //Weight for stock panel
-
-    weightPanel = new JPanel();
-    weightLabel = new JLabel("Weight for this stock (%) ");
-    weightTextField = new JTextField(15);
-    weightPanel.add(weightLabel);
-    weightPanel.add(weightTextField);
-
     buttonPanel = new JPanel();
-    addMoreWeightsButton = new JButton("Add More Weights");
-    addMoreWeightsButton.setActionCommand("addWeights");
 
-    //ticker-weight panel
-    JPanel tickerWeightPanel = new JPanel();
-    tickerWeightPanel.setLayout(new FlowLayout());
-    tickerWeightPanel.add(tickerNamePanel);
-    tickerWeightPanel.add(weightPanel);
-
-    //ticker-weight panel
-    JPanel tickerWeightPanel1 = new JPanel();
-    tickerWeightPanel1.setLayout(new FlowLayout());
-    tickerWeightPanel1.add(tickerNamePanel);
-    tickerWeightPanel1.add(weightPanel);
-
-    JPanel tickerWeightPanel2 = new JPanel();
-    tickerWeightPanel2.setLayout(new FlowLayout());
-    tickerWeightPanel2.add(tickerNamePanel);
-    tickerWeightPanel2.add(weightPanel);
-
-    JPanel tickerWeightPanel3 = new JPanel();
-    tickerWeightPanel3.setLayout(new FlowLayout());
-    tickerWeightPanel3.add(tickerNamePanel);
-    tickerWeightPanel3.add(weightPanel);
-
-    JPanel tickerWeightPanel4 = new JPanel();
-    tickerWeightPanel4.setLayout(new FlowLayout());
-    tickerWeightPanel4.add(tickerNamePanel);
-    tickerWeightPanel4.add(weightPanel);
-
-    JPanel tickerWeightPanel5 = new JPanel();
-    tickerWeightPanel5.setLayout(new FlowLayout());
-    tickerWeightPanel5.add(tickerNamePanel);
-    tickerWeightPanel5.add(weightPanel);
+    tw1 = new TickerWeightPanel();
+    tw2 = new TickerWeightPanel();
+    tw3 = new TickerWeightPanel();
+    tw4 = new TickerWeightPanel();
+    tw5 = new TickerWeightPanel();
 
 
     JPanel investWeightsWholePanel = new JPanel();
-    investWeightsWholePanel.setLayout(new GridLayout(10,1));
+    investWeightsWholePanel.setLayout(new GridLayout(9,1));
     investWeightsWholePanel.add(portfolioNamePanel);
     investWeightsWholePanel.add(amountPanel);
     investWeightsWholePanel.add(commissionPanel);
     investWeightsWholePanel.add(datePanel);
-//    investWeightsWholePanel.add(tickerWeightPanel);
-    investWeightsWholePanel.add(tickerWeightPanel1);
-    investWeightsWholePanel.add(tickerWeightPanel2);
-    investWeightsWholePanel.add(tickerWeightPanel3);
-    investWeightsWholePanel.add(tickerWeightPanel4);
-    investWeightsWholePanel.add(tickerWeightPanel5);
-
+    investWeightsWholePanel.add(tw1);
+    investWeightsWholePanel.add(tw2);
+    investWeightsWholePanel.add(tw3);
+    investWeightsWholePanel.add(tw4);
+    investWeightsWholePanel.add(tw5);
 
     done = new JButton("Done");
     done.setActionCommand("doneFromInvestWeights");
 
+    cancel = new JButton("Cancel");
+    cancel.setActionCommand("cancelFromInvestWeights");
+
     buttonPanel.add(done);
+    buttonPanel.add(cancel);
 
 
-    this.add(investWeightsWholePanel, BorderLayout.PAGE_START);
-    this.add(tickerWeightPanel, BorderLayout.CENTER);
+    this.add(investWeightsWholePanel, BorderLayout.CENTER);
     this.add(buttonPanel, BorderLayout.PAGE_END);
 
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -198,7 +145,7 @@ public class InvestByWeightView extends JFrame {
   }
 
   public void addActionListener(ActionListener listener) {
-    addMoreWeightsButton.addActionListener(listener);
+    cancel.addActionListener(listener);
     done.addActionListener(listener);
   }
 
@@ -216,7 +163,7 @@ public class InvestByWeightView extends JFrame {
   }
 
   public String[] getInput() {
-    String[] input = new String[4];
+    String[] input = new String[13];
 
     input[0] = amountTextField.getText();
     input[1] = commissionTextField.getText();
@@ -226,9 +173,32 @@ public class InvestByWeightView extends JFrame {
             dateComboBox.getSelectedItem().toString();
 
     input[2] = date;
-    input[3] = tickerNameTextField.getText();
-    input[4] = weightTextField.getText();
+    input[3] = tw1.getTickerNameTextField();
+    input[4] = tw1.getWeightTextField();
+
+
+    input[5] = tw2.getTickerNameTextField();
+    input[6] = tw2.getWeightTextField();
+
+    input[7] = tw3.getTickerNameTextField();
+    input[8] = tw3.getWeightTextField();
+
+
+    input[9] = tw4.getTickerNameTextField();
+    input[10] = tw4.getWeightTextField();
+
+
+    input[11] = tw5.getTickerNameTextField();
+    input[12] = tw5.getWeightTextField();
 
     return input;
+  }
+
+  public void setWarning(String message) {
+    JOptionPane.showMessageDialog(InvestByWeightView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
+  }
+
+  public void setSuccessMsg(String s) {
+    JOptionPane.showMessageDialog(InvestByWeightView.this, s, "Success", JOptionPane.INFORMATION_MESSAGE);
   }
 }

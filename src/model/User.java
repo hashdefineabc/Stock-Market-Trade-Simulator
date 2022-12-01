@@ -860,6 +860,20 @@ public class User implements IUserInterface {
     return false;
   }
 
+  @Override
+  public boolean isDoubleValid(String s) {
+    Double value;
+    try {
+      value = Double.valueOf(s);
+    } catch (Exception e) {
+      return false;
+    }
+    if(value < 0.0)
+      return false;
+    return true;
+
+  }
+
 
   private List<String[]> getDataToWrite(Double amount, Double comm,
                                         LocalDate startDate, LocalDate endDate,
