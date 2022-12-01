@@ -223,14 +223,15 @@ public class GUIController implements IController, ActionListener {
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
       investView.updateExistingPortfoliosList(existingPortfolios);
 
-      int portfolioIndex = investView.getSelectedPortfolioIndex();
+      int portfolioIndex = investView.getSelectedPortfolioIndex() + 1;
+
 
       Double amount = Double.valueOf(investInput[0]);
       Double commissionValue = Double.valueOf(investInput[1]);
       LocalDate dateToBuy = LocalDate.parse(investInput[2]);
 
       LocalDate lastTxnDate =  user.calculateTxns(dateToBuy,dateToBuy,0,
-              weights,amount,commissionValue,portfolioIndex+1, InvestmentType.InvestByWeights);
+              weights,amount,commissionValue,portfolioIndex, InvestmentType.InvestByWeights);
 
       user.acceptStrategyFromUser(portfolioIndex,amount,commissionValue,dateToBuy,dateToBuy,weights,
               InvestmentType.InvestByWeights,0,lastTxnDate);
