@@ -71,7 +71,7 @@ public class HomeView extends JFrame {
 
     //set dollar cost averaging for a portfolio
     dca = new JButton("Set Dollar Cost Averaging for a portfolio");
-    dca.setActionCommand("dca");
+    dca.setActionCommand("dcaButtonHome");
     panel.add(dca);
 
     // Exit
@@ -80,7 +80,7 @@ public class HomeView extends JFrame {
     panel.add(exit);
 
     this.getContentPane().add(panel);
-    this.setLocation(200, 200);
+    this.setLocation(100, 100);
     this.setVisible(true);
     this.pack();
   }

@@ -16,6 +16,7 @@ import java.util.Objects;
 
 
 import controller.commands.BuySell;
+import controller.commands.DCA;
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
 import model.InvestmentType;
@@ -27,6 +28,7 @@ import view.BuySellStocksView;
 import view.CompositionGUIView;
 import view.CostBasisGUIView;
 import view.CreateNewPortfolioView;
+import view.DCAGuiView;
 import view.DisplayStocks;
 import view.HomeView;
 import view.InvestByWeightView;
@@ -49,6 +51,7 @@ public class GUIController implements IController, ActionListener {
   private UploadFromFileGUIView uploadFromFileGUIView;
   private DisplayStocks displayComposition;
   private InvestByWeightView investView;
+  private DCAGuiView dcaView;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -209,7 +212,6 @@ public class GUIController implements IController, ActionListener {
   }
 
   private void doneFromInvestWeights(Map<String, Runnable> actionMap) {
-    BuySell buySellCmd = new BuySell(user);
     actionMap.put("doneFromInvestWeights", () -> {
       String[] investInput = new String[13];
       HashMap<String,Double> weights = new HashMap<>();
@@ -237,6 +239,34 @@ public class GUIController implements IController, ActionListener {
     });
   }
 
+  private void doneFromDCA(Map<String, Runnable> actionMap) {
+    actionMap.put("doneFromDCA", () -> {
+      String[] dcaInput = new String[14];
+      HashMap<String,Double> weights = new HashMap<>();
+      dcaInput = this.takeDCAInput(weights);
+      if(dcaInput == null) {
+        return;
+      }
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      dcaView.updateExistingPortfoliosList(existingPortfolios);
+
+      int portfolioIndex = dcaView.getSelectedPortfolioIndex();
+      portfolioIndex++;
+
+      Double amount = Double.valueOf(dcaInput[0]);
+      Double commissionValue = Double.valueOf(dcaInput[1]);
+      LocalDate strategyStart = LocalDate.parse(dcaInput[2]);
+      LocalDate strategyEnd = LocalDate.parse(dcaInput[3]);
+      Integer daysToInvest = Integer.valueOf(dcaInput[4]);
+
+      LocalDate lastTxnDate = user.calculateTxns(strategyStart,strategyEnd,daysToInvest,weights,
+              amount,commissionValue,portfolioIndex, InvestmentType.DCA);
+      user.acceptStrategyFromUser(portfolioIndex,amount,commissionValue,strategyStart,strategyEnd,weights,
+              InvestmentType.DCA, daysToInvest, lastTxnDate);
+      dcaView.setSuccessMsg("Instructions saved for this Portfolio! Money will be invested as per "
+              + "them");
+    });
+  }
   private void cancelFromBuy(Map<String, Runnable> actionMap) {
     actionMap.put("cancelFromBuy", () -> {
       home = new HomeView("Home");
@@ -267,6 +297,16 @@ public class GUIController implements IController, ActionListener {
       home.addActionListener(this);
       home.setLocation(investView.getLocation());
       this.investView.dispose();
+    });
+  }
+  private void cancelFromDCA(Map<String, Runnable> actionMap) {
+    actionMap.put("cancelFromDCA", () -> {
+      home = new HomeView("Home");
+
+      //hide invest weights and display home
+      home.addActionListener(this);
+      home.setLocation(dcaView.getLocation());
+      this.dcaView.dispose();
     });
   }
 
@@ -329,8 +369,11 @@ public class GUIController implements IController, ActionListener {
     okFromDisplayStocks(actionMap);
     uploadFromHomeButton(actionMap);
     investButtonHome(actionMap);
+    dcaButtonHome(actionMap);
     doneFromInvestWeights(actionMap);
+    doneFromDCA(actionMap);
     cancelFromInvestWeights(actionMap);
+    cancelFromDCA(actionMap);
 
     return actionMap;
   }
@@ -344,10 +387,25 @@ public class GUIController implements IController, ActionListener {
 
       int portfolioIndex = investView.getSelectedPortfolioIndex();
 
-
       //hide home and display invest
       investView.addActionListener(this);
       investView.setLocation(home.getLocation());
+      home.dispose();
+    });
+  }
+
+  private void dcaButtonHome(Map<String, Runnable> actionMap) {
+    actionMap.put("dcaButtonHome", () -> {
+      dcaView = new DCAGuiView("Dollar Cost Averaging");
+
+      existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
+      dcaView.updateExistingPortfoliosList(existingPortfolios);
+
+      int portfolioIndex = dcaView.getSelectedPortfolioIndex();
+
+      //hide home and display dca
+      dcaView.addActionListener(this);
+      dcaView.setLocation(home.getLocation());
       home.dispose();
     });
   }
@@ -559,6 +617,69 @@ public class GUIController implements IController, ActionListener {
       else if(i%2 == 0 ) { //validate weights
         if(!user.isDoubleValid(input[i])) {
           investView.setWarning("Enter a valid weight");
+          return null;
+        }
+        weights[j++] = Double.valueOf(input[i]);
+        weight = Double.valueOf(input[i]);
+        flag = 1;
+      }
+      if(flag == 1)
+        tickerWeights.put(tickerName, weight);
+    }
+
+    return input;
+  }
+
+  private String[] takeDCAInput(HashMap<String, Double> tickerWeights) {
+    String[] input = new String[15];
+    input = dcaView.getInput();
+    String amountFromUser = input[0];
+    if(Objects.equals(amountFromUser, "")) {
+      dcaView.setWarning("Enter amount");
+      return null;
+    }
+    try {
+      Double.parseDouble(amountFromUser);
+    }
+    catch (NumberFormatException e) {
+      dcaView.setWarning("Please enter a valid amount");
+      return null;
+    }
+
+    String commissionFromUser = input[1];
+    if(Objects.equals(commissionFromUser, "")) {
+      dcaView.setWarning("Enter commission");
+      return null;
+    }
+    try {
+      Double.parseDouble(commissionFromUser);
+    }
+    catch (NumberFormatException e) {
+      dcaView.setWarning("Please enter a valid commission value");
+      return null;
+    }
+
+    Double[] weights = new Double[5];
+    int j=0;
+
+    String tickerName = null;
+    Double weight = null;
+    int flag = 0;
+
+    for(int i=5; i<15; i++) {
+      if(i % 2 != 0) { //validate ticker Name
+        if(Objects.equals(input[i], ""))
+          break;
+        if(!user.isTickerValid(input[i])) {
+          dcaView.setWarning("Ticker name invalid");
+          return null;
+        }
+        tickerName = input[i];
+        flag = 0;
+      }
+      else if(i%2 == 0 ) { //validate weights
+        if(!user.isDoubleValid(input[i])) {
+          dcaView.setWarning("Enter a valid weight");
           return null;
         }
         weights[j++] = Double.valueOf(input[i]);
