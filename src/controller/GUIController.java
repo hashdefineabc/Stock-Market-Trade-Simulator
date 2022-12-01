@@ -16,7 +16,6 @@ import java.util.Objects;
 
 
 import controller.commands.BuySell;
-import controller.commands.DCA;
 import model.IFlexiblePortfolio;
 import model.IUserInterface;
 import model.InvestmentType;
@@ -25,6 +24,7 @@ import model.Operation;
 import model.PortfolioType;
 import model.Stock;
 import view.BuySellStocksView;
+import view.ChartWeekGuiView;
 import view.CompositionGUIView;
 import view.CostBasisGUIView;
 import view.CreateNewPortfolioView;
@@ -56,6 +56,7 @@ public class GUIController implements IController, ActionListener {
   private DCAGuiView dcaView;
   private DCAFromHome dcaViewHome;
   private DisplayChartGUIView displayChartHome;
+  private ChartWeekGuiView chart;
   List<String[]> stockList;
   List<String> existingPortfolios;
 
@@ -373,6 +374,16 @@ public class GUIController implements IController, ActionListener {
       this.compositionView.dispose();
     });
   }
+  private void closeFromChart(Map<String, Runnable> actionMap) {
+    actionMap.put("closeFromChart", () -> {
+      displayChartHome = new DisplayChartGUIView();
+
+      //hide chart window and display display chart options
+      displayChartHome.addActionListener(this);
+      displayChartHome.setLocation(chart.getLocation());
+      this.chart.dispose();
+    });
+  }
 
   private void okFromDisplayStocks(Map<String, Runnable> actionMap) {
     actionMap.put("okFromDisplayStocks", () -> {
@@ -420,10 +431,34 @@ public class GUIController implements IController, ActionListener {
     cancelFromDCA(actionMap);
     displayChartHome(actionMap);
     backFromDisplayChart(actionMap);
+    prevWeekPerformance(actionMap);
+    prevMonthPerformance(actionMap);
+    prevYearPerformance(actionMap);
+    closeFromChart(actionMap);
 
     return actionMap;
   }
 
+  private void prevWeekPerformance(Map<String, Runnable> actionMap) {
+    actionMap.put("prevWeekPerformance", () -> {
+      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex()+1;
+      chart = new ChartWeekGuiView(user.calculateChart(1, portfolioIndex, PortfolioType.flexible));
+    });
+  }
+
+  private void prevMonthPerformance(Map<String, Runnable> actionMap) {
+    actionMap.put("prevMonthPerformance", () -> {
+      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex()+1;
+      chart = new ChartWeekGuiView(user.calculateChart(2, portfolioIndex, PortfolioType.flexible));
+    });
+  }
+
+  private void prevYearPerformance(Map<String, Runnable> actionMap) {
+    actionMap.put("prevYearPerformance", () -> {
+      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex()+1;
+      chart = new ChartWeekGuiView(user.calculateChart(3, portfolioIndex, PortfolioType.flexible));
+    });
+  }
   private void dcaButtonHomeMain(Map<String, Runnable> actionMap) {
     actionMap.put("dcaButtonHomeMain", () -> {
       dcaViewHome = new DCAFromHome();
@@ -836,13 +871,6 @@ public class GUIController implements IController, ActionListener {
     s[5] = String.valueOf(Operation.BUY); //indicates shares are bought
 
     return s;
-  }
-
-  private void disposeHomeSetCreateFrame(CreateNewPortfolioView createFrame, HomeView home,
-                                ActionListener listener) {
-    createFrame.addActionListener(listener);
-    (createFrame).setLocation(home.getLocation());
-    home.dispose();
   }
 
   @Override
