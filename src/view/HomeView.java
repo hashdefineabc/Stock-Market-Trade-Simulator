@@ -6,6 +6,16 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
+ *The HomeView represents the home page of the application.
+ * It extends the JFrame class in order to design the buttons for the applications' operations.
+ * It provides the user options to:
+ * 1) create a new portfolio
+ * 2) view the composition of a portfolio
+ * 3) buy/sell stocks from a portfolio.
+ * 4) calculate the cost basis of a portfolio.
+ * 5) calculate the value of a portfolio.
+ * 6) invest in  a portfolio by specifying the weights.
+ * 7) apply dollar cost averaging to a portfolio.
  *
  */
 public class HomeView extends JFrame {
@@ -21,6 +31,11 @@ public class HomeView extends JFrame {
   private JButton composition;
   private JButton uploadPortfolio;
   private JButton displayChart;
+
+  /**
+   * Creates a new instance of the HomeView class.
+   * @param s = the title/name we want to specify for this class.
+   */
 
   public HomeView(String s) {
     super(s);
@@ -97,6 +112,13 @@ public class HomeView extends JFrame {
     this.setVisible(true);
     this.pack();
   }
+
+  /**
+   * The ActionListener is notified whenever you click on the button or menu item displayed on the
+   * screen.
+   * Here this listener is added for all the buttons on the view.
+   * @param listener = listener object for this class.
+   */
   public void addActionListener(ActionListener listener) {
     create.addActionListener(listener);
     invest.addActionListener(listener);
