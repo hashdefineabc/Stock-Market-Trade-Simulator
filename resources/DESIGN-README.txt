@@ -1,4 +1,16 @@
 #Design changes
+1. Controller to adapt to the new GUI view
+- We have redesigned the controller to adapt to the new GUI view.
+- We have a controller (IController) which is implemented by CommandController for text-based view and
+    GUIController for the GUI view.
+- Our implementation of the command controller remains the same, we just add the new commands - InvestFlexible and
+    DCA to introduce new features of investing in a portfolio by weights and the dollar cost averaging
+
+2. GUI View
+- We have added a new view to our application, that uses a graphical user interface.
+- Our application works with both the text-based view and the new graphical user interface.
+
+#Design changes
 
 1. Redesign portfolio model
 - We have redesigned the portfolio model of our application to incorporate new features.
