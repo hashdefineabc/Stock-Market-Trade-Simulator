@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.IUserInterface;
-import controller.IController;
 import model.Operation;
 import model.PortfolioType;
 import view.ViewInterface;

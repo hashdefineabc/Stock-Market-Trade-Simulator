@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.lang.Math;
 
 /**
  * Class to implement the user's functionality for the stock market application.
@@ -37,24 +36,24 @@ import java.lang.Math;
  * User can examine the composition of both fixed and flexible portfolios.
  * User can determine the total value of a portfolio on a certain date.
  * User can persist a portfolio so that it can be saved and loaded from the files.
- *<p>
+ * <p>
  * For flexible portfolios, user can purchase a specific number of shares of a specific stock
  * on a specified date, and add them to the portfolio
  * They can sell a specific number of shares of a specific stock on a specified date
  * from a given flexible portfolio.
- *</p>
+ * </p>
  * <p>
  * User can determine the cost basis that is the total amount of money invested in a portfolio
  * by a specific date. This includes all the purchases made in that portfolio till that date.
- *</p>
+ * </p>
  * <p>
  * User can determine the value of a portfolio on a specific date.
  * The value for a portfolio before the date of its first purchase is 0.
- *</p>
+ * </p>
  * <p>
  * Each transaction in flexible portfolio has a commission value associated with it.
  * Commission value is also used in determining the cost basis of the portfolio.
- *</p>
+ * </p>
  */
 public class User implements IUserInterface {
 
@@ -92,8 +91,7 @@ public class User implements IUserInterface {
     if (userDirectory == null) {
       userDirectory = new File("").getAbsolutePath();
       this.folderPath = userDirectory + File.separator + "PortFolioComposition";
-    }
-    else {
+    } else {
       this.folderPath = userDirectory;
     }
     this.fixedPFPath = this.folderPath + File.separator + "FixedPortfolios";
@@ -127,8 +125,7 @@ public class User implements IUserInterface {
       }
       while (row != null);
       csvReader.close();
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       throw new FileNotFoundException("Nasdaq ticker names file not found");
     }
   }
@@ -147,7 +144,6 @@ public class User implements IUserInterface {
   public String getFlexPFPath() {
     return this.flexiblePFPath;
   }
-
 
 
   @Override
@@ -176,15 +172,14 @@ public class User implements IUserInterface {
       IFixedPortfolio newFixedPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
       this.fixedPortfolios.add(newFixedPortfolio);
       dataToWrite = newFixedPortfolio.toListOfString();
-      this.savePortfolioToFile(dataToWrite, newFixedPortfolio.getNameOfPortFolio(),typeofPortfolio);
-    }
-    else if (typeofPortfolio.equals(PortfolioType.flexible)) {
+      this.savePortfolioToFile(dataToWrite, newFixedPortfolio.getNameOfPortFolio(), typeofPortfolio);
+    } else if (typeofPortfolio.equals(PortfolioType.flexible)) {
       IFlexiblePortfolio newFlexPortfolio = new FlexiblePortfolio(portfolioName, stockListToAdd);
       this.flexiblePortfolios.add(newFlexPortfolio);
       dataToWrite = newFlexPortfolio.toListOfString();
-      this.savePortfolioToFile(dataToWrite, newFlexPortfolio.getNameOfPortFolio(),typeofPortfolio);
+      this.savePortfolioToFile(dataToWrite, newFlexPortfolio.getNameOfPortFolio(), typeofPortfolio);
     }
-    return this.checkIfFileExists(portfolioName,typeofPortfolio);
+    return this.checkIfFileExists(portfolioName, typeofPortfolio);
   }
 
   @Override
@@ -194,8 +189,7 @@ public class User implements IUserInterface {
     if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio toCalcCostBasis = this.fixedPortfolios.get(portfolioIndex - 1);
       costBasis = toCalcCostBasis.calculateCostBasis(costBasisDate);
-    }
-    else if (portfolioType.equals(PortfolioType.flexible)) {
+    } else if (portfolioType.equals(PortfolioType.flexible)) {
       IFlexiblePortfolio toCalcCostBasis = this.flexiblePortfolios.get(portfolioIndex - 1);
       costBasis = toCalcCostBasis.calculateCostBasis(costBasisDate);
 
@@ -217,23 +211,22 @@ public class User implements IUserInterface {
 
       }
     }
-    return Math.round(costBasis *100d) / 100d;
+    return Math.round(costBasis * 100d) / 100d;
 
   }
 
 
   @Override
   public void loadExistingPortFolios(PortfolioType portfolioType) {
-    List<String> fileNamesFromSystem =  new ArrayList<>();
+    List<String> fileNamesFromSystem = new ArrayList<>();
     String filePath = null;
     if (portfolioType.equals(PortfolioType.fixed)) {
       this.fixedPortfolios.clear();
-      fileNamesFromSystem =  this.retrieveFileNames(portfolioType);
+      fileNamesFromSystem = this.retrieveFileNames(portfolioType);
       filePath = this.fixedPFPath;
-    }
-    else if (portfolioType.equals(PortfolioType.flexible)) {
+    } else if (portfolioType.equals(PortfolioType.flexible)) {
       this.flexiblePortfolios.clear();
-      fileNamesFromSystem =  this.retrieveFileNames(portfolioType);
+      fileNamesFromSystem = this.retrieveFileNames(portfolioType);
       filePath = this.flexiblePFPath;
     }
 
@@ -262,8 +255,7 @@ public class User implements IUserInterface {
       if (portfolioType.equals(PortfolioType.fixed)) {
         IFixedPortfolio fip = new FixedPortfolio(portfolioName, stockList);
         this.fixedPortfolios.add(fip);
-      }
-      else if (portfolioType.equals(PortfolioType.flexible)) {
+      } else if (portfolioType.equals(PortfolioType.flexible)) {
         IFlexiblePortfolio flp = new FlexiblePortfolio(portfolioName, stockList);
         this.flexiblePortfolios.add(flp);
       }
@@ -303,8 +295,7 @@ public class User implements IUserInterface {
       for (IFixedPortfolio p : portfolioObjects) {
         portfolioNames.add(p.getNameOfPortFolio());
       }
-    }
-    else if (portFolioType.equals(PortfolioType.flexible)) {
+    } else if (portFolioType.equals(PortfolioType.flexible)) {
       this.loadExistingPortFolios(portFolioType);
       List<IFlexiblePortfolio> portfolioObjects = this.flexiblePortfolios;
       for (IFlexiblePortfolio p : portfolioObjects) {
@@ -324,8 +315,6 @@ public class User implements IUserInterface {
   public List<IFlexiblePortfolio> getFlexiblePortfoliosCreatedObjects() {
     return this.flexiblePortfolios;
   }
-
-
 
 
   private void createFolder() {
@@ -361,8 +350,7 @@ public class User implements IUserInterface {
     List<String> fileNamesFromSystem = new ArrayList<>();
     if (portfolioType.equals(PortfolioType.fixed)) {
       file = new File(this.fixedPFPath);
-    }
-    else if (portfolioType.equals(PortfolioType.flexible)) {
+    } else if (portfolioType.equals(PortfolioType.flexible)) {
       file = new File(this.flexiblePFPath);
     }
     String[] fileNames = file.list();
@@ -432,8 +420,7 @@ public class User implements IUserInterface {
     if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio toDisplay = this.fixedPortfolios.get(portfolioIndex - 1);
       return toDisplay.getStocksInPortfolio(dateForComposition);
-    }
-    else if (portfolioType.equals(PortfolioType.flexible)) {
+    } else if (portfolioType.equals(PortfolioType.flexible)) {
       IFlexiblePortfolio toDisplay = this.flexiblePortfolios.get(portfolioIndex - 1);
       return toDisplay.getStocksInPortfolio(dateForComposition);
     }
@@ -447,8 +434,7 @@ public class User implements IUserInterface {
     if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio toCalcVal = this.fixedPortfolios.get(portfolioIndexForVal - 1);
       val = toCalcVal.calculateValue(date);
-    }
-    else if (portfolioType.equals(PortfolioType.flexible)) {
+    } else if (portfolioType.equals(PortfolioType.flexible)) {
       IFlexiblePortfolio toCalcVal = this.flexiblePortfolios.get(portfolioIndexForVal - 1);
       val = toCalcVal.calculateValue(date);
     }
@@ -517,8 +503,7 @@ public class User implements IUserInterface {
     if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio toDisplayChart = this.fixedPortfolios.get(portfolioIndexForVal - 1);
       chart = toDisplayChart.calculateChartValues(option);
-    }
-    else if (portfolioType.equals(PortfolioType.flexible)) {
+    } else if (portfolioType.equals(PortfolioType.flexible)) {
       IFlexiblePortfolio toDisplayChart = this.flexiblePortfolios.get(portfolioIndexForVal - 1);
       chart = toDisplayChart.calculateChartValues(option);
     }
@@ -530,8 +515,7 @@ public class User implements IUserInterface {
   public String getPortfolioName(int portfolioIndex, PortfolioType portfolioType) {
     if (portfolioType.equals(PortfolioType.fixed)) {
       return this.fixedPortfolios.get(portfolioIndex - 1).getNameOfPortFolio();
-    }
-    else {
+    } else {
       return this.flexiblePortfolios.get(portfolioIndex - 1).getNameOfPortFolio();
     }
 
@@ -543,8 +527,7 @@ public class User implements IUserInterface {
     if (portfolioType.equals(PortfolioType.fixed)) {
       IFixedPortfolio fp = this.fixedPortfolios.get(portfolioIndex - 1);
       return fp.getScale();
-    }
-    else {
+    } else {
       IFlexiblePortfolio fp = this.flexiblePortfolios.get(portfolioIndex - 1);
       return fp.getScale();
     }
@@ -595,7 +578,7 @@ public class User implements IUserInterface {
   }
 
   private List<IstockModel> sortStockListDateWise(List<IstockModel> stockList) {
-    stockList.sort((s1,s2) -> s1.getTransactionDate().compareTo(s2.getTransactionDate()));
+    stockList.sort((s1, s2) -> s1.getTransactionDate().compareTo(s2.getTransactionDate()));
     return stockList;
   }
 
@@ -610,7 +593,7 @@ public class User implements IUserInterface {
     Double transactionValue = this.getStockPriceFromDB(tickerNameFromUser, transactionDate);
     LocalTime currentTime = LocalTime.now();
     if (transactionDate.equals(LocalDate.now())
-            && currentTime.isBefore(LocalTime.of(16,0))) {
+            && currentTime.isBefore(LocalTime.of(16, 0))) {
       transactionValue = this.getStockPriceFromDB(tickerNameFromUser,
               transactionDate.minusDays(1));
     }
@@ -624,18 +607,17 @@ public class User implements IUserInterface {
   }
 
   @Override
-  public void updateFlexiblePortFolios(InvestmentType investmentType ) {
+  public void updateFlexiblePortFolios(InvestmentType investmentType) {
     //get list of all flexible portfolios
-    for (IFlexiblePortfolio flp:this.flexiblePortfolios) {
+    for (IFlexiblePortfolio flp : this.flexiblePortfolios) {
       //check if instructions exist for this portfolio
-      String instrFile = this.retrieveInstr(flp.getNameOfPortFolio(),investmentType);
+      String instrFile = this.retrieveInstr(flp.getNameOfPortFolio(), investmentType);
       if (!instrFile.equals("")) {
         //flp.executeInstructions(instrFile);
         if (investmentType.equals(InvestmentType.InvestByWeights)) {
           this.executeInstructionsForFlexPortfolio(flp, this.investmentInstrPath
                   + File.separator + instrFile, InvestmentType.InvestByWeights);
-        }
-        else if (investmentType.equals(InvestmentType.DCA)) {
+        } else if (investmentType.equals(InvestmentType.DCA)) {
           this.executeInstructionsForFlexPortfolio(flp, this.dcaInstrPath
                   + File.separator + instrFile, InvestmentType.DCA);
         }
@@ -660,10 +642,7 @@ public class User implements IUserInterface {
   @Override
   public boolean validateCommissionValue(String commVal) {
     Double commValDouble = Double.valueOf(commVal);
-    if (commValDouble <= 0.0) {
-      return false;
-    }
-    return true;
+    return !(commValDouble <= 0.0);
   }
 
   private void executeInstructionsForFlexPortfolio(IFlexiblePortfolio flp,
@@ -679,19 +658,18 @@ public class User implements IUserInterface {
       BufferedReader br = new BufferedReader(new FileReader(instrFile));
       Double amount = Double.parseDouble(br.readLine().split(splitBy)[1]);
       DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-      LocalDate startDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      LocalDate startDate = LocalDate.parse(br.readLine().split(splitBy)[1], dateFormat);
       LocalDate endDate = null;
-      String endDateS  = br.readLine();
+      String endDateS = br.readLine();
       if (endDateS.equals("END_DATE,")) {
         endDate = null;
-      }
-      else {
-        endDate = LocalDate.parse(endDateS.split(splitBy)[1],dateFormat);
+      } else {
+        endDate = LocalDate.parse(endDateS.split(splitBy)[1], dateFormat);
       }
 
       Integer daysToInvest = Integer.parseInt(br.readLine().split(splitBy)[1]);
       Double commission = Double.parseDouble(br.readLine().split(splitBy)[1]);
-      LocalDate lastTxnDate = LocalDate.parse(br.readLine().split(splitBy)[1],dateFormat);
+      LocalDate lastTxnDate = LocalDate.parse(br.readLine().split(splitBy)[1], dateFormat);
       HashMap<String, Double> weights = new HashMap<>();
 
       if (lastTxnDate.plusDays(daysToInvest).isEqual(LocalDate.now())) {
@@ -699,16 +677,15 @@ public class User implements IUserInterface {
           weights.put(line.split(splitBy)[0], Double.parseDouble(line.split(splitBy)[1]));
         }
         br.close();
-        for(Map.Entry<String,Double> stockWeight: weights.entrySet()) {
+        for (Map.Entry<String, Double> stockWeight : weights.entrySet()) {
           String stockName = stockWeight.getKey();
           Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
-          Double priceOfSingleShare = this.getStockPriceFromDB(stockName,LocalDate.now());
+          Double priceOfSingleShare = this.getStockPriceFromDB(stockName, LocalDate.now());
           if (investmentType.equals(InvestmentType.InvestByWeights)) {
-            numSharesBought = (int) (moneyToInvest/priceOfSingleShare);
+            numSharesBought = (int) (moneyToInvest / priceOfSingleShare);
             numShares = Double.valueOf(numSharesBought);
-          }
-          else if (investmentType.equals(InvestmentType.DCA)) {
-            numShares = (moneyToInvest/priceOfSingleShare);
+          } else if (investmentType.equals(InvestmentType.DCA)) {
+            numShares = (moneyToInvest / priceOfSingleShare);
           }
 
           Stock newStock = Stock.getBuilder().tickerName(stockName)
@@ -738,10 +715,7 @@ public class User implements IUserInterface {
   }
 
 
-
-
-
-  private String retrieveInstr(String portfolioName,InvestmentType investmentType) {
+  private String retrieveInstr(String portfolioName, InvestmentType investmentType) {
     if (investmentType.equals(InvestmentType.InvestByWeights)) {
       file = new File(this.investmentInstrPath);
       String[] fileNames = file.list();
@@ -750,8 +724,7 @@ public class User implements IUserInterface {
           return fileName;
         }
       }
-    }
-    else if (investmentType.equals(InvestmentType.DCA)) {
+    } else if (investmentType.equals(InvestmentType.DCA)) {
       file = new File(this.dcaInstrPath);
       String[] fileNames = file.list();
       for (String fileName : fileNames) {
@@ -766,7 +739,7 @@ public class User implements IUserInterface {
 
   @Override
   public LocalDate calculateTxns(LocalDate strategyStart, LocalDate strategyEnd,
-                                 Integer daysToInvest, HashMap<String,Double> weights,
+                                 Integer daysToInvest, HashMap<String, Double> weights,
                                  double amount, Double commission, int portfolioIndex,
                                  InvestmentType investmentType) {
 
@@ -788,10 +761,10 @@ public class User implements IUserInterface {
 
     while (nextInvestDate.isBefore(realEndDate)
             || (nextInvestDate.isEqual(realEndDate) && realEndDate.isBefore(LocalDate.now()))) {
-      for (Map.Entry <String,Double> stockWeight : weights.entrySet()) {
+      for (Map.Entry<String, Double> stockWeight : weights.entrySet()) {
         String stockName = stockWeight.getKey();
         Double moneyToInvest = (amount * stockWeight.getValue()) / 100.00;
-        Double priceOfSingleShare = this.getStockPriceFromDB(stockName,nextInvestDate);
+        Double priceOfSingleShare = this.getStockPriceFromDB(stockName, nextInvestDate);
         while (priceOfSingleShare == 0.0) {
           // Market was closed on transactionDate, so considering price of next date."
           nextInvestDate = nextInvestDate.plusDays(1);
@@ -801,11 +774,10 @@ public class User implements IUserInterface {
 
         if (investmentType.equals(InvestmentType.DCA)) {
           //numSharesBought = (moneyToInvest/priceOfSingleShare); //allowing fractional shares.
-          numSharesBought = Math.round(Double.valueOf( (moneyToInvest/priceOfSingleShare))
+          numSharesBought = Math.round(Double.valueOf((moneyToInvest / priceOfSingleShare))
                   * 1000d) / 1000d;
-        }
-        else if (investmentType.equals(InvestmentType.InvestByWeights)) {
-          int numShares = (int) (moneyToInvest/priceOfSingleShare); //not allowing fractionalshares.
+        } else if (investmentType.equals(InvestmentType.InvestByWeights)) {
+          int numShares = (int) (moneyToInvest / priceOfSingleShare); //not allowing fractionalshares.
           numSharesBought = Double.valueOf(numShares);
         }
 
@@ -825,36 +797,34 @@ public class User implements IUserInterface {
 
     }
     List<String[]> dataToFile = flp.toListOfString();
-    this.savePortfolioToFile(dataToFile,flp.getNameOfPortFolio().strip()
+    this.savePortfolioToFile(dataToFile, flp.getNameOfPortFolio().strip()
             .split(".csv")[0], PortfolioType.flexible);
 
     return nextInvestDate.minusDays(daysToInvest);
 
-    }
+  }
 
   @Override
   public void acceptStrategyFromUser(int portfolioIndex, Double amount, Double comm,
                                      LocalDate startDate, LocalDate endDate,
-                                     HashMap<String,Double> weights,
+                                     HashMap<String, Double> weights,
                                      InvestmentType investmentType, Integer daysToInvest,
                                      LocalDate lastTxnDate) {
 
     List<String[]> dataToWrite = this.getDataToWrite(amount, comm, startDate, endDate, weights,
             daysToInvest, lastTxnDate);
-    this.saveInstrToFile(this.getPortfolioName(portfolioIndex,PortfolioType.flexible), dataToWrite,
+    this.saveInstrToFile(this.getPortfolioName(portfolioIndex, PortfolioType.flexible), dataToWrite,
             investmentType);
   }
 
   @Override
   public void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
-                              InvestmentType investmentType)
-  {
+                              InvestmentType investmentType) {
     File csvOutputFile = null;
     if (investmentType.equals(InvestmentType.InvestByWeights)) {
       csvOutputFile = new File(this.investmentInstrPath + File.separator
               + portfolioName); //TODO: replace this when file writing is moved to controller
-    }
-    else if (investmentType.equals(InvestmentType.DCA)) {
+    } else if (investmentType.equals(InvestmentType.DCA)) {
       csvOutputFile = new File(this.dcaInstrPath + File.separator
               + portfolioName); //TODO: replace this when file writing is moved to controller
     }
@@ -871,7 +841,7 @@ public class User implements IUserInterface {
   @Override
   public Boolean validateWeightsForInvestment(double[] weights) {
     Double sum = 0.0;
-    for (Double weight: weights) {
+    for (Double weight : weights) {
       sum += weight;
     }
     if (sum == 100.0) {
@@ -888,16 +858,14 @@ public class User implements IUserInterface {
     } catch (Exception e) {
       return false;
     }
-    if(value < 0.0)
-      return false;
-    return true;
+    return !(value < 0.0);
 
   }
 
 
   private List<String[]> getDataToWrite(Double amount, Double comm,
                                         LocalDate startDate, LocalDate endDate,
-                                        HashMap<String,Double> weights, Integer daysToInvest,
+                                        HashMap<String, Double> weights, Integer daysToInvest,
                                         LocalDate lastTxnDate) {
     List<String[]> answer = new ArrayList<>();
     String[] amt = new String[2];
@@ -912,14 +880,13 @@ public class User implements IUserInterface {
     endDt[0] = "END_DATE";
     if (endDate == null) {
       endDt[1] = "";
-    }
-    else {
-      endDt[1] =  endDate.toString();
+    } else {
+      endDt[1] = endDate.toString();
     }
     answer.add(endDt);
     String[] days = new String[2];
     days[0] = "DAYS_TO_INVEST";
-    days[1] =  daysToInvest.toString();
+    days[1] = daysToInvest.toString();
     answer.add(days);
     String[] commission = new String[2];
     commission[0] = "COMMISSION";
@@ -930,7 +897,7 @@ public class User implements IUserInterface {
     lastDate[1] = lastTxnDate.toString();
     answer.add(lastDate);
 
-    for (Map.Entry<String,Double> element : weights.entrySet()) {
+    for (Map.Entry<String, Double> element : weights.entrySet()) {
       String[] weight = new String[2];
       weight[0] = element.getKey().toString();
       weight[1] = element.getValue().toString();

@@ -15,11 +15,10 @@ import java.util.stream.Stream;
 
 import model.IUserInterface;
 import model.InvestmentType;
-import model.IstockModel;
 import model.PortfolioType;
 import view.ViewInterface;
 
-public class DCA implements ICommandController{
+public class DCA implements ICommandController {
 
   private ViewInterface view;
   private IUserInterface user;
@@ -30,6 +29,7 @@ public class DCA implements ICommandController{
     this.user = user;
     this.inputScanner = inputScanner;
   }
+
   @Override
   public void goController() {
     PortfolioType portfolioType = PortfolioType.flexible;
@@ -48,15 +48,15 @@ public class DCA implements ICommandController{
       view.displayMsgToUser("Commission cannot be -ve, Please enter a positive value");
       commission = inputScanner.nextDouble();
     }
-    view.displayMsgToUser("Total amount the user will spend would be:"+( amount + commission));
+    view.displayMsgToUser("Total amount the user will spend would be:" + (amount + commission));
     LocalDate strategyStart = this.getDateFromView("investment start");
     LocalDate strategyEnd = this.getDateFromView("investment end");
     Integer daysToInvest = this.getDaysFromView();
 
-    HashMap<String,Double> weights = this.getWeightsFromView();
-    LocalDate lastTxnDate = user.calculateTxns(strategyStart,strategyEnd,daysToInvest,weights,
-            amount,commission,portfolioIndex, InvestmentType.DCA);
-    user.acceptStrategyFromUser(portfolioIndex,amount,commission,strategyStart,strategyEnd,weights,
+    HashMap<String, Double> weights = this.getWeightsFromView();
+    LocalDate lastTxnDate = user.calculateTxns(strategyStart, strategyEnd, daysToInvest, weights,
+            amount, commission, portfolioIndex, InvestmentType.DCA);
+    user.acceptStrategyFromUser(portfolioIndex, amount, commission, strategyStart, strategyEnd, weights,
             InvestmentType.DCA, daysToInvest, lastTxnDate);
     view.displayMsgToUser("Instructions saved for this Portfolio! Money will be invested as per "
             + "them");
@@ -122,14 +122,15 @@ public class DCA implements ICommandController{
   }
 
   private HashMap<String, Double> getWeightsFromView() {
-    HashMap <String, Double> weights = new HashMap<>();
+    HashMap<String, Double> weights = new HashMap<>();
     do {
       String[] w = this.getWeightFromView();
-      weights.put(w[0],Double.parseDouble(w[1]));
+      weights.put(w[0], Double.parseDouble(w[1]));
     }
     while (this.addMoreWeightsFromView());
     return weights;
   }
+
   private String[] getWeightFromView() {
     Boolean isInputValid = false;
     String tickerNameFromUser = "";
@@ -152,12 +153,13 @@ public class DCA implements ICommandController{
         this.view.displayMsgToUser(e.getMessage());
         isInputValid = false;
       }
-    } while (!isInputValid);
+    }
+    while (!isInputValid);
 
     return new String[]{tickerNameFromUser, Double.toString(percentage)};
   }
 
-  private List<String[]> getDataToWrite(Double amount, HashMap<String,Double> weights,
+  private List<String[]> getDataToWrite(Double amount, HashMap<String, Double> weights,
                                         LocalDate strategyStart, LocalDate strategyEnd,
                                         Integer daysToInvest, Double commission,
                                         List<String> txnDates) {
@@ -183,14 +185,14 @@ public class DCA implements ICommandController{
     days[1] = daysToInvest.toString();
     answer.add(days);
 
-    for (Map.Entry<String,Double> element : weights.entrySet()) {
+    for (Map.Entry<String, Double> element : weights.entrySet()) {
       String[] weight = new String[2];
       weight[0] = element.getKey();
       weight[1] = element.getValue().toString();
       answer.add(weight);
     }
     String[] date = null;
-    for (String txnDate: txnDates) {
+    for (String txnDate : txnDates) {
       date = new String[2];
       date[0] = "TXN_DATE";
       date[1] = txnDate;
@@ -199,7 +201,7 @@ public class DCA implements ICommandController{
 
     String[] lastTxn = new String[2];
     lastTxn[0] = "LAST_TXN";
-    lastTxn[1] = txnDates.get(txnDates.size()-1);
+    lastTxn[1] = txnDates.get(txnDates.size() - 1);
 
     return answer;
   }
@@ -263,8 +265,7 @@ public class DCA implements ICommandController{
         userInput = inputScanner.nextInt();
         if (userInput == 1) {
           return true;
-        }
-        else if (userInput == 0) {
+        } else if (userInput == 0) {
           return false;
         }
         if (!validOptions.contains(userInput)) {

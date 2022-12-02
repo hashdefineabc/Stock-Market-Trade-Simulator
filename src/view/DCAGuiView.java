@@ -1,23 +1,28 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JCheckBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 public class DCAGuiView extends JFrame {
-  private JLabel portfolioNameLabel;
   private JComboBox portfolioNameComboBox;
   int selectedPortfolioIndex;
-  private JLabel amountLabel;
   private JTextField amountTextField;
-  private JLabel commissionLabel;
   private JTextField commissionTextField;
-  private JLabel dateOfTransactionLabel;
   private JComboBox monthComboBox;
   private JComboBox dateComboBox;
   private JComboBox yearComboBox;
@@ -44,7 +49,7 @@ public class DCAGuiView extends JFrame {
 
     // pick portfolio panel
     JPanel portfolioNamePanel = new JPanel();
-    portfolioNameLabel = new JLabel("Portfolio Name: ");
+    JLabel portfolioNameLabel = new JLabel("Portfolio Name: ");
 
     portfolioNameComboBox = new JComboBox();
     portfolioNamePanel.add(portfolioNameLabel);
@@ -53,7 +58,6 @@ public class DCAGuiView extends JFrame {
     ActionListener actionListener = new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-//        getSelectedPortfolio();
         selectedPortfolioIndex = portfolioNameComboBox.getSelectedIndex();
       }
     };
@@ -63,7 +67,7 @@ public class DCAGuiView extends JFrame {
     // amount panel
 
     amountPanel = new JPanel();
-    amountLabel = new JLabel("Enter the amount to invest in USD");
+    JLabel amountLabel = new JLabel("Enter the amount to invest in USD");
     amountTextField = new JTextField(15);
     amountPanel.add(amountLabel);
     amountPanel.add(amountTextField);
@@ -71,7 +75,7 @@ public class DCAGuiView extends JFrame {
     // commission panel
 
     JPanel commissionPanel = new JPanel();
-    commissionLabel = new JLabel("Commission Value (USD):");
+    JLabel commissionLabel = new JLabel("Commission Value (USD):");
     commissionTextField = new JTextField(5);
     commissionPanel.add(commissionLabel);
     commissionPanel.add(commissionTextField);
@@ -86,14 +90,14 @@ public class DCAGuiView extends JFrame {
     //start date panel
 
     JPanel startDatePanel = new JPanel();
-    dateOfTransactionLabel = new JLabel("Investment Start Date: ");
+    JLabel dateOfTransactionLabel = new JLabel("Investment Start Date: ");
     JLabel yearLabel = new JLabel("Year:");
     JLabel monthLabel = new JLabel("Month:");
     JLabel dateLabel = new JLabel("Date:");
 
     //handle month
     String[] months = {"01", "02", "03", "04", "05", "06", "07", "08",
-            "09", "10", "11", "12"};
+                      "09", "10", "11", "12"};
     monthComboBox = new JComboBox(months);
     monthComboBox.addActionListener(listener);
 
@@ -130,7 +134,7 @@ public class DCAGuiView extends JFrame {
 
     //handle month
     String[] endMonths = {"01", "02", "03", "04", "05", "06", "07", "08",
-            "09", "10", "11", "12"};
+                        "09", "10", "11", "12"};
     endMonthComboBox = new JComboBox(endMonths);
     endMonthComboBox.addActionListener(listener);
 
@@ -265,7 +269,7 @@ public class DCAGuiView extends JFrame {
             endMonthComboBox.getSelectedItem().toString() + "-"+
             endDateComboBox.getSelectedItem().toString();
 
-    if(infiniteDateEnabled == true) {
+    if(infiniteDateEnabled) {
       endDate = null;
     }
 

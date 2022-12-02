@@ -40,7 +40,7 @@ public class BuySell implements ICommandController {
   }
 
   public BuySell(IUserInterface user) {
-this.user = user;
+    this.user = user;
   }
 
 

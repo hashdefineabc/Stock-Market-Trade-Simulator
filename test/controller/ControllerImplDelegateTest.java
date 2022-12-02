@@ -181,13 +181,13 @@ public class ControllerImplDelegateTest {
                                        LocalDate startDate, LocalDate endDate, HashMap<String,
             Double> weights, InvestmentType investmentType, Integer daysToInvest,
                                        LocalDate lastTxnDate) {
-
+        return;
     }
 
     @Override
     public void saveInstrToFile(String portfolioName, List<String[]> dataToWrite,
                                 InvestmentType investmentType) {
-
+      return;
     }
 
     /**

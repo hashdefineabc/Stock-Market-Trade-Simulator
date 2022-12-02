@@ -1,11 +1,20 @@
 package view;
 
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+import javax.swing.DefaultComboBoxModel;
+
 
 public class BuySellStocksView extends JFrame {
 
@@ -19,12 +28,6 @@ public class BuySellStocksView extends JFrame {
   private JButton save;
   private JButton cancel;
   private JLabel popUpMsg;
-  private JLabel portfolioNameLabel;
-  private JLabel tickerNameLabel;
-  private JLabel numUnitsLabel;
-  private JLabel commissionLabel;
-  private JLabel dateOfTransactionLabel;
-  private JPanel popUpPanel;
   private int selectedPortfolioIndex;
 
   private Boolean buyOrSell;
@@ -33,12 +36,12 @@ public class BuySellStocksView extends JFrame {
   public BuySellStocksView(String title) {
     super(title);
     popUpMsg = new JLabel("");
-    popUpPanel = new JPanel();
+    JPanel popUpPanel = new JPanel();
     popUpPanel.add(popUpMsg);
 
     //Portfolio name panel
     JPanel portfolioNamePanel = new JPanel();
-    portfolioNameLabel = new JLabel("Portfolio Name: ");
+    JLabel portfolioNameLabel = new JLabel("Portfolio Name: ");
 
     portfolioNameComboBox = new JComboBox();
     portfolioNamePanel.add(portfolioNameLabel);
@@ -56,7 +59,7 @@ public class BuySellStocksView extends JFrame {
     //ticker Name panel
 
     JPanel tickerNamePanel = new JPanel();
-    tickerNameLabel = new JLabel("Ticker Name: ");
+    JLabel tickerNameLabel = new JLabel("Ticker Name: ");
     tickerNameTextField = new JTextField(15);
     tickerNamePanel.add(tickerNameLabel);
     tickerNamePanel.add(tickerNameTextField);
@@ -64,7 +67,7 @@ public class BuySellStocksView extends JFrame {
     // num of units panel
 
     JPanel numUnitsPanel = new JPanel();
-    numUnitsLabel = new JLabel("Number of Units: ");
+    JLabel numUnitsLabel = new JLabel("Number of Units: ");
     numUnitsTextField = new JTextField(5);
     numUnitsPanel.add(numUnitsLabel);
     numUnitsPanel.add(numUnitsTextField);
@@ -72,7 +75,7 @@ public class BuySellStocksView extends JFrame {
     // commission value panel
 
     JPanel commissionPanel = new JPanel();
-    commissionLabel = new JLabel("Commission Value (USD):");
+    JLabel commissionLabel = new JLabel("Commission Value (USD):");
     commissionTextField = new JTextField(5);
     commissionPanel.add(commissionLabel);
     commissionPanel.add(commissionTextField);
@@ -88,7 +91,7 @@ public class BuySellStocksView extends JFrame {
     //date of transaction panel
 
     JPanel datePanel = new JPanel();
-    dateOfTransactionLabel = new JLabel("Date of Transaction: ");
+    JLabel dateOfTransactionLabel = new JLabel("Date of Transaction: ");
     JLabel yearLabel = new JLabel("Year:");
     JLabel monthLabel = new JLabel("Month:");
     JLabel dateLabel = new JLabel("Date:");
@@ -110,9 +113,9 @@ public class BuySellStocksView extends JFrame {
     //handle year
     String[] years = new String[30];
     int j = 0;
-    for (int i = 2022; i > 2006; i=i-1) {
+    for (int i = 2022; i > 2006; i = i - 1) {
       years[j] = Integer.toString(i);
-      j = j+1;
+      j = j + 1;
     }
     yearComboBox = new JComboBox(years);
 
@@ -160,7 +163,7 @@ public class BuySellStocksView extends JFrame {
     input[3] = commissionTextField.getText();
 
     String date = yearComboBox.getSelectedItem().toString() + "-" +
-            monthComboBox.getSelectedItem().toString() + "-"+
+            monthComboBox.getSelectedItem().toString() + "-" +
             dateComboBox.getSelectedItem().toString();
 
     input[2] = date;
@@ -181,9 +184,10 @@ public class BuySellStocksView extends JFrame {
   public void displaySuccess(String message) {
     JOptionPane.showMessageDialog(BuySellStocksView.this, message, "Yayyyy", JOptionPane.INFORMATION_MESSAGE);
   }
+
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
-    for(String portfolio: existingPortfolios) {
+    for (String portfolio : existingPortfolios) {
       tempComboBox.addElement(portfolio);
     }
 

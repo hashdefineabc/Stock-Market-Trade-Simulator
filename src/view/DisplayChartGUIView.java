@@ -1,14 +1,19 @@
 package view;
 
-import java.awt.*;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.DefaultComboBoxModel;
 
 public class DisplayChartGUIView extends JFrame {
-  private JLabel portfolioNameLabel;
   private JButton prevWeekButton;
   private JButton prevMonthButton;
   private JButton prevYearButton;
@@ -21,7 +26,7 @@ public class DisplayChartGUIView extends JFrame {
 
     //Portfolio name panel
     JPanel portfolioNamePanel = new JPanel();
-    portfolioNameLabel = new JLabel("Portfolio Name: ");
+    JLabel portfolioNameLabel = new JLabel("Portfolio Name: ");
 
     portfolioNameComboBox = new JComboBox();
     portfolioNamePanel.add(portfolioNameLabel);
@@ -30,7 +35,6 @@ public class DisplayChartGUIView extends JFrame {
     ActionListener actionListener = new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-//        getSelectedPortfolio();
         selectedPortfolioIndex = portfolioNameComboBox.getSelectedIndex();
       }
     };
@@ -73,12 +77,14 @@ public class DisplayChartGUIView extends JFrame {
     prevMonthButton.addActionListener(listener);
     prevYearButton.addActionListener(listener);
   }
+
   public int getSelectedPortfolioIndex() {
     return selectedPortfolioIndex;
   }
+
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
-    for(String portfolio: existingPortfolios) {
+    for (String portfolio : existingPortfolios) {
       tempComboBox.addElement(portfolio);
     }
 

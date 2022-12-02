@@ -1,22 +1,26 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 public class InvestByWeightView extends JFrame {
 
-  private JLabel portfolioNameLabel;
   private JComboBox portfolioNameComboBox;
   int selectedPortfolioIndex;
-  private JLabel amountLabel;
   private JTextField amountTextField;
-  private JLabel commissionLabel;
   private JTextField commissionTextField;
-  private JLabel dateOfTransactionLabel;
   private JComboBox monthComboBox;
   private JComboBox dateComboBox;
   private JComboBox yearComboBox;
@@ -37,7 +41,7 @@ public class InvestByWeightView extends JFrame {
 
     // pick portfolio panel
     JPanel portfolioNamePanel = new JPanel();
-    portfolioNameLabel = new JLabel("Portfolio Name: ");
+    JLabel portfolioNameLabel = new JLabel("Portfolio Name: ");
 
     portfolioNameComboBox = new JComboBox();
     portfolioNamePanel.add(portfolioNameLabel);
@@ -46,7 +50,6 @@ public class InvestByWeightView extends JFrame {
     ActionListener actionListener = new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-//        getSelectedPortfolio();
         selectedPortfolioIndex = portfolioNameComboBox.getSelectedIndex();
       }
     };
@@ -56,7 +59,7 @@ public class InvestByWeightView extends JFrame {
     // amount panel
 
     amountPanel = new JPanel();
-    amountLabel = new JLabel("Enter the amount to invest in USD");
+    JLabel amountLabel = new JLabel("Enter the amount to invest in USD");
     amountTextField = new JTextField(15);
     amountPanel.add(amountLabel);
     amountPanel.add(amountTextField);
@@ -64,7 +67,7 @@ public class InvestByWeightView extends JFrame {
     // commission panel
 
     JPanel commissionPanel = new JPanel();
-    commissionLabel = new JLabel("Commission Value (USD):");
+    JLabel commissionLabel = new JLabel("Commission Value (USD):");
     commissionTextField = new JTextField(5);
     commissionPanel.add(commissionLabel);
     commissionPanel.add(commissionTextField);
@@ -79,7 +82,7 @@ public class InvestByWeightView extends JFrame {
     //date panel
 
     JPanel datePanel = new JPanel();
-    dateOfTransactionLabel = new JLabel("Date of Transaction: ");
+    JLabel dateOfTransactionLabel = new JLabel("Date of Transaction: ");
     JLabel yearLabel = new JLabel("Year:");
     JLabel monthLabel = new JLabel("Month:");
     JLabel dateLabel = new JLabel("Date:");
@@ -99,9 +102,9 @@ public class InvestByWeightView extends JFrame {
     //handle year
     String[] years = new String[30];
     int j = 0;
-    for (int i = 2022; i > 2006; i=i-1) {
+    for (int i = 2022; i > 2006; i = i - 1) {
       years[j] = Integer.toString(i);
-      j = j+1;
+      j = j + 1;
     }
     yearComboBox = new JComboBox(years);
 
@@ -123,7 +126,7 @@ public class InvestByWeightView extends JFrame {
 
 
     JPanel investWeightsWholePanel = new JPanel();
-    investWeightsWholePanel.setLayout(new GridLayout(9,1));
+    investWeightsWholePanel.setLayout(new GridLayout(9, 1));
     investWeightsWholePanel.add(portfolioNamePanel);
     investWeightsWholePanel.add(amountPanel);
     investWeightsWholePanel.add(commissionPanel);
@@ -159,7 +162,7 @@ public class InvestByWeightView extends JFrame {
 
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
-    for(String portfolio: existingPortfolios) {
+    for (String portfolio : existingPortfolios) {
       tempComboBox.addElement(portfolio);
     }
 
@@ -177,7 +180,7 @@ public class InvestByWeightView extends JFrame {
     input[1] = commissionTextField.getText();
 
     String date = yearComboBox.getSelectedItem().toString() + "-" +
-            monthComboBox.getSelectedItem().toString() + "-"+
+            monthComboBox.getSelectedItem().toString() + "-" +
             dateComboBox.getSelectedItem().toString();
 
     input[2] = date;

@@ -1,17 +1,14 @@
 package view;
 
-import java.awt.*;
+import java.awt.FlowLayout;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class TickerWeightPanel extends JPanel {
 
-  private JPanel tickerNamePanel;
-  private JLabel tickerNameLabel;
   private JTextField tickerNameTextField;
-
-  private JPanel weightPanel;
-  private JLabel weightLabel;
   private JTextField weightTextField;
 
   public TickerWeightPanel() {
@@ -20,16 +17,16 @@ public class TickerWeightPanel extends JPanel {
 
     //ticker Name panel
 
-    tickerNamePanel = new JPanel();
-    tickerNameLabel = new JLabel("Ticker Name: ");
+    JPanel tickerNamePanel = new JPanel();
+    JLabel tickerNameLabel = new JLabel("Ticker Name: ");
     tickerNameTextField = new JTextField(15);
     tickerNamePanel.add(tickerNameLabel);
     tickerNamePanel.add(tickerNameTextField);
 
     //Weight for stock panel
 
-    weightPanel = new JPanel();
-    weightLabel = new JLabel("Weight for this stock (%) ");
+    JPanel weightPanel = new JPanel();
+    JLabel weightLabel = new JLabel("Weight for this stock (%) ");
     weightTextField = new JTextField(15);
     weightPanel.add(weightLabel);
     weightPanel.add(weightTextField);
