@@ -172,7 +172,8 @@ public class User implements IUserInterface {
       IFixedPortfolio newFixedPortfolio = new FixedPortfolio(portfolioName, stockListToAdd);
       this.fixedPortfolios.add(newFixedPortfolio);
       dataToWrite = newFixedPortfolio.toListOfString();
-      this.savePortfolioToFile(dataToWrite, newFixedPortfolio.getNameOfPortFolio(), typeofPortfolio);
+      this.savePortfolioToFile(dataToWrite, newFixedPortfolio.getNameOfPortFolio(),
+              typeofPortfolio);
     } else if (typeofPortfolio.equals(PortfolioType.flexible)) {
       IFlexiblePortfolio newFlexPortfolio = new FlexiblePortfolio(portfolioName, stockListToAdd);
       this.flexiblePortfolios.add(newFlexPortfolio);
@@ -777,7 +778,8 @@ public class User implements IUserInterface {
           numSharesBought = Math.round(Double.valueOf((moneyToInvest / priceOfSingleShare))
                   * 1000d) / 1000d;
         } else if (investmentType.equals(InvestmentType.InvestByWeights)) {
-          int numShares = (int) (moneyToInvest / priceOfSingleShare); //not allowing fractionalshares.
+          int numShares = (int) (moneyToInvest / priceOfSingleShare);
+          //not allowing fractional shares.
           numSharesBought = Double.valueOf(numShares);
         }
 

@@ -14,12 +14,10 @@ import javax.swing.JOptionPane;
 
 public class CreateNewPortfolioView extends JFrame {
 
-  private JLabel label;
   private JTextField portfolioName;
   private JButton createPortfolio;
   private JButton home;
   private JPanel panel;
-  private JLabel popUpMsg;
   JPanel buttonsPanel = new JPanel();
 
   public CreateNewPortfolioView(String title) {
@@ -28,9 +26,8 @@ public class CreateNewPortfolioView extends JFrame {
     this.setLayout(new BorderLayout());
 
     panel = new JPanel();
-    popUpMsg = new JLabel("");
 
-    label = new JLabel("Name of Portfolio: ");
+    JLabel label = new JLabel("Name of Portfolio: ");
     portfolioName = new JTextField(15);
 
     createPortfolio = new JButton("Create Portfolio");
@@ -69,7 +66,6 @@ public class CreateNewPortfolioView extends JFrame {
 
   public void setPopUp(String message) {
     JOptionPane.showMessageDialog(CreateNewPortfolioView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
-    popUpMsg.setText(message);
   }
 
   public void clearField() {

@@ -76,8 +76,9 @@ public class BarChart extends JPanel {
       int valueP = j * barWidth + 1;
       int valueQ = top;
       int height = (int) (value[j] * scale);
-      if (value[j] >= 0)
+      if (value[j] >= 0) {
         valueQ += (int) ((maxValue - value[j]) * scale);
+      }
       else {
         valueQ += (int) (maxValue * scale);
         height = -height;
