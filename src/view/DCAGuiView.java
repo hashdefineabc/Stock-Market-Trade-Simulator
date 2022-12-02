@@ -29,13 +29,10 @@ public class DCAGuiView extends JFrame {
   private JButton cancel;
 
   private JButton done;
-  private JPanel buttonPanel;
-  private JPanel amountPanel;
   private JComboBox endMonthComboBox;
   private JComboBox endDateComboBox;
   private JComboBox endYearComboBox;
   private JTextField frequencyTextField;
-  private JCheckBox infiniteDate;
   private Boolean infiniteDateEnabled = false;
   TickerWeightPanel tw1;
   TickerWeightPanel tw2;
@@ -66,7 +63,7 @@ public class DCAGuiView extends JFrame {
 
     // amount panel
 
-    amountPanel = new JPanel();
+    JPanel amountPanel = new JPanel();
     JLabel amountLabel = new JLabel("Enter the amount to invest in USD");
     amountTextField = new JTextField(15);
     amountPanel.add(amountLabel);
@@ -97,7 +94,7 @@ public class DCAGuiView extends JFrame {
 
     //handle month
     String[] months = {"01", "02", "03", "04", "05", "06", "07", "08",
-                      "09", "10", "11", "12"};
+            "09", "10", "11", "12"};
     monthComboBox = new JComboBox(months);
     monthComboBox.addActionListener(listener);
 
@@ -110,9 +107,9 @@ public class DCAGuiView extends JFrame {
     //handle year
     String[] years = new String[30];
     int j = 0;
-    for (int i = 2022; i > 2006; i=i-1) {
+    for (int i = 2022; i > 2006; i = i - 1) {
       years[j] = Integer.toString(i);
-      j = j+1;
+      j = j + 1;
     }
     yearComboBox = new JComboBox(years);
 
@@ -134,37 +131,36 @@ public class DCAGuiView extends JFrame {
 
     //handle month
     String[] endMonths = {"01", "02", "03", "04", "05", "06", "07", "08",
-                        "09", "10", "11", "12"};
+            "09", "10", "11", "12"};
     endMonthComboBox = new JComboBox(endMonths);
     endMonthComboBox.addActionListener(listener);
 
     //handle date
-    String[] endDates = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"
-            , "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27"
+    String[] endDates = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",
+            "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27"
             , "28", "29", "30", "31"};
     endDateComboBox = new JComboBox(endDates);
 
     //handle year
     String[] endYears = new String[30];
     int k = 0;
-    for (int i = 2022; i > 2006; i=i-1) {
+    for (int i = 2022; i > 2006; i = i - 1) {
       endYears[k] = Integer.toString(i);
-      k = k+1;
+      k = k + 1;
     }
 
     //infinite date checkbox
 
-    infiniteDate = new JCheckBox("No End Date / ", false);
+    JCheckBox infiniteDate = new JCheckBox("No End Date / ", false);
     infiniteDate.addItemListener(new ItemListener() {
       public void itemStateChanged(ItemEvent e) {
         e.getStateChange();
-        if(e.getStateChange()==1) { //checked
+        if (e.getStateChange() == 1) { //checked
           endMonthComboBox.setEnabled(false);
           endDateComboBox.setEnabled(false);
           endYearComboBox.setEnabled(false);
           infiniteDateEnabled = true;
-        }
-        else {
+        } else {
           endMonthComboBox.setEnabled(true);
           endDateComboBox.setEnabled(true);
           endYearComboBox.setEnabled(true);
@@ -193,7 +189,7 @@ public class DCAGuiView extends JFrame {
     frequencyPanel.add(frequencyLabel);
     frequencyPanel.add(frequencyTextField);
 
-    buttonPanel = new JPanel();
+    JPanel buttonPanel = new JPanel();
 
     tw1 = new TickerWeightPanel();
     tw2 = new TickerWeightPanel();
@@ -203,7 +199,7 @@ public class DCAGuiView extends JFrame {
 
 
     JPanel investWeightsWholePanel = new JPanel();
-    investWeightsWholePanel.setLayout(new GridLayout(11,1));
+    investWeightsWholePanel.setLayout(new GridLayout(11, 1));
     investWeightsWholePanel.add(portfolioNamePanel);
     investWeightsWholePanel.add(amountPanel);
     investWeightsWholePanel.add(commissionPanel);
@@ -241,7 +237,7 @@ public class DCAGuiView extends JFrame {
 
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
-    for(String portfolio: existingPortfolios) {
+    for (String portfolio : existingPortfolios) {
       tempComboBox.addElement(portfolio);
     }
 
@@ -259,17 +255,17 @@ public class DCAGuiView extends JFrame {
     input[1] = commissionTextField.getText();
 
     String startDate = yearComboBox.getSelectedItem().toString() + "-" +
-            monthComboBox.getSelectedItem().toString() + "-"+
+            monthComboBox.getSelectedItem().toString() + "-" +
             dateComboBox.getSelectedItem().toString();
 
     input[2] = startDate;
 
 
     String endDate = endYearComboBox.getSelectedItem().toString() + "-" +
-            endMonthComboBox.getSelectedItem().toString() + "-"+
+            endMonthComboBox.getSelectedItem().toString() + "-" +
             endDateComboBox.getSelectedItem().toString();
 
-    if(infiniteDateEnabled) {
+    if (infiniteDateEnabled) {
       endDate = null;
     }
 

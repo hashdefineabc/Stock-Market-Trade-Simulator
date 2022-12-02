@@ -23,11 +23,11 @@ public class DisplayStocks extends JFrame {
 
     int size = stocksToDisplay.size();
     String[] columnNames = {"Ticker Name",
-            "Number of Units",
-            "Commission",
-            "Date of Transaction",
-            "Price",
-            "Buy/Sell"};
+              "Number of Units",
+              "Commission",
+              "Date of Transaction",
+              "Price",
+              "Buy/Sell"};
 
     String[][] data = new String[size][6];
     int i = 0;
