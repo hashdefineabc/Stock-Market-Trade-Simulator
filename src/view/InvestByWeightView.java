@@ -34,8 +34,6 @@ public class InvestByWeightView extends JFrame {
   private JButton cancel;
 
   private JButton done;
-  private JPanel buttonPanel;
-  private JPanel amountPanel;
   TickerWeightPanel tw1;
   TickerWeightPanel tw2;
   TickerWeightPanel tw3;
@@ -70,7 +68,7 @@ public class InvestByWeightView extends JFrame {
 
     // amount panel
 
-    amountPanel = new JPanel();
+    JPanel amountPanel = new JPanel();
     JLabel amountLabel = new JLabel("Enter the amount to invest in USD");
     amountTextField = new JTextField(15);
     amountPanel.add(amountLabel);
@@ -101,7 +99,7 @@ public class InvestByWeightView extends JFrame {
 
     //handle month
     String[] months = {"01", "02", "03", "04", "05", "06", "07", "08",
-            "09", "10", "11", "12"};
+              "09", "10", "11", "12"};
     monthComboBox = new JComboBox(months);
     monthComboBox.addActionListener(listener);
 
@@ -128,7 +126,7 @@ public class InvestByWeightView extends JFrame {
     datePanel.add(yearLabel);
     datePanel.add(yearComboBox);
 
-    buttonPanel = new JPanel();
+    JPanel buttonPanel = new JPanel();
 
     tw1 = new TickerWeightPanel();
     tw2 = new TickerWeightPanel();
@@ -254,7 +252,8 @@ public class InvestByWeightView extends JFrame {
    * @param message = msg to be displayed to the user.
    */
   public void setWarning(String message) {
-    JOptionPane.showMessageDialog(InvestByWeightView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
+    JOptionPane.showMessageDialog(InvestByWeightView.this, message, "Warning",
+            JOptionPane.WARNING_MESSAGE);
   }
 
   /**
@@ -262,6 +261,7 @@ public class InvestByWeightView extends JFrame {
    * @param s = msg to be displayed to the user.
    */
   public void setSuccessMsg(String s) {
-    JOptionPane.showMessageDialog(InvestByWeightView.this, s, "Success", JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(InvestByWeightView.this, s, "Success",
+            JOptionPane.INFORMATION_MESSAGE);
   }
 }

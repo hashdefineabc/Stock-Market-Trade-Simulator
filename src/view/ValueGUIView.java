@@ -70,7 +70,7 @@ public class ValueGUIView extends JFrame {
 
     //handle month
     String[] months = {"01", "02", "03", "04", "05", "06", "07", "08",
-            "09", "10", "11", "12"};
+              "09", "10", "11", "12"};
     monthComboBox = new JComboBox(months);
     monthComboBox.addActionListener(listener);
 
@@ -120,7 +120,6 @@ public class ValueGUIView extends JFrame {
     this.add(buttonPanel, BorderLayout.PAGE_END);
 
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//    this.setPreferredSize(new Dimension(450, 500));
     this.setVisible(true);
     this.pack();
 
@@ -128,7 +127,8 @@ public class ValueGUIView extends JFrame {
   }
 
   public void setPopUp(String message) {
-    JOptionPane.showMessageDialog(ValueGUIView.this, message, "Value", JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(ValueGUIView.this, message, "Value",
+            JOptionPane.INFORMATION_MESSAGE);
     popUpMsg.setText(message);
   }
 
