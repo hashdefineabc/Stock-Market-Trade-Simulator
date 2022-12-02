@@ -3,6 +3,12 @@ package view;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+/**
+ *The CalculateDate class accepts the date from the user
+ * This date is then used for various operations.
+ *
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 public class CalculateDate {
 
   public static void setDate(JComboBox month, JComboBox date) {

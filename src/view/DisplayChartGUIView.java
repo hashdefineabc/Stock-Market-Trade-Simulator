@@ -13,6 +13,12 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.DefaultComboBoxModel;
 
+/**
+ *The DisplayChartGUIView shows a chart that will display the performance of a portfolio.
+ * It extends the JFrame class in order to design the buttons for the display operation.
+ *This lets the user create a new portfolio by entering the details of it.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 public class DisplayChartGUIView extends JFrame {
   private JButton prevWeekButton;
   private JButton prevMonthButton;

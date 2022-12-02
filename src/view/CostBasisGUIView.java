@@ -14,6 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultComboBoxModel;
 
+/**
+ *The CostBasisGUIView shows the cost basis calculated for a particular portfolio.
+ * It extends the JFrame class in order to design the buttons for the create operation.
+ *This lets the user check the cost basis calculated for a particular portfolio.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 public class CostBasisGUIView extends JFrame {
   private JComboBox portfolioNameComboBox;
   private JComboBox monthComboBox;
