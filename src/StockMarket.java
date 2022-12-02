@@ -50,7 +50,7 @@ public class StockMarket {
         System.out.println("Invalid choice, try again\n");
       }
     }
-    controller.go();
+    controller.goIController();
 
   }
 }

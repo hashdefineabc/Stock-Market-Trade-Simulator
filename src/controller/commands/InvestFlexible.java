@@ -1,18 +1,13 @@
 package controller.commands;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import model.IUserInterface;
 import model.InvestmentType;
-import model.IstockModel;
 import model.PortfolioType;
 import view.ViewInterface;
 
@@ -31,8 +26,11 @@ public class InvestFlexible implements ICommandController {
   private Scanner inputScanner;
 
   /**
+
    * Instantiates a new InvestFlexible.
-   *
+   * Instantiates a new Cost basis.
+   * It takes view and model (user) and instantiates it.
+   * It interacts with view and main model which is user.
    * @param view the view
    * @param user the user
    */
@@ -60,27 +58,28 @@ public class InvestFlexible implements ICommandController {
       view.displayMsgToUser("Commission cannot be -ve, Please enter a positive value");
       commission = inputScanner.nextDouble();
     }
-    view.displayMsgToUser("Total amount the user will spend would be:"+(amount + commission));
+    view.displayMsgToUser("Total amount the user will spend would be:" + (amount + commission));
     LocalDate dateToBuy = this.getDateFromView();
-    HashMap<String,Double> weights = this.getWeightsFromView();
-    LocalDate lastTxnDate =  user.calculateTxns(dateToBuy,dateToBuy,0,
-            weights,amount,commission,portfolioIndex, InvestmentType.InvestByWeights);
-    user.acceptStrategyFromUser(portfolioIndex,amount,commission,dateToBuy,dateToBuy,weights,
-            InvestmentType.InvestByWeights,0,lastTxnDate);
+    HashMap<String, Double> weights = this.getWeightsFromView();
+    LocalDate lastTxnDate = user.calculateTxns(dateToBuy, dateToBuy, 0,
+            weights, amount, commission, portfolioIndex, InvestmentType.InvestByWeights);
+    user.acceptStrategyFromUser(portfolioIndex, amount, commission, dateToBuy, dateToBuy, weights,
+            InvestmentType.InvestByWeights, 0, lastTxnDate);
     view.displayMsgToUser("Instructions saved for this Portfolio! Money will be invested as per "
             + "them");
   }
 
 
   private HashMap<String, Double> getWeightsFromView() {
-    HashMap <String, Double> weights = new HashMap<>();
+    HashMap<String, Double> weights = new HashMap<>();
     do {
       String[] w = this.getWeightFromView();
-      weights.put(w[0],Double.parseDouble(w[1]));
+      weights.put(w[0], Double.parseDouble(w[1]));
     }
     while (this.addMoreWeightsFromView());
     return weights;
   }
+
   private String[] getWeightFromView() {
     Boolean isInputValid = false;
     String tickerNameFromUser = "";
@@ -107,6 +106,7 @@ public class InvestFlexible implements ICommandController {
 
     return new String[]{tickerNameFromUser, Double.toString(percentage)};
   }
+
   private int getSelectedPortFolioFromView(PortfolioType portfolioType) {
     int index = -1;
     boolean okay = false;
@@ -174,8 +174,7 @@ public class InvestFlexible implements ICommandController {
         userInput = inputScanner.nextInt();
         if (userInput == 1) {
           return true;
-        }
-        else if (userInput == 0) {
+        } else if (userInput == 0) {
           return false;
         }
         if (!validOptions.contains(userInput)) {

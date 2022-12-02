@@ -205,7 +205,7 @@ public class MVCTest {
     log.append(menu + exit);
     input = new ByteArrayInputStream("7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -216,7 +216,7 @@ public class MVCTest {
     log.append(menu + wrongMenu + menu + exit);
     input = new ByteArrayInputStream("9 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -227,7 +227,7 @@ public class MVCTest {
             + testFixedPortfolio1 + menu + exit);
     input = new ByteArrayInputStream("2 1 1 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -238,7 +238,7 @@ public class MVCTest {
             + testFlexiblePortfolio1 + menu + exit);
     input = new ByteArrayInputStream("2 2 1 2022-11-16 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -248,7 +248,7 @@ public class MVCTest {
     log.append(menu + costBasisPortfolio + costBasisDate + costBasis + menu + exit);
     input = new ByteArrayInputStream("5 1 2022-11-16 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -259,7 +259,7 @@ public class MVCTest {
             + valueDate + fixedValue + menu + exit);
     input = new ByteArrayInputStream("3 1 1 2022-11-16 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -270,7 +270,7 @@ public class MVCTest {
             + flexibleValue + menu + exit);
     input = new ByteArrayInputStream("3 2 1 2022-11-16 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -283,7 +283,7 @@ public class MVCTest {
             + marketStringForFixed + previousDay + addMoreStocks + portfolioSaved + menu + exit);
     input = new ByteArrayInputStream("1 1 1 testCreate1 GOOG 50 1 MSFT 30 0 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     File file = new File("./resources/testPortfolio/FixedPortfolios/testCreate1.csv");
     file.delete();
     assertEquals(log.toString(), out.toString());
@@ -301,7 +301,7 @@ public class MVCTest {
     input = new ByteArrayInputStream(("1 2 1 testCreate2 GOOG 50 10 2022-11-10 1 MSFT 40 "
             + "10 2022-11-09 0 7").getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
     File file = new File("./resources/testPortfolio/FlexiblePortfolios/testCreate2.csv");
     file.delete();
@@ -315,7 +315,7 @@ public class MVCTest {
             + fixedWeeklyGraph + menu + exit);
     input = new ByteArrayInputStream("6 1 1 1 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -326,7 +326,7 @@ public class MVCTest {
             + fixedMonthlyGraph + menu + exit);
     input = new ByteArrayInputStream("6 1 1 2 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -337,7 +337,7 @@ public class MVCTest {
             + fixedYearlyGraph + menu + exit);
     input = new ByteArrayInputStream("6 1 1 3 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -350,7 +350,7 @@ public class MVCTest {
             + costBasisDate + askCom + cannotSell + menu + exit);
     input = new ByteArrayInputStream("2 2 1 2022-11-17 4 1 2 V 30 2022-11-17 10 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -363,7 +363,7 @@ public class MVCTest {
             + costBasisDate + askCom + cannotSell + menu + exit);
     input = new ByteArrayInputStream("2 2 1 2022-11-17 4 1 2 V 20 2022-10-10 10 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
   }
 
@@ -376,7 +376,7 @@ public class MVCTest {
     input = new ByteArrayInputStream(("1 2 1 testFutureBuy NVDA 30 10 2022-11-25 2022-11-16 "
             + "0 7").getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
     File file = new File("./resources/testPortfolio/FlexiblePortfolios/testFutureBuy.csv");
     file.delete();
@@ -390,7 +390,7 @@ public class MVCTest {
             + portfolioSaved + menu + exit);
     input = new ByteArrayInputStream("1 2 1 NegCom AAPL 50 -10 10 2022-11-16 0 7".getBytes());
     IController controller = new CommandController(u, view, input);
-    controller.go();
+    controller.goIController();
     assertEquals(log.toString(), out.toString());
     File file = new File("./resources/testPortfolio/FlexiblePortfolios/NegCom.csv");
     file.delete();

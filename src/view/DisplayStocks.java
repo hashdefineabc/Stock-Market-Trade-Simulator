@@ -1,19 +1,19 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 
 import model.IstockModel;
 
 public class DisplayStocks extends JFrame {
   private JButton okButton;
-  private JPanel buttonsPanel;
-
-
 
   public DisplayStocks(List<IstockModel> stocksToDisplay) {
     super("Stocks");
@@ -30,7 +30,7 @@ public class DisplayStocks extends JFrame {
             "Buy/Sell"};
 
     String[][] data = new String[size][6];
-    int i=0;
+    int i = 0;
 
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -57,7 +57,7 @@ public class DisplayStocks extends JFrame {
     okButton = new JButton("Ok");
     okButton.setActionCommand("okFromDisplayStocks");
 
-    buttonsPanel = new JPanel();
+    JPanel buttonsPanel = new JPanel();
     buttonsPanel.add(okButton);
     this.add(buttonsPanel, BorderLayout.PAGE_END);
 

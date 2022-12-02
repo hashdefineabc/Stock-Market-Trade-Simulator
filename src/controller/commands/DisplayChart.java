@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import controller.IController;
 import model.IUserInterface;
 import model.PortfolioType;
 import view.ViewInterface;

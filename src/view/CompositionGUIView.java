@@ -5,16 +5,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+import javax.swing.DefaultComboBoxModel;
 
-import model.IstockModel;
 
 public class CompositionGUIView extends JFrame {
   private JComboBox portfolioNameComboBox;
-  private JLabel portfolioNameLabel;
-
-  private JLabel dateOfTransactionLabel;
-
   private JComboBox monthComboBox;
   private JComboBox dateComboBox;
   private JComboBox yearComboBox;
@@ -28,7 +29,7 @@ public class CompositionGUIView extends JFrame {
     super(title);
     //Portfolio name panel
     JPanel portfolioNamePanel = new JPanel();
-    portfolioNameLabel = new JLabel("Portfolio Name: ");
+    JLabel portfolioNameLabel = new JLabel("Portfolio Name: ");
 
     portfolioNameComboBox = new JComboBox();
     portfolioNamePanel.add(portfolioNameLabel);
@@ -52,7 +53,7 @@ public class CompositionGUIView extends JFrame {
     //date panel
 
     JPanel datePanel = new JPanel();
-    dateOfTransactionLabel = new JLabel("Date of Transaction: ");
+    JLabel dateOfTransactionLabel = new JLabel("Date of Transaction: ");
     JLabel yearLabel = new JLabel("Year:");
     JLabel monthLabel = new JLabel("Month:");
     JLabel dateLabel = new JLabel("Date:");
@@ -72,9 +73,9 @@ public class CompositionGUIView extends JFrame {
     //handle year
     String[] years = new String[30];
     int j = 0;
-    for (int i = 2022; i > 2006; i=i-1) {
+    for (int i = 2022; i > 2006; i = i - 1) {
       years[j] = Integer.toString(i);
-      j = j+1;
+      j = j + 1;
     }
     yearComboBox = new JComboBox(years);
 
@@ -117,7 +118,8 @@ public class CompositionGUIView extends JFrame {
   }
 
   public void setPopUp(String message) {
-    JOptionPane.showMessageDialog(CompositionGUIView.this, message, "Composition", JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(CompositionGUIView.this, message,
+            "Composition", JOptionPane.INFORMATION_MESSAGE);
     popUpMsg.setText(message);
   }
 
@@ -130,7 +132,7 @@ public class CompositionGUIView extends JFrame {
     String[] input = new String[2];
 
     String date = yearComboBox.getSelectedItem().toString() + "-" +
-            monthComboBox.getSelectedItem().toString() + "-"+
+            monthComboBox.getSelectedItem().toString() + "-" +
             dateComboBox.getSelectedItem().toString();
 
     input[0] = date;
@@ -143,12 +145,13 @@ public class CompositionGUIView extends JFrame {
   }
 
   public void setErrorPopUp(String message) {
-    JOptionPane.showMessageDialog(CompositionGUIView.this, message, "Composition", JOptionPane.ERROR_MESSAGE);
+    JOptionPane.showMessageDialog(CompositionGUIView.this, message,
+            "Composition", JOptionPane.ERROR_MESSAGE);
   }
 
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
-    for(String portfolio: existingPortfolios) {
+    for (String portfolio : existingPortfolios) {
       tempComboBox.addElement(portfolio);
     }
 

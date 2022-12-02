@@ -1,12 +1,16 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
 /**
  *The CreateNewPortfolioView represents the create page of the application.
@@ -20,7 +24,6 @@ public class CreateNewPortfolioView extends JFrame {
   private JTextField portfolioName;
   private JButton createPortfolio;
   private JButton home;
-//  private JButton buyStocks;
   private JPanel panel;
   private JLabel popUpMsg;
   JPanel buttonsPanel = new JPanel();
@@ -46,9 +49,6 @@ public class CreateNewPortfolioView extends JFrame {
     home = new JButton("Home");
     home.setActionCommand("homeFromCreatePortfolio");
 
-//    buyStocks = new JButton("Buy Stocks");
-//    buyStocks.setActionCommand("buyStocks");
-
     panel.add(label);
     panel.add(portfolioName);
     panel.add(createPortfolio);
@@ -57,7 +57,7 @@ public class CreateNewPortfolioView extends JFrame {
 //    buttonsPanel.add(buyStocks);
     buttonsPanel.add(home);
 
-    this.add(panel,  BorderLayout.CENTER);
+    this.add(panel, BorderLayout.CENTER);
     this.add(buttonsPanel, BorderLayout.PAGE_END);
 
     this.add(panel);

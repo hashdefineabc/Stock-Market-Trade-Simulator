@@ -1,9 +1,12 @@
 package view;
 
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 /**
  *The HomeView represents the home page of the application.
@@ -113,12 +116,14 @@ public class HomeView extends JFrame {
     this.pack();
   }
 
+
   /**
    * The ActionListener is notified whenever you click on the button or menu item displayed on the
    * screen.
    * Here this listener is added for all the buttons on the view.
    * @param listener = listener object for this class.
    */
+
   public void addActionListener(ActionListener listener) {
     create.addActionListener(listener);
     invest.addActionListener(listener);

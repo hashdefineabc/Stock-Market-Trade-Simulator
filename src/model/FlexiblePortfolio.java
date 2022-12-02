@@ -1,15 +1,12 @@
 package model;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The class for flexible portfolios implements the flexible portfolio interface and extends the
@@ -37,39 +34,38 @@ public class FlexiblePortfolio extends AbstractFixedPortfolio implements IFlexib
   }
 
 
-
   @Override
   public Double calculateCostBasisForFuture(LocalDate costBasisDate, InvestmentType investmentType,
-                                          String investInstrFile) {
+                                            String investInstrFile) {
 
     Double addCostBasis = 0.0;
-      Double amount = 0.0;
-      Double commission = 0.0;
-      Integer daysToInvest = 0;
-      LocalDate lastTxnDate, startDate, endDate = null;
-      try {
-        BufferedReader br = new BufferedReader(new FileReader(investInstrFile));
-        amount = Double.parseDouble(br.readLine().split(",")[1]);
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        startDate = LocalDate.parse(br.readLine().split(",")[1],dateFormat);
-        endDate = LocalDate.parse(br.readLine().split(",")[1],dateFormat);
-        daysToInvest = Integer.parseInt(br.readLine().split(",")[1]);
-        commission = Double.parseDouble(br.readLine().split(",")[1]);
-        lastTxnDate = LocalDate.parse(br.readLine().split(",")[1],dateFormat);
+    Double amount = 0.0;
+    Double commission = 0.0;
+    Integer daysToInvest = 0;
+    LocalDate lastTxnDate, startDate, endDate = null;
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(investInstrFile));
+      amount = Double.parseDouble(br.readLine().split(",")[1]);
+      DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      startDate = LocalDate.parse(br.readLine().split(",")[1], dateFormat);
+      endDate = LocalDate.parse(br.readLine().split(",")[1], dateFormat);
+      daysToInvest = Integer.parseInt(br.readLine().split(",")[1]);
+      commission = Double.parseDouble(br.readLine().split(",")[1]);
+      lastTxnDate = LocalDate.parse(br.readLine().split(",")[1], dateFormat);
 
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-      while((lastTxnDate.plusDays(daysToInvest)).isBefore(costBasisDate) ||
-              (lastTxnDate.plusDays(daysToInvest)).isEqual(costBasisDate)) {
-        addCostBasis += amount;
-        addCostBasis += commission;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    while ((lastTxnDate.plusDays(daysToInvest)).isBefore(costBasisDate) ||
+            (lastTxnDate.plusDays(daysToInvest)).isEqual(costBasisDate)) {
+      addCostBasis += amount;
+      addCostBasis += commission;
 
-        if (investmentType.equals(InvestmentType.InvestByWeights)) {
-          daysToInvest = 1;
-        }
-        lastTxnDate = lastTxnDate.plusDays(daysToInvest);
+      if (investmentType.equals(InvestmentType.InvestByWeights)) {
+        daysToInvest = 1;
       }
+      lastTxnDate = lastTxnDate.plusDays(daysToInvest);
+    }
 
     return addCostBasis;
   }

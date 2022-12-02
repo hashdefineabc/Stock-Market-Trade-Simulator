@@ -6,7 +6,7 @@ import java.awt.event.WindowListener;
 import java.time.LocalDate;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 public class ChartWeekGuiView extends JFrame {
 
