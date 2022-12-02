@@ -14,5 +14,5 @@ package controller;
  * instead of all appearing within the controller.
  */
 public interface IController {
-  void go();
+  void goIController();
 }

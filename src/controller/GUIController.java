@@ -67,11 +67,11 @@ public class GUIController implements IController, ActionListener {
   }
 
   @Override
-  public void go() {
+  public void goIController() {
     actionMap = initializeMap();
   }
 
-  private void CreatingPortfolio(Map<String, Runnable> actionMap) {
+  private void creatingPortfolio(Map<String, Runnable> actionMap) {
     stockList = new ArrayList<>();
     actionMap.put("create", () -> {
       createNewPortfolioView = new CreateNewPortfolioView("create portfolio");
@@ -81,7 +81,7 @@ public class GUIController implements IController, ActionListener {
       try {
         dcaViewHome.dispose();
       } catch (Exception e) {
-
+        //do nothing
       }
     });
 
@@ -92,11 +92,6 @@ public class GUIController implements IController, ActionListener {
         return;
       }
 
-//      String[] s = this.takeStockInput();
-//      if(s.equals(null))
-//        return;
-//      stockList.add(s);
-
       try {
         if (user.createNewPortfolio(portfolioName, stockList, PortfolioType.flexible)) {
           createNewPortfolioView.setPopUp("Portfolio " + portfolioName + " created successfully");
@@ -104,8 +99,7 @@ public class GUIController implements IController, ActionListener {
         } else {
           createNewPortfolioView.setPopUp("Portfolio name already exists. Try again");
         }
-      }
-      catch (IllegalArgumentException e) {
+      } catch (IllegalArgumentException e) {
         createNewPortfolioView.setPopUp("Portfolio was not created, Try again");
       }
     });
@@ -126,10 +120,6 @@ public class GUIController implements IController, ActionListener {
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
       buySellStock.updateExistingPortfoliosList(existingPortfolios);
 
-//      String[] s = this.takeStockInput();
-//      if(s.equals(null))
-//        return;
-//      stockList.add(s);
 
       //hide home and display buystock
       buySellStock.addActionListener(this);
@@ -146,10 +136,6 @@ public class GUIController implements IController, ActionListener {
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
       buySellStock.updateExistingPortfoliosList(existingPortfolios);
 
-//      String[] s = this.takeStockInput();
-//      if(s.equals(null))
-//        return;
-//      stockList.add(s);
 
       //hide home and display sellStock
       buySellStock.addActionListener(this);
@@ -163,10 +149,11 @@ public class GUIController implements IController, ActionListener {
     actionMap.put("saveStock", () -> {
       String[] stockDetails = new String[6];
       stockDetails = this.takeStockInput();
-      if(stockDetails == null) {
+      if (stockDetails == null) {
         return;
       }
-      stockDetails[5] = buySellStock.getBuyOrSell() ? Operation.BUY.toString() : Operation.SELL.toString();
+      stockDetails[5] = buySellStock.getBuyOrSell() ? Operation.BUY.toString() :
+              Operation.SELL.toString();
 
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
       buySellStock.updateExistingPortfoliosList(existingPortfolios);
@@ -175,7 +162,8 @@ public class GUIController implements IController, ActionListener {
       List<String[]> dataToWrite = null;
 
       try {
-        if ((stockDetails[5] == Operation.SELL.toString()) && (!buySellCmd.validateSellOperation(portfolioIndex+1, stockDetails))) {
+        if ((stockDetails[5] == Operation.SELL.toString()) &&
+                (!buySellCmd.validateSellOperation(portfolioIndex + 1, stockDetails))) {
           buySellStock.setPopUp("Cannot sell stock");
           buySellStock.clear();
           return;
@@ -185,7 +173,7 @@ public class GUIController implements IController, ActionListener {
       }
 
       try {
-        if(!user.validateNumUnits(stockDetails[1])) {
+        if (!user.validateNumUnits(stockDetails[1])) {
           buySellStock.setPopUp("Number of units cannot be negative or fractional");
           buySellStock.clear();
           return;
@@ -194,7 +182,7 @@ public class GUIController implements IController, ActionListener {
         return;
       }
 
-      if(!user.validateCommissionValue(stockDetails[3])) {
+      if (!user.validateCommissionValue(stockDetails[3])) {
         buySellStock.setPopUp("Commission value cannot be negative");
         buySellStock.clear();
         return;
@@ -228,9 +216,9 @@ public class GUIController implements IController, ActionListener {
   private void doneFromInvestWeights(Map<String, Runnable> actionMap) {
     actionMap.put("doneFromInvestWeights", () -> {
       String[] investInput = new String[13];
-      HashMap<String,Double> weights = new HashMap<>();
+      HashMap<String, Double> weights = new HashMap<>();
       investInput = this.takeInvestInput(weights);
-      if(investInput == null) {
+      if (investInput == null) {
         return;
       }
 
@@ -243,13 +231,13 @@ public class GUIController implements IController, ActionListener {
       Double commissionValue = Double.valueOf(investInput[1]);
       LocalDate dateToBuy = LocalDate.parse(investInput[2]);
 
-      LocalDate lastTxnDate =  user.calculateTxns(dateToBuy,dateToBuy,0,
-              weights,amount,commissionValue,portfolioIndex, InvestmentType.InvestByWeights);
+      LocalDate lastTxnDate = user.calculateTxns(dateToBuy, dateToBuy, 0,
+              weights, amount, commissionValue, portfolioIndex, InvestmentType.InvestByWeights);
 
-      user.acceptStrategyFromUser(portfolioIndex,amount,commissionValue,dateToBuy,dateToBuy,weights,
-              InvestmentType.InvestByWeights,0,lastTxnDate);
-      investView.setSuccessMsg("Instructions saved for this Portfolio! Money will be invested as per "
-              + "them");
+      user.acceptStrategyFromUser(portfolioIndex, amount, commissionValue, dateToBuy, dateToBuy,
+              weights, InvestmentType.InvestByWeights, 0, lastTxnDate);
+      investView.setSuccessMsg("Instructions saved for this Portfolio! Money will be invested " +
+              "as per them");
       investView.clear();
     });
   }
@@ -257,9 +245,9 @@ public class GUIController implements IController, ActionListener {
   private void doneFromDCA(Map<String, Runnable> actionMap) {
     actionMap.put("doneFromDCA", () -> {
       String[] dcaInput = new String[14];
-      HashMap<String,Double> weights = new HashMap<>();
+      HashMap<String, Double> weights = new HashMap<>();
       dcaInput = this.takeDCAInput(weights);
-      if(dcaInput == null) {
+      if (dcaInput == null) {
         return;
       }
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
@@ -274,21 +262,21 @@ public class GUIController implements IController, ActionListener {
       LocalDate strategyEnd;
       if (dcaInput[3] == null) {
         strategyEnd = null;
-      }
-      else {
+      } else {
         strategyEnd = LocalDate.parse(dcaInput[3]);
       }
       Integer daysToInvest = Integer.valueOf(dcaInput[4]);
 
-      LocalDate lastTxnDate = user.calculateTxns(strategyStart,strategyEnd,daysToInvest,weights,
-              amount,commissionValue,portfolioIndex, InvestmentType.DCA);
-      user.acceptStrategyFromUser(portfolioIndex,amount,commissionValue,strategyStart,strategyEnd,weights,
-              InvestmentType.DCA, daysToInvest, lastTxnDate);
+      LocalDate lastTxnDate = user.calculateTxns(strategyStart, strategyEnd, daysToInvest, weights,
+              amount, commissionValue, portfolioIndex, InvestmentType.DCA);
+      user.acceptStrategyFromUser(portfolioIndex, amount, commissionValue,
+              strategyStart, strategyEnd, weights, InvestmentType.DCA, daysToInvest, lastTxnDate);
       dcaView.setSuccessMsg("Instructions saved for this Portfolio! Money will be invested as per "
               + "them");
       dcaView.clear();
     });
   }
+
   private void cancelFromBuy(Map<String, Runnable> actionMap) {
     actionMap.put("cancelFromBuy", () -> {
       home = new HomeView("Home");
@@ -321,6 +309,7 @@ public class GUIController implements IController, ActionListener {
       this.investView.dispose();
     });
   }
+
   private void cancelFromDCA(Map<String, Runnable> actionMap) {
     actionMap.put("cancelFromDCA", () -> {
       home = new HomeView("Home");
@@ -332,6 +321,7 @@ public class GUIController implements IController, ActionListener {
       this.dcaViewHome.dispose();
     });
   }
+
   private void cancelFromDCAHome(Map<String, Runnable> actionMap) {
     actionMap.put("cancelFromDCAHome", () -> {
       home = new HomeView("Home");
@@ -353,6 +343,7 @@ public class GUIController implements IController, ActionListener {
       this.valueView.dispose();
     });
   }
+
   private void backFromDisplayChart(Map<String, Runnable> actionMap) {
     actionMap.put("backFromDisplayChart", () -> {
       home = new HomeView("Home");
@@ -374,6 +365,7 @@ public class GUIController implements IController, ActionListener {
       this.compositionView.dispose();
     });
   }
+
   private void closeFromChart(Map<String, Runnable> actionMap) {
     actionMap.put("closeFromChart", () -> {
       displayChartHome = new DisplayChartGUIView();
@@ -405,7 +397,7 @@ public class GUIController implements IController, ActionListener {
       System.exit(0);
     });
 
-    CreatingPortfolio(actionMap);
+    creatingPortfolio(actionMap);
     buyingStocks(actionMap);
     cancelFromBuy(actionMap);
     saveStock(actionMap);
@@ -441,24 +433,28 @@ public class GUIController implements IController, ActionListener {
 
   private void prevWeekPerformance(Map<String, Runnable> actionMap) {
     actionMap.put("prevWeekPerformance", () -> {
-      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex()+1;
-      chart = new ChartWeekGuiView(user.calculateChart(1, portfolioIndex, PortfolioType.flexible));
+      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex() + 1;
+      chart = new ChartWeekGuiView(
+              user.calculateChart(1, portfolioIndex, PortfolioType.flexible));
     });
   }
 
   private void prevMonthPerformance(Map<String, Runnable> actionMap) {
     actionMap.put("prevMonthPerformance", () -> {
-      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex()+1;
-      chart = new ChartWeekGuiView(user.calculateChart(2, portfolioIndex, PortfolioType.flexible));
+      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex() + 1;
+      chart = new ChartWeekGuiView(
+              user.calculateChart(2, portfolioIndex, PortfolioType.flexible));
     });
   }
 
   private void prevYearPerformance(Map<String, Runnable> actionMap) {
     actionMap.put("prevYearPerformance", () -> {
-      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex()+1;
-      chart = new ChartWeekGuiView(user.calculateChart(3, portfolioIndex, PortfolioType.flexible));
+      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex() + 1;
+      chart = new ChartWeekGuiView(
+              user.calculateChart(3, portfolioIndex, PortfolioType.flexible));
     });
   }
+
   private void dcaButtonHomeMain(Map<String, Runnable> actionMap) {
     actionMap.put("dcaButtonHomeMain", () -> {
       dcaViewHome = new DCAFromHome();
@@ -475,7 +471,7 @@ public class GUIController implements IController, ActionListener {
       displayChartHome = new DisplayChartGUIView();
       existingPortfolios = user.getPortfolioNamesCreated(PortfolioType.flexible);
       displayChartHome.updateExistingPortfoliosList(existingPortfolios);
-      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex()+1;
+      int portfolioIndex = displayChartHome.getSelectedPortfolioIndex() + 1;
 
       //hide home and display chart
       displayChartHome.addActionListener(this);
@@ -527,11 +523,10 @@ public class GUIController implements IController, ActionListener {
       String costBasisDate = costBasisView.getInput()[0];
 
       try {
-        Double costBasis = user.calculateCostBasisOfPortfolio(portfolioIndex+1,
+        Double costBasis = user.calculateCostBasisOfPortfolio(portfolioIndex + 1,
                 PortfolioType.flexible, LocalDate.parse(costBasisDate));
         costBasisView.setPopUp("Cost Basis on " + costBasisDate + " is " + String.format("%.2f", costBasis) + " USD");
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         costBasisView.setErrorPopUp("Cost Basis couldn't be calculated!!!\nPlease try again...");
       }
     });
@@ -548,15 +543,14 @@ public class GUIController implements IController, ActionListener {
       String valueDate = valueView.getInput()[0];
 
       try {
-        Double value = user.calculateValueOfPortfolio(portfolioIndex+1, LocalDate.parse(valueDate), PortfolioType.flexible);
+        Double value = user.calculateValueOfPortfolio(portfolioIndex + 1, LocalDate.parse(valueDate), PortfolioType.flexible);
 
         if (value == -1) {
           valueView.setErrorPopUp("Value cannot be calculated for a date prior to portfolio creation");
         } else {
           valueView.setPopUp("Value on " + valueDate + " is " + String.format("%.2f", value) + " USD");
         }
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         valueView.setErrorPopUp("Value couldn't be calculated!!!\nPlease try again");
       }
     });
@@ -573,7 +567,7 @@ public class GUIController implements IController, ActionListener {
       String compositionDate = compositionView.getInput()[0];
 
       try {
-        List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex+1,
+        List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex + 1,
                 PortfolioType.flexible, LocalDate.parse(compositionDate));
         if (stocksToDisplay.size() == 0) {
           compositionView.setPopUp("No stocks are present in the portfolio at this date");
@@ -582,8 +576,8 @@ public class GUIController implements IController, ActionListener {
           displayComposition.addActionListener(this);
           displayComposition.setLocation(compositionView.getLocation());
           this.compositionView.dispose();
-        }}
-      catch (Exception e) {
+        }
+      } catch (Exception e) {
         compositionView.setErrorPopUp("Composition cannot be viewed at the moment!!!\nPlease try again...");
       }
     });
@@ -636,9 +630,9 @@ public class GUIController implements IController, ActionListener {
 
       uploadFromFileGUIView = new UploadFromFileGUIView();
 
-      File fileUploaded = uploadFromFileGUIView.FilePopUp();
+      File fileUploaded = uploadFromFileGUIView.filePopUp();
 
-      if(fileUploaded == null){
+      if (fileUploaded == null) {
         uploadFromFileGUIView.showError("File couldn't be uploaded");
         return;
       }
@@ -652,11 +646,11 @@ public class GUIController implements IController, ActionListener {
       String sourceFileName = fileUploaded.getName();
 
       Path userDirectory = Path.of(new File("").getAbsolutePath());
-      String folderPath = userDirectory + File.separator + "PortFolioComposition" + File.separator + "FlexiblePortfolios" + File.separator+sourceFileName;
+      String folderPath = userDirectory + File.separator + "PortFolioComposition" + File.separator + "FlexiblePortfolios" + File.separator + sourceFileName;
       Path target = Path.of(folderPath);
 
       File newFile = new File(folderPath);
-      if(newFile.exists()) {
+      if (newFile.exists()) {
         uploadFromFileGUIView.showError("File name already exists");
         return;
       }
@@ -668,7 +662,7 @@ public class GUIController implements IController, ActionListener {
       }
       uploadFromFileGUIView.setPopUp();
 
-      uploadFromFileGUIView.addActionListener(this);
+//      uploadFromFileGUIView.addActionListener(this);
       uploadFromFileGUIView.setLocation(home.getLocation());
     });
   }
@@ -677,51 +671,48 @@ public class GUIController implements IController, ActionListener {
     String[] input = new String[13];
     input = investView.getInput();
     String amountFromUser = input[0];
-    if(Objects.equals(amountFromUser, "")) {
+    if (Objects.equals(amountFromUser, "")) {
       investView.setWarning("Enter amount");
       return null;
     }
     try {
       Double.parseDouble(amountFromUser);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       investView.setWarning("Please enter a valid amount");
       return null;
     }
 
     String commissionFromUser = input[1];
-    if(Objects.equals(commissionFromUser, "")) {
+    if (Objects.equals(commissionFromUser, "")) {
       investView.setWarning("Enter commission");
       return null;
     }
     try {
       Double.parseDouble(commissionFromUser);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       investView.setWarning("Please enter a valid commission value");
       return null;
     }
 
     double[] weights = new double[5];
-    int j=0;
+    int j = 0;
 
     String tickerName = null;
     Double weight = null;
     int flag = 0;
 
-    for(int i=3; i<13; i++) {
-      if(i % 2 != 0) { //validate ticker Name
-        if(Objects.equals(input[i], ""))
+    for (int i = 3; i < 13; i++) {
+      if (i % 2 != 0) { //validate ticker Name
+        if (Objects.equals(input[i], ""))
           break;
-        if(!user.isTickerValid(input[i])) {
+        if (!user.isTickerValid(input[i])) {
           investView.setWarning("Ticker name invalid");
           return null;
         }
         tickerName = input[i];
         flag = 0;
-      }
-      else if(i%2 == 0 ) { //validate weights
-        if(!user.isDoubleValid(input[i])) {
+      } else if (i % 2 == 0) { //validate weights
+        if (!user.isDoubleValid(input[i])) {
           investView.setWarning("Enter a valid weight");
           return null;
         }
@@ -729,10 +720,10 @@ public class GUIController implements IController, ActionListener {
         weight = Double.valueOf(input[i]);
         flag = 1;
       }
-      if(flag == 1)
+      if (flag == 1)
         tickerWeights.put(tickerName, weight);
     }
-    if(!user.validateWeightsForInvestment(weights)) {
+    if (!user.validateWeightsForInvestment(weights)) {
       investView.setWarning("Total weights of all stocks should be 100...");
       return null;
     }
@@ -744,51 +735,48 @@ public class GUIController implements IController, ActionListener {
     String[] input = new String[15];
     input = dcaView.getInput();
     String amountFromUser = input[0];
-    if(Objects.equals(amountFromUser, "")) {
+    if (Objects.equals(amountFromUser, "")) {
       dcaView.setWarning("Enter amount");
       return null;
     }
     try {
       Double.parseDouble(amountFromUser);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       dcaView.setWarning("Please enter a valid amount");
       return null;
     }
 
     String commissionFromUser = input[1];
-    if(Objects.equals(commissionFromUser, "")) {
+    if (Objects.equals(commissionFromUser, "")) {
       dcaView.setWarning("Enter commission");
       return null;
     }
     try {
       Double.parseDouble(commissionFromUser);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       dcaView.setWarning("Please enter a valid commission value");
       return null;
     }
 
     double[] weights = new double[5];
-    int j=0;
+    int j = 0;
 
     String tickerName = null;
     Double weight = null;
     int flag = 0;
 
-    for(int i=5; i<15; i++) {
-      if(i % 2 != 0) { //validate ticker Name
-        if(Objects.equals(input[i], ""))
+    for (int i = 5; i < 15; i++) {
+      if (i % 2 != 0) { //validate ticker Name
+        if (Objects.equals(input[i], ""))
           break;
-        if(!user.isTickerValid(input[i])) {
+        if (!user.isTickerValid(input[i])) {
           dcaView.setWarning("Ticker name invalid");
           return null;
         }
         tickerName = input[i];
         flag = 0;
-      }
-      else if(i%2 == 0 ) { //validate weights
-        if(!user.isDoubleValid(input[i])) {
+      } else if (i % 2 == 0) { //validate weights
+        if (!user.isDoubleValid(input[i])) {
           dcaView.setWarning("Enter a valid weight");
           return null;
         }
@@ -796,11 +784,11 @@ public class GUIController implements IController, ActionListener {
         weight = Double.valueOf(input[i]);
         flag = 1;
       }
-      if(flag == 1)
+      if (flag == 1)
         tickerWeights.put(tickerName, weight);
     }
 
-    if(!user.validateWeightsForInvestment(weights)) {
+    if (!user.validateWeightsForInvestment(weights)) {
       dcaView.setWarning("Total weights of all stocks should be 100...");
       return null;
     }
@@ -810,35 +798,33 @@ public class GUIController implements IController, ActionListener {
 
   private String[] takeStockInput() {
     String tickerNameFromUser = buySellStock.getInput()[0];
-    if(Objects.equals(tickerNameFromUser, "")) {
+    if (Objects.equals(tickerNameFromUser, "")) {
       buySellStock.setPopUp("Enter ticker name");
       return null;
     }
-    if(!user.isTickerValid(tickerNameFromUser)) {
+    if (!user.isTickerValid(tickerNameFromUser)) {
       buySellStock.setPopUp("Ticker name invalid");
       buySellStock.clear();
       return null;
     }
-    if(Objects.equals(buySellStock.getInput()[1], "")) {
+    if (Objects.equals(buySellStock.getInput()[1], "")) {
       buySellStock.setPopUp("Enter number of units");
       return null;
     }
     try {
       Double.parseDouble(buySellStock.getInput()[1]);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       buySellStock.setPopUp("Please enter a valid number of units");
       return null;
     }
 
-    if(Objects.equals(buySellStock.getInput()[3], "")) {
+    if (Objects.equals(buySellStock.getInput()[3], "")) {
       buySellStock.setPopUp("Enter commission value");
       return null;
     }
     try {
       Double.parseDouble(buySellStock.getInput()[3]);
-    }
-    catch (NumberFormatException e) {
+    } catch (NumberFormatException e) {
       buySellStock.setPopUp("Please enter a valid commission value");
       return null;
     }
@@ -862,11 +848,9 @@ public class GUIController implements IController, ActionListener {
       transactionDate = transactionDate.minusDays(1);
     }
     while (transactionValue == 0.0) {
-//      buyStock.setPopUp("Market was closed on " + transactionDate + "\n Calculating price of previous date");
       transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
       transactionDate = transactionDate.minusDays(1);
     }
-//    buyStock.setPopUp("Price of the stock considered is of the date " + transactionDate);
     s[4] = String.valueOf(transactionValue);
     s[5] = String.valueOf(Operation.BUY); //indicates shares are bought
 

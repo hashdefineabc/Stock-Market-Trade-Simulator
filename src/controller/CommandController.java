@@ -68,7 +68,7 @@ public class CommandController implements IController {
    */
 
   @Override
-  public void go() {
+  public void goIController() {
     ICommandController cmd = null;
     while (true) {
       try {

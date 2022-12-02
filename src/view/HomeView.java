@@ -1,9 +1,12 @@
 package view;
 
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 public class HomeView extends JFrame {
 
@@ -94,6 +97,7 @@ public class HomeView extends JFrame {
     this.setVisible(true);
     this.pack();
   }
+
   public void addActionListener(ActionListener listener) {
     create.addActionListener(listener);
     invest.addActionListener(listener);
