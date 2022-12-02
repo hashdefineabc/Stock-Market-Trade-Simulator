@@ -19,12 +19,25 @@ import model.IstockModel;
 import model.PortfolioType;
 import view.ViewInterface;
 
+/**
+ * The class DCA implements the command controller interface.
+ * It is one of the commands that is supported by our application.
+ * DCA operation is available only for flexible portfolios.
+ * It allows the user create a new portfolio / apply the strategy to an existing portfolio.
+ * Investment would be done as per the strategy
+ */
 public class DCA implements ICommandController{
 
   private ViewInterface view;
   private IUserInterface user;
   private Scanner inputScanner;
 
+  /**
+   * Instantiates a new DCA.
+   *
+   * @param view the view
+   * @param user the user
+   */
   public DCA(ViewInterface view, IUserInterface user, Scanner inputScanner) {
     this.view = view;
     this.user = user;

@@ -151,5 +151,8 @@ public interface ViewInterface {
 
   void displayChartMonth(Map<LocalDate, String> chart);
 
+  /**
+   * Method to ask the user how much amount they want to invest.
+   */
   void askUserAmountToInvest();
 }

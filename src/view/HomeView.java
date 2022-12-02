@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+/**
+ *
+ */
 public class HomeView extends JFrame {
 
   private JButton create;

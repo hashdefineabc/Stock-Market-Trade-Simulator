@@ -260,5 +260,10 @@ public interface IUserInterface {
 
   Boolean validateWeightsForInvestment(double[] weights);
 
+  /**
+   * Checks if the string is a valid double.
+   * @param s = the string to check.
+   * @return = if the string is a double or not.
+   */
   boolean isDoubleValid(String s);
 }

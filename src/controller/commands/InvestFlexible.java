@@ -1,7 +1,4 @@
 package controller.commands;
-
-import java.io.File;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,6 +16,14 @@ import model.IstockModel;
 import model.PortfolioType;
 import view.ViewInterface;
 
+/**
+ * Instantiates a new Invest in a Flexible Portfolio.
+ * It takes view and model (user) and instantiates it.
+ * It interacts with view and main model which is user.
+ * This Operation is available only for the flexible portfolios.
+ * The strategy specified by the user will be applied to the existing portfolio.
+ */
+
 public class InvestFlexible implements ICommandController {
 
   private ViewInterface view;
@@ -26,9 +31,8 @@ public class InvestFlexible implements ICommandController {
   private Scanner inputScanner;
 
   /**
-   * Instantiates a new Cost basis.
-   * It takes view and model (user) and instantiates it.
-   * It interacts with view and main model which is user.
+   * Instantiates a new InvestFlexible.
+   *
    * @param view the view
    * @param user the user
    */

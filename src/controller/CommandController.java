@@ -20,7 +20,7 @@ import view.ViewInterface;
 
 /**
  * This is our main controller classes that provides implementation for our command controller.
- * It has access to view and model (user).
+ * It has access to text view and model (user).
  * It has view, user as private fields.
  * This class interacts with the model (user) and view.
  * It tells view what to print and tells model what to do.

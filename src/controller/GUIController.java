@@ -39,6 +39,15 @@ import view.ValueGUIView;
 
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 
+/**
+ * This is our main controller classes for GUI based views that provides implementation
+ * for our command controller.
+ * It has access to  the GUI view and model (user).
+ * It has views, user as private fields.
+ * This class interacts with the model (user) and view.
+ * It tells view what to print and tells model what to do.
+ */
+
 public class GUIController implements IController, ActionListener {
 
   private IUserInterface user;
@@ -59,6 +68,24 @@ public class GUIController implements IController, ActionListener {
   private ChartWeekGuiView chart;
   List<String[]> stockList;
   List<String> existingPortfolios;
+
+  /**
+   * Instantiates a new Controller.
+   * It takes in user, view  and
+   * instantiates it to the private fields of this class.
+   * It creates views as per the different operations supported by the application.
+   * The commands supported in our application are as follows
+   * 1. Create a new portfolio
+   * 2. Display composition of a portfolio
+   * 3. Check value of a portfolio on a particular date
+   * 4. Option to buy or sell stocks for flexible portfolios
+   * 5. View the cost basis of portfolios
+   * 6. Invest in a portfolio by percentage
+   * 7. Apply DCA on a portfolio.
+   *
+   * @param user the user model
+   * @param view the view model
+   */
 
   public GUIController(IUserInterface user, HomeView view) {
     this.user = user;
