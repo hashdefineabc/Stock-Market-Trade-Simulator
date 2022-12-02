@@ -81,9 +81,21 @@ Following are the operations supported by this application:
 - The scale of the horizontal axis is decided by the maximum value of the portfolios in the given time range.
 - There are a maximum of 30 asterisks on each line.
 
+7) Invest by weights
+- This operation allows users to invest a fixed amount into an existing fixed portfolio that contains multiple stocks.
+- It uses a specified weight for each stock in the portfolio.
+- User can create a MAANGM portfolio (Meta, Apple, Amazon,  Netflix, Google, Microsoft) and
+- then specify to invest $2000 in the portfolio on a specific date, such that 40% goes towards Meta, 10% towards Apple, 10% towards Amazon,  20% towards Netflix, 10% towards Google, 10% towards Microsoft).
+- This strategy allows purchases of fractional shares depending on the amount specified.
+- The total weights of the portfolios must be equal to 100.
 
+8) Dollar cost averaging
+- OUr application offers creating a start-to-finish dollar-cost averaging as a single operation.
+- We can create a portfolio of specified stocks, and invest a specified amount in the portfolio every x days starting on date 1 until date 2 using the same, specified weights for each transaction.
+- The strategy can also be ongoing without an end date .
 
 #Things to remember while using this application
-1)Currently only the top 25 stocks listed on NASDAQ are supported as valid ticker names. In the future, all the NASDAQ listed stocks will be supported.
-2)If the user wants to calculate the value of a portfolio for a holiday/day when stock exchange was closed, the value returned in such cases will be 0.
-3)Number of stocks purchased need to be positive whole numbers.
+1) Currently only the top 25 stocks listed on NASDAQ are supported as valid ticker names. In the future, all the NASDAQ listed stocks will be supported.
+2) If the user wants to calculate the value of a portfolio for a holiday/day when stock exchange was closed, the value returned in such cases will be 0.
+3) Number of stocks purchased need to be positive whole numbers.
+4) We have taken reference from this site to introduce charts - https://www.roseindia.net/java/example/java/swing/draw-simple-bar-chart.shtml
