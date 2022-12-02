@@ -187,7 +187,7 @@ public interface IUserInterface {
   String getPortfolioName(int portfolioIndex, PortfolioType portfolioType);
 
   /**
-   * Updates the Flexible portfolios as per the investment strategies decided for them
+   * Updates the Flexible portfolios as per the investment strategies decided for them.
    * @param investmentType = Type of investment strategy for a portfolio, can be investing by
    *                       weights or DCA.
    */

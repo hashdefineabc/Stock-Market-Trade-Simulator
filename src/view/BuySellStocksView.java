@@ -50,7 +50,6 @@ public class BuySellStocksView extends JFrame {
     ActionListener actionListener = new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-//        getSelectedPortfolio();
         selectedPortfolioIndex = portfolioNameComboBox.getSelectedIndex();
       }
     };
@@ -103,7 +102,7 @@ public class BuySellStocksView extends JFrame {
 
     //handle month
     String[] months = {"01", "02", "03", "04", "05", "06", "07", "08",
-            "09", "10", "11", "12"};
+                      "09", "10", "11", "12"};
     monthComboBox = new JComboBox(months);
     monthComboBox.addActionListener(listener);
 
@@ -149,15 +148,12 @@ public class BuySellStocksView extends JFrame {
     this.add(buttonPanel, BorderLayout.PAGE_END);
 
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//    this.setPreferredSize(new Dimension(450, 500));
     this.setVisible(true);
     this.pack();
   }
 
   public String[] getInput() {
     String[] input = new String[4];
-//    LocalDate dateSelected;
-//    dateSelected = LocalDate.parse(date);
     input[0] = tickerNameTextField.getText();
     input[1] = numUnitsTextField.getText();
     input[3] = commissionTextField.getText();
@@ -177,12 +173,14 @@ public class BuySellStocksView extends JFrame {
   }
 
   public void setPopUp(String message) {
-    JOptionPane.showMessageDialog(BuySellStocksView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
+    JOptionPane.showMessageDialog(BuySellStocksView.this, message, "Warning",
+            JOptionPane.WARNING_MESSAGE);
     popUpMsg.setText(message);
   }
 
   public void displaySuccess(String message) {
-    JOptionPane.showMessageDialog(BuySellStocksView.this, message, "Yayyyy", JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(BuySellStocksView.this, message, "Yayyyy",
+            JOptionPane.INFORMATION_MESSAGE);
   }
 
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {

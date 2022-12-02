@@ -42,7 +42,9 @@ public class FlexiblePortfolio extends AbstractFixedPortfolio implements IFlexib
     Double amount = 0.0;
     Double commission = 0.0;
     Integer daysToInvest = 0;
-    LocalDate lastTxnDate, startDate, endDate = null;
+    LocalDate lastTxnDate = null;
+    LocalDate startDate = null;
+    LocalDate endDate = null;
     try {
       BufferedReader br = new BufferedReader(new FileReader(investInstrFile));
       amount = Double.parseDouble(br.readLine().split(",")[1]);

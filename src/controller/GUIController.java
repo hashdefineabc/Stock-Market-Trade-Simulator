@@ -525,7 +525,8 @@ public class GUIController implements IController, ActionListener {
       try {
         Double costBasis = user.calculateCostBasisOfPortfolio(portfolioIndex + 1,
                 PortfolioType.flexible, LocalDate.parse(costBasisDate));
-        costBasisView.setPopUp("Cost Basis on " + costBasisDate + " is " + String.format("%.2f", costBasis) + " USD");
+        costBasisView.setPopUp("Cost Basis on " + costBasisDate + " is " +
+                String.format("%.2f", costBasis) + " USD");
       } catch (Exception e) {
         costBasisView.setErrorPopUp("Cost Basis couldn't be calculated!!!\nPlease try again...");
       }
@@ -543,12 +544,15 @@ public class GUIController implements IController, ActionListener {
       String valueDate = valueView.getInput()[0];
 
       try {
-        Double value = user.calculateValueOfPortfolio(portfolioIndex + 1, LocalDate.parse(valueDate), PortfolioType.flexible);
+        Double value = user.calculateValueOfPortfolio(portfolioIndex + 1,
+                LocalDate.parse(valueDate), PortfolioType.flexible);
 
         if (value == -1) {
-          valueView.setErrorPopUp("Value cannot be calculated for a date prior to portfolio creation");
+          valueView.setErrorPopUp
+                  ("Value cannot be calculated for a date prior to portfolio creation");
         } else {
-          valueView.setPopUp("Value on " + valueDate + " is " + String.format("%.2f", value) + " USD");
+          valueView.setPopUp("Value on " + valueDate + " is " +
+                  String.format("%.2f", value) + " USD");
         }
       } catch (Exception e) {
         valueView.setErrorPopUp("Value couldn't be calculated!!!\nPlease try again");
@@ -567,8 +571,10 @@ public class GUIController implements IController, ActionListener {
       String compositionDate = compositionView.getInput()[0];
 
       try {
-        List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(portfolioIndex + 1,
-                PortfolioType.flexible, LocalDate.parse(compositionDate));
+        List<IstockModel> stocksToDisplay = user.displayStocksOfPortFolio(
+                portfolioIndex + 1,
+                PortfolioType.flexible,
+                LocalDate.parse(compositionDate));
         if (stocksToDisplay.size() == 0) {
           compositionView.setPopUp("No stocks are present in the portfolio at this date");
         } else {
@@ -578,7 +584,8 @@ public class GUIController implements IController, ActionListener {
           this.compositionView.dispose();
         }
       } catch (Exception e) {
-        compositionView.setErrorPopUp("Composition cannot be viewed at the moment!!!\nPlease try again...");
+        compositionView.setErrorPopUp
+                ("Composition cannot be viewed at the moment!!!\nPlease try again...");
       }
     });
   }
@@ -646,7 +653,8 @@ public class GUIController implements IController, ActionListener {
       String sourceFileName = fileUploaded.getName();
 
       Path userDirectory = Path.of(new File("").getAbsolutePath());
-      String folderPath = userDirectory + File.separator + "PortFolioComposition" + File.separator + "FlexiblePortfolios" + File.separator + sourceFileName;
+      String folderPath = userDirectory + File.separator + "PortFolioComposition" +
+              File.separator + "FlexiblePortfolios" + File.separator + sourceFileName;
       Path target = Path.of(folderPath);
 
       File newFile = new File(folderPath);
@@ -662,7 +670,6 @@ public class GUIController implements IController, ActionListener {
       }
       uploadFromFileGUIView.setPopUp();
 
-//      uploadFromFileGUIView.addActionListener(this);
       uploadFromFileGUIView.setLocation(home.getLocation());
     });
   }
@@ -703,8 +710,9 @@ public class GUIController implements IController, ActionListener {
 
     for (int i = 3; i < 13; i++) {
       if (i % 2 != 0) { //validate ticker Name
-        if (Objects.equals(input[i], ""))
+        if (Objects.equals(input[i], "")) {
           break;
+        }
         if (!user.isTickerValid(input[i])) {
           investView.setWarning("Ticker name invalid");
           return null;
@@ -720,8 +728,9 @@ public class GUIController implements IController, ActionListener {
         weight = Double.valueOf(input[i]);
         flag = 1;
       }
-      if (flag == 1)
+      if (flag == 1) {
         tickerWeights.put(tickerName, weight);
+      }
     }
     if (!user.validateWeightsForInvestment(weights)) {
       investView.setWarning("Total weights of all stocks should be 100...");
@@ -767,8 +776,9 @@ public class GUIController implements IController, ActionListener {
 
     for (int i = 5; i < 15; i++) {
       if (i % 2 != 0) { //validate ticker Name
-        if (Objects.equals(input[i], ""))
+        if (Objects.equals(input[i], "")) {
           break;
+        }
         if (!user.isTickerValid(input[i])) {
           dcaView.setWarning("Ticker name invalid");
           return null;
@@ -784,8 +794,9 @@ public class GUIController implements IController, ActionListener {
         weight = Double.valueOf(input[i]);
         flag = 1;
       }
-      if (flag == 1)
+      if (flag == 1) {
         tickerWeights.put(tickerName, weight);
+      }
     }
 
     if (!user.validateWeightsForInvestment(weights)) {
@@ -848,7 +859,8 @@ public class GUIController implements IController, ActionListener {
       transactionDate = transactionDate.minusDays(1);
     }
     while (transactionValue == 0.0) {
-      transactionValue = user.getStockPriceFromDB(tickerNameFromUser, transactionDate.minusDays(1));
+      transactionValue = user.getStockPriceFromDB(tickerNameFromUser,
+              transactionDate.minusDays(1));
       transactionDate = transactionDate.minusDays(1);
     }
     s[4] = String.valueOf(transactionValue);
