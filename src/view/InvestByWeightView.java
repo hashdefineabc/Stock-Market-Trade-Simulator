@@ -15,6 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
+/**
+ *The InvestByWeightView represents the invest by weights page of the application.
+ * It extends the JFrame class in order to design the buttons for the create operation.
+ *This lets the user create an investment strategy to invest in a portfolio.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
+
 public class InvestByWeightView extends JFrame {
 
   private JComboBox portfolioNameComboBox;
@@ -34,6 +41,11 @@ public class InvestByWeightView extends JFrame {
   TickerWeightPanel tw3;
   TickerWeightPanel tw4;
   TickerWeightPanel tw5;
+
+  /**
+   * Creates a new  instance of 'InvestByWeightView' class
+   * @param title = the title we want this frame to display
+   */
 
   public InvestByWeightView(String title) {
     super(title);
@@ -155,10 +167,21 @@ public class InvestByWeightView extends JFrame {
     this.pack();
   }
 
+  /**
+   * The ActionListener is notified whenever you click on the button or menu item displayed on the
+   * screen.
+   * Here this listener is added for all the buttons on the view.
+   * @param listener = listener object for this class.
+   */
   public void addActionListener(ActionListener listener) {
     cancel.addActionListener(listener);
     done.addActionListener(listener);
   }
+
+  /**
+   * updating the existing portfolios as per the strategies.
+   * @param existingPortfolios = list of existing portfolios.
+   */
 
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
@@ -169,10 +192,18 @@ public class InvestByWeightView extends JFrame {
     this.portfolioNameComboBox.setModel(tempComboBox);
   }
 
+  /**
+   * gettting the user input for the selected portfolio.
+   * @return = user choice
+   */
   public int getSelectedPortfolioIndex() {
     return selectedPortfolioIndex;
   }
 
+  /**
+   * getting the input from the user for the stratgey.
+   * @return the user strategy array.
+   */
   public String[] getInput() {
     String[] input = new String[13];
 
@@ -205,6 +236,9 @@ public class InvestByWeightView extends JFrame {
     return input;
   }
 
+  /**
+   * clearing all the fields after the user has input the strategy.
+   */
   public void clear() {
     amountTextField.setText("");
     commissionTextField.setText("");
@@ -215,10 +249,18 @@ public class InvestByWeightView extends JFrame {
     tw5.clear();
   }
 
+  /**
+   * letting the user know that theere was some error in the strategy
+   * @param message = msg to be displayed to the user.
+   */
   public void setWarning(String message) {
     JOptionPane.showMessageDialog(InvestByWeightView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
   }
 
+  /**
+   * letting the user know that the strategy was saved sucessfully.
+   * @param s = msg to be displayed to the user.
+   */
   public void setSuccessMsg(String s) {
     JOptionPane.showMessageDialog(InvestByWeightView.this, s, "Success", JOptionPane.INFORMATION_MESSAGE);
   }

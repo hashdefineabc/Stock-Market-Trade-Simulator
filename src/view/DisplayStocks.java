@@ -12,6 +12,12 @@ import javax.swing.JTable;
 
 import model.IstockModel;
 
+/**
+ *The DisplayStocks view displays all the stocks in a portfolio for this application.
+ * It extends the JFrame class in order to design the buttons for the create operation.
+ *This lets the user create an investment strategy to invest in a portfolio.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 public class DisplayStocks extends JFrame {
   private JButton okButton;
 

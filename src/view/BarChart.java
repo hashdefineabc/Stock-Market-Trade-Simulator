@@ -11,7 +11,11 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
-
+/**
+ *The BarChart can be used by the user to check the performance of the portfolio.
+ * It extends the JFrame class in order to design the buttons for the create operation.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 public class BarChart extends JPanel {
 
   String[] dates;

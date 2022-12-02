@@ -15,6 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultComboBoxModel;
 
+/**
+ *The BuySellStocksView shows the user the way to buy/sell stocks from  a portfolio.
+ * It extends the JFrame class in order to design the buttons for the create operation.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 
 public class BuySellStocksView extends JFrame {
 

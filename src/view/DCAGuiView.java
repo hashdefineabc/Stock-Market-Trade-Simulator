@@ -18,6 +18,14 @@ import javax.swing.JCheckBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
+/**
+ *The DCAGuiView represents the invest using DCA feature of the application.
+ * DCA will take inputs weightage for all the stocks.
+ * It extends the JFrame class in order to design the buttons for the create operation.
+ *This lets the user create a new portfolio by entering the details of it.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
+
 public class DCAGuiView extends JFrame {
   private JComboBox portfolioNameComboBox;
   int selectedPortfolioIndex;
@@ -42,6 +50,11 @@ public class DCAGuiView extends JFrame {
   TickerWeightPanel tw3;
   TickerWeightPanel tw4;
   TickerWeightPanel tw5;
+
+  /**
+   * Creates a new  instance of 'DCAGuiView' class
+   * @param title = the title we want this frame to display
+   */
 
   public DCAGuiView(String title) {
     super(title);
@@ -239,6 +252,10 @@ public class DCAGuiView extends JFrame {
     done.addActionListener(listener);
   }
 
+  /**
+   * updating the existing portfolios as per the strategies.
+   * @param existingPortfolios = list of existing portfolios.
+   */
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
     for(String portfolio: existingPortfolios) {
@@ -248,10 +265,18 @@ public class DCAGuiView extends JFrame {
     this.portfolioNameComboBox.setModel(tempComboBox);
   }
 
+  /**
+   * gettting the user input for the selected portfolio.
+   * @return = user choice
+   */
   public int getSelectedPortfolioIndex() {
     return selectedPortfolioIndex;
   }
 
+  /**
+   * getting the input from the user for the stratgey.
+   * @return the user strategy array.
+   */
   public String[] getInput() {
     String[] input = new String[15];
 
@@ -293,14 +318,25 @@ public class DCAGuiView extends JFrame {
     return input;
   }
 
+  /**
+   * letting the user know that theere was some error in the strategy
+   * @param message = msg to be displayed to the user.
+   */
   public void setWarning(String message) {
     JOptionPane.showMessageDialog(DCAGuiView.this, message, "Warning", JOptionPane.WARNING_MESSAGE);
   }
 
+  /**
+   * letting the user know that the strategy was saved sucessfully.
+   * @param s = msg to be displayed to the user.
+   */
   public void setSuccessMsg(String s) {
     JOptionPane.showMessageDialog(DCAGuiView.this, s, "Success", JOptionPane.INFORMATION_MESSAGE);
   }
 
+  /**
+   * clearing all the fields after the user has input the strategy.
+   */
   public void clear() {
     amountTextField.setText("");
     commissionTextField.setText("");
