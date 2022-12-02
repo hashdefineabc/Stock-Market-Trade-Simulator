@@ -1,6 +1,7 @@
 package view;
 
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -59,7 +60,7 @@ public class CostBasisGUIView extends JFrame {
 
     //handle month
     String[] months = {"01", "02", "03", "04", "05", "06", "07", "08",
-            "09", "10", "11", "12"};
+                      "09", "10", "11", "12"};
     monthComboBox = new JComboBox(months);
     monthComboBox.addActionListener(listener);
 

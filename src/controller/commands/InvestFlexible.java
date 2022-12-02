@@ -102,7 +102,8 @@ public class InvestFlexible implements ICommandController {
         this.view.displayMsgToUser(e.getMessage());
         isInputValid = false;
       }
-    } while (!isInputValid);
+    }
+    while (!isInputValid);
 
     return new String[]{tickerNameFromUser, Double.toString(percentage)};
   }
