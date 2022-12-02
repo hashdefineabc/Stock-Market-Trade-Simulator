@@ -8,6 +8,12 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+/**
+ *The ChartWeekGuiView shows the performance of a portfolio on a weekly basis.
+ * It extends the JFrame class in order to design the buttons for the create operation.
+ *This lets the user view the  performance of a portfolio on a weekly basis.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 public class ChartWeekGuiView extends JFrame {
 
   public ChartWeekGuiView(Map<LocalDate, String> chart) {

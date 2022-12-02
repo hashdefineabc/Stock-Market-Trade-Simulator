@@ -6,6 +6,13 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+/**
+ *The TickerWeightPanel is responsible for accepting all the weights and tickers for an investment
+ * strategy.
+ * It extends the JPanel class in order to design the buttons for the create operation.
+ *This lets the user create a new portfolio by entering the details of it.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 public class TickerWeightPanel extends JPanel {
 
   private JTextField tickerNameTextField;

@@ -8,6 +8,13 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/**
+ *The DCAFromHome represents the invest using DCA feature of the application.
+ * DCA will take inputs weightage for all the stocks.
+ * It extends the JFrame class in order to design the buttons for the create operation.
+ *This lets the user create a new portfolio by entering the details of it.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 public class DCAFromHome extends JFrame {
 
   JButton create;

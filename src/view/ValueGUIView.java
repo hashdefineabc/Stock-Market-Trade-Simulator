@@ -14,6 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultComboBoxModel;
 
+/**
+ *The ValueGUIView represents the value calculation feature of the application.
+ * It extends the JFrame class in order to design the buttons for the create operation.
+ *This lets the user create a new portfolio by entering the details of it.
+ * All the buttons and textfields necessary to take input from the user are implemented here.
+ */
 public class ValueGUIView extends JFrame {
   private JComboBox portfolioNameComboBox;
   private JComboBox monthComboBox;
@@ -24,6 +30,10 @@ public class ValueGUIView extends JFrame {
   private JButton viewValueButton;
   private JButton cancelButton;
 
+  /**
+   * Creates a new  instance of 'ValueGUIView' class
+   * @param title = the title we want this frame to display
+   */
 
   public ValueGUIView(String title) {
     super(title);
@@ -139,14 +149,28 @@ public class ValueGUIView extends JFrame {
     return input;
   }
 
+  /**
+   * gettting the user input for the selected portfolio.
+   * @return = user choice
+   */
   public int getSelectedPortfolioIndex() {
     return selectedPortfolioIndex;
   }
+
+
+  /**
+   * letting the user know that theere was some error in the strategy
+   * @param message = msg to be displayed to the user.
+   */
 
   public void setErrorPopUp(String message) {
     JOptionPane.showMessageDialog(ValueGUIView.this, message, "Value", JOptionPane.ERROR_MESSAGE);
   }
 
+  /**
+   * updating the existing portfolios as per the strategies.
+   * @param existingPortfolios = list of existing portfolios.
+   */
   public void updateExistingPortfoliosList(List<String> existingPortfolios) {
     DefaultComboBoxModel tempComboBox = new DefaultComboBoxModel();
     for (String portfolio : existingPortfolios) {
