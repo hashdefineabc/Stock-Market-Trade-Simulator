@@ -1,2 +1,3 @@
-# Assignment6
-GUI, cost-based averaging
+- Designed an application using MVC architecture and programming design paradigms like command design, and visitor pattern.
+- Utilized MySQL to build a robust and secure database to store trading data and user information.
+- Engineered the app to make it future-proof by adhering to the SOLID principles and built a clean and well-structured code to facilitate code-reuse, and minimize code duplication.
